@@ -56,6 +56,14 @@ export default tseslint.config(
 
   // Layer boundaries (see CLAUDE.md "Architecture rules").
   {
+    // config/ may use `import type` from core/types; it must not reach runtime layers.
+    files: ['src/config/**/*.ts'],
+    rules: forbid(
+      ['ui', 'scene', 'services', 'data', 'dev'],
+      'config/ holds plain values; it must not import runtime layers.',
+    ),
+  },
+  {
     files: ['src/core/**/*.ts'],
     rules: forbid(
       ['ui', 'scene', 'services', 'data', 'dev'],
