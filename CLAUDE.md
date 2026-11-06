@@ -16,9 +16,11 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt.
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
-- Matching is deliberately LOOSE: any non-empty guess should usually land on some
-  answer, so players feel the thrill of an unknown result. Only empty input or
-  timeout is tier 0.
+- Matching is deliberately LOOSE: typos, partial names and near misses still land on
+  an answer. A guess that resembles no answer gets a deterministic "lucky" roll: it
+  hits with probability MATCHER_CONFIG.luckyHitChance, with tiers weighted by
+  luckyTierWeights (config/game.ts); otherwise it is tier 0. Empty input and timeout
+  are always tier 0.
 - One run per day; progress is saved and resumable.
 
 ## Tech

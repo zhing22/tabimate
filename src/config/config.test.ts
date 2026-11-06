@@ -42,8 +42,11 @@ describe('config invariants', () => {
     expect(MATCHER_CONFIG.minSimilarity).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeLessThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMaxDistance).toBeGreaterThanOrEqual(1);
-    const weights = Object.values(MATCHER_CONFIG.luckyTierWeights);
+    expect(MATCHER_CONFIG.luckyHitChance).toBeGreaterThanOrEqual(0);
+    expect(MATCHER_CONFIG.luckyHitChance).toBeLessThanOrEqual(1);
+    const weights: number[] = Object.values(MATCHER_CONFIG.luckyTierWeights);
     expect(weights).toHaveLength(5);
-    expect(weights.every((w) => w > 0)).toBe(true);
+    expect(weights.every((w) => w >= 0)).toBe(true);
+    expect(weights.reduce((sum, w) => sum + w, 0)).toBeGreaterThan(0);
   });
 });

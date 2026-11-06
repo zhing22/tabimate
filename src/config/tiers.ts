@@ -1,6 +1,10 @@
-import type { TierId } from '@/core/types';
+/** 0 = no match; 1–5 follow IUCN Red List categories, rarer is higher. */
+export type TierId = 0 | 1 | 2 | 3 | 4 | 5;
 
-/** Keys into the scene's effect registry (Step 9). */
+/** Tiers a real answer can have (tier 0 is only ever a miss). */
+export type AnswerTierId = Exclude<TierId, 0>;
+
+/** Keys into the scene's tier effect registry, which must cover every id. */
 export type EffectId = 'none' | 'glint' | 'sparkle' | 'shiny';
 
 export interface TierDef {
@@ -31,8 +35,8 @@ export const TIERS = [
     name: 'Least Concern',
     shortName: 'LC',
     colour: '--tier-1',
-    emoji: '🟩',
-    points: 1,
+    emoji: '⬜',
+    points: 10,
     effectId: 'none',
   },
   {
@@ -41,7 +45,7 @@ export const TIERS = [
     shortName: 'NT',
     colour: '--tier-2',
     emoji: '🟦',
-    points: 2,
+    points: 25,
     effectId: 'glint',
   },
   {
@@ -49,8 +53,8 @@ export const TIERS = [
     name: 'Vulnerable',
     shortName: 'VU',
     colour: '--tier-3',
-    emoji: '🟪',
-    points: 3,
+    emoji: '🟥',
+    points: 50,
     effectId: 'glint',
   },
   {
@@ -58,8 +62,8 @@ export const TIERS = [
     name: 'Endangered',
     shortName: 'EN',
     colour: '--tier-4',
-    emoji: '🟧',
-    points: 5,
+    emoji: '🟪',
+    points: 85,
     effectId: 'sparkle',
   },
   {
@@ -67,8 +71,8 @@ export const TIERS = [
     name: 'Critically Endangered',
     shortName: 'CR',
     colour: '--tier-5',
-    emoji: '🟥',
-    points: 8,
+    emoji: '🟨',
+    points: 100,
     effectId: 'shiny',
   },
 ] as const satisfies readonly TierDef[];

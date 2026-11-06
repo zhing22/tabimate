@@ -18,9 +18,61 @@ const layer = (name) => [
   `../../../${name}/*`,
 ];
 
-const forbid = (layers, message) => ({
-  'no-restricted-imports': ['error', { patterns: [{ group: layers.flatMap(layer), message }] }],
+const restrictImports = (layers, message, packages = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      patterns: [
+        { group: layers.flatMap(layer), message },
+        ...(packages.length ? [{ group: packages.flatMap((p) => [p, `${p}/*`]), message }] : []),
+      ],
+    },
+  ],
 });
+
+// core/ and config/ must run anywhere (tests in Node, future server validation),
+// so they get no browser globals, no hidden clock and no hidden randomness.
+const PURE_FILES = ['src/core/**/*.ts', 'src/config/**/*.ts'];
+const injected = 'Inject it (Clock, Scheduler, StorageAdapter, PuzzleSource) instead.';
+const pureRules = {
+  'no-restricted-globals': [
+    'error',
+    ...[
+      'window',
+      'document',
+      'navigator',
+      'location',
+      'localStorage',
+      'sessionStorage',
+      'indexedDB',
+      'fetch',
+      'self',
+      'globalThis',
+      'setTimeout',
+      'clearTimeout',
+      'setInterval',
+      'clearInterval',
+      'requestAnimationFrame',
+      'cancelAnimationFrame',
+    ].map((name) => ({ name, message: `Not allowed in pure code. ${injected}` })),
+  ],
+  'no-restricted-properties': [
+    'error',
+    { object: 'Date', property: 'now', message: `Reads the real clock. ${injected}` },
+    {
+      object: 'Math',
+      property: 'random',
+      message: 'Results must be deterministic; derive randomness from a hash or seed.',
+    },
+  ],
+  'no-restricted-syntax': [
+    'error',
+    {
+      selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+      message: `new Date() reads the real clock. ${injected}`,
+    },
+  ],
+};
 
 export default tseslint.config(
   { ignores: ['dist/', 'coverage/', 'node_modules/', 'art/'] },
@@ -29,7 +81,6 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
-      globals: { ...globals.browser },
       parserOptions: {
         project: ['./tsconfig.json', './tsconfig.node.json'],
         tsconfigRootDir: import.meta.dirname,
@@ -54,29 +105,43 @@ export default tseslint.config(
     },
   },
 
-  // Layer boundaries (see CLAUDE.md "Architecture rules").
+  // Globals: browser for app code, none extra for pure code, Node for tooling.
   {
-    // config/ may use `import type` from core/types; it must not reach runtime layers.
+    files: ['src/**/*.ts'],
+    ignores: PURE_FILES,
+    languageOptions: { globals: { ...globals.browser } },
+  },
+  {
+    files: PURE_FILES,
+    languageOptions: { globals: { ...globals.es2023 } },
+    rules: pureRules,
+  },
+
+  // Layer boundaries (see CLAUDE.md "Architecture rules"). Dependency order:
+  // config <- core <- (data, services, ui, scene) <- main.ts.
+  {
     files: ['src/config/**/*.ts'],
-    rules: forbid(
-      ['ui', 'scene', 'services', 'data', 'dev'],
-      'config/ holds plain values; it must not import runtime layers.',
+    rules: restrictImports(
+      ['core', 'data', 'services', 'ui', 'scene', 'dev'],
+      'config/ is the bottom layer: it imports nothing but other config files.',
+      ['kaplay'],
     ),
   },
   {
     files: ['src/core/**/*.ts'],
-    rules: forbid(
-      ['ui', 'scene', 'services', 'data', 'dev'],
+    rules: restrictImports(
+      ['data', 'services', 'ui', 'scene', 'dev'],
       'core/ is pure: it may import only config/ and core/.',
+      ['kaplay'],
     ),
   },
   {
     files: ['src/ui/**/*.ts'],
-    rules: forbid(['scene'], 'ui/ must not import scene/; talk through core events.'),
+    rules: restrictImports(['scene'], 'ui/ must not import scene/; talk through core events.'),
   },
   {
     files: ['src/scene/**/*.ts'],
-    rules: forbid(['ui'], 'scene/ must not import ui/; talk through core events.'),
+    rules: restrictImports(['ui'], 'scene/ must not import ui/; talk through core events.'),
   },
 
   // Tool config files must use default exports, and run in Node.
