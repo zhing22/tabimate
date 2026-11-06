@@ -63,6 +63,41 @@ describe('partial', () => {
 
   it('needs at least partialMinLength characters', () => {
     expect(partial(input('p'), all, cfg)).toBeNull();
+    expect(partial(input('pl'), all, cfg)).toBeNull();
+  });
+
+  // Names and tiers from the real puzzles, where these short guesses used to win
+  // rare animals for everyone.
+  const real = [
+    candidate('tiger', 4, 'Tiger'),
+    candidate('sea-otter', 4, 'Sea otter'),
+    candidate('chimpanzee', 4, 'Chimpanzee'),
+    candidate('polar-bear', 3, 'Polar bear'),
+    candidate('giant-panda', 3, 'Giant panda'),
+  ];
+
+  it.each(['er', 'an', 'ar', 'ger', 'ant'])('does not match %j inside a word', (guess) => {
+    expect(partial(input(guess), real, cfg)).toBeNull();
+  });
+
+  it('matches only from the start of a word', () => {
+    expect(idOf(partial(input('tig'), real, cfg))).toBe('tiger');
+    expect(idOf(partial(input('otter'), real, cfg))).toBe('sea-otter');
+    expect(idOf(partial(input('chimp'), real, cfg))).toBe('chimpanzee');
+    expect(partial(input('panzee'), real, cfg)).toBeNull();
+  });
+
+  it('needs the shorter side to cover partialMinCoverage of the longer', () => {
+    // "sea" is 3 of 9 characters of "sea otter", below 0.4.
+    expect(partial(input('sea'), real, cfg)).toBeNull();
+    expect(idOf(partial(input('sea'), real, { ...cfg, partialMinCoverage: 0.3 }))).toBe(
+      'sea-otter',
+    );
+  });
+
+  it('accepts a whole name inside the input only as whole words', () => {
+    expect(idOf(partial(input('a tiger cub'), real, cfg))).toBe('tiger');
+    expect(partial(input('tigerish cat'), real, cfg)).toBeNull();
   });
 
   it('breaks ties by hash, not by list order', () => {

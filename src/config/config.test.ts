@@ -54,6 +54,8 @@ describe('config invariants', () => {
     expect(MATCHER_CONFIG.typoMaxDistance).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMinLength).toBeGreaterThan(MATCHER_CONFIG.typoMaxDistance);
     expect(MATCHER_CONFIG.partialMinLength).toBeGreaterThanOrEqual(1);
+    expect(MATCHER_CONFIG.partialMinCoverage).toBeGreaterThan(0);
+    expect(MATCHER_CONFIG.partialMinCoverage).toBeLessThanOrEqual(1);
     expect(MATCHER_CONFIG.luckyHitChance).toBeGreaterThanOrEqual(0);
     expect(MATCHER_CONFIG.luckyHitChance).toBeLessThanOrEqual(1);
     const weights: number[] = Object.values(MATCHER_CONFIG.luckyTierWeights);

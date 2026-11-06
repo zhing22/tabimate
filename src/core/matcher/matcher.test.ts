@@ -17,7 +17,7 @@ describe('matchAnswer', () => {
     ['Orcas', 'killer-whale', 1, 'alias'],
     ['platipus', 'platypus', 2, 'typo'],
     ['plat', 'platypus', 2, 'partial'],
-    ['snow', 'snow-leopard', 3, 'partial'],
+    ['snow leo', 'snow-leopard', 3, 'partial'],
     // 3 edits away, so too far for typo, but most of its trigrams match.
     ['plaatyypuss', 'platypus', 2, 'loose'],
   ] as const)('%j -> %s (tier %i, %s)', (raw, animalId, tier, strategy) => {
@@ -44,6 +44,14 @@ describe('matchAnswer', () => {
 
   it('misses nonsense when lucky is off', () => {
     expect(match('James', { ...MATCHER_CONFIG, luckyHitChance: 0 }).tier).toBe(0);
+  });
+
+  // "er" is inside "tiger" and "ar" inside "bear": short fragments must go through
+  // the lucky roll like any other unrecognised guess, not win outright.
+  it.each(['er', 'an', 'ar'])('%j only ever scores through lucky', (raw) => {
+    expect(match(raw, { ...MATCHER_CONFIG, luckyHitChance: 0 }).tier).toBe(0);
+    const result = match(raw);
+    if (result.tier !== 0) expect(result.strategy).toBe('lucky');
   });
 });
 

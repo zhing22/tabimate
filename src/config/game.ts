@@ -37,6 +37,11 @@ export interface MatcherConfig {
   /** Shortest text 'partial' will treat as part of a name, in either direction. */
   readonly partialMinLength: number;
   /**
+   * Least share (0..1) of the longer string the shorter must cover for 'partial',
+   * so "sea" alone does not count as "sea otter".
+   */
+  readonly partialMinCoverage: number;
+  /**
    * Chance (0..1) that a guess resembling no answer still gets a deterministic
    * lucky answer; otherwise it scores tier 0. Set to 0 to turn lucky off.
    */
@@ -50,7 +55,8 @@ export const MATCHER_CONFIG = {
   minSimilarity: 0.3,
   typoMaxDistance: 2,
   typoMinLength: 5,
-  partialMinLength: 2,
+  partialMinLength: 3,
+  partialMinCoverage: 0.4,
   // Most unrecognised guesses miss, so a lucky find stays a surprise.
   luckyHitChance: 0.2,
   // Critically Endangered is never handed out by luck; it has to be named.

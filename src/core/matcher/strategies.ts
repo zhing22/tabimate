@@ -33,17 +33,25 @@ export const typo: StrategyFn = (input, candidates, cfg) => {
   return pickBest(input, candidates, (c) => best.get(c) ?? null);
 };
 
-/** Input inside a name ("whale" in "killer whale") or a name inside the input. */
+/**
+ * The input starts a word of a name ("plat" -> "platypus", "whale" -> "killer
+ * whale"), or a whole name appears as words in the input ("a red fox"). Matching
+ * only at word starts, with a minimum length and coverage, stops tiny guesses
+ * like "er" from landing inside "tiger" for everyone, every day.
+ */
 export const partial: StrategyFn = (input, candidates, cfg) => {
   const text = input.text;
+  const spacedText = ` ${text} `;
   const scoreName = (name: string): Scored | null => {
     const inName = text.length <= name.length;
     const short = inName ? text : name;
-    if (short.length < cfg.partialMinLength) return null;
-    if (!(inName ? name.includes(text) : text.includes(name))) return null;
-    // Shortest matching name wins: "bear" should find "bear" before "polar bear".
     const long = inName ? name : text;
-    return { score: -name.length, confidence: short.length / long.length };
+    const coverage = short.length / long.length;
+    if (short.length < cfg.partialMinLength || coverage < cfg.partialMinCoverage) return null;
+    const found = inName ? ` ${name}`.includes(` ${text}`) : spacedText.includes(` ${name} `);
+    if (!found) return null;
+    // Shortest matching name wins: "bear" should find "bear" before "polar bear".
+    return { score: -name.length, confidence: coverage };
   };
   return pickBest(input, candidates, (c) => bestName(c, scoreName));
 };
