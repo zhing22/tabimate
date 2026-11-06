@@ -1,7 +1,7 @@
 import { isDateKey } from '@/core/date';
 import type { DateKey } from '@/core/types';
 import { DataError } from './dataError';
-import type { PuzzleSource } from './puzzleSource';
+import type { PuzzleSource } from '@/core/puzzleSource';
 import { validateAnimals, validatePuzzle, type AnimalRegistry } from './validate';
 
 export interface LocalPuzzleSourceOptions {

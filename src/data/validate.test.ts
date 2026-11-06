@@ -70,12 +70,27 @@ describe('validatePuzzle', () => {
     ]);
   });
 
+  it('accepts fewer prompts than PROMPTS_PER_DAY, so older files stay valid', () => {
+    const json = fixturePuzzle();
+    json.prompts.splice(1);
+    expect(checkPuzzle(json).prompts).toHaveLength(1);
+  });
+
   type Puzzle = ReturnType<typeof fixturePuzzle> & Json;
   it.each<[string, (p: Puzzle) => unknown, string | null, RegExp]>([
     ['not an object', () => [], null, /must be an object/],
     ['date not matching the file', (p) => ((p.date = '2026-11-08'), p), 'date', /requested key/],
     ['wrong number', (p) => ((p.number = 99), p), 'number', /is puzzle 2/],
-    ['too few prompts', (p) => (p.prompts.pop(), p), 'prompts', /must have 3 prompts/],
+    ['missing date', (p) => (delete (p as Json).date, p), 'date', /non-empty string/],
+    ['non-integer number', (p) => ((p.number = 2.5), p), 'number', /must be an integer/],
+    ['number as a string', (p) => (((p as Json).number = '2'), p), 'number', /must be an integer/],
+    ['no prompts', (p) => ((p.prompts = []), p), 'prompts', /must have 1 to 7 prompts \(got 0\)/],
+    [
+      'too many prompts',
+      (p) => ((p.prompts = Array.from({ length: 8 }, () => p.prompts[0]!)), p),
+      'prompts',
+      /must have 1 to 7 prompts \(got 8\)/,
+    ],
     [
       'unknown animal',
       (p) => ((p.prompts[1]!.answers[0]!.animalId = 'dodo'), p),

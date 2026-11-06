@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { dailyKey, isDateKey, msUntilNextReset, puzzleNumber, shiftKey } from './date';
 
 const at = (iso: string) => new Date(iso);
@@ -22,6 +22,36 @@ describe('dailyKey (reset at 12:00 Asia/Singapore)', () => {
   it('supports another zone and reset hour', () => {
     expect(dailyKey(at('2026-11-06T23:59:59Z'), 'UTC', 0)).toBe('2026-11-06');
     expect(dailyKey(at('2026-11-07T00:00:00Z'), 'UTC', 0)).toBe('2026-11-07');
+  });
+});
+
+describe('dailyKey and msUntilNextReset reject bad settings', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const now = at('2026-11-07T04:00:00Z');
+
+  it('rejects an unknown time zone', () => {
+    expect(() => dailyKey(now, 'Mars/Olympus_Mons')).toThrow(RangeError);
+    expect(() => msUntilNextReset(now, 'Mars/Olympus_Mons')).toThrow(RangeError);
+  });
+
+  it.each([-1, 24, 12.5, Number.NaN])('rejects reset hour %s', (hour) => {
+    expect(() => dailyKey(now, 'UTC', hour)).toThrow(/Reset hour must be an integer 0–23/);
+    expect(() => msUntilNextReset(now, 'UTC', hour)).toThrow(RangeError);
+  });
+
+  it('accepts the edge hour 23', () => {
+    expect(dailyKey(at('2026-11-06T22:59:59Z'), 'UTC', 23)).toBe('2026-11-05');
+    expect(dailyKey(at('2026-11-06T23:00:00Z'), 'UTC', 23)).toBe('2026-11-06');
+  });
+
+  it('throws if Intl leaves out a date part instead of making a NaN key', () => {
+    vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts').mockReturnValue([
+      { type: 'year', value: '2026' },
+    ]);
+    expect(() => dailyKey(now)).toThrow(/Intl gave no month/);
   });
 });
 

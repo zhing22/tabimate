@@ -15,7 +15,8 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
   00:00–11:59 SGT still plays the previous date's puzzle.
-- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt.
+- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
+  plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE).
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
 - Matching is deliberately LOOSE: typos, partial names and near misses still land on
@@ -41,7 +42,8 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - ui/ and scene/ never call each other. They both react to events from core/events.ts
   and send user intents back to the game machine.
 - External dependencies sit behind interfaces: PuzzleSource, StorageAdapter,
-  SpriteProvider, Clock. main.ts chooses the implementations.
+  SpriteProvider, Clock. The interfaces live in core/ (so the game machine can use
+  them); implementations live in data/, services/ or scene/. main.ts chooses them.
 - Tuneable values live in config/, never as magic numbers in logic.
 - Biomes, tiers, effects and matcher strategies are registries: adding one means
   adding an entry, not editing a switch statement.

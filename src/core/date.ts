@@ -36,8 +36,12 @@ function formatterFor(tz: string): Intl.DateTimeFormat {
 
 function wallTime(instant: Date, tz: string): WallTime {
   const parts = formatterFor(tz).formatToParts(instant);
-  const part = (type: Intl.DateTimeFormatPartTypes): number =>
-    Number(parts.find((p) => p.type === type)?.value);
+  const part = (type: Intl.DateTimeFormatPartTypes): number => {
+    const value = Number(parts.find((p) => p.type === type)?.value);
+    // Fail here rather than let NaN become the key "NaN-NaN-NaN" later.
+    if (!Number.isInteger(value)) throw new Error(`Intl gave no ${type} for ${tz}`);
+    return value;
+  };
   return {
     year: part('year'),
     month: part('month'),
@@ -84,14 +88,24 @@ export function shiftKey(key: DateKey, days: number): DateKey {
   return keyFromUtcMs(keyToUtcMs(key) + days * MS_PER_DAY);
 }
 
-/** Key of the puzzle being played at `now`: the local date of the last reset. */
+function checkResetHour(resetHour: number): void {
+  if (!Number.isInteger(resetHour) || resetHour < 0 || resetHour > 23) {
+    throw new RangeError(`Reset hour must be an integer 0–23 (got ${resetHour})`);
+  }
+}
+
+/**
+ * Key of the puzzle being played at `now`: the local date of the last reset.
+ * Throws RangeError for an unknown time zone or a reset hour outside 0–23.
+ */
 export function dailyKey(now: Date, tz = TIMEZONE, resetHour = RESET_HOUR): DateKey {
+  checkResetHour(resetHour);
   const w = wallTime(now, tz);
   const today = keyFromUtcMs(Date.UTC(w.year, w.month - 1, w.day));
   return w.hour < resetHour ? shiftKey(today, -1) : today;
 }
 
-/** Milliseconds from `now` until the next puzzle starts. */
+/** Milliseconds from `now` until the next puzzle starts. Throws like dailyKey. */
 export function msUntilNextReset(now: Date, tz = TIMEZONE, resetHour = RESET_HOUR): number {
   const nextKey = shiftKey(dailyKey(now, tz, resetHour), 1);
   return zonedInstantMs(nextKey, resetHour, tz) - now.getTime();

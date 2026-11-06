@@ -1,10 +1,10 @@
 // Shared vocabulary of the game. Pure types only. Tier ids and colours come from
 // config/, because core depends on config and never the other way round.
+import type { Movement, SizeClass } from '@/config/animals';
 import type { HexColour } from '@/config/colour';
 import type { AnswerTierId } from '@/config/tiers';
 
-export type Movement = 'land' | 'sky' | 'water';
-export type SizeClass = 'S' | 'M' | 'L';
+export type { Movement, SizeClass };
 
 export type AnimalId = string;
 export type PromptId = string;

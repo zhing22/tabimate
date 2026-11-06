@@ -1,20 +1,10 @@
-import { PROMPTS_PER_DAY } from '@/config/game';
+import { MOVEMENTS, SIZE_CLASSES } from '@/config/animals';
+import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import type { AnswerTierId } from '@/config/tiers';
 import { puzzleNumber } from '@/core/date';
-import type {
-  Animal,
-  AnimalId,
-  DateKey,
-  Movement,
-  Prompt,
-  Puzzle,
-  PuzzleAnswer,
-  SizeClass,
-} from '@/core/types';
+import type { Animal, AnimalId, DateKey, Prompt, Puzzle, PuzzleAnswer } from '@/core/types';
 import { createJsonReader, field, item, type JsonReader } from './jsonReader';
 
-const MOVEMENTS: readonly Movement[] = ['land', 'sky', 'water'];
-const SIZES: readonly SizeClass[] = ['S', 'M', 'L'];
 const ANSWER_TIERS: readonly AnswerTierId[] = [1, 2, 3, 4, 5];
 // Ids end up in URLs, sprite keys and hashes, so keep them plain.
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -34,7 +24,7 @@ function readAnimal(r: JsonReader, value: unknown, path: string): Animal {
     aliases: r.stringArray(o.aliases, field(path, 'aliases')),
     archetype: slug(r, o.archetype, field(path, 'archetype')),
     movement: r.oneOf(o.movement, MOVEMENTS, field(path, 'movement')),
-    size: r.oneOf(o.size, SIZES, field(path, 'size')),
+    size: r.oneOf(o.size, SIZE_CLASSES, field(path, 'size')),
     tint: r.hex(o.tint, field(path, 'tint')),
     emoji: r.string(o.emoji, field(path, 'emoji')),
   };
@@ -128,8 +118,10 @@ export function validatePuzzle(json: unknown, { file, key, animals }: PuzzleCont
   if (number !== expected) r.fail('number', `is ${number} but ${key} is puzzle ${expected}`);
 
   const list = r.array(o.prompts, 'prompts');
-  if (list.length !== PROMPTS_PER_DAY) {
-    r.fail('prompts', `must have ${PROMPTS_PER_DAY} prompts (got ${list.length})`);
+  // A range, not an exact count: older files keep their prompt count when
+  // PROMPTS_PER_DAY grows, and the game plays however many a puzzle has.
+  if (list.length < 1 || list.length > MAX_PROMPTS_PER_PUZZLE) {
+    r.fail('prompts', `must have 1 to ${MAX_PROMPTS_PER_PUZZLE} prompts (got ${list.length})`);
   }
   const prompts = list.map((value, i) => readPrompt(r, value, item('prompts', i), animals));
   const ids = new Set<string>();

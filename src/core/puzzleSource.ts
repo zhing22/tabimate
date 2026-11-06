@@ -1,4 +1,4 @@
-import type { Animal, AnimalId, DateKey, Puzzle } from '@/core/types';
+import type { Animal, AnimalId, DateKey, Puzzle } from './types';
 
 /** Where puzzles and the animal registry come from (static files now, an API later). */
 export interface PuzzleSource {

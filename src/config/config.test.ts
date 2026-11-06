@@ -3,6 +3,7 @@ import { BIOMES } from './biomes';
 import {
   LAUNCH_DATE_KEY,
   MATCHER_CONFIG,
+  MAX_PROMPTS_PER_PUZZLE,
   PROMPTS_PER_DAY,
   RESET_HOUR,
   ROUND_TIME_MS,
@@ -46,6 +47,7 @@ describe('config invariants', () => {
     expect(Number.isInteger(RESET_HOUR) && RESET_HOUR >= 0 && RESET_HOUR <= 23).toBe(true);
     expect(LAUNCH_DATE_KEY).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(PROMPTS_PER_DAY).toBeGreaterThan(0);
+    expect(PROMPTS_PER_DAY).toBeLessThanOrEqual(MAX_PROMPTS_PER_PUZZLE);
     expect(ROUND_TIME_MS).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeLessThanOrEqual(1);
