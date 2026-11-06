@@ -1,0 +1,6 @@
+dist
+coverage
+node_modules
+art
+package-lock.json
+*.docx

@@ -1,6 +1,7 @@
 # Tabimate — project brief
 
 ## What it is
+
 Tabimate (旅 tabi = journey + mate) is a daily browser trivia game about animals.
 Everyone gets the same prompts each day (e.g. "Name an animal that lays eggs").
 The player types an animal; rarer matched answers score a higher tier (0–5).
@@ -10,6 +11,7 @@ player forward by its tier; crossing score thresholds enters new biomes
 Original art and naming only: no Pokémon names, sprites or UI.
 
 ## Rules of the game
+
 - Daily reset at 00:00 Asia/Singapore. Puzzle key = SGT date as YYYY-MM-DD.
 - MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt.
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
@@ -20,6 +22,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - One run per day; progress is saved and resumable.
 
 ## Tech
+
 - Vite + TypeScript (strict), Kaplay for the canvas scene, HTML/CSS for UI.
 - Vitest for tests. ESLint + Prettier.
 - Static hosting on Cloudflare Pages. No backend in the MVP.
@@ -27,6 +30,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
   layers tile horizontally. Sprites use 6 template key colours, recoloured from palettes.json.
 
 ## Architecture rules (must follow)
+
 - Layers: config, core, data, services, ui, scene. main.ts wires them together.
 - core/ is pure TypeScript: no DOM, no Kaplay, no fetch, no localStorage, no Date.now()
   without injection. It is fully unit-tested.
@@ -39,6 +43,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
   adding an entry, not editing a switch statement.
 
 ## Code style
+
 - Small files (aim < 150 lines) and small functions (aim < 30 lines), one job each.
 - Named exports only. No default exports. No `any`.
 - Pure functions where possible; side effects at the edges.
@@ -47,4 +52,5 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Mobile first: must work at 360 px wide with the on-screen keyboard open.
 
 ## Commands
+
 - npm run dev | npm run build | npm run test | npm run check (typecheck + lint + test)
