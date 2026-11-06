@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MATCHER_CONFIG, type MatcherConfig } from '@/config/game';
 import type { StrategyId } from '../types';
-import { STRATEGIES, alias, exact, loose, partial, typo } from './strategies';
+import { STRATEGIES, alias, exact, loose, partial, typo, typoAllowance } from './strategies';
 import { candidate } from './testFixtures';
 import type { NormalizedInput } from './types';
 
@@ -38,9 +38,25 @@ describe('typo', () => {
     expect(typo(input('plaxxxus'), all, cfg)).toBeNull();
   });
 
-  it('ignores names shorter than typoMinLength', () => {
-    // "orca" is 4 letters: "orko" would be 2 edits, but that is half the word.
+  it('allows 30% of the name length in edits, at least 1, at most 2', () => {
+    expect([3, 4, 5, 6, 7, 8, 12, 20].map((n) => typoAllowance(n, cfg))).toEqual([
+      1, 1, 1, 1, 2, 2, 2, 2,
+    ]);
+  });
+
+  it('gives short names one edit only', () => {
+    expect(idOf(typo(input('orka'), all, cfg))).toBe('killer-whale');
+    // "orko" is 2 edits from "orca": half the word.
     expect(typo(input('orko'), all, cfg)).toBeNull();
+    const tiger = [candidate('tiger', 4, 'Tiger')];
+    expect(idOf(typo(input('tigr'), tiger, cfg))).toBe('tiger');
+    expect(typo(input('tgrr'), tiger, cfg)).toBeNull();
+  });
+
+  it('ignores guesses and names shorter than typoMinLength', () => {
+    expect(typo(input('fx'), all, cfg)).toBeNull();
+    expect(typo(input('fox'), [candidate('fox', 1, 'fix')], cfg)).toBeNull();
+    expect(typo(input('ige'), [candidate('tiger', 4, 'Tiger')], cfg)).toBeNull();
   });
 
   it('gives lower confidence to more edits', () => {
@@ -98,6 +114,9 @@ describe('partial', () => {
   it('accepts a whole name inside the input only as whole words', () => {
     expect(idOf(partial(input('a tiger cub'), real, cfg))).toBe('tiger');
     expect(partial(input('tigerish cat'), real, cfg)).toBeNull();
+    expect(partial(input('lemur'), [candidate('emu', 1, 'Emu')], cfg)).toBeNull();
+    // Whole words, but tiger is only 5 of 15 characters: below partialMinCoverage.
+    expect(partial(input('the tiger shark'), real, cfg)).toBeNull();
   });
 
   it('breaks ties by hash, not by list order', () => {

@@ -30,10 +30,15 @@ export const REVEAL_DELAY_MS = 600;
 export interface MatcherConfig {
   /** Trigram similarity (0..1) the 'loose' strategy needs to accept a hit. */
   readonly minSimilarity: number;
-  /** Max Levenshtein distance the 'typo' strategy accepts. */
+  /** Most Levenshtein edits the 'typo' strategy ever accepts. */
   readonly typoMaxDistance: number;
-  /** Shortest name 'typo' considers; on shorter names 2 edits change the whole word. */
+  /** Shortest guess and name 'typo' considers. */
   readonly typoMinLength: number;
+  /**
+   * Edits allowed as a share of the name's length, rounded down but at least 1,
+   * so short names tolerate fewer: 4-6 letters get 1 edit, 7+ get 2 (the max).
+   */
+  readonly typoMaxShare: number;
   /** Shortest text 'partial' will treat as part of a name, in either direction. */
   readonly partialMinLength: number;
   /**
@@ -54,7 +59,8 @@ export const MATCHER_CONFIG = {
   // Low on purpose: matching is meant to be loose (see CLAUDE.md).
   minSimilarity: 0.3,
   typoMaxDistance: 2,
-  typoMinLength: 5,
+  typoMinLength: 4,
+  typoMaxShare: 0.3,
   partialMinLength: 3,
   partialMinCoverage: 0.4,
   // Most unrecognised guesses miss, so a lucky find stays a surprise.

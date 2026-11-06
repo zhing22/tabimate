@@ -52,7 +52,9 @@ describe('config invariants', () => {
     expect(MATCHER_CONFIG.minSimilarity).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeLessThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMaxDistance).toBeGreaterThanOrEqual(1);
-    expect(MATCHER_CONFIG.typoMinLength).toBeGreaterThan(MATCHER_CONFIG.typoMaxDistance);
+    expect(MATCHER_CONFIG.typoMinLength).toBeGreaterThanOrEqual(1);
+    expect(MATCHER_CONFIG.typoMaxShare).toBeGreaterThan(0);
+    expect(MATCHER_CONFIG.typoMaxShare).toBeLessThanOrEqual(1);
     expect(MATCHER_CONFIG.partialMinLength).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeLessThanOrEqual(1);

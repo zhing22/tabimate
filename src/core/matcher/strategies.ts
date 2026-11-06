@@ -1,8 +1,10 @@
+import type { MatcherConfig } from '@/config/game';
 import { gramOverlap, minSharedGrams } from './gramIndex';
 import { loose } from './loose';
 import { lucky } from './lucky';
 import { bestName, pickBest, type Scored } from './pick';
 import { levenshtein } from './similarity';
+
 import type { Candidate, Strategy, StrategyFn } from './types';
 
 const SURE: Scored = { score: 1, confidence: 1 };
@@ -14,13 +16,19 @@ export const exact: StrategyFn = (input, candidates) =>
 export const alias: StrategyFn = (input, candidates) =>
   pickBest(input, candidates, (c) => (c.names.indexOf(input.text, 1) > 0 ? SURE : null));
 
+/** Edits a name of this length tolerates: a share of it, at least 1, at most the max. */
+export const typoAllowance = (nameLength: number, cfg: MatcherConfig): number =>
+  Math.min(cfg.typoMaxDistance, Math.max(1, Math.floor(nameLength * cfg.typoMaxShare)));
+
 export const typo: StrategyFn = (input, candidates, cfg) => {
-  const max = cfg.typoMaxDistance;
   const text = input.text;
+  if (text.length < cfg.typoMinLength) return null;
   const { names, shared, inputGramCount } = gramOverlap(candidates, text);
   const best = new Map<Candidate, Scored>();
   names.forEach(({ candidate, name, gramCount }, i) => {
-    if (name.length < cfg.typoMinLength || Math.abs(name.length - text.length) > max) return;
+    if (name.length < cfg.typoMinLength) return;
+    const max = typoAllowance(name.length, cfg);
+    if (Math.abs(name.length - text.length) > max) return;
     // Cheap proof that the name is out of reach, before paying for Levenshtein.
     if (shared[i]! < minSharedGrams(inputGramCount, gramCount, max)) return;
     const distance = levenshtein(text, name, max);
