@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { BIOMES } from './biomes';
-import { MATCHER_CONFIG, PROMPTS_PER_DAY, ROUND_TIME_MS } from './game';
+import {
+  LAUNCH_DATE_KEY,
+  MATCHER_CONFIG,
+  PROMPTS_PER_DAY,
+  RESET_HOUR,
+  ROUND_TIME_MS,
+} from './game';
 import { TIERS } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
@@ -37,6 +43,8 @@ describe('config invariants', () => {
   });
 
   it('game and matcher settings are in sensible ranges', () => {
+    expect(Number.isInteger(RESET_HOUR) && RESET_HOUR >= 0 && RESET_HOUR <= 23).toBe(true);
+    expect(LAUNCH_DATE_KEY).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(PROMPTS_PER_DAY).toBeGreaterThan(0);
     expect(ROUND_TIME_MS).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeGreaterThan(0);

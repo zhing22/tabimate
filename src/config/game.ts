@@ -1,7 +1,16 @@
 import type { AnswerTierId } from './tiers';
 
-/** Daily reset happens at 00:00 in this zone. */
+/** Zone whose wall clock decides when a new puzzle starts. */
 export const TIMEZONE = 'Asia/Singapore';
+
+/**
+ * Local hour (0–23, in TIMEZONE) when a new puzzle starts. 12 = noon, so
+ * 00:00–11:59 still belongs to the previous date's puzzle.
+ */
+export const RESET_HOUR = 12;
+
+/** DateKey of puzzle #1. */
+export const LAUNCH_DATE_KEY = '2026-11-06';
 
 /** MVP value; planned to become 7. */
 export const PROMPTS_PER_DAY = 3;

@@ -1,0 +1,762 @@
+[
+  {
+    "id": "lion",
+    "display": "Lion",
+    "aliases": [],
+    "archetype": "big-cat",
+    "movement": "land",
+    "size": "L",
+    "tint": "#c8902c",
+    "emoji": "🦁"
+  },
+  {
+    "id": "tiger",
+    "display": "Tiger",
+    "aliases": ["bengal tiger"],
+    "archetype": "big-cat",
+    "movement": "land",
+    "size": "L",
+    "tint": "#e07020",
+    "emoji": "🐅"
+  },
+  {
+    "id": "snow-leopard",
+    "display": "Snow leopard",
+    "aliases": ["ounce"],
+    "archetype": "big-cat",
+    "movement": "land",
+    "size": "L",
+    "tint": "#d8d8d0",
+    "emoji": "🐆"
+  },
+  {
+    "id": "cheetah",
+    "display": "Cheetah",
+    "aliases": [],
+    "archetype": "big-cat",
+    "movement": "land",
+    "size": "L",
+    "tint": "#d8a848",
+    "emoji": "🐆"
+  },
+  {
+    "id": "african-elephant",
+    "display": "African elephant",
+    "aliases": ["african bush elephant", "savanna elephant"],
+    "archetype": "elephant",
+    "movement": "land",
+    "size": "L",
+    "tint": "#8a8a8a",
+    "emoji": "🐘"
+  },
+  {
+    "id": "asian-elephant",
+    "display": "Asian elephant",
+    "aliases": ["indian elephant"],
+    "archetype": "elephant",
+    "movement": "land",
+    "size": "L",
+    "tint": "#7a7470",
+    "emoji": "🐘"
+  },
+  {
+    "id": "giant-panda",
+    "display": "Giant panda",
+    "aliases": ["panda", "panda bear"],
+    "archetype": "bear",
+    "movement": "land",
+    "size": "L",
+    "tint": "#f0f0f0",
+    "emoji": "🐼"
+  },
+  {
+    "id": "red-panda",
+    "display": "Red panda",
+    "aliases": ["lesser panda"],
+    "archetype": "small-carnivore",
+    "movement": "land",
+    "size": "M",
+    "tint": "#b84a20",
+    "emoji": "🐾"
+  },
+  {
+    "id": "polar-bear",
+    "display": "Polar bear",
+    "aliases": ["ice bear"],
+    "archetype": "bear",
+    "movement": "land",
+    "size": "L",
+    "tint": "#f4f4ec",
+    "emoji": "🐻‍❄️"
+  },
+  {
+    "id": "brown-bear",
+    "display": "Brown bear",
+    "aliases": ["grizzly", "grizzly bear"],
+    "archetype": "bear",
+    "movement": "land",
+    "size": "L",
+    "tint": "#7a4a28",
+    "emoji": "🐻"
+  },
+  {
+    "id": "grey-wolf",
+    "display": "Grey wolf",
+    "aliases": ["gray wolf", "wolf", "timber wolf"],
+    "archetype": "canine",
+    "movement": "land",
+    "size": "M",
+    "tint": "#8a8a90",
+    "emoji": "🐺"
+  },
+  {
+    "id": "red-fox",
+    "display": "Red fox",
+    "aliases": ["fox"],
+    "archetype": "canine",
+    "movement": "land",
+    "size": "M",
+    "tint": "#d86a28",
+    "emoji": "🦊"
+  },
+  {
+    "id": "koala",
+    "display": "Koala",
+    "aliases": ["koala bear"],
+    "archetype": "marsupial",
+    "movement": "land",
+    "size": "M",
+    "tint": "#9a9aa0",
+    "emoji": "🐨"
+  },
+  {
+    "id": "red-kangaroo",
+    "display": "Red kangaroo",
+    "aliases": ["kangaroo"],
+    "archetype": "marsupial",
+    "movement": "land",
+    "size": "L",
+    "tint": "#b8603a",
+    "emoji": "🦘"
+  },
+  {
+    "id": "tasmanian-devil",
+    "display": "Tasmanian devil",
+    "aliases": ["tassie devil"],
+    "archetype": "marsupial",
+    "movement": "land",
+    "size": "M",
+    "tint": "#2a2a2a",
+    "emoji": "🐾"
+  },
+  {
+    "id": "platypus",
+    "display": "Platypus",
+    "aliases": ["duck-billed platypus", "duckbill"],
+    "archetype": "monotreme",
+    "movement": "water",
+    "size": "M",
+    "tint": "#7a5030",
+    "emoji": "🦫"
+  },
+  {
+    "id": "echidna",
+    "display": "Short-beaked echidna",
+    "aliases": ["echidna", "spiny anteater"],
+    "archetype": "monotreme",
+    "movement": "land",
+    "size": "S",
+    "tint": "#5a4030",
+    "emoji": "🦔"
+  },
+  {
+    "id": "european-hedgehog",
+    "display": "European hedgehog",
+    "aliases": ["hedgehog"],
+    "archetype": "small-mammal",
+    "movement": "land",
+    "size": "S",
+    "tint": "#8a6a48",
+    "emoji": "🦔"
+  },
+  {
+    "id": "european-rabbit",
+    "display": "European rabbit",
+    "aliases": ["rabbit", "bunny", "common rabbit"],
+    "archetype": "small-mammal",
+    "movement": "land",
+    "size": "S",
+    "tint": "#a08060",
+    "emoji": "🐇"
+  },
+  {
+    "id": "house-mouse",
+    "display": "House mouse",
+    "aliases": ["mouse"],
+    "archetype": "small-mammal",
+    "movement": "land",
+    "size": "S",
+    "tint": "#9a9088",
+    "emoji": "🐁"
+  },
+  {
+    "id": "sumatran-orangutan",
+    "display": "Sumatran orangutan",
+    "aliases": [],
+    "archetype": "primate",
+    "movement": "land",
+    "size": "L",
+    "tint": "#c0602a",
+    "emoji": "🦧"
+  },
+  {
+    "id": "bornean-orangutan",
+    "display": "Bornean orangutan",
+    "aliases": [],
+    "archetype": "primate",
+    "movement": "land",
+    "size": "L",
+    "tint": "#a04a20",
+    "emoji": "🦧"
+  },
+  {
+    "id": "eastern-gorilla",
+    "display": "Eastern gorilla",
+    "aliases": ["mountain gorilla", "gorilla"],
+    "archetype": "primate",
+    "movement": "land",
+    "size": "L",
+    "tint": "#3a3a3a",
+    "emoji": "🦍"
+  },
+  {
+    "id": "chimpanzee",
+    "display": "Chimpanzee",
+    "aliases": ["chimp"],
+    "archetype": "primate",
+    "movement": "land",
+    "size": "M",
+    "tint": "#4a3a30",
+    "emoji": "🐒"
+  },
+  {
+    "id": "ruffed-lemur",
+    "display": "Black-and-white ruffed lemur",
+    "aliases": ["ruffed lemur", "lemur"],
+    "archetype": "primate",
+    "movement": "land",
+    "size": "M",
+    "tint": "#e8e8e8",
+    "emoji": "🐒"
+  },
+  {
+    "id": "black-rhino",
+    "display": "Black rhinoceros",
+    "aliases": ["black rhino", "hook-lipped rhinoceros"],
+    "archetype": "rhino",
+    "movement": "land",
+    "size": "L",
+    "tint": "#6a6a6a",
+    "emoji": "🦏"
+  },
+  {
+    "id": "white-rhino",
+    "display": "White rhinoceros",
+    "aliases": ["white rhino", "square-lipped rhinoceros"],
+    "archetype": "rhino",
+    "movement": "land",
+    "size": "L",
+    "tint": "#a0a098",
+    "emoji": "🦏"
+  },
+  {
+    "id": "giraffe",
+    "display": "Giraffe",
+    "aliases": [],
+    "archetype": "hoofed",
+    "movement": "land",
+    "size": "L",
+    "tint": "#d8a050",
+    "emoji": "🦒"
+  },
+  {
+    "id": "plains-zebra",
+    "display": "Plains zebra",
+    "aliases": ["zebra", "common zebra"],
+    "archetype": "hoofed",
+    "movement": "land",
+    "size": "L",
+    "tint": "#f0f0f0",
+    "emoji": "🦓"
+  },
+  {
+    "id": "hippo",
+    "display": "Hippopotamus",
+    "aliases": ["hippo", "common hippopotamus"],
+    "archetype": "hippo",
+    "movement": "land",
+    "size": "L",
+    "tint": "#8a6a80",
+    "emoji": "🦛"
+  },
+  {
+    "id": "malayan-tapir",
+    "display": "Malayan tapir",
+    "aliases": ["tapir", "asian tapir"],
+    "archetype": "hoofed",
+    "movement": "land",
+    "size": "L",
+    "tint": "#303030",
+    "emoji": "🐾"
+  },
+  {
+    "id": "sunda-pangolin",
+    "display": "Sunda pangolin",
+    "aliases": ["pangolin", "malayan pangolin"],
+    "archetype": "small-mammal",
+    "movement": "land",
+    "size": "M",
+    "tint": "#8a6a40",
+    "emoji": "🐾"
+  },
+  {
+    "id": "komodo-dragon",
+    "display": "Komodo dragon",
+    "aliases": ["komodo", "komodo monitor"],
+    "archetype": "reptile",
+    "movement": "land",
+    "size": "L",
+    "tint": "#6a6a40",
+    "emoji": "🦎"
+  },
+  {
+    "id": "saltwater-crocodile",
+    "display": "Saltwater crocodile",
+    "aliases": ["crocodile", "croc", "saltie", "estuarine crocodile"],
+    "archetype": "reptile",
+    "movement": "water",
+    "size": "L",
+    "tint": "#4a5a30",
+    "emoji": "🐊"
+  },
+  {
+    "id": "emu",
+    "display": "Emu",
+    "aliases": [],
+    "archetype": "ratite",
+    "movement": "land",
+    "size": "L",
+    "tint": "#6a5a48",
+    "emoji": "🐦"
+  },
+  {
+    "id": "ostrich",
+    "display": "Common ostrich",
+    "aliases": ["ostrich"],
+    "archetype": "ratite",
+    "movement": "land",
+    "size": "L",
+    "tint": "#3a3030",
+    "emoji": "🐦"
+  },
+  {
+    "id": "brown-kiwi",
+    "display": "North Island brown kiwi",
+    "aliases": ["kiwi", "brown kiwi"],
+    "archetype": "ratite",
+    "movement": "land",
+    "size": "S",
+    "tint": "#7a6040",
+    "emoji": "🐦"
+  },
+  {
+    "id": "kakapo",
+    "display": "Kākāpō",
+    "aliases": ["kakapo", "owl parrot"],
+    "archetype": "parrot",
+    "movement": "land",
+    "size": "M",
+    "tint": "#6a9a30",
+    "emoji": "🦜"
+  },
+  {
+    "id": "indian-peafowl",
+    "display": "Indian peafowl",
+    "aliases": ["peacock", "peahen", "peafowl"],
+    "archetype": "fowl",
+    "movement": "land",
+    "size": "L",
+    "tint": "#2a6ab0",
+    "emoji": "🦚"
+  },
+  {
+    "id": "axolotl",
+    "display": "Axolotl",
+    "aliases": ["mexican walking fish"],
+    "archetype": "amphibian",
+    "movement": "water",
+    "size": "S",
+    "tint": "#f0a0b0",
+    "emoji": "🦎"
+  },
+  {
+    "id": "chinese-giant-salamander",
+    "display": "Chinese giant salamander",
+    "aliases": ["giant salamander"],
+    "archetype": "amphibian",
+    "movement": "water",
+    "size": "L",
+    "tint": "#5a4a38",
+    "emoji": "🦎"
+  },
+  {
+    "id": "bald-eagle",
+    "display": "Bald eagle",
+    "aliases": ["american eagle"],
+    "archetype": "raptor",
+    "movement": "sky",
+    "size": "M",
+    "tint": "#5a3a20",
+    "emoji": "🦅"
+  },
+  {
+    "id": "peregrine-falcon",
+    "display": "Peregrine falcon",
+    "aliases": ["peregrine", "falcon"],
+    "archetype": "raptor",
+    "movement": "sky",
+    "size": "M",
+    "tint": "#6a7080",
+    "emoji": "🦅"
+  },
+  {
+    "id": "philippine-eagle",
+    "display": "Philippine eagle",
+    "aliases": ["monkey-eating eagle"],
+    "archetype": "raptor",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#8a6a40",
+    "emoji": "🦅"
+  },
+  {
+    "id": "california-condor",
+    "display": "California condor",
+    "aliases": ["condor"],
+    "archetype": "raptor",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#2a2a2a",
+    "emoji": "🦅"
+  },
+  {
+    "id": "barn-owl",
+    "display": "Barn owl",
+    "aliases": [],
+    "archetype": "owl",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#e0c090",
+    "emoji": "🦉"
+  },
+  {
+    "id": "snowy-owl",
+    "display": "Snowy owl",
+    "aliases": ["arctic owl"],
+    "archetype": "owl",
+    "movement": "sky",
+    "size": "M",
+    "tint": "#f4f4f0",
+    "emoji": "🦉"
+  },
+  {
+    "id": "african-grey-parrot",
+    "display": "African grey parrot",
+    "aliases": ["african grey", "grey parrot", "gray parrot"],
+    "archetype": "parrot",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#9098a0",
+    "emoji": "🦜"
+  },
+  {
+    "id": "greater-flamingo",
+    "display": "Greater flamingo",
+    "aliases": ["flamingo"],
+    "archetype": "wader",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#f0a0a8",
+    "emoji": "🦩"
+  },
+  {
+    "id": "red-crowned-crane",
+    "display": "Red-crowned crane",
+    "aliases": ["japanese crane", "manchurian crane", "crane"],
+    "archetype": "wader",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#f4f4f4",
+    "emoji": "🐦"
+  },
+  {
+    "id": "white-stork",
+    "display": "White stork",
+    "aliases": ["stork"],
+    "archetype": "wader",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#f0f0f0",
+    "emoji": "🐦"
+  },
+  {
+    "id": "northern-lapwing",
+    "display": "Northern lapwing",
+    "aliases": ["lapwing", "peewit"],
+    "archetype": "wader",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#2a5a40",
+    "emoji": "🐦"
+  },
+  {
+    "id": "ruby-throated-hummingbird",
+    "display": "Ruby-throated hummingbird",
+    "aliases": ["hummingbird"],
+    "archetype": "songbird",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#3a8a40",
+    "emoji": "🐦"
+  },
+  {
+    "id": "common-kingfisher",
+    "display": "Common kingfisher",
+    "aliases": ["kingfisher"],
+    "archetype": "songbird",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#2a8ac0",
+    "emoji": "🐦"
+  },
+  {
+    "id": "eurasian-magpie",
+    "display": "Eurasian magpie",
+    "aliases": ["magpie"],
+    "archetype": "songbird",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#202020",
+    "emoji": "🐦‍⬛"
+  },
+  {
+    "id": "mallard",
+    "display": "Mallard",
+    "aliases": ["duck", "wild duck"],
+    "archetype": "waterfowl",
+    "movement": "sky",
+    "size": "M",
+    "tint": "#2a7a3a",
+    "emoji": "🦆"
+  },
+  {
+    "id": "atlantic-puffin",
+    "display": "Atlantic puffin",
+    "aliases": ["puffin"],
+    "archetype": "seabird",
+    "movement": "sky",
+    "size": "S",
+    "tint": "#202020",
+    "emoji": "🐦"
+  },
+  {
+    "id": "wandering-albatross",
+    "display": "Wandering albatross",
+    "aliases": ["albatross"],
+    "archetype": "seabird",
+    "movement": "sky",
+    "size": "L",
+    "tint": "#f0f0e8",
+    "emoji": "🐦"
+  },
+  {
+    "id": "grey-headed-flying-fox",
+    "display": "Grey-headed flying fox",
+    "aliases": ["flying fox", "fruit bat"],
+    "archetype": "bat",
+    "movement": "sky",
+    "size": "M",
+    "tint": "#6a5a50",
+    "emoji": "🦇"
+  },
+  {
+    "id": "killer-whale",
+    "display": "Killer whale",
+    "aliases": ["orca"],
+    "archetype": "whale",
+    "movement": "water",
+    "size": "L",
+    "tint": "#1a1a1a",
+    "emoji": "🐋"
+  },
+  {
+    "id": "blue-whale",
+    "display": "Blue whale",
+    "aliases": [],
+    "archetype": "whale",
+    "movement": "water",
+    "size": "L",
+    "tint": "#4a6a9a",
+    "emoji": "🐋"
+  },
+  {
+    "id": "humpback-whale",
+    "display": "Humpback whale",
+    "aliases": ["humpback"],
+    "archetype": "whale",
+    "movement": "water",
+    "size": "L",
+    "tint": "#3a4a5a",
+    "emoji": "🐋"
+  },
+  {
+    "id": "vaquita",
+    "display": "Vaquita",
+    "aliases": ["gulf of california porpoise"],
+    "archetype": "dolphin",
+    "movement": "water",
+    "size": "M",
+    "tint": "#8a909a",
+    "emoji": "🐬"
+  },
+  {
+    "id": "bottlenose-dolphin",
+    "display": "Bottlenose dolphin",
+    "aliases": ["dolphin"],
+    "archetype": "dolphin",
+    "movement": "water",
+    "size": "M",
+    "tint": "#8a9aa8",
+    "emoji": "🐬"
+  },
+  {
+    "id": "great-white-shark",
+    "display": "Great white shark",
+    "aliases": ["great white", "white shark"],
+    "archetype": "shark",
+    "movement": "water",
+    "size": "L",
+    "tint": "#7a8a98",
+    "emoji": "🦈"
+  },
+  {
+    "id": "whale-shark",
+    "display": "Whale shark",
+    "aliases": [],
+    "archetype": "shark",
+    "movement": "water",
+    "size": "L",
+    "tint": "#4a5a7a",
+    "emoji": "🦈"
+  },
+  {
+    "id": "great-hammerhead",
+    "display": "Great hammerhead",
+    "aliases": ["hammerhead", "hammerhead shark"],
+    "archetype": "shark",
+    "movement": "water",
+    "size": "L",
+    "tint": "#8a8a80",
+    "emoji": "🦈"
+  },
+  {
+    "id": "hawksbill-turtle",
+    "display": "Hawksbill turtle",
+    "aliases": ["hawksbill", "hawksbill sea turtle"],
+    "archetype": "turtle",
+    "movement": "water",
+    "size": "M",
+    "tint": "#8a5a30",
+    "emoji": "🐢"
+  },
+  {
+    "id": "leatherback-turtle",
+    "display": "Leatherback turtle",
+    "aliases": ["leatherback", "leatherback sea turtle"],
+    "archetype": "turtle",
+    "movement": "water",
+    "size": "L",
+    "tint": "#3a3a40",
+    "emoji": "🐢"
+  },
+  {
+    "id": "common-octopus",
+    "display": "Common octopus",
+    "aliases": ["octopus"],
+    "archetype": "octopus",
+    "movement": "water",
+    "size": "M",
+    "tint": "#c05040",
+    "emoji": "🐙"
+  },
+  {
+    "id": "dugong",
+    "display": "Dugong",
+    "aliases": ["sea cow"],
+    "archetype": "sirenian",
+    "movement": "water",
+    "size": "L",
+    "tint": "#8a8078",
+    "emoji": "🦭"
+  },
+  {
+    "id": "west-indian-manatee",
+    "display": "West Indian manatee",
+    "aliases": ["manatee"],
+    "archetype": "sirenian",
+    "movement": "water",
+    "size": "L",
+    "tint": "#7a7a78",
+    "emoji": "🦭"
+  },
+  {
+    "id": "sea-otter",
+    "display": "Sea otter",
+    "aliases": [],
+    "archetype": "otter",
+    "movement": "water",
+    "size": "M",
+    "tint": "#6a4a30",
+    "emoji": "🦦"
+  },
+  {
+    "id": "harbour-seal",
+    "display": "Harbour seal",
+    "aliases": ["harbor seal", "common seal", "seal"],
+    "archetype": "seal",
+    "movement": "water",
+    "size": "M",
+    "tint": "#8a8a80",
+    "emoji": "🦭"
+  },
+  {
+    "id": "emperor-penguin",
+    "display": "Emperor penguin",
+    "aliases": [],
+    "archetype": "penguin",
+    "movement": "water",
+    "size": "L",
+    "tint": "#202028",
+    "emoji": "🐧"
+  },
+  {
+    "id": "african-penguin",
+    "display": "African penguin",
+    "aliases": ["jackass penguin", "black-footed penguin"],
+    "archetype": "penguin",
+    "movement": "water",
+    "size": "M",
+    "tint": "#202020",
+    "emoji": "🐧"
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-08",
+  "number": 3,
+  "prompts": [
+    {
+      "id": "mammal",
+      "text": "Name a mammal",
+      "answers": [
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "european-hedgehog", "tier": 2 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "bornean-orangutan", "tier": 5 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "chimpanzee", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "giraffe", "tier": 3 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "polar-bear", "tier": 3 },
+        { "animalId": "giant-panda", "tier": 3 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "vaquita", "tier": 5 },
+        { "animalId": "blue-whale", "tier": 4 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "ruffed-lemur", "tier": 5 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "brown-bear", "tier": 1 }
+      ]
+    },
+    {
+      "id": "lives-in-australia",
+      "text": "Name an animal that lives in Australia",
+      "answers": [
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "emu", "tier": 1 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "whale-shark", "tier": 4 },
+        { "animalId": "hawksbill-turtle", "tier": 5 },
+        { "animalId": "leatherback-turtle", "tier": 3 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "peregrine-falcon", "tier": 1 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "wandering-albatross", "tier": 3 },
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "blue-whale", "tier": 4 }
+      ]
+    },
+    {
+      "id": "black-and-white",
+      "text": "Name an animal that is black and white",
+      "answers": [
+        { "animalId": "giant-panda", "tier": 3 },
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "bald-eagle", "tier": 1 },
+        { "animalId": "snowy-owl", "tier": 3 },
+        { "animalId": "red-crowned-crane", "tier": 3 },
+        { "animalId": "white-stork", "tier": 1 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "eurasian-magpie", "tier": 1 },
+        { "animalId": "ruffed-lemur", "tier": 5 }
+      ]
+    }
+  ]
+}

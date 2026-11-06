@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-06",
+  "number": 1,
+  "prompts": [
+    {
+      "id": "lays-eggs",
+      "text": "Name an animal that lays eggs",
+      "answers": [
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "emu", "tier": 1 },
+        { "animalId": "ostrich", "tier": 1 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "african-grey-parrot", "tier": 4 },
+        { "animalId": "greater-flamingo", "tier": 1 },
+        { "animalId": "indian-peafowl", "tier": 1 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "ruby-throated-hummingbird", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "red-crowned-crane", "tier": 3 },
+        { "animalId": "bald-eagle", "tier": 1 },
+        { "animalId": "peregrine-falcon", "tier": 1 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "snowy-owl", "tier": 3 },
+        { "animalId": "komodo-dragon", "tier": 4 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "hawksbill-turtle", "tier": 5 },
+        { "animalId": "leatherback-turtle", "tier": 3 },
+        { "animalId": "axolotl", "tier": 5 },
+        { "animalId": "common-octopus", "tier": 1 },
+        { "animalId": "chinese-giant-salamander", "tier": 5 },
+        { "animalId": "mallard", "tier": 1 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "california-condor", "tier": 5 }
+      ]
+    },
+    {
+      "id": "lives-in-africa",
+      "text": "Name an animal that lives in Africa",
+      "answers": [
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "cheetah", "tier": 3 },
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "giraffe", "tier": 3 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "chimpanzee", "tier": 4 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "ostrich", "tier": 1 },
+        { "animalId": "african-grey-parrot", "tier": 4 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "greater-flamingo", "tier": 1 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "peregrine-falcon", "tier": 1 },
+        { "animalId": "ruffed-lemur", "tier": 5 },
+        { "animalId": "white-stork", "tier": 1 },
+        { "animalId": "great-white-shark", "tier": 3 }
+      ]
+    },
+    {
+      "id": "lives-in-ocean",
+      "text": "Name an animal that lives in the ocean",
+      "answers": [
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "blue-whale", "tier": 4 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "vaquita", "tier": 5 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "whale-shark", "tier": 4 },
+        { "animalId": "great-hammerhead", "tier": 5 },
+        { "animalId": "hawksbill-turtle", "tier": 5 },
+        { "animalId": "leatherback-turtle", "tier": 3 },
+        { "animalId": "common-octopus", "tier": 1 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "west-indian-manatee", "tier": 3 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "wandering-albatross", "tier": 3 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "polar-bear", "tier": 3 }
+      ]
+    }
+  ]
+}
