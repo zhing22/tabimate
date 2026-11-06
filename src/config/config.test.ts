@@ -51,6 +51,7 @@ describe('config invariants', () => {
     expect(ROUND_TIME_MS).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.minSimilarity).toBeLessThanOrEqual(1);
+    expect(MATCHER_CONFIG.looseMinInnerGrams).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMaxDistance).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMinLength).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.typoMaxShare).toBeGreaterThan(0);

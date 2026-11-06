@@ -18,8 +18,17 @@ export interface GramOverlap {
   readonly names: readonly IndexedName[];
   /** shared[i] = trigrams names[i] has in common with the input. */
   readonly shared: Int32Array;
+  /** Like shared, but counting only inner trigrams (see isInnerGram). */
+  readonly sharedInner: Int32Array;
   readonly inputGramCount: number;
 }
+
+/**
+ * True for a trigram of three real characters. Padding and word-gap trigrams
+ * ("  d", " do", "r w") only say where words start and end, so on their own
+ * they make "dog" look like "dolphin".
+ */
+export const isInnerGram = (gram: string): boolean => !gram.includes(' ');
 
 // Comparing a guess with every name one by one was the slowest part of matching,
 // so each candidate list is indexed once and only names sharing a trigram are visited.
@@ -54,10 +63,15 @@ export function gramOverlap(candidates: readonly Candidate[], text: string): Gra
   const { names, postings } = indexOf(candidates);
   const grams = trigrams(text);
   const shared = new Int32Array(names.length);
+  const sharedInner = new Int32Array(names.length);
   for (const gram of grams) {
-    for (const position of postings.get(gram) ?? []) shared[position]!++;
+    const inner = isInnerGram(gram);
+    for (const position of postings.get(gram) ?? []) {
+      shared[position]!++;
+      if (inner) sharedInner[position]!++;
+    }
   }
-  const overlap = { names, shared, inputGramCount: grams.size };
+  const overlap = { names, shared, sharedInner, inputGramCount: grams.size };
   last = { candidates, text, overlap };
   return overlap;
 }

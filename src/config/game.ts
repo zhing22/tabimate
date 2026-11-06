@@ -30,6 +30,11 @@ export const REVEAL_DELAY_MS = 600;
 export interface MatcherConfig {
   /** Trigram similarity (0..1) the 'loose' strategy needs to accept a hit. */
   readonly minSimilarity: number;
+  /**
+   * Trigrams of three real letters (no padding or space) a guess must share with
+   * a name for 'loose'. Stops "dog" -> "dolphin", which share only the word start.
+   */
+  readonly looseMinInnerGrams: number;
   /** Most Levenshtein edits the 'typo' strategy ever accepts. */
   readonly typoMaxDistance: number;
   /** Shortest guess and name 'typo' considers. */
@@ -58,6 +63,7 @@ export interface MatcherConfig {
 export const MATCHER_CONFIG = {
   // Low on purpose: matching is meant to be loose (see CLAUDE.md).
   minSimilarity: 0.3,
+  looseMinInnerGrams: 2,
   typoMaxDistance: 2,
   typoMinLength: 4,
   typoMaxShare: 0.3,

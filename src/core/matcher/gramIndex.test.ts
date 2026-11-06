@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { gramOverlap, minSharedGrams } from './gramIndex';
+import { gramOverlap, isInnerGram, minSharedGrams } from './gramIndex';
 import { fnv1a, levenshtein, trigrams } from './similarity';
 import { candidate } from './testFixtures';
 
@@ -41,6 +41,18 @@ describe('minSharedGrams', () => {
   });
 });
 
+describe('isInnerGram', () => {
+  it.each([
+    ['dol', true],
+    ['  d', false],
+    [' do', false],
+    ['og ', false],
+    ['r w', false],
+  ])('%j -> %s', (gram, inner) => {
+    expect(isInnerGram(gram)).toBe(inner);
+  });
+});
+
 describe('gramOverlap', () => {
   const candidates = [candidate('a', 1, 'tiger', 'big cat'), candidate('b', 2, 'emu')];
 
@@ -49,6 +61,12 @@ describe('gramOverlap', () => {
     expect(names.map((n) => n.name)).toEqual(['tiger', 'big cat', 'emu']);
     expect([...counts]).toEqual([shared('tigers', 'tiger'), 0, 0]);
     expect(inputGramCount).toBe(trigrams('tigers').size);
+  });
+
+  it('counts inner trigrams separately', () => {
+    // tigers/tiger share "  t", " ti" (padding) and tig, ige, ger (inner).
+    expect(gramOverlap(candidates, 'tigers').sharedInner[0]).toBe(3);
+    expect(gramOverlap(candidates, 'tom').sharedInner[0]).toBe(0);
   });
 
   it('reuses the result for the same guess', () => {

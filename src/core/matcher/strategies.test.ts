@@ -135,6 +135,31 @@ describe('loose', () => {
   it('respects minSimilarity', () => {
     expect(loose(input('platapuss'), all, { ...cfg, minSimilarity: 0.99 })).toBeNull();
   });
+
+  const dolphin = candidate('bottlenose-dolphin', 1, 'Bottlenose dolphin', 'dolphin');
+  const axolotl = candidate('axolotl', 5, 'Axolotl');
+  const tiger = candidate('tiger', 4, 'Tiger');
+
+  // These share only the padded word start ("  d", " do"), which used to clear 0.3.
+  it.each(['dog', 'ax', 'axq', 'axqq', 'doll'])(
+    'does not match %j on a shared start alone',
+    (g) => {
+      expect(loose(input(g), [dolphin, axolotl, tiger], cfg)).toBeNull();
+    },
+  );
+
+  it('still matches near misses that share real letters', () => {
+    expect(idOf(loose(input('plaatyypuss'), all, cfg))).toBe('platypus');
+    expect(idOf(loose(input('the tiger shark'), [dolphin, tiger], cfg))).toBe('tiger');
+  });
+
+  it('respects looseMinInnerGrams', () => {
+    // "plaatyypuss" shares 4 inner trigrams with "platypus": pla, aty, ypu, pus.
+    expect(loose(input('plaatyypuss'), all, { ...cfg, looseMinInnerGrams: 5 })).toBeNull();
+    expect(idOf(loose(input('dog'), [dolphin], { ...cfg, looseMinInnerGrams: 0 }))).toBe(
+      'bottlenose-dolphin',
+    );
+  });
 });
 
 describe('STRATEGIES', () => {
