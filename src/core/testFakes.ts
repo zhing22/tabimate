@@ -13,6 +13,8 @@ export interface FakeTime {
   readonly scheduler: Scheduler;
   /** Moves time forward, running each timer that falls due, in order. */
   advance(ms: number): void;
+  /** Moves the clock without running timers, like a background tab holding them back. */
+  skip(ms: number): void;
   /** Timers still waiting. */
   pending(): number;
   nowMs(): number;
@@ -50,6 +52,9 @@ export function createFakeTime(startIso = '2026-11-07T04:00:00Z'): FakeTime {
     clock: { now: () => new Date(now) },
     scheduler,
     advance,
+    skip: (ms) => {
+      now += ms;
+    },
     pending: () => timers.length,
     nowMs: () => now,
   };

@@ -8,8 +8,10 @@ import type {
   RunStatus,
 } from './types';
 
+// start and revealDone carry the next round's deadline, so a playing state is
+// never without one (a save taken at any moment can be resumed fairly).
 export type GameAction =
-  | { readonly type: 'start' }
+  | { readonly type: 'start'; readonly roundEndsAt: number }
   | {
       readonly type: 'submit';
       readonly promptId: PromptId;
@@ -17,7 +19,7 @@ export type GameAction =
       readonly timeMs: number;
     }
   | { readonly type: 'timeout'; readonly promptId: PromptId; readonly timeMs: number }
-  | { readonly type: 'revealDone' }
+  | { readonly type: 'revealDone'; readonly nextRoundEndsAt: number }
   | { readonly type: 'restore'; readonly state: RunState };
 
 /** A fresh, not yet started run of `puzzle`. */
@@ -28,6 +30,7 @@ export function createRunState(puzzle: Puzzle, mode: GameMode = 'daily'): RunSta
     promptCount: puzzle.prompts.length,
     results: [],
     status: 'idle',
+    roundEndsAt: null,
   };
 }
 
@@ -42,7 +45,12 @@ const timedOut = (): MatchResult => ({ tier: 0, animalId: null, strategy: null, 
 
 function answer(state: RunState, result: RoundResult): RunState {
   if (state.status !== 'playing' || state.results.length >= state.promptCount) return state;
-  return { ...state, status: 'revealing', results: [...state.results, result] };
+  return {
+    ...state,
+    status: 'revealing',
+    results: [...state.results, result],
+    roundEndsAt: null,
+  };
 }
 
 /**
@@ -52,7 +60,8 @@ function answer(state: RunState, result: RoundResult): RunState {
 export function gameReducer(state: RunState, action: GameAction): RunState {
   switch (action.type) {
     case 'start':
-      return state.status === 'idle' ? { ...state, status: 'playing' } : state;
+      if (state.status !== 'idle') return state;
+      return { ...state, status: 'playing', roundEndsAt: action.roundEndsAt };
     case 'submit':
       return answer(state, {
         promptId: action.promptId,
@@ -63,10 +72,9 @@ export function gameReducer(state: RunState, action: GameAction): RunState {
       return answer(state, { promptId: action.promptId, match: timedOut(), timeMs: action.timeMs });
     case 'revealDone':
       if (state.status !== 'revealing') return state;
-      return {
-        ...state,
-        status: state.results.length >= state.promptCount ? 'finished' : 'playing',
-      };
+      return state.results.length >= state.promptCount
+        ? { ...state, status: 'finished', roundEndsAt: null }
+        : { ...state, status: 'playing', roundEndsAt: action.nextRoundEndsAt };
     case 'restore':
       return state.status === 'idle' ? action.state : state;
   }
@@ -83,6 +91,7 @@ const RESULTS_FIT: Readonly<Record<RunStatus, (done: number, n: number) => boole
 /**
  * True if `saved` is a consistent run of this puzzle in this mode: same date
  * and prompt count, results in prompt order, and a status that fits them.
+ * A playing run must have its round deadline; no other status may.
  */
 export function canRestore(saved: RunState, puzzle: Puzzle, mode: GameMode): boolean {
   const n = puzzle.prompts.length;
@@ -91,5 +100,9 @@ export function canRestore(saved: RunState, puzzle: Puzzle, mode: GameMode): boo
   }
   if (saved.results.length > n) return false;
   const inOrder = saved.results.every((r, i) => r.promptId === puzzle.prompts[i]?.id);
-  return inOrder && RESULTS_FIT[saved.status](saved.results.length, n);
+  const deadlineFits =
+    saved.status === 'playing'
+      ? typeof saved.roundEndsAt === 'number' && Number.isFinite(saved.roundEndsAt)
+      : saved.roundEndsAt === null;
+  return inOrder && deadlineFits && RESULTS_FIT[saved.status](saved.results.length, n);
 }

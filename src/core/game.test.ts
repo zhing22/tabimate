@@ -23,16 +23,16 @@ const submit = (promptId: string): GameAction => ({
 
 const idle = createRunState(puzzle);
 const run = (...actions: GameAction[]) => actions.reduce(gameReducer, idle);
-const playing0 = run({ type: 'start' });
-const revealing0 = run({ type: 'start' }, submit('a'));
+const playing0 = run({ type: 'start', roundEndsAt: 1000 });
+const revealing0 = run({ type: 'start', roundEndsAt: 1000 }, submit('a'));
 const finished = run(
-  { type: 'start' },
+  { type: 'start', roundEndsAt: 1000 },
   submit('a'),
-  { type: 'revealDone' },
+  { type: 'revealDone', nextRoundEndsAt: 2000 },
   submit('b'),
-  { type: 'revealDone' },
+  { type: 'revealDone', nextRoundEndsAt: 2000 },
   submit('c'),
-  { type: 'revealDone' },
+  { type: 'revealDone', nextRoundEndsAt: 2000 },
 );
 
 describe('createRunState', () => {
@@ -43,7 +43,18 @@ describe('createRunState', () => {
       promptCount: 3,
       results: [],
       status: 'idle',
+      roundEndsAt: null,
     });
+  });
+});
+
+describe('gameReducer: round deadline', () => {
+  it('is set while playing and cleared otherwise', () => {
+    expect(playing0.roundEndsAt).toBe(1000);
+    expect(revealing0.roundEndsAt).toBeNull();
+    const next = gameReducer(revealing0, { type: 'revealDone', nextRoundEndsAt: 2000 });
+    expect(next.roundEndsAt).toBe(2000);
+    expect(finished.roundEndsAt).toBeNull();
   });
 });
 
@@ -68,7 +79,9 @@ describe('gameReducer: legal transitions', () => {
   });
 
   it('revealDone: revealing -> playing, or finished after the last prompt', () => {
-    expect(gameReducer(revealing0, { type: 'revealDone' }).status).toBe('playing');
+    expect(gameReducer(revealing0, { type: 'revealDone', nextRoundEndsAt: 2000 }).status).toBe(
+      'playing',
+    );
     expect(finished.status).toBe('finished');
     expect(finished.results.map((r) => r.promptId)).toEqual(['a', 'b', 'c']);
   });
@@ -92,10 +105,10 @@ describe('gameReducer: illegal transitions return the same state', () => {
     finished,
   };
   const actions: Record<string, GameAction> = {
-    start: { type: 'start' },
+    start: { type: 'start', roundEndsAt: 1000 },
     submit: submit('a'),
     timeout: { type: 'timeout', promptId: 'a', timeMs: 1 },
-    revealDone: { type: 'revealDone' },
+    revealDone: { type: 'revealDone', nextRoundEndsAt: 2000 },
     restore: { type: 'restore', state: playing0 },
   };
   const legal = new Set([
@@ -127,7 +140,9 @@ describe('currentRoundIndex', () => {
     expect(currentRoundIndex(idle)).toBeNull();
     expect(currentRoundIndex(playing0)).toBe(0);
     expect(currentRoundIndex(revealing0)).toBe(0);
-    expect(currentRoundIndex(gameReducer(revealing0, { type: 'revealDone' }))).toBe(1);
+    expect(
+      currentRoundIndex(gameReducer(revealing0, { type: 'revealDone', nextRoundEndsAt: 2000 })),
+    ).toBe(1);
     expect(currentRoundIndex(finished)).toBeNull();
   });
 });
@@ -154,6 +169,9 @@ describe('canRestore', () => {
     ['revealing with no result', { ...playing0, status: 'revealing' }],
     ['idle with results', { ...revealing0, status: 'idle' }],
     ['too many results', { ...finished, results: [...finished.results, finished.results[0]!] }],
+    ['playing without a deadline', { ...playing0, roundEndsAt: null }],
+    ['playing with a bad deadline', { ...playing0, roundEndsAt: Number.NaN }],
+    ['revealing with a deadline', { ...revealing0, roundEndsAt: 5000 }],
   ])('rejects %s', (_name, state) => {
     expect(canRestore(state, puzzle, 'daily')).toBe(false);
   });

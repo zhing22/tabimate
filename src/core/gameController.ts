@@ -41,10 +41,10 @@ export function createGameController(deps: GameControllerDeps): GameController {
   let state = createRunState(puzzle, mode);
   let roundTimer: TimerHandle | null = null;
   let revealTimer: TimerHandle | null = null;
-  let roundStartedAt = 0;
   let disposed = false;
 
   const now = () => clock.now().getTime();
+  const nextDeadline = () => now() + roundTimeMs;
 
   /** Applies an action; true if the state changed. */
   function dispatch(action: GameAction): boolean {
@@ -61,13 +61,22 @@ export function createGameController(deps: GameControllerDeps): GameController {
     roundTimer = null;
   }
 
-  function beginRound() {
+  /**
+   * Arms the timer for the round in progress, from the deadline in state. A
+   * resumed round gets only the time it had left; a lapsed one times out now.
+   */
+  function runRound() {
     const index = state.results.length;
     const prompt = puzzle.prompts[index];
-    if (!prompt) return;
-    roundStartedAt = now();
-    roundTimer = scheduler.setTimeout(onTimeout, roundTimeMs);
-    bus.emit('roundStarted', { index, prompt, endsAt: roundStartedAt + roundTimeMs });
+    const endsAt = state.roundEndsAt;
+    if (!prompt || endsAt === null) return;
+    const left = endsAt - now();
+    if (left <= 0) {
+      onTimeout();
+      return;
+    }
+    roundTimer = scheduler.setTimeout(onTimeout, left);
+    bus.emit('roundStarted', { index, prompt, endsAt });
   }
 
   function scheduleReveal(scoreBefore: number) {
@@ -85,13 +94,13 @@ export function createGameController(deps: GameControllerDeps): GameController {
   function finishReveal(scoreBefore: number) {
     revealTimer = null;
     const index = state.results.length - 1;
-    if (!dispatch({ type: 'revealDone' })) return;
+    if (!dispatch({ type: 'revealDone', nextRoundEndsAt: nextDeadline() })) return;
     bus.emit('revealFinished', { index });
     // Biomes change after the reveal, so the tier is seen before the scene moves on.
     const score = totalScore(state.results);
     for (const biome of biomesEntered(scoreBefore, score)) bus.emit('biomeEntered', { biome });
     if (state.status === 'finished') bus.emit('runFinished', { results: state.results, score });
-    else beginRound();
+    else runRound();
   }
 
   function onTimeout() {
@@ -105,8 +114,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
   /** Picks a restored run back up from wherever it was saved. */
   function resume() {
     if (state.status === 'playing') {
-      // The saved state has no round start time, so the round restarts with a full timer.
-      beginRound();
+      runRound();
     } else if (state.status === 'revealing') {
       scheduleReveal(totalScore(state.results.slice(0, -1)));
     } else if (state.status === 'finished') {
@@ -116,17 +124,25 @@ export function createGameController(deps: GameControllerDeps): GameController {
 
   return {
     start() {
-      if (!dispatch({ type: 'start' })) return;
+      if (!dispatch({ type: 'start', roundEndsAt: nextDeadline() })) return;
       bus.emit('runStarted', { mode, puzzleDate: puzzle.date, promptCount: state.promptCount });
-      beginRound();
+      runRound();
     },
 
     submit(input) {
       if (disposed || state.status !== 'playing') return;
       const prompt = puzzle.prompts[state.results.length];
-      if (!prompt) return;
+      const endsAt = state.roundEndsAt;
+      if (!prompt || endsAt === null) return;
+      // Background tabs delay timers, so an answer can arrive after the deadline
+      // before the timeout has fired. It is a timeout all the same.
+      if (now() >= endsAt) {
+        cancelRoundTimer();
+        onTimeout();
+        return;
+      }
       const match = matchAnswer(input, prompt, animals, cfg);
-      const timeMs = Math.min(Math.max(now() - roundStartedAt, 0), roundTimeMs);
+      const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);
       answered({ type: 'submit', promptId: prompt.id, match, timeMs }, totalScore(state.results));
     },
 

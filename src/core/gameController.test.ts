@@ -163,13 +163,65 @@ describe('gameController: restore', () => {
     return first.game.getState();
   }
 
-  it('resumes a playing run at the next round with a full timer', () => {
-    const saved = savedAfterOneRound('playing');
-    const { game, story, time } = setup();
-    expect(game.restore(saved)).toBe(true);
+  // Every setup() clock starts at the same instant, so moving the new one on
+  // stands in for the time spent reloading.
+  function reloadAt(saved: RunState, elapsedMs: number) {
+    const next = setup();
+    next.time.advance(elapsedMs);
+    expect(next.game.restore(saved)).toBe(true);
+    return next;
+  }
+
+  it('resumes a round with only the time it had left', () => {
+    const saved = savedAfterOneRound('playing'); // round 2 began at 600 ms
+    const deadline = REVEAL_DELAY_MS + ROUND_TIME_MS;
+    expect(saved.roundEndsAt).toBe(createFakeTime().nowMs() + deadline);
+
+    const { game, story, time, log } = reloadAt(saved, 10_600);
     expect(story()).toEqual(['runRestored', 'roundStarted 1']);
-    time.advance(ROUND_TIME_MS - 1);
+    expect(log.find(([name]) => name === 'roundStarted')?.[1]).toMatchObject({
+      endsAt: saved.roundEndsAt,
+    });
+    time.advance(deadline - 10_600 - 1);
     expect(game.getState().results).toHaveLength(1);
+    time.advance(1);
+    expect(game.getState().results[1]?.match.tier).toBe(0);
+  });
+
+  it('never adds time however often the page is reloaded', () => {
+    let saved = savedAfterOneRound('playing');
+    const deadline = saved.roundEndsAt;
+    for (const elapsed of [5_000, 10_000, 20_000]) {
+      const { game } = reloadAt(saved, elapsed);
+      saved = game.getState();
+      expect(saved.roundEndsAt).toBe(deadline);
+    }
+  });
+
+  it('records a timeout at once if the deadline passed while away', () => {
+    const saved = savedAfterOneRound('playing');
+    const { game, story } = reloadAt(saved, 60_000);
+    expect(story()).toEqual(['runRestored', 'answerMatched 1 tier 0']);
+    expect(game.getState().results[1]).toMatchObject({
+      promptId: 'r2',
+      timeMs: ROUND_TIME_MS,
+      match: { tier: 0, input: '' },
+    });
+  });
+
+  it('treats an answer after the deadline as a timeout, even if the timer is late', () => {
+    const { time, game } = setup();
+    game.start();
+    // A background tab can hold timers back while the clock keeps going.
+    time.skip(ROUND_TIME_MS + 5_000);
+    game.submit('Platypus');
+    expect(game.getState().results[0]?.match).toEqual({
+      tier: 0,
+      animalId: null,
+      strategy: null,
+      input: '',
+    });
+    expect(time.pending()).toBe(1); // only the reveal; the round timer was cleared
   });
 
   it('finishes a reveal that was interrupted', () => {

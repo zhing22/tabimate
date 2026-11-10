@@ -86,4 +86,10 @@ export interface RunState {
   readonly promptCount: number;
   readonly results: readonly RoundResult[];
   readonly status: RunStatus;
+  /**
+   * When the current round's time runs out (epoch ms, injected Clock). Set
+   * while 'playing', null otherwise. Saved with the run so a reload cannot
+   * restart the timer.
+   */
+  readonly roundEndsAt: number | null;
 }
