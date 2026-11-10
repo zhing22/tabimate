@@ -1,5 +1,5 @@
 import { MOVEMENTS, SIZE_CLASSES } from '@/config/animals';
-import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
+import { MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import type { AnswerTierId } from '@/config/tiers';
 import { puzzleNumber } from '@/core/date';
 import type { Animal, AnimalId, DateKey, Prompt, Puzzle, PuzzleAnswer } from '@/core/types';
@@ -32,13 +32,18 @@ function readAnimal(r: JsonReader, value: unknown, path: string): Animal {
 
 /**
  * Two animals sharing a name or alias would make matching ambiguous, so every
- * name (case-insensitive) must belong to exactly one animal.
+ * name (case-insensitive) must belong to exactly one animal. Names must also
+ * fit in the input box.
  */
 function checkNamesUnique(r: JsonReader, animals: readonly Animal[]): void {
   const owner = new Map<string, AnimalId>();
   animals.forEach((animal, i) => {
     const names = [animal.display, ...animal.aliases];
     names.forEach((name, n) => {
+      if (name.length > MAX_INPUT_LENGTH) {
+        const path = n === 0 ? `[${i}].display` : `[${i}].aliases[${n - 1}]`;
+        r.fail(path, `is longer than MAX_INPUT_LENGTH (${MAX_INPUT_LENGTH}), so it can't be typed`);
+      }
       const key = name.trim().toLowerCase();
       const taken = owner.get(key);
       if (taken !== undefined && taken !== animal.id) {

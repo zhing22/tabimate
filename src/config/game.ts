@@ -27,6 +27,12 @@ export const ROUND_TIME_MS = 25_000;
 /** Pause between a submitted answer and the tier reveal, for suspense. */
 export const REVEAL_DELAY_MS = 600;
 
+/**
+ * Longest guess the matcher reads; anything after is cut off. Also the input
+ * box's maxlength, so every animal name (validated against it) can be typed.
+ */
+export const MAX_INPUT_LENGTH = 40;
+
 export interface MatcherConfig {
   /** Trigram similarity (0..1) the 'loose' strategy needs to accept a hit. */
   readonly minSimilarity: number;

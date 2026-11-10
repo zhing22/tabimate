@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { MATCHER_CONFIG, type MatcherConfig } from '@/config/game';
+import { MATCHER_CONFIG, MAX_INPUT_LENGTH, type MatcherConfig } from '@/config/game';
 import type { Animal, AnimalId, Prompt } from '../types';
 import { buildCandidates } from './candidates';
-import { matchAnswer, runStrategies } from './index';
+import { clampInput, matchAnswer, runStrategies } from './index';
 import { ANIMALS, PROMPT } from './testFixtures';
 
 const match = (raw: string, cfg: MatcherConfig = MATCHER_CONFIG) =>
@@ -52,6 +52,32 @@ describe('matchAnswer', () => {
     expect(match(raw, { ...MATCHER_CONFIG, luckyHitChance: 0 }).tier).toBe(0);
     const result = match(raw);
     if (result.tier !== 0) expect(result.strategy).toBe('lucky');
+  });
+});
+
+describe('clampInput', () => {
+  it('keeps short input as it is', () => {
+    expect(clampInput('Platypus')).toBe('Platypus');
+    expect(clampInput('x'.repeat(MAX_INPUT_LENGTH))).toHaveLength(MAX_INPUT_LENGTH);
+  });
+
+  it('cuts long input to MAX_INPUT_LENGTH', () => {
+    expect(clampInput('x'.repeat(10_000))).toBe('x'.repeat(MAX_INPUT_LENGTH));
+  });
+
+  it('never leaves half an emoji', () => {
+    // '🦊' is two UTF-16 units; a cut at 4 would land between them.
+    expect(clampInput('abc🦊def', 4)).toBe('abc');
+    expect(clampInput('ab🦊def', 4)).toBe('ab🦊');
+  });
+});
+
+describe('long input', () => {
+  it('matches on the first MAX_INPUT_LENGTH characters and stores only those', () => {
+    const pasted = `platypus${' '.repeat(MAX_INPUT_LENGTH)}${'junk '.repeat(100_000)}`;
+    const result = match(pasted);
+    expect(result).toMatchObject({ animalId: 'platypus', strategy: 'exact' });
+    expect(result.input).toHaveLength(MAX_INPUT_LENGTH);
   });
 });
 

@@ -53,6 +53,12 @@ describe('validateAnimals', () => {
       /used by "killer-whale"/,
     ],
     ['display clash', (l) => ((l[2]!.display = 'fox'), l), '[2].display', /used by "red-fox"/],
+    [
+      'name too long to type',
+      (l) => ((l[1]!.aliases = ['orca', 'x'.repeat(41)]), l),
+      '[1].aliases[1]',
+      /longer than MAX_INPUT_LENGTH \(40\)/,
+    ],
   ])('rejects %s', (_name, mutate, field, problem) => {
     const json = mutate(fixtureAnimals());
     expectDataError(() => validateAnimals(json, ANIMALS), ANIMALS, field, problem);
