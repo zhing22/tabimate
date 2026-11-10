@@ -82,6 +82,8 @@ export type RunStatus = 'idle' | 'playing' | 'revealing' | 'finished';
 export interface RunState {
   readonly mode: GameMode;
   readonly puzzleDate: DateKey;
+  /** Prompts in this run's puzzle, so the reducer knows when the run is over. */
+  readonly promptCount: number;
   readonly results: readonly RoundResult[];
   readonly status: RunStatus;
 }

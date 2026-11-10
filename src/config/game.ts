@@ -27,6 +27,9 @@ export const ROUND_TIME_MS = 25_000;
 /** Pause between a submitted answer and the tier reveal, for suspense. */
 export const REVEAL_DELAY_MS = 600;
 
+/** Journey distance (world units, scaled by the scene) the player moves per point. */
+export const DISTANCE_PER_POINT = 1;
+
 /**
  * Longest guess the matcher reads; anything after is cut off. Also the input
  * box's maxlength, so every animal name (validated against it) can be typed.
