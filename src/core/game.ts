@@ -120,12 +120,28 @@ const STATUS_RANK: Readonly<Record<RunStatus, number>> = {
 export const runProgress = (state: RunState): number =>
   state.results.length * 4 + STATUS_RANK[state.status];
 
+const sameMatch = (a: MatchResult, b: MatchResult): boolean =>
+  a.tier === b.tier &&
+  a.animalId === b.animalId &&
+  a.strategy === b.strategy &&
+  a.input === b.input;
+
+const sameResult = (a: RoundResult, b: RoundResult): boolean =>
+  a.promptId === b.promptId && a.timeMs === b.timeMs && sameMatch(a.match, b.match);
+
 /**
- * True if `next` may replace `saved` on disk: same day, not behind it, and
- * a finished run is final. Stops a stale tab from rolling a run back.
+ * True if `next` may replace `saved` on disk. It must be the same run carried
+ * further: same day, every saved answer unchanged and in place, and not behind.
+ * At the same point it must be identical (deadline included). A finished run
+ * is final. Without the answer check, a second tab could answer a round again
+ * and replace the first answer: a free retry.
  */
 export function canOverwrite(saved: RunState, next: RunState): boolean {
   if (saved.puzzleDate !== next.puzzleDate || saved.mode !== next.mode) return false;
   if (saved.status === 'finished') return false;
-  return runProgress(next) >= runProgress(saved);
+  if (next.results.length < saved.results.length) return false;
+  if (!saved.results.every((result, i) => sameResult(result, next.results[i]!))) return false;
+  const ahead = runProgress(next) - runProgress(saved);
+  if (ahead !== 0) return ahead > 0;
+  return next.status === saved.status && next.roundEndsAt === saved.roundEndsAt;
 }

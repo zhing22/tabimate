@@ -216,3 +216,33 @@ describe('runProgress and canOverwrite', () => {
     expect(canOverwrite(playing0, { ...revealing0, puzzleDate: '2026-11-08' })).toBe(false);
   });
 });
+
+describe('canOverwrite: the same run, carried further', () => {
+  const miss: MatchResult = { tier: 0, animalId: null, strategy: null, input: 'cat' };
+  const other = (state: RunState) =>
+    gameReducer(state, { type: 'submit', promptId: 'b', match: miss, timeMs: 5 });
+  const playing1 = gameReducer(revealing0, { type: 'revealDone', nextRoundEndsAt: 2000 });
+  const answeredB = gameReducer(playing1, submit('b'));
+  const answeredOther = other(playing1);
+
+  it('refuses a different answer to the same round (a second tab retrying)', () => {
+    expect(canOverwrite(answeredB, answeredOther)).toBe(false);
+    const shownB = gameReducer(answeredB, { type: 'revealDone', nextRoundEndsAt: 3000 });
+    const shownOther = gameReducer(answeredOther, { type: 'revealDone', nextRoundEndsAt: 3000 });
+    expect(canOverwrite(shownB, shownOther)).toBe(false);
+  });
+
+  it('refuses a save that is ahead but changed an earlier answer', () => {
+    const ahead = gameReducer(answeredOther, { type: 'revealDone', nextRoundEndsAt: 3000 });
+    expect(canOverwrite(answeredB, ahead)).toBe(false);
+  });
+
+  it('accepts the same answers with more added', () => {
+    expect(canOverwrite(playing1, answeredB)).toBe(true);
+  });
+
+  it('at the same point, accepts only an identical state', () => {
+    expect(canOverwrite(playing1, { ...playing1 })).toBe(true);
+    expect(canOverwrite(playing1, { ...playing1, roundEndsAt: 9999 })).toBe(false);
+  });
+});

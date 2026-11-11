@@ -172,3 +172,37 @@ describe('progress: storage', () => {
     });
   });
 });
+
+describe('progress: two tabs', () => {
+  it('a second tab cannot replace an answer the first tab already saved', () => {
+    const storage = createMemoryStorageAdapter();
+    const a = openPage(storage, '2026-11-07T05:00:00Z');
+    a.game.submit('Platypus');
+    a.time.advance(REVEAL_DELAY_MS); // round 2 in progress, saved
+
+    // Tab B opens the same moment and restores the same round.
+    const b = openPage(storage, '2026-11-07T05:00:00Z');
+    expect(b.restored).toBe(true);
+
+    a.game.submit('cat'); // a poor answer in tab A...
+    a.time.advance(REVEAL_DELAY_MS);
+    b.game.submit('snow leopard'); // ...retried in tab B
+    b.time.advance(REVEAL_DELAY_MS);
+
+    // Both tabs have reached the same point; storage keeps the answer saved first.
+    expect(b.game.getState().results[1]?.match.animalId).toBe('snow-leopard');
+    const reloaded = openPage(storage, '2026-11-07T05:00:01Z');
+    expect(reloaded.game.getState().results.map((r) => r.match.input)).toEqual(['Platypus', 'cat']);
+  });
+
+  it('two tabs left open do not fight: the stale one stops saving', () => {
+    const storage = createMemoryStorageAdapter();
+    const a = openPage(storage, '2026-11-07T05:00:00Z');
+    const b = openPage(storage, '2026-11-07T05:00:00Z');
+    finish(a);
+    finish(b);
+    const reloaded = openPage(storage, '2026-11-07T06:00:00Z');
+    expect(reloaded.game.getState().results).toEqual(a.game.getState().results);
+    expect(reloaded.progress.getStats().history).toHaveLength(1);
+  });
+});
