@@ -24,8 +24,14 @@ export const MAX_PROMPTS_PER_PUZZLE = 7;
 
 export const ROUND_TIME_MS = 25_000;
 
-/** Pause between a submitted answer and the tier reveal, for suspense. */
-export const REVEAL_DELAY_MS = 600;
+/**
+ * How long the reveal shows after an answer before the next round's timer
+ * starts: the suspense below, then time to read the result.
+ */
+export const REVEAL_DELAY_MS = 2_600;
+
+/** Drum-roll before the tier appears on the reveal. Shorter than REVEAL_DELAY_MS. */
+export const REVEAL_SUSPENSE_MS = 600;
 
 /** Journey distance (world units, scaled by the scene) the player moves per point. */
 export const DISTANCE_PER_POINT = 1;

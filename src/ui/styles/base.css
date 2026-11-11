@@ -1,0 +1,112 @@
+/* Reset and page layout: a full-screen scene with the UI as an overlay on top. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; /* the overlay scrolls inside itself, the page never does */
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--night);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+p,
+ol,
+ul {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+/* The canvas world (Kaplay draws here later). A sky gradient until then. */
+#scene {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scene);
+  background: linear-gradient(#5fa8c8, #cfe8d0 70%, #6abe30 70%);
+  image-rendering: pixelated;
+}
+
+/*
+ * The UI covers exactly the visible part of the screen. --vv-height/--vv-top
+ * come from ui/viewport.ts and shrink it above a phone keyboard.
+ */
+#ui {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--vv-top, 0px);
+  height: var(--vv-height, 100dvh);
+  z-index: var(--z-ui);
+  display: grid;
+  /* minmax(0, 1fr): the column is the screen width, not the width of its longest line. */
+  grid-template-columns: minmax(0, 1fr);
+  overflow-y: auto;
+  padding: max(var(--space-4), env(safe-area-inset-top)) var(--space-4)
+    max(var(--space-4), env(safe-area-inset-bottom));
+}
+
+.screen-layer,
+.overlay-layer {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  min-height: 0;
+}
+
+.overlay-layer {
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+
+.overlay-layer > * {
+  pointer-events: auto;
+}
+
+.overlay-layer:empty {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Headings take focus only so screen readers start there; they are not controls. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+[hidden] {
+  display: none !important;
+}

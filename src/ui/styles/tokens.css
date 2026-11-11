@@ -1,0 +1,72 @@
+/* Design tokens. Tier colours must match config/tiers.ts (checked by ui/styles.test.ts). */
+:root {
+  /* Journal palette */
+  --ink: #2b2134;
+  --ink-soft: #5b4a63;
+  --paper: #f6e8c8;
+  --paper-deep: #ead39f;
+  --paper-edge: #8f6a3f;
+  --night: #1d2b3a;
+  --accent: #c0404e;
+  --accent-ink: #fff6e6;
+  --focus: #3fa7ff;
+
+  /* Tiers: background, and text that reads on it (contrast >= 4.5:1). */
+  --tier-0: #4a4458;
+  --tier-0-ink: #f3eefb;
+  --tier-1: #e9e4d8;
+  --tier-1-ink: #2b2134;
+  --tier-2: #3270c8;
+  --tier-2-ink: #ffffff;
+  --tier-3: #c8333f;
+  --tier-3-ink: #ffffff;
+  --tier-4: #7b3fbf;
+  --tier-4-ink: #ffffff;
+  --tier-5: #f2c230;
+  --tier-5-ink: #2b2134;
+
+  /* Spacing (4 px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Radii: small, pixel art likes corners */
+  --radius-1: 2px;
+  --radius-2: 4px;
+
+  /* Type */
+  --font-pixel: 'Pixelify Sans', ui-monospace, monospace;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.5rem;
+
+  /* Layers */
+  --z-scene: 0;
+  --z-ui: 10;
+  --z-overlay: 20;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur-med: 240ms;
+  --dur-slow: 480ms;
+  --ease-pop: cubic-bezier(0.2, 1.4, 0.4, 1);
+
+  /* Sizes */
+  --tap: 44px; /* minimum touch target */
+  --card-max: 28rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-med: 0ms;
+    --dur-slow: 0ms;
+  }
+}

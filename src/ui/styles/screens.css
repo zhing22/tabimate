@@ -1,0 +1,332 @@
+/* Cards: pages of a travel journal with a stepped pixel border. */
+.card {
+  width: 100%;
+  max-width: var(--card-max);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* never wider than the card, whatever is inside */
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--paper);
+  border-radius: var(--radius-2);
+  box-shadow:
+    0 0 0 3px var(--paper-edge),
+    0 0 0 6px var(--ink),
+    0 6px 0 6px rgb(0 0 0 / 0.25);
+}
+
+.card--journal {
+  background:
+    repeating-linear-gradient(transparent 0 27px, rgb(143 106 63 / 0.12) 27px 28px), var(--paper);
+  text-align: center;
+}
+
+.title,
+.section-title,
+.round__prompt,
+.button,
+.tier-badge,
+.results__number,
+.reveal__points {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  line-height: 1.1;
+}
+
+.title--sm {
+  font-size: var(--text-xl);
+}
+
+.section-title {
+  font-size: var(--text-md);
+  text-align: left;
+}
+
+.subtitle {
+  font-size: var(--text-lg);
+  color: var(--ink-soft);
+}
+
+.meta {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* Buttons: chunky, pixel-bordered, at least 44 px tall. */
+.button {
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-lg);
+  background: var(--paper-deep);
+  border: 0;
+  border-radius: var(--radius-1);
+  box-shadow:
+    0 0 0 3px var(--ink),
+    inset 0 -4px 0 rgb(0 0 0 / 0.18);
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+
+.button--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.how-to {
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.how-to summary {
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.how-to ul {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-5);
+}
+
+/* Round */
+.round__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.round__prompt {
+  font-size: var(--text-xl);
+  line-height: 1.2;
+}
+
+.answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.answer__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.answer__row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.answer__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-3);
+  font-size: max(16px, var(--text-lg)); /* 16 px or more stops iOS zooming in on focus */
+  background: #fffaf0;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-1);
+}
+
+.answer__input:read-only {
+  color: var(--ink-soft);
+}
+
+/* Timer ring */
+.timer-ring {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex: none;
+}
+
+.timer-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-ring__track,
+.timer-ring__arc {
+  fill: none;
+  stroke-width: 6;
+}
+
+.timer-ring__track {
+  stroke: var(--paper-deep);
+}
+
+.timer-ring__arc {
+  stroke: var(--tier-2);
+  stroke-linecap: butt;
+}
+
+.timer-ring--low .timer-ring__arc {
+  stroke: var(--accent);
+}
+
+.timer-ring__label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-pixel);
+  font-size: var(--text-lg);
+}
+
+/* Tier badge */
+.tier-badge {
+  display: inline-block;
+  justify-self: center;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--badge-ink);
+  background: var(--badge);
+  border-radius: var(--radius-1);
+  box-shadow: 0 0 0 2px var(--ink);
+  white-space: nowrap;
+}
+
+.tier-badge--lg {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-md);
+}
+
+/* Reveal: a pop-up page over the round. */
+.reveal {
+  text-align: center;
+  animation: pop var(--dur-med) var(--ease-pop);
+}
+
+.reveal__suspense {
+  font-family: var(--font-pixel);
+  font-size: var(--text-2xl);
+  display: none;
+}
+
+.reveal--pending .reveal__suspense {
+  display: block;
+  animation: blink var(--dur-slow) steps(2) infinite;
+}
+
+.reveal--pending .reveal__body {
+  display: none;
+}
+
+.reveal__body {
+  display: grid;
+  gap: var(--space-2);
+  animation: pop var(--dur-med) var(--ease-pop);
+}
+
+.reveal__emoji {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.reveal__name {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.reveal__points {
+  font-size: var(--text-xl);
+}
+
+.reveal[data-tier='5'] .reveal__body {
+  text-shadow: 0 0 12px var(--tier-5);
+}
+
+/* Results */
+.results__number {
+  font-size: var(--text-2xl);
+}
+
+.team-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.team-card__member {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2);
+  background: rgb(255 255 255 / 0.4);
+  border-radius: var(--radius-1);
+}
+
+.team-card__emoji {
+  font-size: var(--text-xl);
+}
+
+.team-card__text {
+  display: grid;
+  min-width: 0;
+}
+
+.team-card__name {
+  font-weight: 700;
+}
+
+.team-card__prompt {
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.countdown {
+  font-family: var(--font-pixel);
+  color: var(--ink);
+}
+
+.error__detail {
+  overflow-wrap: anywhere;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Small phones: tighter cards so the round fits above the keyboard. */
+@media (max-height: 520px) {
+  .card {
+    padding: var(--space-4);
+    gap: var(--space-2);
+  }
+  .round__prompt {
+    font-size: var(--text-lg);
+  }
+}

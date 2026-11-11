@@ -9,5 +9,7 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     passWithNoTests: true,
+    // So tests can read stylesheets with ?raw (ui/styles.test.ts checks the tokens).
+    css: true,
   },
 });
