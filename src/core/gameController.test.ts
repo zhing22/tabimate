@@ -318,8 +318,13 @@ describe('gameController: misbehaving listeners', () => {
       bus.on(event, () => game.dispose());
       game.start();
       game.submit('Platypus');
-      time.advance(REVEAL_DELAY_MS + ROUND_TIME_MS * 3);
+      // Disposed during answerMatched: no reveal timer may have been started.
+      // (Checked before time moves, since a stray timer would fire and vanish.)
+      expect(time.pending()).toBe(event === 'answerMatched' ? 0 : 1);
+      time.advance(REVEAL_DELAY_MS);
+      // Disposed during revealFinished: no round timer may have been started.
       expect(time.pending()).toBe(0);
+      time.advance(ROUND_TIME_MS * 3);
       expect(game.getState().results).toHaveLength(1);
       // Nothing is announced after dispose.
       expect(seen).toEqual(
