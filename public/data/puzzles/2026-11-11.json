@@ -1,0 +1,89 @@
+{
+  "date": "2026-11-11",
+  "number": 6,
+  "prompts": [
+    {
+      "id": "has-fur",
+      "text": "Name an animal with fur",
+      "answers": [
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "snow-leopard", "tier": 3 },
+        { "animalId": "cheetah", "tier": 3 },
+        { "animalId": "giant-panda", "tier": 3 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "polar-bear", "tier": 3 },
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "grey-wolf", "tier": 1 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "sumatran-orangutan", "tier": 5 },
+        { "animalId": "bornean-orangutan", "tier": 5 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "chimpanzee", "tier": 4 },
+        { "animalId": "ruffed-lemur", "tier": 5 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "platypus", "tier": 2 }
+      ]
+    },
+    {
+      "id": "grey",
+      "text": "Name an animal that is mostly grey",
+      "answers": [
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "grey-wolf", "tier": 1 },
+        { "animalId": "african-grey-parrot", "tier": 4 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "west-indian-manatee", "tier": 3 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "great-hammerhead", "tier": 5 },
+        { "animalId": "vaquita", "tier": 5 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "blue-whale", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 }
+      ]
+    },
+    {
+      "id": "eats-fish",
+      "text": "Name an animal that eats fish",
+      "answers": [
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "bald-eagle", "tier": 1 },
+        { "animalId": "common-kingfisher", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "wandering-albatross", "tier": 3 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "great-hammerhead", "tier": 5 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "white-stork", "tier": 1 },
+        { "animalId": "chinese-giant-salamander", "tier": 5 },
+        { "animalId": "axolotl", "tier": 5 },
+        { "animalId": "vaquita", "tier": 5 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "red-crowned-crane", "tier": 3 },
+        { "animalId": "common-octopus", "tier": 1 },
+        { "animalId": "whale-shark", "tier": 4 }
+      ]
+    }
+  ]
+}

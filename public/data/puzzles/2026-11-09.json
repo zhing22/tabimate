@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-09",
+  "number": 4,
+  "prompts": [
+    {
+      "id": "eats-plants",
+      "text": "Name an animal that eats plants",
+      "answers": [
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "giraffe", "tier": 3 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "giant-panda", "tier": 3 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "west-indian-manatee", "tier": 3 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "ruffed-lemur", "tier": 5 },
+        { "animalId": "bornean-orangutan", "tier": 5 },
+        { "animalId": "sumatran-orangutan", "tier": 5 },
+        { "animalId": "house-mouse", "tier": 1 }
+      ]
+    },
+    {
+      "id": "nocturnal",
+      "text": "Name an animal that is active at night",
+      "answers": [
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "european-hedgehog", "tier": 2 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "common-octopus", "tier": 1 },
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "european-rabbit", "tier": 4 }
+      ]
+    },
+    {
+      "id": "bigger-than-you",
+      "text": "Name an animal bigger than a person",
+      "answers": [
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "polar-bear", "tier": 3 },
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "giraffe", "tier": 3 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "komodo-dragon", "tier": 4 },
+        { "animalId": "ostrich", "tier": 1 },
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "blue-whale", "tier": 4 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "whale-shark", "tier": 4 },
+        { "animalId": "great-hammerhead", "tier": 5 },
+        { "animalId": "leatherback-turtle", "tier": 3 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "west-indian-manatee", "tier": 3 }
+      ]
+    }
+  ]
+}

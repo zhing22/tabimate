@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-13",
+  "number": 8,
+  "prompts": [
+    {
+      "id": "colourful",
+      "text": "Name a colourful animal",
+      "answers": [
+        { "animalId": "indian-peafowl", "tier": 1 },
+        { "animalId": "ruby-throated-hummingbird", "tier": 1 },
+        { "animalId": "common-kingfisher", "tier": 1 },
+        { "animalId": "greater-flamingo", "tier": 1 },
+        { "animalId": "mallard", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "axolotl", "tier": 5 },
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "common-octopus", "tier": 1 },
+        { "animalId": "sumatran-orangutan", "tier": 5 },
+        { "animalId": "eurasian-magpie", "tier": 1 },
+        { "animalId": "hawksbill-turtle", "tier": 5 }
+      ]
+    },
+    {
+      "id": "island",
+      "text": "Name an animal that lives on an island",
+      "answers": [
+        { "animalId": "komodo-dragon", "tier": 4 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "ruffed-lemur", "tier": 5 },
+        { "animalId": "sumatran-orangutan", "tier": 5 },
+        { "animalId": "bornean-orangutan", "tier": 5 },
+        { "animalId": "philippine-eagle", "tier": 5 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "wandering-albatross", "tier": 3 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "red-crowned-crane", "tier": 3 }
+      ]
+    },
+    {
+      "id": "sleepy",
+      "text": "Name an animal that sleeps a lot",
+      "answers": [
+        { "animalId": "koala", "tier": 3 },
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "european-hedgehog", "tier": 2 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "grey-headed-flying-fox", "tier": 3 },
+        { "animalId": "red-panda", "tier": 4 },
+        { "animalId": "cheetah", "tier": 3 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "giant-panda", "tier": 3 },
+        { "animalId": "snow-leopard", "tier": 3 }
+      ]
+    }
+  ]
+}

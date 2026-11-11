@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-10",
+  "number": 5,
+  "prompts": [
+    {
+      "id": "grassland",
+      "text": "Name an animal that lives on grassland or savanna",
+      "answers": [
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "cheetah", "tier": 3 },
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "white-rhino", "tier": 2 },
+        { "animalId": "black-rhino", "tier": 5 },
+        { "animalId": "plains-zebra", "tier": 2 },
+        { "animalId": "giraffe", "tier": 3 },
+        { "animalId": "ostrich", "tier": 1 },
+        { "animalId": "emu", "tier": 1 },
+        { "animalId": "red-kangaroo", "tier": 1 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "grey-wolf", "tier": 1 },
+        { "animalId": "white-stork", "tier": 1 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "hippo", "tier": 3 }
+      ]
+    },
+    {
+      "id": "good-swimmer",
+      "text": "Name an animal that is a good swimmer",
+      "answers": [
+        { "animalId": "tiger", "tier": 4 },
+        { "animalId": "polar-bear", "tier": 3 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "harbour-seal", "tier": 1 },
+        { "animalId": "killer-whale", "tier": 1 },
+        { "animalId": "bottlenose-dolphin", "tier": 1 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "dugong", "tier": 3 },
+        { "animalId": "west-indian-manatee", "tier": 3 },
+        { "animalId": "saltwater-crocodile", "tier": 1 },
+        { "animalId": "axolotl", "tier": 5 },
+        { "animalId": "chinese-giant-salamander", "tier": 5 },
+        { "animalId": "hawksbill-turtle", "tier": 5 },
+        { "animalId": "leatherback-turtle", "tier": 3 },
+        { "animalId": "mallard", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "malayan-tapir", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "great-white-shark", "tier": 3 },
+        { "animalId": "whale-shark", "tier": 4 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "vaquita", "tier": 5 },
+        { "animalId": "common-octopus", "tier": 1 }
+      ]
+    },
+    {
+      "id": "bird",
+      "text": "Name a bird",
+      "answers": [
+        { "animalId": "emu", "tier": 1 },
+        { "animalId": "ostrich", "tier": 1 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "indian-peafowl", "tier": 1 },
+        { "animalId": "bald-eagle", "tier": 1 },
+        { "animalId": "peregrine-falcon", "tier": 1 },
+        { "animalId": "philippine-eagle", "tier": 5 },
+        { "animalId": "california-condor", "tier": 5 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "snowy-owl", "tier": 3 },
+        { "animalId": "african-grey-parrot", "tier": 4 },
+        { "animalId": "greater-flamingo", "tier": 1 },
+        { "animalId": "red-crowned-crane", "tier": 3 },
+        { "animalId": "white-stork", "tier": 1 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "ruby-throated-hummingbird", "tier": 1 },
+        { "animalId": "common-kingfisher", "tier": 1 },
+        { "animalId": "eurasian-magpie", "tier": 1 },
+        { "animalId": "mallard", "tier": 1 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "wandering-albatross", "tier": 3 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 }
+      ]
+    }
+  ]
+}

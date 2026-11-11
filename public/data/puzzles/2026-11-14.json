@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-14",
+  "number": 9,
+  "prompts": [
+    {
+      "id": "burrow",
+      "text": "Name an animal that lives in a burrow or den",
+      "answers": [
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "european-hedgehog", "tier": 2 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "red-fox", "tier": 1 },
+        { "animalId": "grey-wolf", "tier": 1 },
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "polar-bear", "tier": 3 },
+        { "animalId": "atlantic-puffin", "tier": 3 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "komodo-dragon", "tier": 4 }
+      ]
+    },
+    {
+      "id": "loud",
+      "text": "Name an animal known for being loud",
+      "answers": [
+        { "animalId": "lion", "tier": 3 },
+        { "animalId": "humpback-whale", "tier": 1 },
+        { "animalId": "grey-wolf", "tier": 1 },
+        { "animalId": "indian-peafowl", "tier": 1 },
+        { "animalId": "chimpanzee", "tier": 4 },
+        { "animalId": "african-elephant", "tier": 4 },
+        { "animalId": "asian-elephant", "tier": 4 },
+        { "animalId": "kakapo", "tier": 5 },
+        { "animalId": "red-crowned-crane", "tier": 3 },
+        { "animalId": "tasmanian-devil", "tier": 4 },
+        { "animalId": "northern-lapwing", "tier": 2 },
+        { "animalId": "emperor-penguin", "tier": 2 },
+        { "animalId": "african-penguin", "tier": 5 },
+        { "animalId": "blue-whale", "tier": 4 },
+        { "animalId": "hippo", "tier": 3 },
+        { "animalId": "eastern-gorilla", "tier": 5 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "sumatran-orangutan", "tier": 5 },
+        { "animalId": "eurasian-magpie", "tier": 1 },
+        { "animalId": "african-grey-parrot", "tier": 4 },
+        { "animalId": "red-fox", "tier": 1 }
+      ]
+    },
+    {
+      "id": "brown",
+      "text": "Name an animal that is mostly brown",
+      "answers": [
+        { "animalId": "brown-bear", "tier": 1 },
+        { "animalId": "platypus", "tier": 2 },
+        { "animalId": "european-hedgehog", "tier": 2 },
+        { "animalId": "european-rabbit", "tier": 4 },
+        { "animalId": "house-mouse", "tier": 1 },
+        { "animalId": "brown-kiwi", "tier": 3 },
+        { "animalId": "sea-otter", "tier": 4 },
+        { "animalId": "bornean-orangutan", "tier": 5 },
+        { "animalId": "komodo-dragon", "tier": 4 },
+        { "animalId": "echidna", "tier": 1 },
+        { "animalId": "sunda-pangolin", "tier": 5 },
+        { "animalId": "chinese-giant-salamander", "tier": 5 },
+        { "animalId": "barn-owl", "tier": 1 },
+        { "animalId": "philippine-eagle", "tier": 5 },
+        { "animalId": "emu", "tier": 1 },
+        { "animalId": "mallard", "tier": 1 }
+      ]
+    }
+  ]
+}
