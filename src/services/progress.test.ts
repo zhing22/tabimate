@@ -9,7 +9,7 @@ import type { StorageAdapter } from '@/core/storage';
 import { createFakeTime } from '@/core/testFakes';
 import type { DateKey, Puzzle } from '@/core/types';
 import { createProgressService } from './progress';
-import { SAVE_KEY, SCHEMA_VERSION } from './saveData';
+import { BACKUP_KEY, SAVE_KEY, SCHEMA_VERSION } from './saveData';
 import { createMemoryStorageAdapter } from './storage';
 import { finishedRun, playingRun } from './testRuns';
 
@@ -204,5 +204,54 @@ describe('progress: two tabs', () => {
     const reloaded = openPage(storage, '2026-11-07T06:00:00Z');
     expect(reloaded.game.getState().results).toEqual(a.game.getState().results);
     expect(reloaded.progress.getStats().history).toHaveLength(1);
+  });
+});
+
+describe('progress: damaged saves', () => {
+  const entry = (key: string) => ({ key, score: 25, tiers: [2, 0, 0] });
+  const damaged = {
+    version: SCHEMA_VERSION,
+    runs: {},
+    stats: {
+      streak: 2,
+      bestStreak: 2,
+      lastPlayedKey: '2026-11-08',
+      history: [entry('2026-11-07'), { key: 'oops' }, entry('2026-11-08')],
+    },
+  };
+
+  it('one bad history entry costs that entry, not the streak', () => {
+    const storage = createMemoryStorageAdapter();
+    storage.set(SAVE_KEY, damaged);
+    const page = openPage(storage, '2026-11-09T05:00:00Z');
+    finish(page);
+    expect(page.progress.getStats()).toMatchObject({ streak: 3, bestStreak: 3 });
+    expect(page.progress.getStats().history.map((h) => h.key)).toEqual([
+      '2026-11-07',
+      '2026-11-08',
+      '2026-11-09',
+    ]);
+  });
+
+  it('backs up what it could not read before writing over it', () => {
+    const storage = createMemoryStorageAdapter();
+    storage.set(SAVE_KEY, damaged);
+    openPage(storage, '2026-11-09T05:00:00Z'); // starting the run saves
+    expect(storage.get(BACKUP_KEY)).toEqual(damaged);
+    expect(storage.get(SAVE_KEY)).not.toEqual(damaged);
+  });
+
+  it('backs up a save that cannot be read at all', () => {
+    const storage = createMemoryStorageAdapter();
+    storage.set(SAVE_KEY, '{truncated');
+    openPage(storage, '2026-11-09T05:00:00Z');
+    expect(storage.get(BACKUP_KEY)).toBe('{truncated');
+  });
+
+  it('leaves no backup when the save was fine', () => {
+    const storage = createMemoryStorageAdapter();
+    finish(openPage(storage, '2026-11-07T05:00:00Z'));
+    finish(openPage(storage, '2026-11-08T05:00:00Z'));
+    expect(storage.get(BACKUP_KEY)).toBeNull();
   });
 });

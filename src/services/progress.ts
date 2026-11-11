@@ -5,7 +5,14 @@ import { canOverwrite } from '@/core/game';
 import type { StorageAdapter } from '@/core/storage';
 import { currentStreak, historyEntry, recordRun, type Stats } from '@/core/streak';
 import type { DateKey, RunState } from '@/core/types';
-import { isFromNewerVersion, parseSaveData, SAVE_KEY, type SaveData } from './saveData';
+import {
+  BACKUP_KEY,
+  isFromNewerVersion,
+  parseSaveData,
+  readSaveData,
+  SAVE_KEY,
+  type SaveData,
+} from './saveData';
 
 export interface ProgressService {
   /** The saved run for that puzzle, if any. Check it with canRestore before use. */
@@ -41,8 +48,11 @@ export function createProgressService(storage: StorageAdapter, clock: Clock): Pr
   const read = (): SaveData => parseSaveData(storage.get(SAVE_KEY));
 
   function write(data: SaveData) {
+    const raw = storage.get(SAVE_KEY);
     // A newer build's save would be lost by writing our older shape over it.
-    if (isFromNewerVersion(storage.get(SAVE_KEY))) return;
+    if (isFromNewerVersion(raw)) return;
+    // Anything we could not read is kept, untouched, before it is replaced.
+    if (readSaveData(raw).lossy) storage.set(BACKUP_KEY, raw);
     storage.set(SAVE_KEY, data);
   }
 

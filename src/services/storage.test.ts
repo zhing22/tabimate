@@ -51,10 +51,10 @@ describe('createLocalStorageAdapter', () => {
     expect(items.has('k')).toBe(false);
   });
 
-  it('treats corrupt JSON as missing', () => {
+  it('hands back text that is not JSON as it is, so it can be backed up', () => {
     const { storage, items } = fakeStorage();
     items.set('k', '{not json');
-    expect(createLocalStorageAdapter(() => storage).get('k')).toBeNull();
+    expect(createLocalStorageAdapter(() => storage).get('k')).toBe('{not json');
   });
 
   it('works from memory when storage cannot even be reached (private mode)', () => {

@@ -4,6 +4,7 @@ import {
   isFromNewerVersion,
   migrate,
   parseSaveData,
+  readSaveData,
   SCHEMA_VERSION,
   type Migration,
 } from './saveData';
@@ -83,15 +84,59 @@ describe('parseSaveData', () => {
     expect(data.stats.streak).toBe(2);
   });
 
-  it('resets only the stats when they are broken', () => {
+  it('keeps the good history entries when one is bad', () => {
+    const good = (key: string) => ({ key, score: 25, tiers: [2, 0, 0] });
     const raw = {
       version: SCHEMA_VERSION,
-      runs: { '2026-11-07': finishedRun('2026-11-07') },
-      stats: { streak: -1 },
+      runs: {},
+      stats: {
+        streak: 3,
+        bestStreak: 5,
+        lastPlayedKey: '2026-11-09',
+        history: [good('2026-11-08'), { key: 'yesterday', score: 'lots' }, good('2026-11-09')],
+      },
     };
-    const data = parseSaveData(raw);
-    expect(data.stats).toEqual(emptySaveData().stats);
-    expect(Object.keys(data.runs)).toEqual(['2026-11-07']);
+    const { data, lossy } = readSaveData(raw);
+    expect(lossy).toBe(true);
+    expect(data.stats).toEqual({
+      streak: 3,
+      bestStreak: 5,
+      lastPlayedKey: '2026-11-09',
+      history: [good('2026-11-08'), good('2026-11-09')],
+    });
+  });
+
+  it('keeps history and best streak when the streak fields are broken', () => {
+    const entry = { key: '2026-11-07', score: 10, tiers: [1] };
+    const raw = {
+      version: SCHEMA_VERSION,
+      runs: {},
+      stats: { streak: -1, bestStreak: 4, lastPlayedKey: '2026-11-07', history: [entry] },
+    };
+    expect(parseSaveData(raw).stats).toEqual({
+      streak: 0,
+      bestStreak: 4,
+      lastPlayedKey: null,
+      history: [entry],
+    });
+  });
+
+  it('keeps one history entry per day', () => {
+    const raw = {
+      version: SCHEMA_VERSION,
+      stats: {
+        streak: 1,
+        bestStreak: 1,
+        lastPlayedKey: '2026-11-07',
+        history: [
+          { key: '2026-11-07', score: 10, tiers: [1] },
+          { key: '2026-11-07', score: 99, tiers: [5] },
+        ],
+      },
+    };
+    expect(parseSaveData(raw).stats.history).toEqual([
+      { key: '2026-11-07', score: 10, tiers: [1] },
+    ]);
   });
 
   it('upgrades old saves through the migrations it is given', () => {
@@ -116,5 +161,24 @@ describe('isFromNewerVersion', () => {
     expect(isFromNewerVersion({ version: SCHEMA_VERSION + 1 })).toBe(true);
     expect(isFromNewerVersion({ version: SCHEMA_VERSION })).toBe(false);
     expect(isFromNewerVersion(null)).toBe(false);
+  });
+});
+
+describe('readSaveData: lossy', () => {
+  it.each<[string, unknown, boolean]>([
+    ['nothing saved', null, false],
+    [
+      'a clean save',
+      { ...emptySaveData(), runs: { '2026-11-07': finishedRun('2026-11-07') } },
+      false,
+    ],
+    ['a save without stats yet', { version: SCHEMA_VERSION, runs: {} }, false],
+    ['text that was not JSON', '{not json', true],
+    ['no version', { runs: {} }, true],
+    ['a bad run', { version: SCHEMA_VERSION, runs: { '2026-11-07': { status: 'won' } } }, true],
+    ['runs of the wrong type', { version: SCHEMA_VERSION, runs: [] }, true],
+    ['stats of the wrong type', { version: SCHEMA_VERSION, stats: 'x' }, true],
+  ])('%s -> %s', (_name, raw, lossy) => {
+    expect(readSaveData(raw).lossy).toBe(lossy);
   });
 });

@@ -5,7 +5,11 @@
  * callers validate it. The real one is services/storage.ts.
  */
 export interface StorageAdapter {
-  /** The stored value, or null if there is none or it cannot be read. */
+  /**
+   * The stored value; null if there is none or storage cannot be reached. A
+   * value that cannot be decoded comes back raw (e.g. as its text), so the
+   * caller can reject it without losing it.
+   */
   get(key: string): unknown;
   set(key: string, value: unknown): void;
   remove(key: string): void;

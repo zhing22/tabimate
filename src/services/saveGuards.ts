@@ -3,7 +3,7 @@
 // later by core's canRestore.
 import type { TierId } from '@/config/tiers';
 import { isDateKey } from '@/core/date';
-import type { HistoryEntry, Stats } from '@/core/streak';
+import { emptyStats, type HistoryEntry, type Stats } from '@/core/streak';
 import type {
   GameMode,
   MatchResult,
@@ -76,10 +76,35 @@ const isHistoryEntry = (value: unknown): value is HistoryEntry =>
   Array.isArray(value.tiers) &&
   value.tiers.every(isTier);
 
-export const isStats = (value: unknown): value is Stats =>
-  isObject(value) &&
-  isCount(value.streak) &&
-  isCount(value.bestStreak) &&
-  (value.lastPlayedKey === null || isKey(value.lastPlayedKey)) &&
-  Array.isArray(value.history) &&
-  value.history.every(isHistoryEntry);
+/**
+ * Salvages what it can from stored stats. Each history entry stands alone
+ * (a bad one is dropped, the rest kept, one entry per day). streak and
+ * lastPlayedKey only mean something together, so they are kept or reset as a
+ * pair; bestStreak stands alone. `lossy` says whether anything was dropped.
+ */
+export function readStats(value: unknown): { stats: Stats; lossy: boolean } {
+  if (value === undefined) return { stats: emptyStats(), lossy: false };
+  if (!isObject(value)) return { stats: emptyStats(), lossy: true };
+  let lossy = false;
+
+  const rawHistory = Array.isArray(value.history) ? value.history : [];
+  if (!Array.isArray(value.history)) lossy = true;
+  const byKey = new Map<string, HistoryEntry>();
+  for (const entry of rawHistory) {
+    if (isHistoryEntry(entry) && !byKey.has(entry.key)) byKey.set(entry.key, entry);
+    else lossy = true;
+  }
+  const history = [...byKey.values()].sort((a, b) => (a.key < b.key ? -1 : 1));
+
+  const lastPlayedKey = value.lastPlayedKey;
+  const streakOk = isCount(value.streak) && (lastPlayedKey === null || isKey(lastPlayedKey));
+  if (!streakOk) lossy = true;
+  const streak = streakOk ? Number(value.streak) : 0;
+  if (!isCount(value.bestStreak)) lossy = true;
+  const bestStreak = Math.max(isCount(value.bestStreak) ? value.bestStreak : 0, streak);
+
+  return {
+    stats: { streak, bestStreak, lastPlayedKey: streakOk ? lastPlayedKey : null, history },
+    lossy,
+  };
+}

@@ -1,9 +1,12 @@
 import { emptyStats, type Stats } from '@/core/streak';
 import type { DateKey, RunState } from '@/core/types';
-import { isObject, isRunState, isStats } from './saveGuards';
+import { isObject, isRunState, readStats } from './saveGuards';
 
 /** The one storage key all progress lives under. */
 export const SAVE_KEY = 'tabimate.save';
+
+/** Where an unreadable save is copied before it is written over, so it can be recovered. */
+export const BACKUP_KEY = 'tabimate.save.bak';
 
 /** Bump when the shape changes, and add a migration from the old version. */
 export const SCHEMA_VERSION = 1;
@@ -57,25 +60,34 @@ export function migrate(
 }
 
 /**
- * Turns whatever storage held into valid SaveData. Unreadable parts are
- * dropped, not fatal: a bad run loses that run, bad stats reset the stats.
+ * Turns whatever storage held into valid SaveData, salvaging piece by piece:
+ * a bad run loses that run, a bad history entry loses that entry. `lossy` is
+ * true if anything stored could not be kept, so the caller can back it up
+ * before writing over it.
  */
-export function parseSaveData(
+export function readSaveData(
   raw: unknown,
   migrations: Readonly<Record<number, Migration>> = MIGRATIONS,
   target = SCHEMA_VERSION,
-): SaveData {
+): { data: SaveData; lossy: boolean } {
+  if (raw === null || raw === undefined) return { data: emptySaveData(), lossy: false };
   const data = migrate(raw, migrations, target);
-  if (!data) return emptySaveData();
+  if (!data) return { data: emptySaveData(), lossy: true };
+
+  let lossy = false;
   const runs: Record<DateKey, RunState> = {};
-  if (isObject(data.runs)) {
-    for (const [key, run] of Object.entries(data.runs)) {
-      if (isRunState(run) && run.puzzleDate === key) runs[key] = run;
-    }
+  if (data.runs !== undefined && !isObject(data.runs)) lossy = true;
+  for (const [key, run] of Object.entries(isObject(data.runs) ? data.runs : {})) {
+    if (isRunState(run) && run.puzzleDate === key) runs[key] = run;
+    else lossy = true;
   }
-  return {
-    version: target,
-    runs,
-    stats: isStats(data.stats) ? data.stats : emptyStats(),
-  };
+  const stats = readStats(data.stats);
+  return { data: { version: target, runs, stats: stats.stats }, lossy: lossy || stats.lossy };
 }
+
+/** readSaveData without the report. */
+export const parseSaveData = (
+  raw: unknown,
+  migrations: Readonly<Record<number, Migration>> = MIGRATIONS,
+  target = SCHEMA_VERSION,
+): SaveData => readSaveData(raw, migrations, target).data;

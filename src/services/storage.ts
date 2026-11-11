@@ -56,7 +56,9 @@ export function createLocalStorageAdapter(
       try {
         return JSON.parse(read.value) as unknown;
       } catch {
-        return null; // corrupt or hand-edited: treat as missing
+        // Not JSON (corrupt or hand-edited): hand back the text itself, so the
+        // caller can reject it but still back it up instead of losing it.
+        return read.value;
       }
     },
     set(key, value) {
