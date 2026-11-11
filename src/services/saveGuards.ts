@@ -1,0 +1,85 @@
+// Shape checks for data read back from storage, which may be old, corrupt or
+// edited by hand. Deeper consistency (does a run fit its puzzle?) is checked
+// later by core's canRestore.
+import type { TierId } from '@/config/tiers';
+import { isDateKey } from '@/core/date';
+import type { HistoryEntry, Stats } from '@/core/streak';
+import type {
+  GameMode,
+  MatchResult,
+  RoundResult,
+  RunState,
+  RunStatus,
+  StrategyId,
+} from '@/core/types';
+
+type Json = Record<string, unknown>;
+
+export const isObject = (value: unknown): value is Json =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const isCount = (value: unknown): value is number => Number.isInteger(value) && Number(value) >= 0;
+const isTime = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value);
+const isKey = (value: unknown): value is string => typeof value === 'string' && isDateKey(value);
+
+// `satisfies Record<Union, true>` makes the compiler fail here if a union grows.
+const MODES = { daily: true } satisfies Record<GameMode, true>;
+const STATUSES = { idle: true, playing: true, revealing: true, finished: true } satisfies Record<
+  RunStatus,
+  true
+>;
+const STRATEGIES = {
+  exact: true,
+  alias: true,
+  typo: true,
+  partial: true,
+  loose: true,
+  lucky: true,
+} satisfies Record<StrategyId, true>;
+
+const oneOf = <T extends string>(table: Record<T, true>, value: unknown): value is T =>
+  typeof value === 'string' && Object.prototype.hasOwnProperty.call(table, value);
+
+const isTier = (value: unknown): value is TierId =>
+  Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 5;
+
+function isMatch(value: unknown): value is MatchResult {
+  if (!isObject(value) || typeof value.input !== 'string') return false;
+  if (value.tier === 0) return value.animalId === null && value.strategy === null;
+  return (
+    isTier(value.tier) && typeof value.animalId === 'string' && oneOf(STRATEGIES, value.strategy)
+  );
+}
+
+const isRoundResult = (value: unknown): value is RoundResult =>
+  isObject(value) &&
+  typeof value.promptId === 'string' &&
+  isTime(value.timeMs) &&
+  isMatch(value.match);
+
+export const isRunState = (value: unknown): value is RunState =>
+  isObject(value) &&
+  oneOf(MODES, value.mode) &&
+  isKey(value.puzzleDate) &&
+  isCount(value.promptCount) &&
+  Number(value.promptCount) >= 1 &&
+  Array.isArray(value.results) &&
+  value.results.every(isRoundResult) &&
+  oneOf(STATUSES, value.status) &&
+  (value.roundEndsAt === null || isTime(value.roundEndsAt));
+
+const isHistoryEntry = (value: unknown): value is HistoryEntry =>
+  isObject(value) &&
+  isKey(value.key) &&
+  isTime(value.score) &&
+  Array.isArray(value.tiers) &&
+  value.tiers.every(isTier);
+
+export const isStats = (value: unknown): value is Stats =>
+  isObject(value) &&
+  isCount(value.streak) &&
+  isCount(value.bestStreak) &&
+  (value.lastPlayedKey === null || isKey(value.lastPlayedKey)) &&
+  Array.isArray(value.history) &&
+  value.history.every(isHistoryEntry);

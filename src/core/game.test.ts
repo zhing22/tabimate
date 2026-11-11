@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  canOverwrite,
   canRestore,
   createRunState,
   currentRoundIndex,
   gameReducer,
+  runProgress,
   type GameAction,
 } from './game';
 import type { MatchResult, Puzzle, RunState, RunStatus } from './types';
@@ -174,5 +176,43 @@ describe('canRestore', () => {
     ['revealing with a deadline', { ...revealing0, roundEndsAt: 5000 }],
   ])('rejects %s', (_name, state) => {
     expect(canRestore(state, puzzle, 'daily')).toBe(false);
+  });
+});
+
+describe('runProgress and canOverwrite', () => {
+  const steps: GameAction[] = [
+    { type: 'start', roundEndsAt: 1000 },
+    submit('a'),
+    { type: 'revealDone', nextRoundEndsAt: 2000 },
+    submit('b'),
+    { type: 'revealDone', nextRoundEndsAt: 3000 },
+    submit('c'),
+    { type: 'revealDone', nextRoundEndsAt: 4000 },
+  ];
+  const states = steps.reduce<RunState[]>(
+    (all, action) => [...all, gameReducer(all[all.length - 1]!, action)],
+    [idle],
+  );
+
+  it('grows with every transition of a run', () => {
+    const progress = states.map(runProgress);
+    expect(progress).toEqual([...progress].sort((a, b) => a - b));
+    expect(new Set(progress).size).toBe(states.length);
+  });
+
+  it('lets a run move forward or be saved again, never back', () => {
+    expect(canOverwrite(playing0, revealing0)).toBe(true);
+    expect(canOverwrite(playing0, playing0)).toBe(true);
+    expect(canOverwrite(revealing0, playing0)).toBe(false);
+    expect(canOverwrite(playing0, idle)).toBe(false);
+  });
+
+  it('treats a finished run as final', () => {
+    expect(canOverwrite(finished, finished)).toBe(false);
+    expect(canOverwrite(finished, idle)).toBe(false);
+  });
+
+  it('never mixes up days', () => {
+    expect(canOverwrite(playing0, { ...revealing0, puzzleDate: '2026-11-08' })).toBe(false);
   });
 });

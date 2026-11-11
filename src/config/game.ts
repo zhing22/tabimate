@@ -36,6 +36,9 @@ export const DISTANCE_PER_POINT = 1;
  */
 export const MAX_INPUT_LENGTH = 40;
 
+/** Days of full run state kept in storage (history keeps scores for every day). */
+export const RUNS_KEPT_DAYS = 7;
+
 export interface MatcherConfig {
   /** Trigram similarity (0..1) the 'loose' strategy needs to accept a hit. */
   readonly minSimilarity: number;

@@ -106,3 +106,26 @@ export function canRestore(saved: RunState, puzzle: Puzzle, mode: GameMode): boo
       : saved.roundEndsAt === null;
   return inOrder && deadlineFits && RESULTS_FIT[saved.status](saved.results.length, n);
 }
+
+// Order of statuses for the same number of results: a round is revealed, then
+// the next one is played (playing(n) comes after revealing(n)).
+const STATUS_RANK: Readonly<Record<RunStatus, number>> = {
+  idle: 0,
+  revealing: 1,
+  playing: 2,
+  finished: 3,
+};
+
+/** How far through a run a state is; grows with every transition. */
+export const runProgress = (state: RunState): number =>
+  state.results.length * 4 + STATUS_RANK[state.status];
+
+/**
+ * True if `next` may replace `saved` on disk: same day, not behind it, and
+ * a finished run is final. Stops a stale tab from rolling a run back.
+ */
+export function canOverwrite(saved: RunState, next: RunState): boolean {
+  if (saved.puzzleDate !== next.puzzleDate || saved.mode !== next.mode) return false;
+  if (saved.status === 'finished') return false;
+  return runProgress(next) >= runProgress(saved);
+}
