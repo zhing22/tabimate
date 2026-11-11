@@ -50,6 +50,20 @@ describe('createBus', () => {
     expect(later).toHaveBeenCalledTimes(2);
   });
 
+  it('keeps going when a listener throws, and reports the error', () => {
+    const errors: [unknown, string][] = [];
+    const bus = createBus<TestEvents>({ onError: (error, type) => errors.push([error, type]) });
+    const after = vi.fn();
+    const boom = new Error('scene broke');
+    bus.on('pong', () => {
+      throw boom;
+    });
+    bus.on('pong', after);
+    expect(() => bus.emit('pong', 'x')).not.toThrow();
+    expect(after).toHaveBeenCalledWith('x');
+    expect(errors).toEqual([[boom, 'pong']]);
+  });
+
   it('ignores emits and offs with no listeners', () => {
     const bus = createBus<TestEvents>();
     expect(() => bus.emit('ping', { n: 0 })).not.toThrow();

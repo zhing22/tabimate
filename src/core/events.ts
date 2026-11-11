@@ -10,8 +10,24 @@ export interface Bus<M> {
   emit<K extends keyof M>(type: K, payload: M[K]): void;
 }
 
+export interface BusOptions<M> {
+  /**
+   * Called when a listener throws. The other listeners still run, and so does
+   * the code that emitted: one broken listener must not leave the game half
+   * way through a transition. By default the error is rethrown on a microtask,
+   * so it still reaches the console (and fails tests) without stopping the emit.
+   */
+  readonly onError?: (error: unknown, type: keyof M) => void;
+}
+
+const rethrowLater = (error: unknown): void =>
+  queueMicrotask(() => {
+    throw error;
+  });
+
 /** A tiny typed event bus. M maps each event name to its payload type. */
-export function createBus<M>(): Bus<M> {
+export function createBus<M>(options: BusOptions<M> = {}): Bus<M> {
+  const onError = options.onError ?? rethrowLater;
   const listeners: { [K in keyof M]?: Set<Listener<M[K]>> } = {};
 
   const off = <K extends keyof M>(type: K, listener: Listener<M[K]>): void => {
@@ -28,7 +44,13 @@ export function createBus<M>(): Bus<M> {
     off,
     emit(type, payload) {
       // A copy, so listeners may unsubscribe (or subscribe) while being called.
-      for (const listener of [...(listeners[type] ?? [])]) listener(payload);
+      for (const listener of [...(listeners[type] ?? [])]) {
+        try {
+          listener(payload);
+        } catch (error) {
+          onError(error, type);
+        }
+      }
     },
   };
 }

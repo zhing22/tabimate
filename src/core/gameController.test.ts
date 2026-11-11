@@ -276,3 +276,65 @@ describe('gameController: mode', () => {
     });
   });
 });
+
+describe('gameController: misbehaving listeners', () => {
+  function bare(onError?: (error: unknown) => void) {
+    const time = createFakeTime();
+    const bus = createBus<GameEvents>(onError ? { onError } : {});
+    const game = createGameController({
+      puzzle,
+      animals: ANIMALS,
+      bus,
+      clock: time.clock,
+      scheduler: time.scheduler,
+    });
+    const seen: string[] = [];
+    for (const name of ['roundStarted', 'revealFinished', 'biomeEntered', 'runFinished'] as const) {
+      bus.on(name, () => seen.push(name));
+    }
+    return { time, bus, game, seen };
+  }
+
+  it('keeps playing when a listener throws mid-transition', () => {
+    const errors: unknown[] = [];
+    const { time, bus, game, seen } = bare((error) => errors.push(error));
+    bus.on('revealFinished', () => {
+      throw new Error('scene broke');
+    });
+    game.start();
+    game.submit('Platypus');
+    time.advance(REVEAL_DELAY_MS);
+    expect(errors).toHaveLength(1);
+    // The next round still began, with its timer running.
+    expect(seen).toEqual(['roundStarted', 'revealFinished', 'roundStarted']);
+    expect(game.getState().status).toBe('playing');
+    expect(time.pending()).toBe(1);
+  });
+
+  it.each(['answerMatched', 'revealFinished'] as const)(
+    'stops fully when a listener disposes it during %s',
+    (event) => {
+      const { time, bus, game, seen } = bare();
+      bus.on(event, () => game.dispose());
+      game.start();
+      game.submit('Platypus');
+      time.advance(REVEAL_DELAY_MS + ROUND_TIME_MS * 3);
+      expect(time.pending()).toBe(0);
+      expect(game.getState().results).toHaveLength(1);
+      // Nothing is announced after dispose.
+      expect(seen).toEqual(
+        event === 'answerMatched' ? ['roundStarted'] : ['roundStarted', 'revealFinished'],
+      );
+    },
+  );
+
+  it('stops fully when a listener disposes it during biomeEntered', () => {
+    const { time, bus, game, seen } = bare();
+    bus.on('biomeEntered', () => game.dispose());
+    game.start();
+    game.submit('snow leopard'); // 50 points: enters Grassland
+    time.advance(REVEAL_DELAY_MS + ROUND_TIME_MS * 3);
+    expect(seen).toEqual(['roundStarted', 'revealFinished', 'biomeEntered']);
+    expect(time.pending()).toBe(0);
+  });
+});

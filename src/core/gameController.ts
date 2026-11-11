@@ -46,13 +46,19 @@ export function createGameController(deps: GameControllerDeps): GameController {
   const now = () => clock.now().getTime();
   const nextDeadline = () => now() + roundTimeMs;
 
+  // Listeners may call dispose() while an event is delivered (e.g. the UI
+  // tearing down on the last reveal); after that the controller says nothing.
+  const emit: GameBus['emit'] = (type, payload) => {
+    if (!disposed) bus.emit(type, payload);
+  };
+
   /** Applies an action; true if the state changed. */
   function dispatch(action: GameAction): boolean {
     if (disposed) return false;
     const next = gameReducer(state, action);
     if (next === state) return false;
     state = next;
-    bus.emit('stateChanged', { state });
+    emit('stateChanged', { state });
     return true;
   }
 
@@ -66,6 +72,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
    * resumed round gets only the time it had left; a lapsed one times out now.
    */
   function runRound() {
+    if (disposed) return;
     const index = state.results.length;
     const prompt = puzzle.prompts[index];
     const endsAt = state.roundEndsAt;
@@ -76,10 +83,11 @@ export function createGameController(deps: GameControllerDeps): GameController {
       return;
     }
     roundTimer = scheduler.setTimeout(onTimeout, left);
-    bus.emit('roundStarted', { index, prompt, endsAt });
+    emit('roundStarted', { index, prompt, endsAt });
   }
 
   function scheduleReveal(scoreBefore: number) {
+    if (disposed) return;
     revealTimer = scheduler.setTimeout(() => finishReveal(scoreBefore), revealDelayMs);
   }
 
@@ -87,7 +95,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
     if (!dispatch(action)) return;
     cancelRoundTimer();
     const round = state.results.length - 1;
-    bus.emit('answerMatched', { round, result: state.results[round]! });
+    emit('answerMatched', { round, result: state.results[round]! });
     scheduleReveal(scoreBefore);
   }
 
@@ -95,11 +103,11 @@ export function createGameController(deps: GameControllerDeps): GameController {
     revealTimer = null;
     const index = state.results.length - 1;
     if (!dispatch({ type: 'revealDone', nextRoundEndsAt: nextDeadline() })) return;
-    bus.emit('revealFinished', { index });
+    emit('revealFinished', { index });
     // Biomes change after the reveal, so the tier is seen before the scene moves on.
     const score = totalScore(state.results);
-    for (const biome of biomesEntered(scoreBefore, score)) bus.emit('biomeEntered', { biome });
-    if (state.status === 'finished') bus.emit('runFinished', { results: state.results, score });
+    for (const biome of biomesEntered(scoreBefore, score)) emit('biomeEntered', { biome });
+    if (state.status === 'finished') emit('runFinished', { results: state.results, score });
     else runRound();
   }
 
@@ -118,14 +126,14 @@ export function createGameController(deps: GameControllerDeps): GameController {
     } else if (state.status === 'revealing') {
       scheduleReveal(totalScore(state.results.slice(0, -1)));
     } else if (state.status === 'finished') {
-      bus.emit('runFinished', { results: state.results, score: totalScore(state.results) });
+      emit('runFinished', { results: state.results, score: totalScore(state.results) });
     }
   }
 
   return {
     start() {
       if (!dispatch({ type: 'start', roundEndsAt: nextDeadline() })) return;
-      bus.emit('runStarted', { mode, puzzleDate: puzzle.date, promptCount: state.promptCount });
+      emit('runStarted', { mode, puzzleDate: puzzle.date, promptCount: state.promptCount });
       runRound();
     },
 
@@ -149,7 +157,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
     restore(saved) {
       if (disposed || state.status !== 'idle' || !canRestore(saved, puzzle, mode)) return false;
       if (!dispatch({ type: 'restore', state: saved })) return false;
-      bus.emit('runRestored', { state });
+      emit('runRestored', { state });
       resume();
       return true;
     },
