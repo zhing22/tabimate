@@ -29,9 +29,22 @@ export interface AppDeps {
   readonly interval?: Interval;
 }
 
+export interface FinishedRun {
+  readonly results: readonly RoundResult[];
+  readonly score: number;
+  /** Stats with this run already recorded. */
+  readonly stats: Stats;
+}
+
 export interface App {
   /** Shows the start screen (when there was no saved run to restore). */
   showStart(): void;
+  /**
+   * Shows the results. main.ts calls it after recording the run, instead of a
+   * runFinished listener here, so the streak never depends on which listener
+   * subscribed first.
+   */
+  showResults(run: FinishedRun): void;
   destroy(): void;
 }
 
@@ -82,8 +95,7 @@ export function createApp(deps: AppDeps): App {
     );
   }
 
-  function showResults(results: readonly RoundResult[], score: number) {
-    const stats = deps.getStats();
+  function showResults({ results, score, stats }: FinishedRun) {
     // Fixed when the screen opens: asking "time to the next reset" every second
     // would jump back to 24 h at noon and never reach zero.
     const nextPuzzleAt = now() + msUntilNextReset(clock.now());
@@ -117,7 +129,6 @@ export function createApp(deps: AppDeps): App {
       if (state.status === 'revealing' && last) showReveal(last);
     }),
     bus.on('biomeEntered', ({ biome }) => host.announce(`You entered the ${biome.name}.`)),
-    bus.on('runFinished', ({ results, score }) => showResults(results, score)),
   ];
 
   return {
@@ -132,6 +143,7 @@ export function createApp(deps: AppDeps): App {
         { play: () => controller.start() },
       );
     },
+    showResults,
     destroy() {
       for (const stop of stops) stop();
       host.destroy();

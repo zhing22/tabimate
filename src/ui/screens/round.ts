@@ -29,7 +29,7 @@ export interface RoundActions {
  */
 export interface RoundScreen {
   setRound(props: RoundProps): void;
-  /** While a reveal shows: input kept (and focused) but read-only. */
+  /** While a reveal shows: input kept (and focused) but read-only, timer held. */
   lock(): void;
   unmount: Unmount;
 }
@@ -107,6 +107,7 @@ export function mountRound(
     lock() {
       locked = true;
       input.readOnly = true; // readOnly, not disabled: disabling would drop focus and the keyboard
+      ring.freeze();
       refresh();
     },
     unmount: () => ring.destroy(),

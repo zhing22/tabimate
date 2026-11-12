@@ -20,7 +20,17 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
  * Circular countdown. Drawn from endsAt each frame rather than counting down
  * itself, so it stays right after a reload or a throttled background tab.
  */
-export function timerRing(props: TimerRingProps): Component & { setEndsAt(endsAt: number): void } {
+export interface TimerRing extends Component {
+  /** Points at a new deadline and (re)starts the countdown. */
+  setEndsAt(endsAt: number): void;
+  /**
+   * Holds the ring at what it shows now. Used while a reveal is up: a ring
+   * running out behind the result would look like a timeout.
+   */
+  freeze(): void;
+}
+
+export function timerRing(props: TimerRingProps): TimerRing {
   const frames = props.frames ?? animationFrames;
   const warnAt = props.warnAtS ?? 5;
   let endsAt = props.endsAt;
@@ -60,15 +70,26 @@ export function timerRing(props: TimerRingProps): Component & { setEndsAt(endsAt
     }
   };
 
+  let stop: (() => void) | null = null;
+  const halt = () => {
+    stop?.();
+    stop = null;
+  };
+
   draw();
-  const stop = frames(draw);
+  stop = frames(draw);
   return {
     el,
     setEndsAt(next) {
       endsAt = next;
       shown = -1;
       draw();
+      stop ??= frames(draw);
     },
-    destroy: stop,
+    freeze() {
+      draw();
+      halt();
+    },
+    destroy: halt,
   };
 }

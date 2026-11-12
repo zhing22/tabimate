@@ -151,7 +151,6 @@ describe('currentRoundIndex', () => {
 
 describe('canRestore', () => {
   it.each<[string, RunState]>([
-    ['idle', idle],
     ['playing', playing0],
     ['revealing', revealing0],
     ['finished', finished],
@@ -169,6 +168,7 @@ describe('canRestore', () => {
     ['finished too early', { ...revealing0, status: 'finished' }],
     ['playing with every prompt answered', { ...finished, status: 'playing' }],
     ['revealing with no result', { ...playing0, status: 'revealing' }],
+    ['idle (nothing to resume)', idle],
     ['idle with results', { ...revealing0, status: 'idle' }],
     ['too many results', { ...finished, results: [...finished.results, finished.results[0]!] }],
     ['playing without a deadline', { ...playing0, roundEndsAt: null }],

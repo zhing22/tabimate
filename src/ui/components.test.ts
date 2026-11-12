@@ -44,6 +44,23 @@ describe('timerRing', () => {
     ring.destroy();
     expect(t.running()).toBe(0);
   });
+
+  it('freeze holds what it shows until it gets a new deadline', () => {
+    const t = manualTime();
+    const ring = timerRing({ endsAt: 25_000, totalMs: 25_000, now: t.now, frames: t.frames });
+    t.set(22_000);
+    ring.freeze();
+    expect(t.running()).toBe(0);
+    t.set(30_000);
+    expect(ring.el.textContent).toBe('3');
+    ring.setEndsAt(55_000);
+    expect(ring.el.textContent).toBe('25');
+    expect(t.running()).toBe(1);
+    t.set(50_000);
+    expect(ring.el.textContent).toBe('5');
+    ring.destroy();
+    expect(t.running()).toBe(0);
+  });
 });
 
 describe('countdown', () => {

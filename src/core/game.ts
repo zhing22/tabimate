@@ -82,7 +82,9 @@ export function gameReducer(state: RunState, action: GameAction): RunState {
 
 // How many results each status allows, for a run of n prompts.
 const RESULTS_FIT: Readonly<Record<RunStatus, (done: number, n: number) => boolean>> = {
-  idle: (done) => done === 0,
+  // Nothing to resume: restoring it would leave the page waiting for a start
+  // that never comes. The app never saves idle; only an old or edited save has it.
+  idle: () => false,
   playing: (done, n) => done < n,
   revealing: (done) => done >= 1,
   finished: (done, n) => done === n,
@@ -91,6 +93,7 @@ const RESULTS_FIT: Readonly<Record<RunStatus, (done: number, n: number) => boole
 /**
  * True if `saved` is a consistent run of this puzzle in this mode: same date
  * and prompt count, results in prompt order, and a status that fits them.
+ * An idle run never is: there is nothing to pick up.
  * A playing run must have its round deadline; no other status may.
  */
 export function canRestore(saved: RunState, puzzle: Puzzle, mode: GameMode): boolean {

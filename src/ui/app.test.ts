@@ -31,6 +31,9 @@ function setup() {
     scheduler: time.scheduler,
   });
   const reload = vi.fn();
+  // Stands in for progress: 2-day streak until today's run is recorded.
+  let stats = { ...emptyStats(), streak: 2, bestStreak: 4 };
+  const getStats = () => stats;
   const app = createApp({
     host: createScreenHost(root),
     bus,
@@ -38,11 +41,16 @@ function setup() {
     puzzle,
     animals: ANIMALS,
     clock: time.clock,
-    getStats: () => ({ ...emptyStats(), streak: 2, bestStreak: 4 }),
+    getStats,
     reload,
     suspenseMs: 0,
     frames: ui.frames,
     interval: ui.interval,
+  });
+  // As main.ts does: record the run, then show results.
+  bus.on('runFinished', ({ results, score }) => {
+    stats = { ...stats, streak: 3 };
+    app.showResults({ results, score, stats: getStats() });
   });
   const $ = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector);
   const input = () => $<HTMLInputElement>('#answer')!;
@@ -100,7 +108,8 @@ describe('app: playing with the keyboard', () => {
     expect(document.activeElement).toBe(t.$('#results-title'));
     expect(t.$('.results__number')?.textContent).toBe('160');
     expect(t.root.textContent).toContain('Reached the Forest');
-    expect(t.root.textContent).toContain('2-day streak');
+    // The streak includes the run just finished.
+    expect(t.root.textContent).toContain('3-day streak');
     expect(t.root.querySelectorAll('.team-card__member')).toHaveLength(3);
   });
 
@@ -129,6 +138,24 @@ describe('app: playing with the keyboard', () => {
     answer(t, 'snow leopard'); // 50 points: Grassland
     await t.flush();
     expect(t.live()).toBe('You entered the Grassland.');
+  });
+
+  it('holds the timer during the reveal, then restarts it for the next prompt', () => {
+    const t = setup();
+    t.controller.start();
+    const ring = () => t.$('.timer-ring__label')?.textContent;
+    t.time.advance(ROUND_TIME_MS - 3_000);
+    t.ui.set(0);
+    expect(ring()).toBe('3');
+    type(t.input(), 'tiger');
+    pressEnter(t.input());
+    t.time.advance(REVEAL_DELAY_MS - 1); // well past the old deadline
+    t.ui.set(0);
+    expect(ring()).toBe('3'); // not run down to 0, which would look like a timeout
+    t.time.advance(1);
+    t.ui.set(0);
+    expect(t.$('#round-prompt')?.textContent).toBe('Prompt 2');
+    expect(ring()).toBe(String(ROUND_TIME_MS / 1000));
   });
 
   it('shows text the player typed as text, never as markup', () => {

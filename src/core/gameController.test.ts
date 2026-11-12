@@ -249,6 +249,16 @@ describe('gameController: restore', () => {
     expect(other.game.restore(saved)).toBe(false);
     expect(other.game.getState().results).toHaveLength(0);
   });
+
+  // Returning true here would make main.ts skip the start screen and leave the
+  // page with nothing on it.
+  it('refuses an idle save, so the caller shows the start screen', () => {
+    const { game, story } = setup();
+    expect(game.restore(setup().game.getState())).toBe(false);
+    expect(story()).toEqual([]);
+    game.start();
+    expect(game.getState().status).toBe('playing');
+  });
 });
 
 describe('gameController: dispose', () => {

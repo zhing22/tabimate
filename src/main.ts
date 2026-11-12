@@ -45,7 +45,6 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
     scheduler: browserScheduler,
   });
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
-  bus.on('runFinished', () => progress.completeRun(controller.getState()));
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({
@@ -57,6 +56,11 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
     clock,
     getStats: () => progress.getStats(),
     reload,
+  });
+  // One listener, in this order: record the run, then show results with its streak.
+  bus.on('runFinished', ({ results, score }) => {
+    progress.completeRun(controller.getState());
+    app.showResults({ results, score, stats: progress.getStats() });
   });
   const saved = progress.loadToday(puzzle.date);
   if (!(saved && controller.restore(saved))) app.showStart();
