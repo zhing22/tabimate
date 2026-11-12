@@ -183,7 +183,7 @@ describe('progress: two tabs', () => {
     const b = openPage(storage, '2026-11-07T05:00:00Z');
     expect(b.restored).toBe(true);
 
-    a.game.submit('cat'); // a poor answer in tab A...
+    a.game.submit('red fox'); // a poor answer in tab A...
     a.game.next();
     b.game.submit('snow leopard'); // ...retried in tab B
     b.game.next();
@@ -191,7 +191,10 @@ describe('progress: two tabs', () => {
     // Both tabs have reached the same point; storage keeps the answer saved first.
     expect(b.game.getState().results[1]?.match.animalId).toBe('snow-leopard');
     const reloaded = openPage(storage, '2026-11-07T05:00:01Z');
-    expect(reloaded.game.getState().results.map((r) => r.match.input)).toEqual(['Platypus', 'cat']);
+    expect(reloaded.game.getState().results.map((r) => r.match.input)).toEqual([
+      'Platypus',
+      'red fox',
+    ]);
   });
 
   it('two tabs left open do not fight: the stale one stops saving', () => {

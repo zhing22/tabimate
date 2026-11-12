@@ -72,6 +72,7 @@ function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
       });
     },
     lock: () => screen?.lock(),
+    reject: () => screen?.reject(),
     get mounted() {
       return screen !== null;
     },
@@ -117,7 +118,7 @@ export function createApp(deps: AppDeps): App {
   const round = roundSlot(
     host,
     { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
-    { submit: (text) => controller.submit(text), next },
+    { submit: (text) => controller.submit(text), next, draft: (text) => controller.setDraft(text) },
   );
 
   function showReveal(index: number, result: RoundResult) {
@@ -160,6 +161,7 @@ export function createApp(deps: AppDeps): App {
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
+    bus.on('answerRejected', () => round.reject()),
     bus.on('answerMatched', ({ round: index, result }) => showReveal(index, result)),
     bus.on('runRestored', ({ state }) => {
       const index = state.results.length - 1;

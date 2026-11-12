@@ -51,3 +51,17 @@
     font-size: var(--text-lg);
   }
 }
+
+/* One line under the box when a guess matches nothing; the box keeps the text. */
+.answer__error {
+  color: var(--error);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.answer__input[aria-invalid='true'] {
+  border-color: var(--error);
+}

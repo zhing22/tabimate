@@ -3,9 +3,9 @@ import type { Clock } from './clock';
 import type { GameBus } from './events';
 import { canRestore, createRunState, gameReducer, type GameAction } from './game';
 import { biomesEntered, totalScore } from './journey';
-import { matchAnswer } from './matcher';
+import { ANSWER_KEY_STRATEGIES, matchAnswer } from './matcher';
 import type { Scheduler, TimerHandle } from './scheduler';
-import type { Animal, AnimalId, GameMode, Puzzle, RunState } from './types';
+import type { Animal, AnimalId, GameMode, Prompt, Puzzle, RunState } from './types';
 
 export interface GameControllerDeps {
   readonly puzzle: Puzzle;
@@ -21,7 +21,16 @@ export interface GameControllerDeps {
 /** The UI talks to the game only through these; it never touches state. */
 export interface GameController {
   start(): void;
+  /**
+   * Tries a guess. A match is scored and revealed; a guess that matches
+   * nothing emits answerRejected and the round goes on, so the player can retry.
+   */
   submit(input: string): void;
+  /**
+   * What is in the answer box right now. When time runs out it is submitted
+   * as it stands: scored if it matches, 0 points if not.
+   */
+  setDraft(text: string): void;
   /**
    * Moves on from the reveal: to the next prompt, or to the results after the
    * last one. The game waits on the reveal until this is called.
@@ -42,6 +51,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
 
   let state = createRunState(puzzle, mode);
   let roundTimer: TimerHandle | null = null;
+  let draft = '';
   let disposed = false;
 
   const now = () => clock.now().getTime();
@@ -74,6 +84,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
    */
   function runRound() {
     if (disposed) return;
+    draft = '';
     const index = state.results.length;
     const prompt = puzzle.prompts[index];
     const endsAt = state.roundEndsAt;
@@ -106,11 +117,24 @@ export function createGameController(deps: GameControllerDeps): GameController {
     else runRound();
   }
 
+  const matchFor = (input: string, prompt: Prompt) =>
+    matchAnswer(input, prompt, animals, cfg, ANSWER_KEY_STRATEGIES);
+
+  /** Time is up: whatever is in the box is the answer, matched or not. */
   function onTimeout() {
     roundTimer = null;
     const prompt = puzzle.prompts[state.results.length];
     if (!prompt) return;
-    answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs });
+    if (draft.trim() === '') {
+      answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs });
+      return;
+    }
+    answered({
+      type: 'submit',
+      promptId: prompt.id,
+      match: matchFor(draft, prompt),
+      timeMs: roundTimeMs,
+    });
   }
 
   /**
@@ -138,15 +162,24 @@ export function createGameController(deps: GameControllerDeps): GameController {
       const endsAt = state.roundEndsAt;
       if (!prompt || endsAt === null) return;
       // Background tabs delay timers, so an answer can arrive after the deadline
-      // before the timeout has fired. It is a timeout all the same.
+      // before the timeout has fired. Time ran out with this text in the box.
       if (now() >= endsAt) {
+        draft = input;
         cancelRoundTimer();
         onTimeout();
         return;
       }
-      const match = matchAnswer(input, prompt, animals, cfg);
+      const match = matchFor(input, prompt);
+      if (match.tier === 0) {
+        emit('answerRejected', { round: state.results.length, input: match.input });
+        return;
+      }
       const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);
       answered({ type: 'submit', promptId: prompt.id, match, timeMs });
+    },
+
+    setDraft(text) {
+      draft = text;
     },
 
     next() {

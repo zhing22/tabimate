@@ -30,7 +30,10 @@ export interface RevealActions {
 export function describeResult(result: RoundResult, animal: Animal | null, points: number): string {
   const { match } = result;
   if (match.tier === 0) {
-    return match.input === '' ? "Time's up. No match." : `No match for "${match.input}".`;
+    // A miss only reaches a reveal when time runs out (other misses can be retried).
+    return match.input === ''
+      ? "Time's up. No match."
+      : `Time's up. No match for "${match.input}".`;
   }
   return `${animal?.display ?? match.animalId}: ${TIERS[match.tier].name}, ${points} points.`;
 }
@@ -78,11 +81,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
         { class: 'reveal__emoji', 'aria-hidden': 'true' },
         animal?.emoji ?? (tier ? '🐾' : '💨'),
       ),
-      h(
-        'p',
-        { class: 'reveal__name' },
-        animal?.display ?? (result.match.input === '' ? "Time's up" : 'No match'),
-      ),
+      h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
       tierBadge(tier, { size: 'lg' }).el,
       h('p', { class: 'reveal__points' }, tier ? `+${points}` : '+0'),
       next,

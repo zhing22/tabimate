@@ -22,10 +22,12 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
 - Matching is deliberately LOOSE: typos, partial names and near misses still land on
-  an answer. A guess that resembles no answer gets a deterministic "lucky" roll: it
-  hits with probability MATCHER_CONFIG.luckyHitChance, with tiers weighted by
-  luckyTierWeights (config/game.ts); otherwise it is tier 0. Empty input and timeout
-  are always tier 0.
+  an answer. A guess that matches nothing in the answer key is rejected: the box keeps
+  the text, a one-line message says so, and the player can retry until time runs out.
+  At time-up whatever is in the box is submitted: scored if it matches, else tier 0
+  (an empty box is tier 0). The "lucky" strategy (a seeded random hit for unmatched
+  guesses) stays in the matcher but is not used in play: with retries it would let
+  players fish for points with nonsense.
 - One run per day; progress is saved and resumable.
 
 ## Tech

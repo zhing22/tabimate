@@ -63,6 +63,8 @@ export interface GameEvents {
   /** endsAt is epoch ms from the injected clock. */
   roundStarted: { index: number; prompt: Prompt; endsAt: number };
   answerMatched: { round: number; result: RoundResult };
+  /** A guess matched nothing in the answer key. The round goes on; try again. */
+  answerRejected: { round: number; input: string };
   revealFinished: { index: number };
   biomeEntered: { biome: BiomeDef };
   runFinished: { results: readonly RoundResult[]; score: number };

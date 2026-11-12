@@ -24,6 +24,7 @@ function setup() {
     runRestored: 0,
     roundStarted: 0,
     answerMatched: 0,
+    answerRejected: 0,
     revealFinished: 0,
     biomeEntered: 0,
     runFinished: 0,
@@ -44,6 +45,7 @@ function setup() {
       .map(([name, p]) => {
         if (name === 'roundStarted') return `roundStarted ${p.index}`;
         if (name === 'answerMatched') return `answerMatched ${p.round} tier ${p.result.match.tier}`;
+        if (name === 'answerRejected') return `answerRejected ${p.input}`;
         if (name === 'revealFinished') return `revealFinished ${p.index}`;
         if (name === 'biomeEntered') return `biomeEntered ${p.biome.id}`;
         if (name === 'runFinished') return `runFinished ${p.score}`;
@@ -241,17 +243,16 @@ describe('gameController: restore', () => {
     });
   });
 
-  it('treats an answer after the deadline as a timeout, even if the timer is late', () => {
+  it('treats an answer after the deadline as time up with that text, even if the timer is late', () => {
     const { time, game } = setup();
     game.start();
     // A background tab can hold timers back while the clock keeps going.
     time.skip(ROUND_TIME_MS + 5_000);
     game.submit('Platypus');
-    expect(game.getState().results[0]?.match).toEqual({
-      tier: 0,
-      animalId: null,
-      strategy: null,
-      input: '',
+    // It was in the box when time ran out, so it counts, with the full round's time.
+    expect(game.getState().results[0]).toMatchObject({
+      timeMs: ROUND_TIME_MS,
+      match: { tier: 2, animalId: 'platypus' },
     });
     expect(time.pending()).toBe(0); // round timer cleared; the reveal waits for next()
   });
@@ -388,5 +389,62 @@ describe('gameController: misbehaving listeners', () => {
     time.advance(ROUND_TIME_MS * 3);
     expect(seen).toEqual(['roundStarted', 'revealFinished', 'biomeEntered']);
     expect(time.pending()).toBe(0);
+  });
+});
+
+describe('gameController: retrying a guess', () => {
+  it('rejects a guess that matches nothing, and the round goes on', () => {
+    const { time, game, story, log } = setup();
+    game.start();
+    const changes = log.length;
+    game.submit('James');
+    expect(story().at(-1)).toBe('answerRejected James');
+    expect(game.getState()).toMatchObject({ status: 'playing', results: [] });
+    expect(log.slice(changes).some(([name]) => name === 'stateChanged')).toBe(false);
+    expect(time.pending()).toBe(1); // the round timer still runs
+    game.submit('tiger');
+    expect(game.getState().results[0]?.match).toMatchObject({ animalId: 'tiger', tier: 4 });
+  });
+
+  it('never scores a lucky roll, however often the player retries', () => {
+    const { game } = setup();
+    game.start();
+    for (let i = 0; i < 200; i++) game.submit(`nonsense ${i}`);
+    expect(game.getState().results).toHaveLength(0);
+  });
+
+  it('submits what is in the box when time runs out: scored if it matches', () => {
+    const { time, game } = setup();
+    game.start();
+    game.setDraft('platypus');
+    time.advance(ROUND_TIME_MS);
+    expect(game.getState().results[0]).toMatchObject({
+      timeMs: ROUND_TIME_MS,
+      match: { tier: 2, animalId: 'platypus', input: 'platypus' },
+    });
+  });
+
+  it('scores 0 if the box still matches nothing, keeping what was typed', () => {
+    const { time, game } = setup();
+    game.start();
+    game.submit('James');
+    game.setDraft('James');
+    time.advance(ROUND_TIME_MS);
+    expect(game.getState().results[0]?.match).toEqual({
+      tier: 0,
+      animalId: null,
+      strategy: null,
+      input: 'James',
+    });
+  });
+
+  it('forgets the draft at the next prompt', () => {
+    const { time, game } = setup();
+    game.start();
+    game.setDraft('platypus');
+    game.submit('platypus');
+    game.next();
+    time.advance(ROUND_TIME_MS);
+    expect(game.getState().results[1]?.match).toMatchObject({ tier: 0, input: '' });
   });
 });

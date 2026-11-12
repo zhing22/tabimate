@@ -199,7 +199,63 @@ describe('app: playing with the keyboard', () => {
     t.controller.start();
     type(t.input(), '<img src=x onerror=alert(1)>');
     pressEnter(t.input());
+    t.time.advance(ROUND_TIME_MS); // submitted as it stands, then shown in the reveal
     expect(t.root.querySelector('img')).toBeNull();
+  });
+});
+
+describe('app: a guess that matches nothing', () => {
+  it('says so in one line under the box, keeps the text and focus, and lets them retry', () => {
+    const t = setup();
+    t.controller.start();
+    const input = t.input();
+    type(input, 'James');
+    pressEnter(input);
+    const error = t.$('.answer__error')!;
+    expect(error.hidden).toBe(false);
+    expect(error.getAttribute('role')).toBe('alert');
+    expect(error.textContent).toBe("Not on today's list. Try another animal.");
+    expect(input.value).toBe('James');
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    expect(document.activeElement).toBe(input);
+    expect(t.$('.reveal')).toBeNull();
+
+    type(input, 'tiger'); // editing hides the message
+    expect(error.hidden).toBe(true);
+    expect(input.getAttribute('aria-invalid')).toBe('false');
+    pressEnter(input);
+    expect(t.$('.reveal__name')?.textContent).toBe('Tiger');
+  });
+
+  it('submits what is in the box when time runs out, at 0 points if it still matches nothing', async () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'James');
+    pressEnter(t.input());
+    t.time.advance(ROUND_TIME_MS);
+    expect(t.$('.reveal__name')?.textContent).toBe("Time's up");
+    expect(t.$('.reveal__points')?.textContent).toBe('+0');
+    await t.flush();
+    expect(t.live()).toBe('Time\x27s up. No match for "James".');
+  });
+
+  it('scores a match typed but not sent before time ran out', () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'platypus');
+    t.time.advance(ROUND_TIME_MS);
+    expect(t.$('.reveal__name')?.textContent).toBe('Platypus');
+    expect(t.$('.reveal__points')?.textContent).toBe('+25');
+  });
+
+  it('starts the next prompt with the message gone', () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'James');
+    pressEnter(t.input());
+    answer(t, 'tiger');
+    expect(t.$('.answer__error')?.hidden).toBe(true);
+    expect(t.input().value).toBe('');
   });
 });
 

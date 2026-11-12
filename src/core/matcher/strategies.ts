@@ -75,3 +75,12 @@ export const STRATEGIES: readonly Strategy[] = [
   { id: 'loose', match: loose },
   { id: 'lucky', match: lucky },
 ];
+
+/**
+ * Strategies that find an answer actually in the answer key: everything but
+ * lucky. Play uses these. A guess that matches nothing can be retried, so a
+ * lucky roll per guess would let anyone fish for points with nonsense.
+ */
+export const ANSWER_KEY_STRATEGIES: readonly Strategy[] = STRATEGIES.filter(
+  (strategy) => strategy.id !== 'lucky',
+);

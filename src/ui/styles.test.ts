@@ -34,6 +34,7 @@ describe('tokens.css', () => {
     expect(contrast(token('--ink')!, token('--paper')!)).toBeGreaterThanOrEqual(4.5);
     expect(contrast(token('--ink-soft')!, token('--paper')!)).toBeGreaterThanOrEqual(4.5);
     expect(contrast(token('--accent-ink')!, token('--accent')!)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(token('--error')!, token('--paper')!)).toBeGreaterThanOrEqual(4.5);
   });
 
   it('turns motion off for people who ask for less', () => {

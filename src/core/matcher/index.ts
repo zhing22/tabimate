@@ -59,3 +59,4 @@ export function matchAnswer(
   if (!hit) return { tier: 0, animalId: null, strategy: null, input: rawInput };
   return { tier: hit.tier, animalId: hit.animalId, strategy: hit.strategy, input: rawInput };
 }
+export { ANSWER_KEY_STRATEGIES, STRATEGIES } from './strategies';

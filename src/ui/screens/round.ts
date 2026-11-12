@@ -22,6 +22,8 @@ export interface RoundActions {
   submit(text: string): void;
   /** Enter pressed while locked (the reveal is up): move on. */
   next(): void;
+  /** The text in the box changed (it is submitted as it stands if time runs out). */
+  draft(text: string): void;
 }
 
 /**
@@ -33,8 +35,12 @@ export interface RoundScreen {
   setRound(props: RoundProps): void;
   /** While a reveal shows: input kept (and focused) but read-only, timer held. */
   lock(): void;
+  /** The guess matched nothing: say so, keep the text and focus for another try. */
+  reject(): void;
   unmount: Unmount;
 }
+
+const NOT_FOUND = "Not on today's list. Try another animal.";
 
 interface RoundView {
   readonly card: HTMLElement;
@@ -43,6 +49,7 @@ interface RoundView {
   readonly form: HTMLFormElement;
   readonly input: HTMLInputElement;
   readonly go: HTMLButtonElement;
+  readonly error: HTMLElement;
   readonly ring: TimerRing;
 }
 
@@ -59,14 +66,21 @@ function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
     autocorrect: 'off',
     spellcheck: 'false',
     enterkeyhint: 'go',
-    'aria-describedby': 'round-prompt',
+    'aria-describedby': 'round-prompt answer-error',
   });
+  // role=alert: read out as soon as it appears, without moving focus.
+  const error = h(
+    'p',
+    { id: 'answer-error', class: 'answer__error', role: 'alert', hidden: true },
+    NOT_FOUND,
+  );
   const go = h('button', { class: 'button button--primary', type: 'submit' }, 'Go');
   const form = h(
     'form',
     { class: 'answer', autocomplete: 'off' },
     h('label', { for: 'answer', class: 'answer__label' }, 'Your animal'),
     h('div', { class: 'answer__row' }, input, go),
+    error,
   );
   const ring = timerRing({
     endsAt: first.endsAt,
@@ -82,7 +96,7 @@ function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
     question,
     form,
   );
-  return { card, step, question, form, input, go, ring };
+  return { card, step, question, form, input, go, error, ring };
 }
 
 export function mountRound(
@@ -91,14 +105,22 @@ export function mountRound(
   setup: RoundSetup,
   actions: RoundActions,
 ): RoundScreen {
-  const { card, step, question, form, input, go, ring } = buildRound(first, setup);
+  const { card, step, question, form, input, go, error, ring } = buildRound(first, setup);
+  const showError = (shown: boolean) => {
+    error.hidden = !shown;
+    input.setAttribute('aria-invalid', String(shown));
+  };
 
   let locked = false;
   const empty = () => input.value.trim() === '';
   const refresh = () => {
     go.disabled = locked || empty();
   };
-  input.addEventListener('input', refresh);
+  input.addEventListener('input', () => {
+    showError(false);
+    refresh();
+    actions.draft(input.value);
+  });
   // While locked the Go button is disabled, so Enter would not submit the form.
   // The box keeps focus during the reveal, so Enter (or "go" on a phone) moves on.
   input.addEventListener('keydown', (event) => {
@@ -120,6 +142,7 @@ export function mountRound(
     locked = false;
     input.readOnly = false;
     input.value = '';
+    showError(false);
     refresh();
     focus(input);
   };
@@ -132,6 +155,14 @@ export function mountRound(
       input.readOnly = true; // readOnly, not disabled: disabling would drop focus and the keyboard
       ring.freeze();
       refresh();
+    },
+    reject() {
+      // The text stays, so a near miss can be fixed rather than retyped.
+      // Cleared and set again, so a screen reader repeats it on every miss.
+      error.textContent = '';
+      showError(true);
+      error.textContent = NOT_FOUND;
+      focus(input);
     },
     unmount: () => ring.destroy(),
   };
