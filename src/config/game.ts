@@ -24,13 +24,16 @@ export const MAX_PROMPTS_PER_PUZZLE = 7;
 
 export const ROUND_TIME_MS = 25_000;
 
+/** With this much of a round left (or less), the timer ring turns urgent. */
+export const TIMER_WARN_MS = 5_000;
+
 /**
  * How long the reveal shows after an answer before the next round's timer
  * starts: the suspense below, then time to read the result.
  */
 export const REVEAL_DELAY_MS = 2_600;
 
-/** Drum-roll before the tier appears on the reveal. Shorter than REVEAL_DELAY_MS. */
+/** Drum-roll before the tier appears on the reveal. Shorter than REVEAL_DELAY_MS (tested). */
 export const REVEAL_SUSPENSE_MS = 600;
 
 /** Journey distance (world units, scaled by the scene) the player moves per point. */

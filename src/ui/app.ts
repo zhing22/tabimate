@@ -6,12 +6,11 @@ import type { GameController } from '@/core/gameController';
 import { biomeFor, pointsFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
 import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
-import type { TeamRound } from './components/teamCard';
 import type { FrameLoop, Interval } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
-import { resultsScreen } from './screens/results';
-import { mountRound, type RoundProps, type RoundScreen } from './screens/round';
+import { resultsScreen, type ResultsProps } from './screens/results';
+import { mountRound, type RoundActions, type RoundProps, type RoundSetup } from './screens/round';
 import { startScreen } from './screens/start';
 
 export interface AppDeps {
@@ -48,6 +47,53 @@ export interface App {
   destroy(): void;
 }
 
+type AnimalOf = (result: RoundResult) => Animal | null;
+
+/**
+ * The round screen mounts once and is then updated in place (see round.ts),
+ * so this keeps hold of it between rounds.
+ */
+function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
+  let screen: ReturnType<typeof mountRound> | null = null;
+  return {
+    show(props: RoundProps) {
+      host.clearOverlay();
+      if (screen) {
+        screen.setRound(props);
+        return;
+      }
+      host.showCustom((root) => {
+        const mounted = mountRound(root, props, setup, actions);
+        screen = mounted;
+        return () => {
+          mounted.unmount();
+          screen = null;
+        };
+      });
+    },
+    lock: () => screen?.lock(),
+  };
+}
+
+function resultsProps(
+  puzzle: Puzzle,
+  animalOf: AnimalOf,
+  { results, score, stats }: FinishedRun,
+  msUntilNext: () => number,
+): ResultsProps {
+  return {
+    rounds: results.flatMap((result, i) => {
+      const prompt = puzzle.prompts[i];
+      return prompt ? [{ prompt, result, animal: animalOf(result) }] : [];
+    }),
+    score,
+    biomeName: biomeFor(score).name,
+    streak: stats.streak,
+    bestStreak: stats.bestStreak,
+    msUntilNext,
+  };
+}
+
 /**
  * The UI router: turns game events into screens and player actions into
  * controller calls. It never changes game state itself.
@@ -55,34 +101,16 @@ export interface App {
 export function createApp(deps: AppDeps): App {
   const { host, bus, controller, puzzle, animals, clock } = deps;
   const now = () => clock.now().getTime();
-  const animalOf = (result: RoundResult) =>
+  const animalOf: AnimalOf = (result) =>
     result.match.animalId === null ? null : (animals.get(result.match.animalId) ?? null);
-
-  let round: RoundScreen | null = null;
-
-  function showRound(props: RoundProps) {
-    host.clearOverlay();
-    if (round) {
-      round.setRound(props);
-      return;
-    }
-    host.showCustom((root) => {
-      const screen = mountRound(
-        root,
-        props,
-        { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
-        { submit: (text) => controller.submit(text) },
-      );
-      round = screen;
-      return () => {
-        screen.unmount();
-        round = null;
-      };
-    });
-  }
+  const round = roundSlot(
+    host,
+    { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
+    { submit: (text) => controller.submit(text) },
+  );
 
   function showReveal(result: RoundResult) {
-    round?.lock();
+    round.lock();
     host.showOverlay(
       revealScreen,
       {
@@ -95,33 +123,22 @@ export function createApp(deps: AppDeps): App {
     );
   }
 
-  function showResults({ results, score, stats }: FinishedRun) {
+  function showResults(run: FinishedRun) {
     // Fixed when the screen opens: asking "time to the next reset" every second
     // would jump back to 24 h at noon and never reach zero.
     const nextPuzzleAt = now() + msUntilNextReset(clock.now());
-    const rounds: TeamRound[] = results.flatMap((result, i) => {
-      const prompt = puzzle.prompts[i];
-      return prompt ? [{ prompt, result, animal: animalOf(result) }] : [];
-    });
+    const props = resultsProps(puzzle, animalOf, run, () => nextPuzzleAt - now());
     host.show(
       resultsScreen,
-      {
-        rounds,
-        score,
-        biomeName: biomeFor(score).name,
-        streak: stats.streak,
-        bestStreak: stats.bestStreak,
-        msUntilNext: () => nextPuzzleAt - now(),
-        ...(deps.interval ? { interval: deps.interval } : {}),
-      },
+      { ...props, ...(deps.interval ? { interval: deps.interval } : {}) },
       { next: deps.reload },
     );
-    host.announce(`Journey complete: ${score} points.`);
+    host.announce(`Journey complete: ${run.score} points.`);
   }
 
   const stops = [
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
-      showRound({ index, total: puzzle.prompts.length, prompt, endsAt }),
+      round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
     bus.on('answerMatched', ({ result }) => showReveal(result)),
     bus.on('runRestored', ({ state }) => {

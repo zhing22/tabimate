@@ -6,12 +6,25 @@ import {
   MAX_PROMPTS_PER_PUZZLE,
   PROMPTS_PER_DAY,
   RESET_HOUR,
+  REVEAL_DELAY_MS,
+  REVEAL_SUSPENSE_MS,
   ROUND_TIME_MS,
+  TIMER_WARN_MS,
 } from './game';
 import { TIERS } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
+  it('the reveal has time to show the result after its suspense', () => {
+    expect(REVEAL_SUSPENSE_MS).toBeGreaterThanOrEqual(0);
+    expect(REVEAL_SUSPENSE_MS).toBeLessThan(REVEAL_DELAY_MS);
+  });
+
+  it('the timer warns only near the end of a round', () => {
+    expect(TIMER_WARN_MS).toBeGreaterThan(0);
+    expect(TIMER_WARN_MS).toBeLessThan(ROUND_TIME_MS);
+  });
+
   it('TIERS is indexed by tier id', () => {
     expect(TIERS).toHaveLength(6);
     TIERS.forEach((tier, index) => {

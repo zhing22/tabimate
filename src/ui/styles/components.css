@@ -85,69 +85,6 @@
   cursor: default;
 }
 
-.how-to {
-  text-align: left;
-  font-size: var(--text-sm);
-}
-
-.how-to summary {
-  min-height: var(--tap);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.how-to ul {
-  display: grid;
-  gap: var(--space-2);
-  padding-left: var(--space-5);
-}
-
-/* Round */
-.round__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.round__prompt {
-  font-size: var(--text-xl);
-  line-height: 1.2;
-}
-
-.answer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-2);
-}
-
-.answer__label {
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-
-.answer__row {
-  display: flex;
-  gap: var(--space-3);
-}
-
-.answer__input {
-  flex: 1;
-  min-width: 0;
-  min-height: var(--tap);
-  padding: var(--space-2) var(--space-3);
-  font-size: max(16px, var(--text-lg)); /* 16 px or more stops iOS zooming in on focus */
-  background: #fffaf0;
-  border: 3px solid var(--ink);
-  border-radius: var(--radius-1);
-}
-
-.answer__input:read-only {
-  color: var(--ink-soft);
-}
-
 /* Timer ring */
 .timer-ring {
   position: relative;
@@ -204,60 +141,15 @@
 }
 
 .tier-badge--lg {
+  max-width: 100%;
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-md);
+  /* "CR · Critically Endangered" is about as wide as a 360 px card: wrap, never overflow. */
+  white-space: normal;
+  text-wrap: balance;
 }
 
-/* Reveal: a pop-up page over the round. */
-.reveal {
-  text-align: center;
-  animation: pop var(--dur-med) var(--ease-pop);
-}
-
-.reveal__suspense {
-  font-family: var(--font-pixel);
-  font-size: var(--text-2xl);
-  display: none;
-}
-
-.reveal--pending .reveal__suspense {
-  display: block;
-  animation: blink var(--dur-slow) steps(2) infinite;
-}
-
-.reveal--pending .reveal__body {
-  display: none;
-}
-
-.reveal__body {
-  display: grid;
-  gap: var(--space-2);
-  animation: pop var(--dur-med) var(--ease-pop);
-}
-
-.reveal__emoji {
-  font-size: 3.5rem;
-  line-height: 1;
-}
-
-.reveal__name {
-  font-size: var(--text-xl);
-  font-weight: 700;
-}
-
-.reveal__points {
-  font-size: var(--text-xl);
-}
-
-.reveal[data-tier='5'] .reveal__body {
-  text-shadow: 0 0 12px var(--tier-5);
-}
-
-/* Results */
-.results__number {
-  font-size: var(--text-2xl);
-}
-
+/* Team card: one row per prompt on the results screen. */
 .team-card {
   display: grid;
   gap: var(--space-2);
@@ -301,32 +193,4 @@
 .countdown {
   font-family: var(--font-pixel);
   color: var(--ink);
-}
-
-.error__detail {
-  overflow-wrap: anywhere;
-}
-
-@keyframes pop {
-  from {
-    transform: scale(0.85);
-    opacity: 0;
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0.3;
-  }
-}
-
-/* Small phones: tighter cards so the round fits above the keyboard. */
-@media (max-height: 520px) {
-  .card {
-    padding: var(--space-4);
-    gap: var(--space-2);
-  }
-  .round__prompt {
-    font-size: var(--text-lg);
-  }
 }

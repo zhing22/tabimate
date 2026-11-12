@@ -1,0 +1,53 @@
+/* Round: the prompt, the answer box and the timer in the header. */
+.round__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.round__prompt {
+  font-size: var(--text-xl);
+  line-height: 1.2;
+}
+
+.answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.answer__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.answer__row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.answer__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-3);
+  font-size: max(16px, var(--text-lg)); /* 16 px or more stops iOS zooming in on focus */
+  background: #fffaf0;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-1);
+}
+
+.answer__input:read-only {
+  color: var(--ink-soft);
+}
+
+/* Small phones: tighter cards so the round fits above the keyboard. */
+@media (max-height: 520px) {
+  .card {
+    padding: var(--space-4);
+    gap: var(--space-2);
+  }
+  .round__prompt {
+    font-size: var(--text-lg);
+  }
+}

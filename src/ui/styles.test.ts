@@ -40,3 +40,28 @@ describe('tokens.css', () => {
     expect(tokens).toMatch(/prefers-reduced-motion:\s*reduce/);
   });
 });
+
+const sheets = import.meta.glob<string>('./styles/*.css', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+describe('style sheets', () => {
+  it('index.css imports every sheet', () => {
+    const index = sheets['./styles/index.css']!;
+    for (const path of Object.keys(sheets)) {
+      if (path.endsWith('/index.css')) continue;
+      expect(index, `${path} is not imported`).toContain(
+        `@import '${path.replace('./styles/', './')}'`,
+      );
+    }
+  });
+
+  // Effects are chosen by TIERS[].effectId; a selector on the tier number would bypass it.
+  it('no selector styles a tier by its number', () => {
+    for (const [path, css] of Object.entries(sheets)) {
+      expect(css, path).not.toMatch(/\[data-tier=/);
+    }
+  });
+});

@@ -1,6 +1,6 @@
-import { MAX_INPUT_LENGTH } from '@/config/game';
+import { MAX_INPUT_LENGTH, TIMER_WARN_MS } from '@/config/game';
 import type { Prompt } from '@/core/types';
-import { timerRing } from '../components/timerRing';
+import { timerRing, type TimerRing } from '../components/timerRing';
 import { focus, h } from '../dom';
 import type { FrameLoop } from '../frames';
 import type { Unmount } from '../host';
@@ -34,12 +34,17 @@ export interface RoundScreen {
   unmount: Unmount;
 }
 
-export function mountRound(
-  root: HTMLElement,
-  first: RoundProps,
-  setup: RoundSetup,
-  actions: RoundActions,
-): RoundScreen {
+interface RoundView {
+  readonly card: HTMLElement;
+  readonly step: HTMLElement;
+  readonly question: HTMLElement;
+  readonly form: HTMLFormElement;
+  readonly input: HTMLInputElement;
+  readonly go: HTMLButtonElement;
+  readonly ring: TimerRing;
+}
+
+function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
   const step = h('p', { class: 'meta round__step' });
   const question = h('h2', { id: 'round-prompt', class: 'round__prompt' });
   const input = h('input', {
@@ -65,30 +70,39 @@ export function mountRound(
     endsAt: first.endsAt,
     totalMs: setup.totalMs,
     now: setup.now,
+    warnAtMs: TIMER_WARN_MS,
     ...(setup.frames ? { frames: setup.frames } : {}),
   });
+  const card = h(
+    'section',
+    { class: 'card round', 'aria-labelledby': 'round-prompt' },
+    h('header', { class: 'round__header' }, step, ring.el),
+    question,
+    form,
+  );
+  return { card, step, question, form, input, go, ring };
+}
+
+export function mountRound(
+  root: HTMLElement,
+  first: RoundProps,
+  setup: RoundSetup,
+  actions: RoundActions,
+): RoundScreen {
+  const { card, step, question, form, input, go, ring } = buildRound(first, setup);
 
   let locked = false;
+  const empty = () => input.value.trim() === '';
   const refresh = () => {
-    go.disabled = locked || input.value.trim() === '';
+    go.disabled = locked || empty();
   };
   input.addEventListener('input', refresh);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     // An accidental Enter on an empty box must not throw the round away.
-    if (locked || input.value.trim() === '') return;
-    actions.submit(input.value);
+    if (!locked && !empty()) actions.submit(input.value);
   });
-
-  root.append(
-    h(
-      'section',
-      { class: 'card round', 'aria-labelledby': 'round-prompt' },
-      h('header', { class: 'round__header' }, step, ring.el),
-      question,
-      form,
-    ),
-  );
+  root.append(card);
 
   const setRound = (props: RoundProps) => {
     step.textContent = `Prompt ${props.index + 1} of ${props.total}`;

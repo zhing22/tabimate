@@ -1,8 +1,6 @@
 // Composition root: the only place that picks real implementations and wires
 // config, core, data, services and ui together.
-import './ui/styles/tokens.css';
-import './ui/styles/base.css';
-import './ui/styles/screens.css';
+import './ui/styles/index.css';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { createBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';

@@ -35,7 +35,14 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   const tier = result.match.tier;
   const card = h(
     'section',
-    { class: 'card reveal reveal--pending', 'data-tier': tier, 'aria-label': 'Result' },
+    {
+      class: 'card reveal reveal--pending',
+      'data-tier': tier,
+      // Styled by effect, not tier number, so TIERS decides which tier is shiny.
+      'data-effect': TIERS[tier].effectId,
+      style: `--reveal-tier: var(${TIERS[tier].colour})`,
+      'aria-label': 'Result',
+    },
     h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
     h(
       'div',

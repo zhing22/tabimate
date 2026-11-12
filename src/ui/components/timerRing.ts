@@ -8,18 +8,14 @@ export interface TimerRingProps {
   readonly endsAt: number;
   readonly totalMs: number;
   readonly now: () => number;
-  /** Below this many seconds the ring turns urgent. */
-  readonly warnAtS?: number;
+  /** With this much time left or less (as shown, in whole seconds) the ring turns urgent. */
+  readonly warnAtMs: number;
   readonly frames?: FrameLoop;
 }
 
 const RADIUS = 26;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-/**
- * Circular countdown. Drawn from endsAt each frame rather than counting down
- * itself, so it stays right after a reload or a throttled background tab.
- */
 export interface TimerRing extends Component {
   /** Points at a new deadline and (re)starts the countdown. */
   setEndsAt(endsAt: number): void;
@@ -30,9 +26,12 @@ export interface TimerRing extends Component {
   freeze(): void;
 }
 
+/**
+ * Circular countdown. Drawn from endsAt each frame rather than counting down
+ * itself, so it stays right after a reload or a throttled background tab.
+ */
 export function timerRing(props: TimerRingProps): TimerRing {
   const frames = props.frames ?? animationFrames;
-  const warnAt = props.warnAtS ?? 5;
   let endsAt = props.endsAt;
 
   const arc = svg('circle', {
@@ -66,7 +65,7 @@ export function timerRing(props: TimerRingProps): TimerRing {
       shown = seconds;
       label.textContent = String(seconds);
       el.setAttribute('aria-label', `${seconds} seconds left`);
-      el.classList.toggle('timer-ring--low', seconds <= warnAt);
+      el.classList.toggle('timer-ring--low', seconds * 1000 <= props.warnAtMs);
     }
   };
 

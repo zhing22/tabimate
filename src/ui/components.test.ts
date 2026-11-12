@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
+import { TIERS } from '@/config/tiers';
 import { countdown } from './components/countdown';
 import { teamCard } from './components/teamCard';
 import { tierBadge } from './components/tierBadge';
 import { timerRing } from './components/timerRing';
 import { formatCountdown, secondsLeft } from './format';
+import { revealScreen } from './screens/reveal';
 import { manualTime } from './testUi';
 
 describe('format', () => {
@@ -26,9 +28,18 @@ describe('format', () => {
 describe('timerRing', () => {
   it('draws from endsAt each frame and turns urgent near the end', () => {
     const t = manualTime();
-    const ring = timerRing({ endsAt: 25_000, totalMs: 25_000, now: t.now, frames: t.frames });
+    const ring = timerRing({
+      endsAt: 25_000,
+      totalMs: 25_000,
+      now: t.now,
+      frames: t.frames,
+      warnAtMs: 5_000,
+    });
     expect(ring.el.textContent).toBe('25');
     expect(ring.el.getAttribute('role')).toBe('timer');
+    t.set(19_500);
+    expect(ring.el.textContent).toBe('6');
+    expect(ring.el.classList.contains('timer-ring--low')).toBe(false);
     t.set(20_500);
     expect(ring.el.textContent).toBe('5');
     expect(ring.el.classList.contains('timer-ring--low')).toBe(true);
@@ -38,7 +49,13 @@ describe('timerRing', () => {
 
   it('can be pointed at a new deadline, and stops on destroy', () => {
     const t = manualTime();
-    const ring = timerRing({ endsAt: 1_000, totalMs: 25_000, now: t.now, frames: t.frames });
+    const ring = timerRing({
+      endsAt: 1_000,
+      totalMs: 25_000,
+      now: t.now,
+      frames: t.frames,
+      warnAtMs: 5_000,
+    });
     ring.setEndsAt(25_000);
     expect(ring.el.textContent).toBe('25');
     ring.destroy();
@@ -47,7 +64,13 @@ describe('timerRing', () => {
 
   it('freeze holds what it shows until it gets a new deadline', () => {
     const t = manualTime();
-    const ring = timerRing({ endsAt: 25_000, totalMs: 25_000, now: t.now, frames: t.frames });
+    const ring = timerRing({
+      endsAt: 25_000,
+      totalMs: 25_000,
+      now: t.now,
+      frames: t.frames,
+      warnAtMs: 5_000,
+    });
     t.set(22_000);
     ring.freeze();
     expect(t.running()).toBe(0);
@@ -108,4 +131,26 @@ describe('tierBadge and teamCard', () => {
     expect(el.textContent).toContain('No match');
     expect(el.textContent).toContain('Lays eggs');
   });
+});
+
+describe('revealScreen', () => {
+  it.each(TIERS.map((t) => [t.id, t.effectId] as const))(
+    'tier %i carries its effect %s from TIERS',
+    (tier, effect) => {
+      const root = document.createElement('div');
+      const match =
+        tier === 0
+          ? ({ tier, animalId: null, strategy: null, input: 'x' } as const)
+          : ({ tier, animalId: 'tiger', strategy: 'exact', input: 'x' } as const);
+      const result = { promptId: 'p', timeMs: 1, match };
+      revealScreen(
+        root,
+        { result, animal: null, points: 0, suspenseMs: 0 },
+        { revealed: () => {} },
+      );
+      const card = root.querySelector<HTMLElement>('.reveal')!;
+      expect(card.dataset['effect']).toBe(effect);
+      expect(card.getAttribute('style')).toContain(`var(--tier-${tier})`);
+    },
+  );
 });
