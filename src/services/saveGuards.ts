@@ -35,7 +35,6 @@ const STRATEGIES = {
   typo: true,
   partial: true,
   loose: true,
-  lucky: true,
 } satisfies Record<StrategyId, true>;
 
 const oneOf = <T extends string>(table: Record<T, true>, value: unknown): value is T =>

@@ -52,9 +52,10 @@
   }
 }
 
-/* One line under the box when a guess matches nothing; the box keeps the text. */
-.answer__error {
-  color: var(--error);
+/* One line under the box: red when a guess matches nothing, blue when the box
+   now holds a corrected name. */
+.answer__note {
+  color: var(--hint);
   font-size: var(--text-sm);
   font-weight: 600;
   white-space: nowrap;
@@ -62,6 +63,14 @@
   text-overflow: ellipsis;
 }
 
-.answer__input[aria-invalid='true'] {
+.answer__note[data-kind='error'] {
+  color: var(--error);
+}
+
+.answer__input[data-note='error'] {
   border-color: var(--error);
+}
+
+.answer__input[data-note='hint'] {
+  border-color: var(--hint);
 }

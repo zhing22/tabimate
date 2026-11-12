@@ -9,6 +9,7 @@
   --night: #1d2b3a;
   --accent: #c0404e;
   --error: #a32631; /* text on paper: wrong-answer message */
+  --hint: #2a5a9e; /* text on paper: "did you mean" message */
   --accent-ink: #fff6e6;
   --focus: #3fa7ff;
 

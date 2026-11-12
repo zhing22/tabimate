@@ -37,10 +37,15 @@ export interface RoundScreen {
   lock(): void;
   /** The guess matched nothing: say so, keep the text and focus for another try. */
   reject(): void;
+  /** The guess was close: put the right name in the box, ready to send or retype. */
+  suggest(name: string): void;
   unmount: Unmount;
 }
 
 const NOT_FOUND = "Not on today's list. Try another animal.";
+const DID_YOU_MEAN = 'Did you mean this? Press Go to answer.';
+
+type Note = 'error' | 'hint';
 
 interface RoundView {
   readonly card: HTMLElement;
@@ -49,7 +54,7 @@ interface RoundView {
   readonly form: HTMLFormElement;
   readonly input: HTMLInputElement;
   readonly go: HTMLButtonElement;
-  readonly error: HTMLElement;
+  readonly note: HTMLElement;
   readonly ring: TimerRing;
 }
 
@@ -66,21 +71,18 @@ function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
     autocorrect: 'off',
     spellcheck: 'false',
     enterkeyhint: 'go',
-    'aria-describedby': 'round-prompt answer-error',
+    'aria-describedby': 'round-prompt answer-note',
   });
+  // One line under the box: "not on the list" or "did you mean this?".
   // role=alert: read out as soon as it appears, without moving focus.
-  const error = h(
-    'p',
-    { id: 'answer-error', class: 'answer__error', role: 'alert', hidden: true },
-    NOT_FOUND,
-  );
+  const note = h('p', { id: 'answer-note', class: 'answer__note', role: 'alert', hidden: true });
   const go = h('button', { class: 'button button--primary', type: 'submit' }, 'Go');
   const form = h(
     'form',
     { class: 'answer', autocomplete: 'off' },
     h('label', { for: 'answer', class: 'answer__label' }, 'Your animal'),
     h('div', { class: 'answer__row' }, input, go),
-    error,
+    note,
   );
   const ring = timerRing({
     endsAt: first.endsAt,
@@ -96,7 +98,7 @@ function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
     question,
     form,
   );
-  return { card, step, question, form, input, go, error, ring };
+  return { card, step, question, form, input, go, note, ring };
 }
 
 export function mountRound(
@@ -105,10 +107,15 @@ export function mountRound(
   setup: RoundSetup,
   actions: RoundActions,
 ): RoundScreen {
-  const { card, step, question, form, input, go, error, ring } = buildRound(first, setup);
-  const showError = (shown: boolean) => {
-    error.hidden = !shown;
-    input.setAttribute('aria-invalid', String(shown));
+  const { card, step, question, form, input, go, note, ring } = buildRound(first, setup);
+  const showNote = (kind: Note | null, text = '') => {
+    // Cleared first, so a screen reader repeats it even when the text is the same.
+    note.textContent = '';
+    note.hidden = kind === null;
+    note.dataset['kind'] = kind ?? '';
+    input.dataset['note'] = kind ?? '';
+    input.setAttribute('aria-invalid', String(kind === 'error'));
+    note.textContent = text;
   };
 
   let locked = false;
@@ -117,7 +124,7 @@ export function mountRound(
     go.disabled = locked || empty();
   };
   input.addEventListener('input', () => {
-    showError(false);
+    showNote(null);
     refresh();
     actions.draft(input.value);
   });
@@ -142,7 +149,7 @@ export function mountRound(
     locked = false;
     input.readOnly = false;
     input.value = '';
-    showError(false);
+    showNote(null);
     refresh();
     focus(input);
   };
@@ -157,12 +164,18 @@ export function mountRound(
       refresh();
     },
     reject() {
-      // The text stays, so a near miss can be fixed rather than retyped.
-      // Cleared and set again, so a screen reader repeats it on every miss.
-      error.textContent = '';
-      showError(true);
-      error.textContent = NOT_FOUND;
+      // The text stays, so it can be fixed rather than retyped.
+      showNote('error', NOT_FOUND);
       focus(input);
+    },
+    suggest(name) {
+      input.value = name;
+      actions.draft(name); // no input event for a value set in code
+      refresh();
+      showNote('hint', DID_YOU_MEAN);
+      focus(input);
+      // Selected, so typing replaces it at once; Go or Enter sends it as is.
+      input.select();
     },
     unmount: () => ring.destroy(),
   };

@@ -25,6 +25,7 @@ function setup() {
     roundStarted: 0,
     answerMatched: 0,
     answerRejected: 0,
+    answerSuggested: 0,
     revealFinished: 0,
     biomeEntered: 0,
     runFinished: 0,
@@ -46,6 +47,7 @@ function setup() {
         if (name === 'roundStarted') return `roundStarted ${p.index}`;
         if (name === 'answerMatched') return `answerMatched ${p.round} tier ${p.result.match.tier}`;
         if (name === 'answerRejected') return `answerRejected ${p.input}`;
+        if (name === 'answerSuggested') return `answerSuggested ${p.input} -> ${p.suggestion}`;
         if (name === 'revealFinished') return `revealFinished ${p.index}`;
         if (name === 'biomeEntered') return `biomeEntered ${p.biome.id}`;
         if (name === 'runFinished') return `runFinished ${p.score}`;
@@ -406,7 +408,7 @@ describe('gameController: retrying a guess', () => {
     expect(game.getState().results[0]?.match).toMatchObject({ animalId: 'tiger', tier: 4 });
   });
 
-  it('never scores a lucky roll, however often the player retries', () => {
+  it('never scores nonsense, however often the player retries', () => {
     const { game } = setup();
     game.start();
     for (let i = 0; i < 200; i++) game.submit(`nonsense ${i}`);
@@ -435,6 +437,34 @@ describe('gameController: retrying a guess', () => {
       animalId: null,
       strategy: null,
       input: 'James',
+    });
+  });
+
+  it.each([
+    ['platipus', 'Platypus'],
+    ['orca', 'Killer whale'],
+    ['plat', 'Platypus'],
+  ])('offers the exact name for a close guess %j, scoring nothing yet', (typed, name) => {
+    const { time, game, story } = setup();
+    game.start();
+    game.submit(typed);
+    expect(story().at(-1)).toBe(`answerSuggested ${typed} -> ${name}`);
+    expect(game.getState()).toMatchObject({ status: 'playing', results: [] });
+    expect(time.pending()).toBe(1);
+    game.submit(name);
+    expect(game.getState().results[0]?.match.strategy).toBe('exact');
+  });
+
+  it('scores only an exact name at time-up; a close guess counts as a miss', () => {
+    const { time, game } = setup();
+    game.start();
+    game.setDraft('platipus');
+    time.advance(ROUND_TIME_MS);
+    expect(game.getState().results[0]?.match).toEqual({
+      tier: 0,
+      animalId: null,
+      strategy: null,
+      input: 'platipus',
     });
   });
 

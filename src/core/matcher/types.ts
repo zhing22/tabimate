@@ -2,7 +2,7 @@ import type { MatcherConfig } from '@/config/game';
 import type { AnswerTierId } from '@/config/tiers';
 import type { AnimalId, PromptId, StrategyId } from '../types';
 
-/** A guess after normalize(), with the prompt it answers (lucky seeds on both). */
+/** A guess after normalize(), with the prompt it answers. */
 export interface NormalizedInput {
   readonly text: string;
   readonly promptId: PromptId;
@@ -21,7 +21,7 @@ export interface Candidate {
 /** What a strategy finds. The pipeline adds which strategy it was, so none can mislabel itself. */
 export interface Found {
   readonly candidate: Candidate;
-  /** 0..1, how sure the strategy is. Lucky finds are 0. */
+  /** 0..1, how sure the strategy is. */
   readonly confidence: number;
 }
 

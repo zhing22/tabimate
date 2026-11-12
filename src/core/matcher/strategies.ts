@@ -1,7 +1,6 @@
 import type { MatcherConfig } from '@/config/game';
 import { gramOverlap, minSharedGrams } from './gramIndex';
 import { loose } from './loose';
-import { lucky } from './lucky';
 import { bestName, pickBest, type Scored } from './pick';
 import { levenshtein } from './similarity';
 
@@ -64,7 +63,7 @@ export const partial: StrategyFn = (input, candidates, cfg) => {
   return pickBest(input, candidates, (c) => bestName(c, scoreName));
 };
 
-export { loose, lucky };
+export { loose };
 
 /** Tried in order; the first hit wins. Add or reorder entries here, not in the pipeline. */
 export const STRATEGIES: readonly Strategy[] = [
@@ -73,14 +72,4 @@ export const STRATEGIES: readonly Strategy[] = [
   { id: 'typo', match: typo },
   { id: 'partial', match: partial },
   { id: 'loose', match: loose },
-  { id: 'lucky', match: lucky },
 ];
-
-/**
- * Strategies that find an answer actually in the answer key: everything but
- * lucky. Play uses these. A guess that matches nothing can be retried, so a
- * lucky roll per guess would let anyone fish for points with nonsense.
- */
-export const ANSWER_KEY_STRATEGIES: readonly Strategy[] = STRATEGIES.filter(
-  (strategy) => strategy.id !== 'lucky',
-);

@@ -73,6 +73,7 @@ function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
     },
     lock: () => screen?.lock(),
     reject: () => screen?.reject(),
+    suggest: (name: string) => screen?.suggest(name),
     get mounted() {
       return screen !== null;
     },
@@ -162,6 +163,7 @@ export function createApp(deps: AppDeps): App {
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
     bus.on('answerRejected', () => round.reject()),
+    bus.on('answerSuggested', ({ suggestion }) => round.suggest(suggestion)),
     bus.on('answerMatched', ({ round: index, result }) => showReveal(index, result)),
     bus.on('runRestored', ({ state }) => {
       const index = state.results.length - 1;

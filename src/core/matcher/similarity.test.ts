@@ -1,12 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  fnv1a,
-  gramSimilarity,
-  levenshtein,
-  trigramSimilarity,
-  trigrams,
-  unitHash,
-} from './similarity';
+import { fnv1a, gramSimilarity, levenshtein, trigramSimilarity, trigrams } from './similarity';
 
 describe('levenshtein', () => {
   it.each([
@@ -48,19 +41,10 @@ describe('trigrams and similarity', () => {
   });
 });
 
-describe('fnv1a and unitHash', () => {
+describe('fnv1a', () => {
   it('matches the reference FNV-1a values', () => {
     expect(fnv1a('')).toBe(0x811c9dc5);
     expect(fnv1a('a')).toBe(0xe40c292c);
     expect(fnv1a('foobar')).toBe(0xbf9cf968);
-  });
-
-  it('is stable and spreads over [0, 1)', () => {
-    expect(unitHash('james')).toBe(unitHash('james'));
-    const values = Array.from({ length: 1000 }, (_, i) => unitHash(`x${i}`));
-    expect(values.every((v) => v >= 0 && v < 1)).toBe(true);
-    const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
-    expect(mean).toBeGreaterThan(0.45);
-    expect(mean).toBeLessThan(0.55);
   });
 });

@@ -34,7 +34,11 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
           {},
           h('li', {}, 'Each prompt asks for an animal. Type one before the ring runs out.'),
           h('li', {}, 'Rarer animals score more: tiers follow the IUCN Red List.'),
-          h('li', {}, 'Typos and partial names still count. Unknown guesses might get lucky.'),
+          h(
+            'li',
+            {},
+            'Close enough? We fix typos and short names for you: press Go again to answer.',
+          ),
           h('li', {}, 'Every animal you find joins your trail. One journey a day.'),
         ),
       ),

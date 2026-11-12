@@ -25,33 +25,12 @@ describe('matchAnswer', () => {
   });
 
   it.each(['', '   ', '!!!'])('%j is always a miss', (raw) => {
-    const sure = { ...MATCHER_CONFIG, luckyHitChance: 1 };
-    expect(match(raw, sure)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
+    expect(match(raw)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
   });
 
-  it.each(['A', 'James'])('%j gets the same result on every call, never tier 5', (raw) => {
-    const first = match(raw);
-    for (let i = 0; i < 20; i++) expect(match(raw)).toEqual(first);
-    expect(first.tier).not.toBe(5);
-    if (first.tier !== 0) expect(first.strategy).toBe('lucky');
-  });
-
-  it('gives a lucky non-zero tier to nonsense when lucky is certain', () => {
-    const result = match('James', { ...MATCHER_CONFIG, luckyHitChance: 1 });
-    expect(result.tier).toBeGreaterThan(0);
-    expect(result.strategy).toBe('lucky');
-  });
-
-  it('misses nonsense when lucky is off', () => {
-    expect(match('James', { ...MATCHER_CONFIG, luckyHitChance: 0 }).tier).toBe(0);
-  });
-
-  // "er" is inside "tiger" and "ar" inside "bear": short fragments must go through
-  // the lucky roll like any other unrecognised guess, not win outright.
-  it.each(['er', 'an', 'ar'])('%j only ever scores through lucky', (raw) => {
-    expect(match(raw, { ...MATCHER_CONFIG, luckyHitChance: 0 }).tier).toBe(0);
-    const result = match(raw);
-    if (result.tier !== 0) expect(result.strategy).toBe('lucky');
+  // "er" is inside "tiger" and "ar" inside "bear": fragments that short match nothing.
+  it.each(['James', 'zzzz', 'er', 'an', 'ar'])('%j matches nothing', (raw) => {
+    expect(match(raw)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
   });
 });
 

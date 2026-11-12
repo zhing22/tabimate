@@ -71,11 +71,5 @@ describe('config invariants', () => {
     expect(MATCHER_CONFIG.partialMinLength).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeLessThanOrEqual(1);
-    expect(MATCHER_CONFIG.luckyHitChance).toBeGreaterThanOrEqual(0);
-    expect(MATCHER_CONFIG.luckyHitChance).toBeLessThanOrEqual(1);
-    const weights: number[] = Object.values(MATCHER_CONFIG.luckyTierWeights);
-    expect(weights).toHaveLength(5);
-    expect(weights.every((w) => w >= 0)).toBe(true);
-    expect(weights.reduce((sum, w) => sum + w, 0)).toBeGreaterThan(0);
   });
 });

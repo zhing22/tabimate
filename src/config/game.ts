@@ -1,5 +1,3 @@
-import type { AnswerTierId } from './tiers';
-
 /** Zone whose wall clock decides when a new puzzle starts. */
 export const TIMEZONE = 'Asia/Singapore';
 
@@ -69,13 +67,6 @@ export interface MatcherConfig {
    * so "sea" alone does not count as "sea otter".
    */
   readonly partialMinCoverage: number;
-  /**
-   * Chance (0..1) that a guess resembling no answer still gets a deterministic
-   * lucky answer; otherwise it scores tier 0. Set to 0 to turn lucky off.
-   */
-  readonly luckyHitChance: number;
-  /** Relative odds of each tier when the lucky roll hits. 0 = never. */
-  readonly luckyTierWeights: Readonly<Record<AnswerTierId, number>>;
 }
 
 export const MATCHER_CONFIG = {
@@ -87,8 +78,4 @@ export const MATCHER_CONFIG = {
   typoMaxShare: 0.3,
   partialMinLength: 3,
   partialMinCoverage: 0.4,
-  // Most unrecognised guesses miss, so a lucky find stays a surprise.
-  luckyHitChance: 0.2,
-  // Critically Endangered is never handed out by luck; it has to be named.
-  luckyTierWeights: { 1: 20, 2: 30, 3: 35, 4: 15, 5: 0 },
 } as const satisfies MatcherConfig;

@@ -15,19 +15,25 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
   00:00–11:59 SGT still plays the previous date's puzzle.
-- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. After each
-  answer the result stays up until the player taps Next (or presses Enter); the next
-  prompt's timer starts then. The game
-  plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE).
+- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
+  plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE). After
+  each answer the result stays up until the player taps Next (or presses Enter); the
+  next prompt's timer starts then.
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
-- Matching is deliberately LOOSE: typos, partial names and near misses still land on
-  an answer. A guess that matches nothing in the answer key is rejected: the box keeps
-  the text, a one-line message says so, and the player can retry until time runs out.
-  At time-up whatever is in the box is submitted: scored if it matches, else tier 0
-  (an empty box is tier 0). The "lucky" strategy (a seeded random hit for unmatched
-  guesses) stays in the matcher but is not used in play: with retries it would let
-  players fish for points with nonsense.
+- Answering: only an answer's exact name scores (after normalising case, punctuation
+  and plurals: "Platypuses" is exact for Platypus). On each Go the guess is run
+  through the matcher strategies in order: exact, alias, typo, partial, loose
+  (core/matcher/strategies.ts).
+  - exact: scored and revealed at once.
+  - alias, typo, partial or loose: not scored. The box is replaced with that
+    animal's exact name (selected) and a one-line hint says "Did you mean this? Press
+    Go to answer." Go again submits it; typing replaces it.
+  - no match: not scored. The box keeps the text and a one-line red message says
+    it is not on today's list. The player can retry until time runs out.
+  - Time-up submits whatever is in the box: scored only if it is an exact name
+    (e.g. a correction the player left in the box), otherwise tier 0. An empty box
+    is tier 0. There is no random or "lucky" scoring.
 - One run per day; progress is saved and resumable.
 
 ## Tech

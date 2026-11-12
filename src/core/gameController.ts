@@ -3,9 +3,9 @@ import type { Clock } from './clock';
 import type { GameBus } from './events';
 import { canRestore, createRunState, gameReducer, type GameAction } from './game';
 import { biomesEntered, totalScore } from './journey';
-import { ANSWER_KEY_STRATEGIES, matchAnswer } from './matcher';
+import { matchAnswer } from './matcher';
 import type { Scheduler, TimerHandle } from './scheduler';
-import type { Animal, AnimalId, GameMode, Prompt, Puzzle, RunState } from './types';
+import type { Animal, AnimalId, GameMode, MatchResult, Prompt, Puzzle, RunState } from './types';
 
 export interface GameControllerDeps {
   readonly puzzle: Puzzle;
@@ -22,13 +22,15 @@ export interface GameControllerDeps {
 export interface GameController {
   start(): void;
   /**
-   * Tries a guess. A match is scored and revealed; a guess that matches
-   * nothing emits answerRejected and the round goes on, so the player can retry.
+   * Tries a guess. Only an animal's exact name is scored and revealed. A guess
+   * that is close to an answer (alias, typo, part of the name, near miss)
+   * emits answerSuggested with that animal's name, for the player to confirm;
+   * one that matches nothing emits answerRejected. Either way the round goes on.
    */
   submit(input: string): void;
   /**
    * What is in the answer box right now. When time runs out it is submitted
-   * as it stands: scored if it matches, 0 points if not.
+   * as it stands: scored if it is an exact name, 0 points otherwise.
    */
   setDraft(text: string): void;
   /**
@@ -117,10 +119,15 @@ export function createGameController(deps: GameControllerDeps): GameController {
     else runRound();
   }
 
-  const matchFor = (input: string, prompt: Prompt) =>
-    matchAnswer(input, prompt, animals, cfg, ANSWER_KEY_STRATEGIES);
+  const matchFor = (input: string, prompt: Prompt) => matchAnswer(input, prompt, animals, cfg);
 
-  /** Time is up: whatever is in the box is the answer, matched or not. */
+  /** The name the player is offered for a close guess: the one an exact match needs. */
+  const nameOf = (id: AnimalId) => animals.get(id)?.display ?? id.replace(/-/g, ' ');
+
+  /**
+   * Time is up: whatever is in the box is the answer. Only an exact name
+   * scores; a close guess was never confirmed, so it counts as a miss.
+   */
   function onTimeout() {
     roundTimer = null;
     const prompt = puzzle.prompts[state.results.length];
@@ -129,12 +136,12 @@ export function createGameController(deps: GameControllerDeps): GameController {
       answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs });
       return;
     }
-    answered({
-      type: 'submit',
-      promptId: prompt.id,
-      match: matchFor(draft, prompt),
-      timeMs: roundTimeMs,
-    });
+    const found = matchFor(draft, prompt);
+    const match: MatchResult =
+      found.strategy === 'exact'
+        ? found
+        : { tier: 0, animalId: null, strategy: null, input: found.input };
+    answered({ type: 'submit', promptId: prompt.id, match, timeMs: roundTimeMs });
   }
 
   /**
@@ -170,8 +177,13 @@ export function createGameController(deps: GameControllerDeps): GameController {
         return;
       }
       const match = matchFor(input, prompt);
-      if (match.tier === 0) {
-        emit('answerRejected', { round: state.results.length, input: match.input });
+      const round = state.results.length;
+      if (match.animalId === null) {
+        emit('answerRejected', { round, input: match.input });
+        return;
+      }
+      if (match.strategy !== 'exact') {
+        emit('answerSuggested', { round, input: match.input, suggestion: nameOf(match.animalId) });
         return;
       }
       const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);

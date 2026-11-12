@@ -65,6 +65,11 @@ export interface GameEvents {
   answerMatched: { round: number; result: RoundResult };
   /** A guess matched nothing in the answer key. The round goes on; try again. */
   answerRejected: { round: number; input: string };
+  /**
+   * A guess is close to an answer but not its exact name. `suggestion` is that
+   * animal's name; submitting it scores. The round goes on meanwhile.
+   */
+  answerSuggested: { round: number; input: string; suggestion: string };
   revealFinished: { index: number };
   biomeEntered: { biome: BiomeDef };
   runFinished: { results: readonly RoundResult[]; score: number };

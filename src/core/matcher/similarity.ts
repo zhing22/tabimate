@@ -77,6 +77,3 @@ export function fnv1a(text: string): number {
   }
   return hash >>> 0;
 }
-
-/** A hash mapped onto [0, 1), usable like a deterministic Math.random(). */
-export const unitHash = (text: string): number => fnv1a(text) / 2 ** 32;

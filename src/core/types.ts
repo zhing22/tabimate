@@ -44,7 +44,7 @@ export interface Puzzle {
 }
 
 /** Names of the matcher strategies; the matcher's registry is keyed by these. */
-export type StrategyId = 'exact' | 'alias' | 'typo' | 'partial' | 'loose' | 'lucky';
+export type StrategyId = 'exact' | 'alias' | 'typo' | 'partial' | 'loose';
 
 /** A hit always has an animal and the strategy that found it; a miss has neither. */
 export type MatchResult =

@@ -182,7 +182,7 @@ describe('loose', () => {
 
 describe('STRATEGIES', () => {
   it('runs in the documented order', () => {
-    const order: StrategyId[] = ['exact', 'alias', 'typo', 'partial', 'loose', 'lucky'];
+    const order: StrategyId[] = ['exact', 'alias', 'typo', 'partial', 'loose'];
     expect(STRATEGIES.map((s) => s.id)).toEqual(order);
   });
 });

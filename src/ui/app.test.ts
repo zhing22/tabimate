@@ -184,7 +184,7 @@ describe('app: playing with the keyboard', () => {
     t.controller.start();
     answer(t, 'Platypus');
     answer(t, 'tiger');
-    type(t.input(), 'orca');
+    type(t.input(), 'killer whale');
     pressEnter(t.input());
     const button = t.$<HTMLButtonElement>('.reveal__next')!;
     expect(button.textContent).toBe('See results');
@@ -204,6 +204,50 @@ describe('app: playing with the keyboard', () => {
   });
 });
 
+describe('app: a close guess', () => {
+  it.each([
+    ['platipus', 'Platypus'], // typo
+    ['orca', 'Killer whale'], // another name
+    ['snow leo', 'Snow leopard'], // part of the name
+  ])('puts the right name in the box for %j, and Go then answers it', (typed, name) => {
+    const t = setup();
+    t.controller.start();
+    const input = t.input();
+    type(input, typed);
+    pressEnter(input);
+    expect(t.$('.reveal')).toBeNull(); // not scored yet
+    expect(input.value).toBe(name);
+    const note = t.$('.answer__note')!;
+    expect(note.hidden).toBe(false);
+    expect(note.dataset['kind']).toBe('hint');
+    expect(note.textContent).toBe('Did you mean this? Press Go to answer.');
+    expect(input.getAttribute('aria-invalid')).toBe('false');
+    // Selected, so typing something else replaces it.
+    expect([input.selectionStart, input.selectionEnd]).toEqual([0, name.length]);
+    expect(document.activeElement).toBe(input);
+
+    pressEnter(input);
+    expect(t.$('.reveal__name')?.textContent).toBe(name);
+  });
+
+  it('scores the corrected name if time runs out before Go', () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'platipus');
+    pressEnter(t.input());
+    t.time.advance(ROUND_TIME_MS);
+    expect(t.$('.reveal__name')?.textContent).toBe('Platypus');
+  });
+
+  it('scores 0 for a close guess never sent, when time runs out', () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'platipus');
+    t.time.advance(ROUND_TIME_MS);
+    expect(t.$('.reveal__points')?.textContent).toBe('+0');
+  });
+});
+
 describe('app: a guess that matches nothing', () => {
   it('says so in one line under the box, keeps the text and focus, and lets them retry', () => {
     const t = setup();
@@ -211,7 +255,7 @@ describe('app: a guess that matches nothing', () => {
     const input = t.input();
     type(input, 'James');
     pressEnter(input);
-    const error = t.$('.answer__error')!;
+    const error = t.$('.answer__note')!;
     expect(error.hidden).toBe(false);
     expect(error.getAttribute('role')).toBe('alert');
     expect(error.textContent).toBe("Not on today's list. Try another animal.");
@@ -254,7 +298,7 @@ describe('app: a guess that matches nothing', () => {
     type(t.input(), 'James');
     pressEnter(t.input());
     answer(t, 'tiger');
-    expect(t.$('.answer__error')?.hidden).toBe(true);
+    expect(t.$('.answer__note')?.hidden).toBe(true);
     expect(t.input().value).toBe('');
   });
 });
@@ -284,7 +328,7 @@ describe('app: restoring a saved run', () => {
 
   it('opens a finished day on the results', () => {
     const saved = savedRun((t) => {
-      for (const text of ['Platypus', 'tiger', 'orca']) answer(t, text);
+      for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
     });
     const t = setup();
     t.controller.restore(saved);
@@ -296,7 +340,7 @@ describe('app: next puzzle', () => {
   it('counts down to the next noon and then offers the new puzzle', () => {
     const t = setup();
     t.controller.start();
-    for (const text of ['Platypus', 'tiger', 'orca']) answer(t, text);
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
     const button = [...t.root.querySelectorAll('button')].find((b) =>
       b.textContent?.includes("today's puzzle"),
     )!;
