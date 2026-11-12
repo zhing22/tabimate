@@ -43,3 +43,8 @@ export function type(input: HTMLInputElement, text: string): void {
 export function pressEnter(input: HTMLInputElement): void {
   input.form?.requestSubmit();
 }
+
+/** A key press on an element, as keydown (what the round screen listens for). */
+export function pressKey(el: HTMLElement, key: string): void {
+  el.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+}

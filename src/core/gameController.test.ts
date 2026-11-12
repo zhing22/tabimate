@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { REVEAL_DELAY_MS, ROUND_TIME_MS } from '@/config/game';
+import { ROUND_TIME_MS } from '@/config/game';
 import { createBus, type GameEvents } from './events';
 import { createGameController } from './gameController';
 import { ANIMALS, PROMPT } from './matcher/testFixtures';
@@ -58,12 +58,12 @@ describe('gameController: a full run', () => {
     game.start();
     time.advance(3_000);
     game.submit('Platypus'); // tier 2: 25 points
-    time.advance(REVEAL_DELAY_MS);
+    game.next();
     time.advance(4_000);
     game.submit('snow leopard'); // tier 3: 75, enters Grassland at 50
-    time.advance(REVEAL_DELAY_MS);
+    game.next();
     game.submit('tiger'); // tier 4: 160, enters Forest at 125
-    time.advance(REVEAL_DELAY_MS);
+    game.next();
 
     expect(story()).toEqual([
       'runStarted',
@@ -111,7 +111,7 @@ describe('gameController: timers', () => {
       timeMs: ROUND_TIME_MS,
       match: { tier: 0, animalId: null, strategy: null, input: '' },
     });
-    time.advance(REVEAL_DELAY_MS);
+    game.next();
     expect(story()).toEqual([
       'runStarted',
       'roundStarted 0',
@@ -125,11 +125,12 @@ describe('gameController: timers', () => {
     const { time, game } = setup();
     game.start();
     game.submit('Platypus');
-    // Round 1's timer would have fired by now; round 2's (started after the
-    // reveal) has not. So any second result here would be a stray timeout.
+    // Round 1's timer would have fired by now; round 2's has not started (the
+    // reveal is still up). So any second result here would be a stray timeout.
     time.advance(ROUND_TIME_MS);
     expect(game.getState().results).toHaveLength(1);
-    expect(game.getState().status).toBe('playing');
+    expect(game.getState().status).toBe('revealing');
+    expect(time.pending()).toBe(0);
   });
 
   it('ignores submits while revealing, before start and after the run', () => {
@@ -140,10 +141,41 @@ describe('gameController: timers', () => {
     game.submit('Platypus');
     game.submit('tiger');
     expect(game.getState().results).toHaveLength(1);
-    for (let i = 0; i < 3; i++) time.advance(ROUND_TIME_MS + REVEAL_DELAY_MS);
+    for (let i = 0; i < 3; i++) {
+      time.advance(ROUND_TIME_MS);
+      game.next();
+    }
     expect(game.getState().status).toBe('finished');
     game.submit('tiger');
     expect(game.getState().results).toHaveLength(3);
+  });
+
+  it('waits on the reveal until next(), with no clock running', () => {
+    const { time, game, story } = setup();
+    game.start();
+    game.submit('Platypus');
+    time.advance(ROUND_TIME_MS * 10);
+    expect(game.getState().status).toBe('revealing');
+    expect(time.pending()).toBe(0);
+    const before = time.nowMs();
+    game.next();
+    // The next round's full time starts when the player moves on.
+    expect(game.getState().roundEndsAt).toBe(before + ROUND_TIME_MS);
+    expect(story().slice(-2)).toEqual(['revealFinished 0', 'roundStarted 1']);
+  });
+
+  it('ignores next() unless a reveal is up', () => {
+    const { game } = setup();
+    game.next();
+    expect(game.getState().status).toBe('idle');
+    game.start();
+    game.next();
+    expect(game.getState()).toMatchObject({ status: 'playing', results: [] });
+    game.submit('Platypus');
+    game.next();
+    game.next(); // a double tap must not skip round 2
+    expect(game.getState()).toMatchObject({ status: 'playing' });
+    expect(game.getState().results).toHaveLength(1);
   });
 
   it('ignores a second start', () => {
@@ -159,7 +191,7 @@ describe('gameController: restore', () => {
     const first = setup();
     first.game.start();
     first.game.submit('Platypus');
-    if (status === 'playing') first.time.advance(REVEAL_DELAY_MS);
+    if (status === 'playing') first.game.next();
     return first.game.getState();
   }
 
@@ -173,8 +205,8 @@ describe('gameController: restore', () => {
   }
 
   it('resumes a round with only the time it had left', () => {
-    const saved = savedAfterOneRound('playing'); // round 2 began at 600 ms
-    const deadline = REVEAL_DELAY_MS + ROUND_TIME_MS;
+    const saved = savedAfterOneRound('playing'); // round 2 began at once
+    const deadline = ROUND_TIME_MS;
     expect(saved.roundEndsAt).toBe(createFakeTime().nowMs() + deadline);
 
     const { game, story, time, log } = reloadAt(saved, 10_600);
@@ -221,21 +253,27 @@ describe('gameController: restore', () => {
       strategy: null,
       input: '',
     });
-    expect(time.pending()).toBe(1); // only the reveal; the round timer was cleared
+    expect(time.pending()).toBe(0); // round timer cleared; the reveal waits for next()
   });
 
-  it('finishes a reveal that was interrupted', () => {
+  it('puts an interrupted reveal back up, waiting for the player', () => {
     const saved = savedAfterOneRound('revealing');
     const { game, story, time } = setup();
     game.restore(saved);
-    time.advance(REVEAL_DELAY_MS);
+    time.advance(ROUND_TIME_MS * 10);
+    expect(story()).toEqual(['runRestored']);
+    expect(time.pending()).toBe(0);
+    game.next();
     expect(story()).toEqual(['runRestored', 'revealFinished 0', 'roundStarted 1']);
   });
 
   it('re-announces a finished run', () => {
     const first = setup();
     first.game.start();
-    for (let i = 0; i < 3; i++) first.time.advance(ROUND_TIME_MS + REVEAL_DELAY_MS);
+    for (let i = 0; i < 3; i++) {
+      first.time.advance(ROUND_TIME_MS);
+      first.game.next();
+    }
     const { game, story } = setup();
     game.restore(first.game.getState());
     expect(story()).toEqual(['runRestored', 'runFinished 0']);
@@ -313,7 +351,7 @@ describe('gameController: misbehaving listeners', () => {
     });
     game.start();
     game.submit('Platypus');
-    time.advance(REVEAL_DELAY_MS);
+    game.next();
     expect(errors).toHaveLength(1);
     // The next round still began, with its timer running.
     expect(seen).toEqual(['roundStarted', 'revealFinished', 'roundStarted']);
@@ -328,10 +366,8 @@ describe('gameController: misbehaving listeners', () => {
       bus.on(event, () => game.dispose());
       game.start();
       game.submit('Platypus');
-      // Disposed during answerMatched: no reveal timer may have been started.
-      // (Checked before time moves, since a stray timer would fire and vanish.)
-      expect(time.pending()).toBe(event === 'answerMatched' ? 0 : 1);
-      time.advance(REVEAL_DELAY_MS);
+      expect(time.pending()).toBe(0);
+      game.next(); // ignored if already disposed
       // Disposed during revealFinished: no round timer may have been started.
       expect(time.pending()).toBe(0);
       time.advance(ROUND_TIME_MS * 3);
@@ -348,7 +384,8 @@ describe('gameController: misbehaving listeners', () => {
     bus.on('biomeEntered', () => game.dispose());
     game.start();
     game.submit('snow leopard'); // 50 points: enters Grassland
-    time.advance(REVEAL_DELAY_MS + ROUND_TIME_MS * 3);
+    game.next();
+    time.advance(ROUND_TIME_MS * 3);
     expect(seen).toEqual(['roundStarted', 'revealFinished', 'biomeEntered']);
     expect(time.pending()).toBe(0);
   });

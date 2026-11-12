@@ -72,6 +72,9 @@ function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
       });
     },
     lock: () => screen?.lock(),
+    get mounted() {
+      return screen !== null;
+    },
   };
 }
 
@@ -103,13 +106,22 @@ export function createApp(deps: AppDeps): App {
   const now = () => clock.now().getTime();
   const animalOf: AnimalOf = (result) =>
     result.match.animalId === null ? null : (animals.get(result.match.animalId) ?? null);
+  // Moving on only counts once the result is visible, so an Enter pressed twice
+  // in a hurry can't skip past a reveal during its drum-roll.
+  let resultShown = false;
+  const next = () => {
+    if (!resultShown) return;
+    resultShown = false;
+    controller.next();
+  };
   const round = roundSlot(
     host,
     { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
-    { submit: (text) => controller.submit(text) },
+    { submit: (text) => controller.submit(text), next },
   );
 
-  function showReveal(result: RoundResult) {
+  function showReveal(index: number, result: RoundResult) {
+    resultShown = false;
     round.lock();
     host.showOverlay(
       revealScreen,
@@ -118,8 +130,16 @@ export function createApp(deps: AppDeps): App {
         animal: animalOf(result),
         points: pointsFor(result),
         suspenseMs: deps.suspenseMs ?? REVEAL_SUSPENSE_MS,
+        isLast: index === puzzle.prompts.length - 1,
+        focusNext: !round.mounted,
       },
-      { revealed: (summary) => host.announce(summary) },
+      {
+        revealed: (summary) => {
+          resultShown = true;
+          host.announce(summary);
+        },
+        next,
+      },
     );
   }
 
@@ -140,10 +160,11 @@ export function createApp(deps: AppDeps): App {
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
-    bus.on('answerMatched', ({ result }) => showReveal(result)),
+    bus.on('answerMatched', ({ round: index, result }) => showReveal(index, result)),
     bus.on('runRestored', ({ state }) => {
-      const last = state.results[state.results.length - 1];
-      if (state.status === 'revealing' && last) showReveal(last);
+      const index = state.results.length - 1;
+      const last = state.results[index];
+      if (state.status === 'revealing' && last) showReveal(index, last);
     }),
     bus.on('biomeEntered', ({ biome }) => host.announce(`You entered the ${biome.name}.`)),
   ];

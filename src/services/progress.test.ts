@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { REVEAL_DELAY_MS } from '@/config/game';
 import { dailyKey } from '@/core/date';
 import { createBus, type GameEvents } from '@/core/events';
 import { createRunState } from '@/core/game';
@@ -47,7 +46,7 @@ function openPage(storage: StorageAdapter, iso: string) {
 function finish(page: ReturnType<typeof openPage>) {
   while (page.game.getState().status !== 'finished') {
     page.game.submit('Platypus');
-    page.time.advance(REVEAL_DELAY_MS);
+    page.game.next();
   }
 }
 
@@ -56,7 +55,7 @@ describe('progress: resume', () => {
     const storage = createMemoryStorageAdapter();
     const first = openPage(storage, '2026-11-07T05:00:00Z');
     first.game.submit('Platypus');
-    first.time.advance(REVEAL_DELAY_MS);
+    first.game.next();
     const before = first.game.getState();
 
     const again = openPage(storage, '2026-11-07T05:00:05Z');
@@ -178,16 +177,16 @@ describe('progress: two tabs', () => {
     const storage = createMemoryStorageAdapter();
     const a = openPage(storage, '2026-11-07T05:00:00Z');
     a.game.submit('Platypus');
-    a.time.advance(REVEAL_DELAY_MS); // round 2 in progress, saved
+    a.game.next(); // round 2 in progress, saved
 
     // Tab B opens the same moment and restores the same round.
     const b = openPage(storage, '2026-11-07T05:00:00Z');
     expect(b.restored).toBe(true);
 
     a.game.submit('cat'); // a poor answer in tab A...
-    a.time.advance(REVEAL_DELAY_MS);
+    a.game.next();
     b.game.submit('snow leopard'); // ...retried in tab B
-    b.time.advance(REVEAL_DELAY_MS);
+    b.game.next();
 
     // Both tabs have reached the same point; storage keeps the answer saved first.
     expect(b.game.getState().results[1]?.match.animalId).toBe('snow-leopard');

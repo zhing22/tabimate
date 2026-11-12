@@ -15,7 +15,9 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
   00:00–11:59 SGT still plays the previous date's puzzle.
-- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
+- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. After each
+  answer the result stays up until the player taps Next (or presses Enter); the next
+  prompt's timer starts then. The game
   plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE).
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.

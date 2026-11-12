@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { REVEAL_DELAY_MS, ROUND_TIME_MS } from '@/config/game';
+import { ROUND_TIME_MS } from '@/config/game';
 import { createBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
@@ -9,7 +9,7 @@ import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
 import { createApp } from './app';
 import { createScreenHost } from './host';
-import { pressEnter, type, manualTime } from './testUi';
+import { manualTime, pressEnter, pressKey, type } from './testUi';
 
 const puzzle: Puzzle = {
   date: '2026-11-07',
@@ -17,7 +17,7 @@ const puzzle: Puzzle = {
   prompts: ['r1', 'r2', 'r3'].map((id, i) => ({ ...PROMPT, id, text: `Prompt ${i + 1}` })),
 };
 
-function setup() {
+function setup(suspenseMs = 0) {
   document.body.innerHTML = '<main id="ui"></main>';
   const root = document.querySelector<HTMLElement>('#ui')!;
   const time = createFakeTime();
@@ -43,7 +43,7 @@ function setup() {
     clock: time.clock,
     getStats,
     reload,
-    suspenseMs: 0,
+    suspenseMs,
     frames: ui.frames,
     interval: ui.interval,
   });
@@ -59,11 +59,11 @@ function setup() {
   return { root, time, ui, controller, app, reload, $, input, live, flush };
 }
 
-/** Answers and waits out the reveal. */
+/** Answers, then presses Enter again to move on from the reveal. */
 function answer(t: ReturnType<typeof setup>, text: string) {
   type(t.input(), text);
   pressEnter(t.input());
-  t.time.advance(REVEAL_DELAY_MS);
+  pressKey(t.input(), 'Enter');
 }
 
 beforeEach(() => {
@@ -94,7 +94,11 @@ describe('app: playing with the keyboard', () => {
     await t.flush();
     expect(t.live()).toBe('Platypus: Near Threatened, 25 points.');
 
-    t.time.advance(REVEAL_DELAY_MS);
+    // The reveal waits for the player, however long they take.
+    t.time.advance(ROUND_TIME_MS * 2);
+    expect(t.$('.reveal')).not.toBeNull();
+    expect(t.$('.reveal__next')?.textContent).toBe('Next prompt');
+    pressKey(input, 'Enter');
     expect(t.$('.reveal')).toBeNull();
     expect(t.input()).toBe(input); // the very same element, round after round
     expect(input.value).toBe('');
@@ -149,13 +153,45 @@ describe('app: playing with the keyboard', () => {
     expect(ring()).toBe('3');
     type(t.input(), 'tiger');
     pressEnter(t.input());
-    t.time.advance(REVEAL_DELAY_MS - 1); // well past the old deadline
+    t.time.advance(10_000); // well past the old deadline
     t.ui.set(0);
     expect(ring()).toBe('3'); // not run down to 0, which would look like a timeout
-    t.time.advance(1);
+    t.$<HTMLButtonElement>('.reveal__next')!.click();
     t.ui.set(0);
     expect(t.$('#round-prompt')?.textContent).toBe('Prompt 2');
     expect(ring()).toBe(String(ROUND_TIME_MS / 1000));
+  });
+
+  it('ignores Enter while the drum-roll is still going', () => {
+    vi.useFakeTimers();
+    try {
+      const t = setup(600);
+      t.controller.start();
+      type(t.input(), 'tiger');
+      pressEnter(t.input());
+      pressKey(t.input(), 'Enter'); // a hurried second Enter
+      vi.advanceTimersByTime(600);
+      expect(t.$('.reveal__name')?.textContent).toBe('Tiger');
+      pressKey(t.input(), 'Enter');
+      expect(t.$('#round-prompt')?.textContent).toBe('Prompt 2');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('offers "See results" after the last prompt', () => {
+    const t = setup();
+    t.controller.start();
+    answer(t, 'Platypus');
+    answer(t, 'tiger');
+    type(t.input(), 'orca');
+    pressEnter(t.input());
+    const button = t.$<HTMLButtonElement>('.reveal__next')!;
+    expect(button.textContent).toBe('See results');
+    // Tapping it must not steal focus from the answer box (the phone keyboard).
+    expect(button.dispatchEvent(new MouseEvent('mousedown', { cancelable: true }))).toBe(false);
+    button.click();
+    expect(t.$('#results-title')).not.toBeNull();
   });
 
   it('shows text the player typed as text, never as markup', () => {
@@ -183,7 +219,10 @@ describe('app: restoring a saved run', () => {
     const t = setup();
     expect(t.controller.restore(saved)).toBe(true);
     expect(t.$('.reveal__name')?.textContent).toBe('Tiger');
-    t.time.advance(REVEAL_DELAY_MS);
+    // No answer box on screen after a reload, so the button takes focus.
+    const next = t.$<HTMLButtonElement>('.reveal__next')!;
+    expect(document.activeElement).toBe(next);
+    next.click();
     expect(t.$('#round-prompt')?.textContent).toBe('Prompt 2');
   });
 
@@ -206,8 +245,8 @@ describe('app: next puzzle', () => {
       b.textContent?.includes("today's puzzle"),
     )!;
     expect(button.hidden).toBe(true);
-    // The fake run took 3 reveals; the next reset is just under 24 h away.
-    t.time.advance(24 * 3_600_000 - 3 * REVEAL_DELAY_MS - 1_000);
+    // The run took no fake time, so the next reset is 24 h away.
+    t.time.advance(24 * 3_600_000 - 1_000);
     t.ui.set(0);
     expect(t.$('.countdown')?.textContent).toBe('00:00:01');
     t.time.advance(1_000);

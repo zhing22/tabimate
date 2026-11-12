@@ -28,12 +28,9 @@ export const ROUND_TIME_MS = 25_000;
 export const TIMER_WARN_MS = 5_000;
 
 /**
- * How long the reveal shows after an answer before the next round's timer
- * starts: the suspense below, then time to read the result.
+ * Drum-roll before the tier appears on the reveal. The reveal then stays up
+ * until the player taps Next (or presses Enter); the next timer starts then.
  */
-export const REVEAL_DELAY_MS = 2_600;
-
-/** Drum-roll before the tier appears on the reveal. Shorter than REVEAL_DELAY_MS (tested). */
 export const REVEAL_SUSPENSE_MS = 600;
 
 /** Journey distance (world units, scaled by the scene) the player moves per point. */

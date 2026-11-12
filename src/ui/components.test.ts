@@ -145,8 +145,8 @@ describe('revealScreen', () => {
       const result = { promptId: 'p', timeMs: 1, match };
       revealScreen(
         root,
-        { result, animal: null, points: 0, suspenseMs: 0 },
-        { revealed: () => {} },
+        { result, animal: null, points: 0, suspenseMs: 0, isLast: false, focusNext: false },
+        { revealed: () => {}, next: () => {} },
       );
       const card = root.querySelector<HTMLElement>('.reveal')!;
       expect(card.dataset['effect']).toBe(effect);

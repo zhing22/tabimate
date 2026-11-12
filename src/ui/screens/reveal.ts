@@ -1,7 +1,7 @@
 import { TIERS } from '@/config/tiers';
 import type { Animal, RoundResult } from '@/core/types';
 import { tierBadge } from '../components/tierBadge';
-import { h } from '../dom';
+import { focus, h } from '../dom';
 import type { Screen } from '../host';
 
 export interface RevealProps {
@@ -10,11 +10,20 @@ export interface RevealProps {
   readonly points: number;
   /** Drum-roll before the tier shows; 0 shows it at once. */
   readonly suspenseMs: number;
+  /** The last prompt: the button leads to the results instead. */
+  readonly isLast: boolean;
+  /**
+   * Move focus to the button once shown. Only when no answer box is on screen
+   * (a reload mid-reveal); otherwise the box keeps focus and Enter moves on.
+   */
+  readonly focusNext: boolean;
 }
 
 export interface RevealActions {
   /** Called when the tier becomes visible, with a sentence for screen readers. */
   revealed(summary: string): void;
+  /** The player wants to move on. */
+  next(): void;
 }
 
 /** What to say about a result, for the screen and for screen readers. */
@@ -27,12 +36,29 @@ export function describeResult(result: RoundResult, animal: Animal | null, point
 }
 
 /**
+ * Inside the reveal, so it only appears once the tier is shown. Pressing it
+ * must not take focus from the answer box: on a phone that would close the
+ * keyboard, and the next prompt wants it open.
+ */
+function nextButton(isLast: boolean, next: () => void): HTMLButtonElement {
+  const button = h(
+    'button',
+    { class: 'button button--primary reveal__next', type: 'button' },
+    isLast ? 'See results' : 'Next prompt',
+  );
+  button.addEventListener('mousedown', (event) => event.preventDefault());
+  button.addEventListener('click', next);
+  return button;
+}
+
+/**
  * Shown as an overlay above the round, so the answer box keeps focus (and the
  * phone keeps its keyboard). Focus is not moved; the live region speaks instead.
  */
 export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, actions) => {
   const { result, animal, points } = props;
   const tier = result.match.tier;
+  const next = nextButton(props.isLast, () => actions.next());
   const card = h(
     'section',
     {
@@ -59,6 +85,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
       ),
       tierBadge(tier, { size: 'lg' }).el,
       h('p', { class: 'reveal__points' }, tier ? `+${points}` : '+0'),
+      next,
     ),
   );
   root.append(card);
@@ -66,6 +93,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   const show = () => {
     card.classList.remove('reveal--pending');
     actions.revealed(describeResult(result, animal, points));
+    if (props.focusNext) focus(next);
   };
   if (props.suspenseMs <= 0) {
     show();

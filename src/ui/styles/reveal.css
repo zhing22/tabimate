@@ -59,3 +59,9 @@
 .reveal[data-effect='shiny'] .reveal__body {
   text-shadow: 0 0 12px var(--reveal-tier);
 }
+
+/* The button continues the game; it takes no part in the tier's effect. */
+.reveal__next {
+  margin-top: var(--space-2);
+  text-shadow: none;
+}

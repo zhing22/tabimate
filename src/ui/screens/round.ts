@@ -20,6 +20,8 @@ export interface RoundSetup {
 
 export interface RoundActions {
   submit(text: string): void;
+  /** Enter pressed while locked (the reveal is up): move on. */
+  next(): void;
 }
 
 /**
@@ -97,6 +99,13 @@ export function mountRound(
     go.disabled = locked || empty();
   };
   input.addEventListener('input', refresh);
+  // While locked the Go button is disabled, so Enter would not submit the form.
+  // The box keeps focus during the reveal, so Enter (or "go" on a phone) moves on.
+  input.addEventListener('keydown', (event) => {
+    if (!locked || event.key !== 'Enter') return;
+    event.preventDefault();
+    actions.next();
+  });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     // An accidental Enter on an empty box must not throw the round away.

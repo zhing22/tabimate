@@ -153,6 +153,24 @@ describe('loose', () => {
     expect(idOf(loose(input('the tiger shark'), [dolphin, tiger], cfg))).toBe('tiger');
   });
 
+  const hummingbird = candidate(
+    'ruby-throated-hummingbird',
+    1,
+    'Ruby-throated hummingbird',
+    'hummingbird',
+  );
+
+  // "bird" shares "bir" and "ird" with "hummingbird", but no word of the name starts "bi".
+  it.each(['bird', 'birds', 'big bird'])('does not match %j to a word inside a name', (g) => {
+    expect(loose(input(g), [hummingbird, tiger], cfg)).toBeNull();
+  });
+
+  it('matches a misspelling that starts where a word of the name starts', () => {
+    expect(idOf(loose(input('humingburd'), [hummingbird, tiger], cfg))).toBe(
+      'ruby-throated-hummingbird',
+    );
+  });
+
   it('respects looseMinInnerGrams', () => {
     // "plaatyypuss" shares 4 inner trigrams with "platypus": pla, aty, ypu, pus.
     expect(loose(input('plaatyypuss'), all, { ...cfg, looseMinInnerGrams: 5 })).toBeNull();

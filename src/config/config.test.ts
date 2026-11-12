@@ -6,7 +6,6 @@ import {
   MAX_PROMPTS_PER_PUZZLE,
   PROMPTS_PER_DAY,
   RESET_HOUR,
-  REVEAL_DELAY_MS,
   REVEAL_SUSPENSE_MS,
   ROUND_TIME_MS,
   TIMER_WARN_MS,
@@ -15,9 +14,9 @@ import { TIERS } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
-  it('the reveal has time to show the result after its suspense', () => {
+  it('the reveal drum-roll is short enough not to drag', () => {
     expect(REVEAL_SUSPENSE_MS).toBeGreaterThanOrEqual(0);
-    expect(REVEAL_SUSPENSE_MS).toBeLessThan(REVEAL_DELAY_MS);
+    expect(REVEAL_SUSPENSE_MS).toBeLessThanOrEqual(1_500);
   });
 
   it('the timer warns only near the end of a round', () => {

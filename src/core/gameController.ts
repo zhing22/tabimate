@@ -1,4 +1,4 @@
-import { MATCHER_CONFIG, REVEAL_DELAY_MS, ROUND_TIME_MS, type MatcherConfig } from '@/config/game';
+import { MATCHER_CONFIG, ROUND_TIME_MS, type MatcherConfig } from '@/config/game';
 import type { Clock } from './clock';
 import type { GameBus } from './events';
 import { canRestore, createRunState, gameReducer, type GameAction } from './game';
@@ -15,17 +15,22 @@ export interface GameControllerDeps {
   readonly scheduler: Scheduler;
   readonly matcherConfig?: MatcherConfig;
   readonly mode?: GameMode;
-  readonly timing?: { readonly roundTimeMs: number; readonly revealDelayMs: number };
+  readonly timing?: { readonly roundTimeMs: number };
 }
 
 /** The UI talks to the game only through these; it never touches state. */
 export interface GameController {
   start(): void;
   submit(input: string): void;
+  /**
+   * Moves on from the reveal: to the next prompt, or to the results after the
+   * last one. The game waits on the reveal until this is called.
+   */
+  next(): void;
   /** Loads a saved run into a fresh controller. False (and no change) if it doesn't fit. */
   restore(saved: RunState): boolean;
   getState(): RunState;
-  /** Stops all timers; the controller ignores calls afterwards. */
+  /** Stops the round timer; the controller ignores calls afterwards. */
   dispose(): void;
 }
 
@@ -33,14 +38,10 @@ export function createGameController(deps: GameControllerDeps): GameController {
   const { puzzle, animals, bus, clock, scheduler } = deps;
   const cfg = deps.matcherConfig ?? MATCHER_CONFIG;
   const mode = deps.mode ?? 'daily';
-  const { roundTimeMs, revealDelayMs } = deps.timing ?? {
-    roundTimeMs: ROUND_TIME_MS,
-    revealDelayMs: REVEAL_DELAY_MS,
-  };
+  const { roundTimeMs } = deps.timing ?? { roundTimeMs: ROUND_TIME_MS };
 
   let state = createRunState(puzzle, mode);
   let roundTimer: TimerHandle | null = null;
-  let revealTimer: TimerHandle | null = null;
   let disposed = false;
 
   const now = () => clock.now().getTime();
@@ -86,22 +87,16 @@ export function createGameController(deps: GameControllerDeps): GameController {
     emit('roundStarted', { index, prompt, endsAt });
   }
 
-  function scheduleReveal(scoreBefore: number) {
-    if (disposed) return;
-    revealTimer = scheduler.setTimeout(() => finishReveal(scoreBefore), revealDelayMs);
-  }
-
-  function answered(action: GameAction, scoreBefore: number) {
+  function answered(action: GameAction) {
     if (!dispatch(action)) return;
     cancelRoundTimer();
     const round = state.results.length - 1;
     emit('answerMatched', { round, result: state.results[round]! });
-    scheduleReveal(scoreBefore);
   }
 
-  function finishReveal(scoreBefore: number) {
-    revealTimer = null;
+  function finishReveal() {
     const index = state.results.length - 1;
+    const scoreBefore = totalScore(state.results.slice(0, -1));
     if (!dispatch({ type: 'revealDone', nextRoundEndsAt: nextDeadline() })) return;
     emit('revealFinished', { index });
     // Biomes change after the reveal, so the tier is seen before the scene moves on.
@@ -115,16 +110,16 @@ export function createGameController(deps: GameControllerDeps): GameController {
     roundTimer = null;
     const prompt = puzzle.prompts[state.results.length];
     if (!prompt) return;
-    const scoreBefore = totalScore(state.results);
-    answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs }, scoreBefore);
+    answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs });
   }
 
-  /** Picks a restored run back up from wherever it was saved. */
+  /**
+   * Picks a restored run back up from wherever it was saved. A run saved
+   * mid-reveal needs nothing: it waits for next(), as it did before the reload.
+   */
   function resume() {
     if (state.status === 'playing') {
       runRound();
-    } else if (state.status === 'revealing') {
-      scheduleReveal(totalScore(state.results.slice(0, -1)));
     } else if (state.status === 'finished') {
       emit('runFinished', { results: state.results, score: totalScore(state.results) });
     }
@@ -151,7 +146,12 @@ export function createGameController(deps: GameControllerDeps): GameController {
       }
       const match = matchAnswer(input, prompt, animals, cfg);
       const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);
-      answered({ type: 'submit', promptId: prompt.id, match, timeMs }, totalScore(state.results));
+      answered({ type: 'submit', promptId: prompt.id, match, timeMs });
+    },
+
+    next() {
+      // dispatch ignores revealDone in any other status, and after dispose.
+      finishReveal();
     },
 
     restore(saved) {
@@ -166,8 +166,6 @@ export function createGameController(deps: GameControllerDeps): GameController {
 
     dispose() {
       cancelRoundTimer();
-      if (revealTimer !== null) scheduler.clearTimeout(revealTimer);
-      revealTimer = null;
       disposed = true;
     },
   };
