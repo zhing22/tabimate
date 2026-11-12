@@ -62,3 +62,5 @@ Original art and naming only: no Pokémon names, sprites or UI.
 ## Commands
 
 - npm run dev | npm run build | npm run test | npm run check (typecheck + lint + test)
+- Dev-only pages (not in the build): /dev/scene.html replays a scripted run in the scene
+  (?step=N jumps ahead, ?restore rebuilds a finished run) with an fps readout.

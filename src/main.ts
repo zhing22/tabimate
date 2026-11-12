@@ -2,10 +2,12 @@
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
 import { dailyKey, msUntilNextReset } from '@/core/date';
-import { createBus, type GameEvents } from '@/core/events';
+import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
+import { createScene } from '@/scene/sceneManager';
+import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
 import { browserScheduler } from '@/services/browserScheduler';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
@@ -31,6 +33,25 @@ async function load(): Promise<{ puzzle: Puzzle | null; animals: ReadonlyMap<Ani
   return { puzzle, animals };
 }
 
+/**
+ * The scene is scenery: if it can't start (no WebGL, say), the game is still
+ * fully playable over the CSS backdrop, so a failure is only logged.
+ */
+function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
+  const container = document.querySelector<HTMLElement>('#scene');
+  if (!container) return;
+  try {
+    const scene = createScene(container, bus, {
+      animals,
+      puzzleDate: puzzle.date,
+      createSprites: (k) => createEmojiSpriteProvider(k),
+    });
+    scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
+  } catch (error) {
+    console.error('Scene failed to start; playing without it', error);
+  }
+}
+
 function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   const bus = createBus<GameEvents>({
     onError: (error, type) => console.error(`Listener for "${String(type)}" failed`, error),
@@ -43,6 +64,8 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
     scheduler: browserScheduler,
   });
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
+
+  startScene(bus, puzzle, animals);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({

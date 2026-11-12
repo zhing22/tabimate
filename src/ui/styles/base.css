@@ -37,12 +37,22 @@ input {
   color: inherit;
 }
 
-/* The canvas world (Kaplay draws here later). A sky gradient until then. */
+/*
+ * The canvas world (scene/). It fills #scene and sizes itself to it; the
+ * gradient shows only until it starts, or if it can't (no WebGL).
+ */
 #scene {
   position: fixed;
   inset: 0;
   z-index: var(--z-scene);
+  overflow: hidden;
+  pointer-events: none;
   background: linear-gradient(#5fa8c8, #cfe8d0 70%, #6abe30 70%);
+}
+
+.scene__canvas {
+  position: absolute;
+  left: 0;
   image-rendering: pixelated;
 }
 
@@ -109,4 +119,43 @@ input {
 
 [hidden] {
   display: none !important;
+}
+
+/*
+ * Phone portrait: the scene on top, the prompt below. Desktop and landscape
+ * keep the full-window scene with the card over it.
+ *
+ * When the keyboard opens, the scene keeps its size (a new scale would make
+ * the world jump) and slides up instead: the sky goes off the top while the
+ * ground and the party stay just above the card.
+ */
+@media (orientation: portrait) and (max-width: 767px) {
+  :root {
+    --scene-h: 45vh;
+    /* Room the tallest in-run card (the reveal, with its Next button) needs
+       below the scene. With the keyboard up, ~80 native rows of scene still
+       show: the ground and the party. */
+    --ui-min-h: 340px;
+    --scene-shown: max(0px, min(var(--scene-h), calc(var(--vv-height, 100dvh) - var(--ui-min-h))));
+  }
+
+  /* svh ignores the browser bar showing and hiding. A custom property can't
+     fall back by repeating it, hence @supports. */
+  @supports (height: 1svh) {
+    :root {
+      --scene-h: 45svh;
+    }
+  }
+
+  #scene {
+    bottom: auto;
+    top: calc(var(--vv-top, 0px) + var(--scene-shown) - var(--scene-h));
+    height: var(--scene-h);
+  }
+
+  #ui {
+    top: calc(var(--vv-top, 0px) + var(--scene-shown));
+    height: calc(var(--vv-height, 100dvh) - var(--scene-shown));
+    padding-top: var(--space-3);
+  }
 }

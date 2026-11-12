@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <!--
+    Dev only (not in the production build): the journey scene on its own,
+    replaying a scripted run. Open /dev/scene.html on the dev server.
+    ?step=N  jumps straight to after answer N (for screenshots)
+    ?restore  rebuilds a finished run at once, as a reload would
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scene preview</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #111;
+      }
+      #scene {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+      }
+      .scene__canvas {
+        position: absolute;
+        left: 0;
+        image-rendering: pixelated;
+      }
+      #stats {
+        position: fixed;
+        top: 4px;
+        left: 4px;
+        padding: 2px 6px;
+        font: 12px/1.4 monospace;
+        color: #fff;
+        background: rgb(0 0 0 / 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="scene"></div>
+    <pre id="stats"></pre>
+    <script type="module" src="/src/dev/scenePreview.ts"></script>
+  </body>
+</html>
