@@ -1,4 +1,4 @@
-import type { KAPLAYCtx, SpriteAnims } from 'kaplay';
+import type { ImageSource, KAPLAYCtx, SpriteAnims } from 'kaplay';
 import { TEMPLATE_KEYS, type AnimalArt, type Palette } from '@/config/render';
 import type { Animal, AnimalId } from '@/core/types';
 import { makeCanvas } from './canvasArt';
@@ -26,24 +26,21 @@ export interface PixelSpriteOptions {
   readonly loadSheet: (archetype: string) => Promise<LoadedSheet>;
   /** Draws everything without a sheet or palette (and the player, for now). */
   readonly fallback: SpriteProvider;
+  /** Turns recoloured pixels into something Kaplay can load. Tests swap it out. */
+  readonly toImage?: (pixels: Pixels) => ImageSource;
 }
 
-/** Fetches an archetype's Aseprite PNG + JSON and reads the pixels out. */
-export async function fetchSheet(urls: { image: string; json: string }): Promise<LoadedSheet> {
-  const [json, image] = await Promise.all([
-    fetch(urls.json).then((r) => r.json() as Promise<unknown>),
-    new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`could not load ${urls.image}`));
-      img.src = urls.image;
-    }),
-  ]);
-  const { ctx } = makeCanvas(image.width, image.height);
-  ctx.drawImage(image, 0, 0);
+/**
+ * Reads a downloaded sheet (see data/spriteArtSource loadSheetFiles): its
+ * pixels, and its frames, which must lie inside the image.
+ */
+export function readSheet(files: { json: unknown; image: HTMLImageElement }): LoadedSheet {
+  const { width, height } = files.image;
+  const { ctx } = makeCanvas(width, height);
+  ctx.drawImage(files.image, 0, 0);
   return {
-    info: parseAsepriteSheet(json),
-    pixels: ctx.getImageData(0, 0, image.width, image.height),
+    info: parseAsepriteSheet(files.json, { width, height }),
+    pixels: ctx.getImageData(0, 0, width, height),
   };
 }
 
@@ -65,6 +62,7 @@ export function createPixelSpriteProvider(
 ): SpriteProvider {
   const refs = new Map<Animal, readonly [plain: SpriteRef, shiny: SpriteRef]>();
   const warned = new Set<string>();
+  const toImage = options.toImage ?? toCanvas;
 
   const register = (name: string, pixels: Pixels, sheet: SheetInfo) => {
     const { width, height } = pixels;
@@ -75,7 +73,7 @@ export function createPixelSpriteProvider(
     for (const [tag, t] of Object.entries(sheet.tags))
       anims[tag] = { from: t.from, to: t.to, loop: true, speed: t.fps };
     return new Promise<void>((resolve, reject) => {
-      k.loadSprite(name, toCanvas(pixels), { frames, anims })
+      k.loadSprite(name, toImage(pixels), { frames, anims })
         .onLoad(() => resolve())
         .onError(reject);
     });

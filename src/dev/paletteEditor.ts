@@ -3,9 +3,12 @@
 import type { HexColour } from '@/config/colour';
 import type { Palette } from '@/config/render';
 import { BIOMES } from '@/config/biomes';
-import { loadSpriteArt, sheetUrls, type SpriteArt } from '@/data/spriteArtSource';
+import { createJsonLoader } from '@/data/jsonLoader';
+import { loadSheetFiles, loadSpriteArt, type SpriteArt } from '@/data/spriteArtSource';
 import { contrastRatio, deriveShades, snapToPalette } from '@/scene/sprites/paletteUtils';
-import { fetchSheet } from '@/scene/sprites/pixelSpriteProvider';
+import { readSheet } from '@/scene/sprites/pixelSpriteProvider';
+
+const loader = createJsonLoader({ baseUrl: '/' });
 import { createPreview, type Preview } from './palettePreview';
 
 const SLOTS = ['Outline', 'Base', 'Shadow', 'Highlight', 'Accent', 'Eye'] as const;
@@ -92,9 +95,17 @@ async function main(art: SpriteArt) {
       ...warnings.map((w) => Object.assign(document.createElement('li'), { textContent: w })),
     );
     $('#json').textContent = `"${paletteSelect.value}": ${JSON.stringify(colours)}`;
+  }
+
+  /** Keeps an edit as a draft; one that matches palettes.json again is dropped. */
+  function saveDraft() {
     const drafts = readDrafts();
-    drafts[paletteSelect.value] = colours;
+    const file = art.palettes.get(paletteSelect.value) ?? [];
+    const same = colours.length === file.length && colours.every((hex, i) => hex === file[i]);
+    if (same) delete drafts[paletteSelect.value];
+    else drafts[paletteSelect.value] = colours;
     writeDrafts(drafts);
+    $('#draft-note').hidden = same;
   }
 
   function setColour(slot: number, hex: HexColour) {
@@ -106,6 +117,7 @@ async function main(art: SpriteArt) {
       colours[3] = fit(highlight);
     }
     render();
+    saveDraft(); // only a real edit makes a draft, never just opening a palette
   }
 
   function loadPalette(fromFile = false) {
@@ -117,7 +129,10 @@ async function main(art: SpriteArt) {
 
   async function loadArchetype() {
     preview?.destroy();
-    preview = createPreview($('#preview'), await fetchSheet(sheetUrls('/', archetype.value)));
+    preview = createPreview(
+      $('#preview'),
+      readSheet(await loadSheetFiles(loader, archetype.value)),
+    );
     render();
   }
 
@@ -144,7 +159,7 @@ async function main(art: SpriteArt) {
   await loadArchetype();
 }
 
-loadSpriteArt({ baseUrl: '/' })
+loadSpriteArt(loader)
   .then(main)
   .catch((error: unknown) => {
     $('#warnings').textContent = `Could not load the art data: ${String(error)}`;

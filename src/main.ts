@@ -7,10 +7,11 @@ import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
-import { loadSpriteArt, sheetUrls } from '@/data/spriteArtSource';
+import { createJsonLoader } from '@/data/jsonLoader';
+import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
-import { createPixelSpriteProvider, fetchSheet } from '@/scene/sprites/pixelSpriteProvider';
+import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
 import { browserScheduler } from '@/services/browserScheduler';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
@@ -26,7 +27,9 @@ if (!root) throw new Error('index.html is missing #ui');
 watchViewport();
 const host = createScreenHost(root);
 const clock = systemClock;
-const source = createLocalPuzzleSource({ baseUrl: import.meta.env.BASE_URL });
+// One loader for all of public/, so animals.json is fetched once for puzzles and sprites.
+const loader = createJsonLoader({ baseUrl: import.meta.env.BASE_URL });
+const source = createLocalPuzzleSource({ loader });
 const progress = createProgressService(createLocalStorageAdapter(), clock);
 const reload = () => location.reload();
 
@@ -50,10 +53,9 @@ function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId,
       createSprites: (k) => {
         const emoji = createEmojiSpriteProvider(k);
         if (SPRITE_SOURCE === 'emoji') return emoji;
-        const baseUrl = import.meta.env.BASE_URL;
         return createPixelSpriteProvider(k, {
-          loadArt: () => loadSpriteArt({ baseUrl }),
-          loadSheet: (archetype) => fetchSheet(sheetUrls(baseUrl, archetype)),
+          loadArt: () => loadSpriteArt(loader),
+          loadSheet: async (archetype) => readSheet(await loadSheetFiles(loader, archetype)),
           fallback: emoji,
         });
       },

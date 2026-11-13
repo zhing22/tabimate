@@ -43,6 +43,9 @@ export const PLAYER_SCREEN_X = 0.75;
 /** Path distance between one follower and the next (native px). */
 export const FOLLOWER_SPACING = 19;
 
+/** Each follower steps this much later than the one in front (seconds into the walk). */
+export const FOLLOWER_STEP_OFFSET_S = 0.13;
+
 export const SIZE_PX: Readonly<Record<SizeClass, number>> = { S: 12, M: 16, L: 24 };
 
 export const PLAYER_SIZE = { width: 16, height: 24 } as const;

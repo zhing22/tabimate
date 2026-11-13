@@ -3,6 +3,7 @@ import {
   BIOME_FADE_MS,
   BLINK_MS,
   FOLLOWER_SPACING,
+  FOLLOWER_STEP_OFFSET_S,
   GROUND_Y,
   MISS_WALK,
   POP_IN_MS,
@@ -66,6 +67,14 @@ export interface WorldOptions {
 
 const STEPS_PER_S = 5;
 
+/**
+ * How far into the walk follower `index` is: each one a little behind the one
+ * in front, so the party doesn't step in lockstep. Used for both the step bob
+ * (here) and the walk frames (renderer), so legs and bob stay in time.
+ */
+export const followerStepTime = (player: Player, index: number): number =>
+  player.stepTime + (index + 1) * FOLLOWER_STEP_OFFSET_S;
+
 /** Walking: a 1 px bounce per step, upright. */
 function stepPose(stepTime: number, out: Pose) {
   out.dy = -Math.round(Math.abs(Math.sin(stepTime * Math.PI * STEPS_PER_S)));
@@ -95,22 +104,22 @@ export function createWorld(options: WorldOptions): World {
     const animal =
       result.match.animalId === null ? undefined : options.animals.get(result.match.animalId);
     if (animal) {
-      // The idle motion's blink hook closes this follower's eyes for a moment.
-      const eyes = { blink: 0 };
-      const idle = createIdleMotion({
-        seed: `${animal.id}|${followers.length}`,
-        reducedMotion: options.reducedMotion,
-        onBlink: () => (eyes.blink = BLINK_MS / 1000),
-      });
-      followers.push(
-        Object.assign(eyes, {
-          animal,
-          shiny: result.match.tier === 5,
-          idle,
-          pose: { dy: 0, scaleY: 1, angle: 0 },
-          pop: animate ? 0 : 1,
+      const follower: Follower = {
+        animal,
+        shiny: result.match.tier === 5,
+        pose: { dy: 0, scaleY: 1, angle: 0 },
+        pop: animate ? 0 : 1,
+        blink: 0,
+        idle: createIdleMotion({
+          seed: `${animal.id}|${followers.length}`,
+          reducedMotion: options.reducedMotion,
+          // Closes this follower's eyes for a moment (called later, from update).
+          onBlink: () => {
+            follower.blink = BLINK_MS / 1000;
+          },
         }),
-      );
+      };
+      followers.push(follower);
     } else {
       leaveFootprints(player.x);
     }
@@ -164,7 +173,7 @@ export function createWorld(options: WorldOptions): World {
       for (let i = 0; i < followers.length; i++) {
         const follower = followers[i]!;
         // Walk in step with the player, each a little out of time with the next.
-        if (player.walking) stepPose(player.stepTime + (i + 1) * 0.13, follower.pose);
+        if (player.walking) stepPose(followerStepTime(player, i), follower.pose);
         else follower.idle.update(dtS, follower.pose);
         if (follower.blink > 0) follower.blink = Math.max(0, follower.blink - dtS);
         if (follower.pop < 1) follower.pop = Math.min(1, follower.pop + (dtS * 1000) / POP_IN_MS);

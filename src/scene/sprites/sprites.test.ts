@@ -139,6 +139,52 @@ describe('parseAsepriteSheet', () => {
     expect(() => parseAsepriteSheet(json)).toThrow();
   });
 
+  it.each([
+    ['pingpong', 'plays "pingpong"; only forward is supported'],
+    ['reverse', 'plays "reverse"; only forward is supported'],
+  ])('rejects a %s tag rather than playing it wrong', (direction, message) => {
+    const json = {
+      frames: [frame(0)],
+      meta: { frameTags: [{ name: 'walk', from: 0, to: 0, direction }] },
+    };
+    expect(() => parseAsepriteSheet(json)).toThrow(message);
+  });
+
+  it('rejects a frame outside the image', () => {
+    const json = { frames: [frame(0), frame(24)] };
+    expect(() => parseAsepriteSheet(json, { width: 48, height: 24 })).not.toThrow();
+    expect(() => parseAsepriteSheet(json, { width: 40, height: 24 })).toThrow(
+      'frame 1 lies outside the 40x24 image',
+    );
+    expect(() => parseAsepriteSheet(json, { width: 48, height: 20 })).toThrow(
+      'frame 0 lies outside',
+    );
+  });
+
+  it('gives frames without a duration 125 ms (8 fps)', () => {
+    const json = {
+      frames: [{ frame: { x: 0, y: 0, w: 8, h: 8 } }, { frame: { x: 8, y: 0, w: 8, h: 8 } }],
+      meta: { frameTags: [{ name: 'walk', from: 0, to: 1 }] },
+    };
+    expect(parseAsepriteSheet(json).tags.walk?.fps).toBe(8);
+  });
+
+  it.each([
+    ['not an object', [], 'must be an object'],
+    [
+      'a frame without a rectangle',
+      { frames: [{ duration: 100 }] },
+      'frame 0 has no "frame" rectangle',
+    ],
+    [
+      'a zero-size frame',
+      { frames: [{ frame: { x: 0, y: 0, w: 0, h: 8 } }] },
+      'frame 0 has a bad rectangle',
+    ],
+  ])('rejects %s, saying why', (_name, json, message) => {
+    expect(() => parseAsepriteSheet(json)).toThrow(message);
+  });
+
   it('loops a tag over time', () => {
     const walk = { from: 2, to: 5, fps: 8 };
     expect([0, 0.125, 0.25, 0.375, 0.5].map((t) => frameAt(walk, t))).toEqual([2, 3, 4, 5, 2]);

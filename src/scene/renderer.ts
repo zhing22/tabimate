@@ -15,11 +15,22 @@ import { propsInSegment, segmentsInView, type PlacedProp } from './props';
 import type { SpriteProvider, SpriteRef } from './sprites/spriteProvider';
 import { frameAt } from './sprites/sheet';
 import type { Viewport } from './viewport';
-import type { World } from './world';
+import { followerStepTime, type World } from './world';
 
 const DEG = 180 / Math.PI;
 const FOOTPRINT_COLOUR = '#222034';
 const PROP_CACHE_LIMIT = 64;
+
+/** How a character is drawn this frame, besides where. */
+interface Look {
+  pose: Pose;
+  /** 0..1 while popping in, then 1. */
+  pop: number;
+  /** Seconds into the walk, or -1 when standing (first frame). */
+  walkS: number;
+  /** Show the eyes-closed copy of the frame. */
+  blinking: boolean;
+}
 
 // A pop that overshoots a little before settling at 1.
 const popScale = (t: number) => {
@@ -118,18 +129,14 @@ export function createRenderer(
     }
   }
 
-  /**
-   * `walkS`: seconds into the walk, or -1 when standing (first frame). Blinking
-   * swaps in the eyes-closed copy of the same frame.
-   */
+  // One object, refilled for each character, so drawing them allocates nothing.
+  const look: Look = { pose: world.playerPose, pop: 1, walkS: -1, blinking: false };
+
   function drawCharacter(
     ref: SpriteRef,
     x: number,
     y: number,
-    pose: Pose,
-    pop: number,
-    walkS = -1,
-    blinking = false,
+    { pose, pop, walkS, blinking }: Look,
   ) {
     const s = pop < 1 ? popScale(pop) : 1;
     sprite.sprite = blinking && ref.blinkName ? ref.blinkName : ref.name;
@@ -171,10 +178,16 @@ export function createRenderer(
       trail.pointBehind((i + 1) * FOLLOWER_SPACING, onPath);
       movementFor(f.animal.movement)(onPath, 0, 0, placed);
       const x = Math.round(placed.x) - cameraX;
-      const walkS = world.player.walking ? world.player.stepTime + i * 0.13 : -1;
-      const ref = sprites.spriteFor(f.animal, f.shiny);
-      drawCharacter(ref, x, Math.round(placed.y), f.pose, f.pop, walkS, f.blink > 0);
+      look.pose = f.pose;
+      look.pop = f.pop;
+      look.walkS = world.player.walking ? followerStepTime(world.player, i) : -1;
+      look.blinking = f.blink > 0;
+      drawCharacter(sprites.spriteFor(f.animal, f.shiny), x, Math.round(placed.y), look);
     }
-    drawCharacter(sprites.playerSprite(), playerX - cameraX, GROUND_Y, world.playerPose, 1);
+    look.pose = world.playerPose;
+    look.pop = 1;
+    look.walkS = world.player.walking ? world.player.stepTime : -1;
+    look.blinking = false;
+    drawCharacter(sprites.playerSprite(), playerX - cameraX, GROUND_Y, look);
   };
 }

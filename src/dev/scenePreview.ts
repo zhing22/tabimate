@@ -6,8 +6,12 @@ import { biomesEntered } from '@/core/journey';
 import type { Animal, RoundResult, RunState } from '@/core/types';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
-import { createPixelSpriteProvider, fetchSheet } from '@/scene/sprites/pixelSpriteProvider';
-import { loadSpriteArt, sheetUrls } from '@/data/spriteArtSource';
+import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
+import { createJsonLoader } from '@/data/jsonLoader';
+import { ANIMALS_FILE } from '@/data/localPuzzleSource';
+import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
+
+const loader = createJsonLoader({ baseUrl: '/' });
 
 const SCRIPT: readonly (readonly [string | null, AnswerTierId | 0])[] = [
   ['tiger', 4],
@@ -28,7 +32,7 @@ const points = [0, 10, 25, 50, 85, 100] as const;
 
 async function main() {
   const params = new URLSearchParams(location.search);
-  const animals = (await (await fetch('/data/animals.json')).json()) as Animal[];
+  const animals = (await loader.load(ANIMALS_FILE)) as Animal[];
   const bus = createBus<GameEvents>();
   const scene = createScene(document.querySelector<HTMLElement>('#scene')!, bus, {
     animals: new Map(animals.map((a) => [a.id, a])),
@@ -37,8 +41,8 @@ async function main() {
       params.has('emoji')
         ? createEmojiSpriteProvider(k)
         : createPixelSpriteProvider(k, {
-            loadArt: () => loadSpriteArt({ baseUrl: '/' }),
-            loadSheet: (archetype) => fetchSheet(sheetUrls('/', archetype)),
+            loadArt: () => loadSpriteArt(loader),
+            loadSheet: async (archetype) => readSheet(await loadSheetFiles(loader, archetype)),
             fallback: createEmojiSpriteProvider(k),
           }),
   });
