@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { MATCHER_CONFIG, MAX_INPUT_LENGTH, type MatcherConfig } from '@/config/game';
 import type { Animal, AnimalId, Prompt } from '../types';
 import { buildCandidates } from './candidates';
-import { clampInput, matchAnswer, runStrategies } from './index';
+import { STRATEGIES, clampInput, matchAnswer, runStrategies } from './index';
 import { ANIMALS, PROMPT } from './testFixtures';
 
 const match = (raw: string, cfg: MatcherConfig = MATCHER_CONFIG) =>
@@ -31,6 +31,32 @@ describe('matchAnswer', () => {
   // "er" is inside "tiger" and "ar" inside "bear": fragments that short match nothing.
   it.each(['James', 'zzzz', 'er', 'an', 'ar'])('%j matches nothing', (raw) => {
     expect(match(raw)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
+  });
+});
+
+describe('lists of animals', () => {
+  // Pasting a list must not beat naming one animal: no strategy may pick an
+  // answer out of it, so the player is told it is not on the list.
+  it.each(['platypus tiger', 'tiger, platypus, red fox', 'brown bear sun bear', 'orca tiger'])(
+    '%j matches nothing',
+    (raw) => {
+      expect(match(raw)).toMatchObject({ tier: 0, animalId: null, strategy: null });
+    },
+  );
+
+  it.each([
+    ['a red fox', 'red-fox'], // one animal, with a word around it
+    ['red fox fox', 'red-fox'], // its name and its alias: still one animal
+    ['snow leopard', 'snow-leopard'],
+  ])('%j still names one animal', (raw, id) => {
+    expect(match(raw).animalId).toBe(id);
+  });
+});
+
+describe('strategies', () => {
+  // No random or "lucky" scoring: the default pipeline is these five, in order.
+  it('are exact, alias, typo, partial and loose, and nothing else', () => {
+    expect(STRATEGIES.map((s) => s.id)).toEqual(['exact', 'alias', 'typo', 'partial', 'loose']);
   });
 });
 

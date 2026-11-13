@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { matchAnswer } from '@/core/matcher';
+import { namesSeveralAnimals } from '@/core/matcher/lists';
+import { normalize } from '@/core/matcher/normalize';
+import type { Puzzle } from '@/core/types';
 import { validateAnimals, validatePuzzle } from './validate';
 
 // The real files in public/data, so a bad edit to the shipped data fails `npm run check`.
@@ -33,5 +37,34 @@ describe('public/data', () => {
       animals: registry,
     });
     expect(puzzle.date).toBe(key);
+  });
+
+  const puzzles: Puzzle[] = Object.entries(puzzleJson).map(([path, json]) =>
+    validatePuzzle(json, { file: path, key: keyOf(path), animals: registry }),
+  );
+
+  // A close guess is corrected to the display name, so that name must score.
+  it('scores every answer when its exact display name is typed', () => {
+    for (const puzzle of puzzles) {
+      for (const prompt of puzzle.prompts) {
+        for (const { animalId, tier } of prompt.answers) {
+          const display = registry.get(animalId)!.display;
+          expect(matchAnswer(display, prompt, registry), `${puzzle.date} ${prompt.id}`).toEqual({
+            tier,
+            animalId,
+            strategy: 'exact',
+            input: display,
+          });
+        }
+      }
+    }
+  });
+
+  it('never reads one animal\x27s own name as a list of animals', () => {
+    for (const animal of registry.values()) {
+      for (const name of [animal.display, ...animal.aliases]) {
+        expect(namesSeveralAnimals(normalize(name), registry), name).toBe(false);
+      }
+    }
   });
 });

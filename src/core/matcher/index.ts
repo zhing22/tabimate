@@ -1,6 +1,7 @@
 import { MATCHER_CONFIG, MAX_INPUT_LENGTH, type MatcherConfig } from '@/config/game';
 import type { Animal, AnimalId, MatchResult, Prompt } from '../types';
 import { buildCandidates } from './candidates';
+import { namesSeveralAnimals } from './lists';
 import { normalize } from './normalize';
 import { STRATEGIES } from './strategies';
 import type { Candidate, Hit, NormalizedInput, Strategy } from './types';
@@ -35,8 +36,8 @@ export function clampInput(raw: string, max: number = MAX_INPUT_LENGTH): string 
 }
 
 /**
- * Scores what the player typed against one prompt. Empty input is always a
- * miss. Input past MAX_INPUT_LENGTH is ignored, and result.input holds the cut text.
+ * Scores what the player typed against one prompt. Empty input, and a list
+ * naming several animals, is always a miss. Input past MAX_INPUT_LENGTH is ignored, and result.input holds the cut text.
  */
 export function matchAnswer(
   typed: string,
@@ -47,8 +48,9 @@ export function matchAnswer(
 ): MatchResult {
   const rawInput = clampInput(typed);
   const text = normalize(rawInput);
+  // An empty guess, or a list of animals, is never one answer.
   const hit =
-    text === ''
+    text === '' || namesSeveralAnimals(text, animals)
       ? null
       : runStrategies(
           { text, promptId: prompt.id },

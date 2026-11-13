@@ -1,49 +1,12 @@
-import { MATCHER_CONFIG, ROUND_TIME_MS, type MatcherConfig } from '@/config/game';
-import type { Clock } from './clock';
+import { MATCHER_CONFIG, ROUND_TIME_MS } from '@/config/game';
 import type { GameBus } from './events';
 import { canRestore, createRunState, gameReducer, type GameAction } from './game';
 import { biomesEntered, totalScore } from './journey';
-import { matchAnswer } from './matcher';
-import type { Scheduler, TimerHandle } from './scheduler';
-import type { Animal, AnimalId, GameMode, MatchResult, Prompt, Puzzle, RunState } from './types';
+import { judgeGuess, timeUpMatch } from './answering';
+import type { GameController, GameControllerDeps } from './controllerTypes';
+import { createRoundTimer } from './roundTimer';
 
-export interface GameControllerDeps {
-  readonly puzzle: Puzzle;
-  readonly animals: ReadonlyMap<AnimalId, Animal>;
-  readonly bus: GameBus;
-  readonly clock: Clock;
-  readonly scheduler: Scheduler;
-  readonly matcherConfig?: MatcherConfig;
-  readonly mode?: GameMode;
-  readonly timing?: { readonly roundTimeMs: number };
-}
-
-/** The UI talks to the game only through these; it never touches state. */
-export interface GameController {
-  start(): void;
-  /**
-   * Tries a guess. Only an animal's exact name is scored and revealed. A guess
-   * that is close to an answer (alias, typo, part of the name, near miss)
-   * emits answerSuggested with that animal's name, for the player to confirm;
-   * one that matches nothing emits answerRejected. Either way the round goes on.
-   */
-  submit(input: string): void;
-  /**
-   * What is in the answer box right now. When time runs out it is submitted
-   * as it stands: scored if it is an exact name, 0 points otherwise.
-   */
-  setDraft(text: string): void;
-  /**
-   * Moves on from the reveal: to the next prompt, or to the results after the
-   * last one. The game waits on the reveal until this is called.
-   */
-  next(): void;
-  /** Loads a saved run into a fresh controller. False (and no change) if it doesn't fit. */
-  restore(saved: RunState): boolean;
-  getState(): RunState;
-  /** Stops the round timer; the controller ignores calls afterwards. */
-  dispose(): void;
-}
+export type { GameController, GameControllerDeps } from './controllerTypes';
 
 export function createGameController(deps: GameControllerDeps): GameController {
   const { puzzle, animals, bus, clock, scheduler } = deps;
@@ -52,8 +15,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
   const { roundTimeMs } = deps.timing ?? { roundTimeMs: ROUND_TIME_MS };
 
   let state = createRunState(puzzle, mode);
-  let roundTimer: TimerHandle | null = null;
-  let draft = '';
+  const timer = createRoundTimer(scheduler);
   let disposed = false;
 
   const now = () => clock.now().getTime();
@@ -75,34 +37,28 @@ export function createGameController(deps: GameControllerDeps): GameController {
     return true;
   }
 
-  function cancelRoundTimer() {
-    if (roundTimer !== null) scheduler.clearTimeout(roundTimer);
-    roundTimer = null;
-  }
-
   /**
    * Arms the timer for the round in progress, from the deadline in state. A
    * resumed round gets only the time it had left; a lapsed one times out now.
    */
   function runRound() {
     if (disposed) return;
-    draft = '';
     const index = state.results.length;
     const prompt = puzzle.prompts[index];
     const endsAt = state.roundEndsAt;
     if (!prompt || endsAt === null) return;
     const left = endsAt - now();
     if (left <= 0) {
-      onTimeout();
+      onTimeout('');
       return;
     }
-    roundTimer = scheduler.setTimeout(onTimeout, left);
+    timer.start(left, onTimeout);
     emit('roundStarted', { index, prompt, endsAt });
   }
 
   function answered(action: GameAction) {
     if (!dispatch(action)) return;
-    cancelRoundTimer();
+    timer.cancel();
     const round = state.results.length - 1;
     emit('answerMatched', { round, result: state.results[round]! });
   }
@@ -119,28 +75,15 @@ export function createGameController(deps: GameControllerDeps): GameController {
     else runRound();
   }
 
-  const matchFor = (input: string, prompt: Prompt) => matchAnswer(input, prompt, animals, cfg);
-
-  /** The name the player is offered for a close guess: the one an exact match needs. */
-  const nameOf = (id: AnimalId) => animals.get(id)?.display ?? id.replace(/-/g, ' ');
-
-  /**
-   * Time is up: whatever is in the box is the answer. Only an exact name
-   * scores; a close guess was never confirmed, so it counts as a miss.
-   */
-  function onTimeout() {
-    roundTimer = null;
+  /** Time is up: whatever is in the box is the answer (see timeUpMatch). */
+  function onTimeout(draft: string) {
     const prompt = puzzle.prompts[state.results.length];
     if (!prompt) return;
     if (draft.trim() === '') {
       answered({ type: 'timeout', promptId: prompt.id, timeMs: roundTimeMs });
       return;
     }
-    const found = matchFor(draft, prompt);
-    const match: MatchResult =
-      found.strategy === 'exact'
-        ? found
-        : { tier: 0, animalId: null, strategy: null, input: found.input };
+    const match = timeUpMatch(draft, prompt, animals, cfg);
     answered({ type: 'submit', promptId: prompt.id, match, timeMs: roundTimeMs });
   }
 
@@ -171,28 +114,24 @@ export function createGameController(deps: GameControllerDeps): GameController {
       // Background tabs delay timers, so an answer can arrive after the deadline
       // before the timeout has fired. Time ran out with this text in the box.
       if (now() >= endsAt) {
-        draft = input;
-        cancelRoundTimer();
-        onTimeout();
+        timer.cancel();
+        onTimeout(input);
         return;
       }
-      const match = matchFor(input, prompt);
+      const verdict = judgeGuess(input, prompt, animals, cfg);
       const round = state.results.length;
-      if (match.animalId === null) {
-        emit('answerRejected', { round, input: match.input });
-        return;
+      if (verdict.kind === 'none') {
+        emit('answerRejected', { round, input: verdict.input });
+      } else if (verdict.kind === 'close') {
+        const { suggestion } = verdict;
+        emit('answerSuggested', { round, input: verdict.input, suggestion });
+      } else {
+        const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);
+        answered({ type: 'submit', promptId: prompt.id, match: verdict.match, timeMs });
       }
-      if (match.strategy !== 'exact') {
-        emit('answerSuggested', { round, input: match.input, suggestion: nameOf(match.animalId) });
-        return;
-      }
-      const timeMs = Math.max(roundTimeMs - (endsAt - now()), 0);
-      answered({ type: 'submit', promptId: prompt.id, match, timeMs });
     },
 
-    setDraft(text) {
-      draft = text;
-    },
+    setDraft: (text) => timer.setDraft(text),
 
     next() {
       // dispatch ignores revealDone in any other status, and after dispose.
@@ -210,7 +149,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
     getState: () => state,
 
     dispose() {
-      cancelRoundTimer();
+      timer.cancel();
       disposed = true;
     },
   };

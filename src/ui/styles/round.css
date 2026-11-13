@@ -58,9 +58,8 @@
   color: var(--hint);
   font-size: var(--text-sm);
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* One line on most phones; wraps rather than cutting off on the smallest. */
+  overflow-wrap: anywhere;
 }
 
 .answer__note[data-kind='error'] {

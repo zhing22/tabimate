@@ -3,14 +3,18 @@ import type { Clock } from '@/core/clock';
 import { msUntilNextReset } from '@/core/date';
 import type { GameBus } from '@/core/events';
 import type { GameController } from '@/core/gameController';
-import { biomeFor, pointsFor } from '@/core/journey';
+import { pointsFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
 import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
 import type { FrameLoop, Interval } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
-import { resultsScreen, type ResultsProps } from './screens/results';
-import { mountRound, type RoundActions, type RoundProps, type RoundSetup } from './screens/round';
+import { resultsScreen } from './screens/results';
+import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
+
+export type { FinishedRun } from './resultsProps';
+import { roundSlot } from './roundSlot';
+import { DID_YOU_MEAN, NOT_FOUND } from './screens/roundView';
 import { startScreen } from './screens/start';
 
 export interface AppDeps {
@@ -28,13 +32,6 @@ export interface AppDeps {
   readonly interval?: Interval;
 }
 
-export interface FinishedRun {
-  readonly results: readonly RoundResult[];
-  readonly score: number;
-  /** Stats with this run already recorded. */
-  readonly stats: Stats;
-}
-
 export interface App {
   /** Shows the start screen (when there was no saved run to restore). */
   showStart(): void;
@@ -45,58 +42,6 @@ export interface App {
    */
   showResults(run: FinishedRun): void;
   destroy(): void;
-}
-
-type AnimalOf = (result: RoundResult) => Animal | null;
-
-/**
- * The round screen mounts once and is then updated in place (see round.ts),
- * so this keeps hold of it between rounds.
- */
-function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
-  let screen: ReturnType<typeof mountRound> | null = null;
-  return {
-    show(props: RoundProps) {
-      host.clearOverlay();
-      if (screen) {
-        screen.setRound(props);
-        return;
-      }
-      host.showCustom((root) => {
-        const mounted = mountRound(root, props, setup, actions);
-        screen = mounted;
-        return () => {
-          mounted.unmount();
-          screen = null;
-        };
-      });
-    },
-    lock: () => screen?.lock(),
-    reject: () => screen?.reject(),
-    suggest: (name: string) => screen?.suggest(name),
-    get mounted() {
-      return screen !== null;
-    },
-  };
-}
-
-function resultsProps(
-  puzzle: Puzzle,
-  animalOf: AnimalOf,
-  { results, score, stats }: FinishedRun,
-  msUntilNext: () => number,
-): ResultsProps {
-  return {
-    rounds: results.flatMap((result, i) => {
-      const prompt = puzzle.prompts[i];
-      return prompt ? [{ prompt, result, animal: animalOf(result) }] : [];
-    }),
-    score,
-    biomeName: biomeFor(score).name,
-    streak: stats.streak,
-    bestStreak: stats.bestStreak,
-    msUntilNext,
-  };
 }
 
 /**
@@ -162,8 +107,15 @@ export function createApp(deps: AppDeps): App {
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
-    bus.on('answerRejected', () => round.reject()),
-    bus.on('answerSuggested', ({ suggestion }) => round.suggest(suggestion)),
+    // Spoken through the host's live region, which re-reads a repeated message.
+    bus.on('answerRejected', () => {
+      round.reject();
+      host.announce(NOT_FOUND);
+    }),
+    bus.on('answerSuggested', ({ suggestion }) => {
+      round.suggest(suggestion);
+      host.announce(`${suggestion}. ${DID_YOU_MEAN}`);
+    }),
     bus.on('answerMatched', ({ round: index, result }) => showReveal(index, result)),
     bus.on('runRestored', ({ state }) => {
       const index = state.results.length - 1;

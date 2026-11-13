@@ -22,7 +22,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
 - Answering: only an answer's exact name scores (after normalising case, punctuation
-  and plurals: "Platypuses" is exact for Platypus). On each Go the guess is run
+  and plurals: "killer whales!" is exact for Killer whale). On each Go the guess is run
   through the matcher strategies in order: exact, alias, typo, partial, loose
   (core/matcher/strategies.ts).
   - exact: scored and revealed at once.

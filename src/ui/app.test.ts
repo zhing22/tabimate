@@ -209,7 +209,7 @@ describe('app: a close guess', () => {
     ['platipus', 'Platypus'], // typo
     ['orca', 'Killer whale'], // another name
     ['snow leo', 'Snow leopard'], // part of the name
-  ])('puts the right name in the box for %j, and Go then answers it', (typed, name) => {
+  ])('puts the right name in the box for %j, and Go then answers it', async (typed, name) => {
     const t = setup();
     t.controller.start();
     const input = t.input();
@@ -221,6 +221,8 @@ describe('app: a close guess', () => {
     expect(note.hidden).toBe(false);
     expect(note.dataset['kind']).toBe('hint');
     expect(note.textContent).toBe('Did you mean this? Press Go to answer.');
+    await t.flush();
+    expect(t.live()).toBe(`${name}. Did you mean this? Press Go to answer.`);
     expect(input.getAttribute('aria-invalid')).toBe('false');
     // Selected, so typing something else replaces it.
     expect([input.selectionStart, input.selectionEnd]).toEqual([0, name.length]);
@@ -249,6 +251,19 @@ describe('app: a close guess', () => {
 });
 
 describe('app: a guess that matches nothing', () => {
+  it('reads the message out, and again on a second miss in a row', async () => {
+    const t = setup();
+    t.controller.start();
+    type(t.input(), 'James');
+    pressEnter(t.input());
+    await t.flush();
+    expect(t.live()).toBe("Not on today's list. Try again.");
+    pressEnter(t.input()); // the same guess again: the same message
+    expect(t.live()).toBe(''); // cleared first, so it is a change a screen reader hears
+    await t.flush();
+    expect(t.live()).toBe("Not on today's list. Try again.");
+  });
+
   it('says so in one line under the box, keeps the text and focus, and lets them retry', () => {
     const t = setup();
     t.controller.start();
@@ -257,8 +272,8 @@ describe('app: a guess that matches nothing', () => {
     pressEnter(input);
     const error = t.$('.answer__note')!;
     expect(error.hidden).toBe(false);
-    expect(error.getAttribute('role')).toBe('alert');
-    expect(error.textContent).toBe("Not on today's list. Try another animal.");
+    expect(error.textContent).toBe("Not on today's list. Try again.");
+    expect(input.getAttribute('aria-describedby')).toContain(error.id);
     expect(input.value).toBe('James');
     expect(input.getAttribute('aria-invalid')).toBe('true');
     expect(document.activeElement).toBe(input);

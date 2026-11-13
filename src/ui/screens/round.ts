@@ -1,21 +1,15 @@
-import { MAX_INPUT_LENGTH, TIMER_WARN_MS } from '@/config/game';
 import type { Prompt } from '@/core/types';
-import { timerRing, type TimerRing } from '../components/timerRing';
-import { focus, h } from '../dom';
-import type { FrameLoop } from '../frames';
+import { focus } from '../dom';
 import type { Unmount } from '../host';
+import { buildRound, DID_YOU_MEAN, NOT_FOUND, type RoundSetup } from './roundView';
+
+export type { RoundSetup } from './roundView';
 
 export interface RoundProps {
   readonly index: number;
   readonly total: number;
   readonly prompt: Prompt;
   readonly endsAt: number;
-}
-
-export interface RoundSetup {
-  readonly totalMs: number;
-  readonly now: () => number;
-  readonly frames?: FrameLoop;
 }
 
 export interface RoundActions {
@@ -42,64 +36,7 @@ export interface RoundScreen {
   unmount: Unmount;
 }
 
-const NOT_FOUND = "Not on today's list. Try another animal.";
-const DID_YOU_MEAN = 'Did you mean this? Press Go to answer.';
-
 type Note = 'error' | 'hint';
-
-interface RoundView {
-  readonly card: HTMLElement;
-  readonly step: HTMLElement;
-  readonly question: HTMLElement;
-  readonly form: HTMLFormElement;
-  readonly input: HTMLInputElement;
-  readonly go: HTMLButtonElement;
-  readonly note: HTMLElement;
-  readonly ring: TimerRing;
-}
-
-function buildRound(first: RoundProps, setup: RoundSetup): RoundView {
-  const step = h('p', { class: 'meta round__step' });
-  const question = h('h2', { id: 'round-prompt', class: 'round__prompt' });
-  const input = h('input', {
-    id: 'answer',
-    class: 'answer__input',
-    type: 'text',
-    maxlength: MAX_INPUT_LENGTH,
-    autocomplete: 'off',
-    autocapitalize: 'none',
-    autocorrect: 'off',
-    spellcheck: 'false',
-    enterkeyhint: 'go',
-    'aria-describedby': 'round-prompt answer-note',
-  });
-  // One line under the box: "not on the list" or "did you mean this?".
-  // role=alert: read out as soon as it appears, without moving focus.
-  const note = h('p', { id: 'answer-note', class: 'answer__note', role: 'alert', hidden: true });
-  const go = h('button', { class: 'button button--primary', type: 'submit' }, 'Go');
-  const form = h(
-    'form',
-    { class: 'answer', autocomplete: 'off' },
-    h('label', { for: 'answer', class: 'answer__label' }, 'Your animal'),
-    h('div', { class: 'answer__row' }, input, go),
-    note,
-  );
-  const ring = timerRing({
-    endsAt: first.endsAt,
-    totalMs: setup.totalMs,
-    now: setup.now,
-    warnAtMs: TIMER_WARN_MS,
-    ...(setup.frames ? { frames: setup.frames } : {}),
-  });
-  const card = h(
-    'section',
-    { class: 'card round', 'aria-labelledby': 'round-prompt' },
-    h('header', { class: 'round__header' }, step, ring.el),
-    question,
-    form,
-  );
-  return { card, step, question, form, input, go, note, ring };
-}
 
 export function mountRound(
   root: HTMLElement,
@@ -107,10 +44,8 @@ export function mountRound(
   setup: RoundSetup,
   actions: RoundActions,
 ): RoundScreen {
-  const { card, step, question, form, input, go, note, ring } = buildRound(first, setup);
+  const { card, step, question, form, input, go, note, ring } = buildRound(first.endsAt, setup);
   const showNote = (kind: Note | null, text = '') => {
-    // Cleared first, so a screen reader repeats it even when the text is the same.
-    note.textContent = '';
     note.hidden = kind === null;
     note.dataset['kind'] = kind ?? '';
     input.dataset['note'] = kind ?? '';
