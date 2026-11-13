@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <!--
+    Dev only (not in the production build): tune sprite palettes by eye.
+    Open /dev/palettes.html on the dev server. Edits are kept as drafts in this
+    browser; "Copy as JSON" gives the line to paste into public/data/palettes.json.
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palette editor</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+        color: #1d2b3a;
+        background: #f3efe6;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .controls,
+      #slots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .slot {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        padding: 4px 8px;
+        background: #fff;
+        border-radius: 6px;
+      }
+      .slot input[type='text'] {
+        font-family: monospace;
+      }
+      #preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      figure {
+        margin: 0;
+      }
+      .preview__canvas {
+        display: block;
+        image-rendering: pixelated;
+        border-radius: 4px;
+      }
+      figcaption {
+        font-size: 12px;
+        color: #555;
+      }
+      #warnings {
+        color: #a32631;
+        font-weight: 600;
+      }
+      pre {
+        padding: 8px;
+        overflow-x: auto;
+        background: #fff;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Palette editor</h1>
+    <div class="controls">
+      <label
+        >Archetype
+        <select id="archetype"></select
+      ></label>
+      <label
+        >Palette
+        <select id="palette"></select
+      ></label>
+      <label><input type="checkbox" id="derive" /> Derive shadow and highlight from base</label>
+      <label><input type="checkbox" id="snap" /> Snap to master palette</label>
+      <span id="draft-note" hidden
+        >(draft) <button type="button" id="reset">Reset to file</button></span
+      >
+    </div>
+    <div id="slots"></div>
+    <ul id="warnings"></ul>
+    <div id="preview"></div>
+    <p><button type="button" id="copy">Copy as JSON</button></p>
+    <pre id="json"></pre>
+    <script type="module" src="/src/dev/paletteEditor.ts"></script>
+  </body>
+</html>

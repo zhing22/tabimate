@@ -91,6 +91,23 @@ describe('world: a run', () => {
   });
 });
 
+describe('world: blinking', () => {
+  it('closes a standing follower’s eyes for a moment, every few seconds', () => {
+    const w = world();
+    w.restore([hit('tiger', 4)]);
+    let blinks = 0;
+    let wasBlinking = false;
+    for (let i = 0; i < 60 * 12; i++) {
+      w.update(1 / 60);
+      const blinking = w.followers[0]!.blink > 0;
+      if (blinking && !wasBlinking) blinks++;
+      wasBlinking = blinking;
+    }
+    expect(blinks).toBeGreaterThanOrEqual(2);
+    expect(blinks).toBeLessThanOrEqual(6);
+  });
+});
+
 describe('world: restore', () => {
   it('rebuilds followers, position and biome at once, without animation', () => {
     const w = world();

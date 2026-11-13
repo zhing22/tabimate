@@ -45,6 +45,11 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Static hosting on Cloudflare Pages. No backend in the MVP.
 - Pixel art: scene is 180 native px tall, scaled by a whole number (computed in device pixels);
   layers tile horizontally. Sprites use 6 template key colours, recoloured from palettes.json.
+- Sprite pipeline: public/assets/sprites/{archetype}.png + .json (Aseprite export, frame
+  tags walk and flap or swim), listed in manifest.json, drawn only in TEMPLATE_KEYS
+  (config/render.ts). animals.json gives each animal palette, shinyPalette and
+  paletteOverride; palette colours come from data/master-palette.json (tested). An
+  animal without a sheet or palette is drawn as its emoji. SPRITE_SOURCE picks the provider.
 
 ## Architecture rules (must follow)
 
@@ -73,4 +78,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
 
 - npm run dev | npm run build | npm run test | npm run check (typecheck + lint + test)
 - Dev-only pages (not in the build): /dev/scene.html replays a scripted run in the scene
-  (?step=N jumps ahead, ?restore rebuilds a finished run) with an fps readout.
+  (?step=N jumps ahead, ?restore rebuilds a finished run, ?emoji for placeholders) with an
+  fps readout. /dev/palettes.html tunes palettes by eye and copies them as JSON.
+- npm run pixelate -- <folder> --size 24 [--colors 6] [--master]: AI images to rough pixel
+  art in art/pixelated/. npm run art:sample redraws the placeholder big-cat sheet.

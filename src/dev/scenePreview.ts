@@ -6,13 +6,16 @@ import { biomesEntered } from '@/core/journey';
 import type { Animal, RoundResult, RunState } from '@/core/types';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
+import { createPixelSpriteProvider, fetchSheet } from '@/scene/sprites/pixelSpriteProvider';
+import { loadSpriteArt, sheetUrls } from '@/data/spriteArtSource';
 
 const SCRIPT: readonly (readonly [string | null, AnswerTierId | 0])[] = [
-  ['platypus', 2],
-  ['snow-leopard', 3], // 75: Grassland
-  ['tiger', 4], // 160: Forest
+  ['tiger', 4],
+  ['snow-leopard', 3], // two big cats, one sheet
+  ['platypus', 2], // no sheet yet: emoji
   [null, 0],
-  ['sunda-pangolin', 5],
+  ['tiger', 5], // shiny: white tiger
+  ['snow-leopard', 5], // shiny: golden
 ];
 const STEP_MS = 2_500;
 
@@ -30,7 +33,14 @@ async function main() {
   const scene = createScene(document.querySelector<HTMLElement>('#scene')!, bus, {
     animals: new Map(animals.map((a) => [a.id, a])),
     puzzleDate: '2026-11-12',
-    createSprites: (k) => createEmojiSpriteProvider(k),
+    createSprites: (k) =>
+      params.has('emoji')
+        ? createEmojiSpriteProvider(k)
+        : createPixelSpriteProvider(k, {
+            loadArt: () => loadSpriteArt({ baseUrl: '/' }),
+            loadSheet: (archetype) => fetchSheet(sheetUrls('/', archetype)),
+            fallback: createEmojiSpriteProvider(k),
+          }),
   });
   document.querySelector('#stats')!.textContent = 'loading sprites';
   await scene.ready;

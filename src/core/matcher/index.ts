@@ -48,9 +48,8 @@ export function matchAnswer(
 ): MatchResult {
   const rawInput = clampInput(typed);
   const text = normalize(rawInput);
-  // An empty guess, or a list of animals, is never one answer.
-  const hit =
-    text === '' || namesSeveralAnimals(text, animals)
+  const found =
+    text === ''
       ? null
       : runStrategies(
           { text, promptId: prompt.id },
@@ -58,6 +57,14 @@ export function matchAnswer(
           cfg,
           strategies,
         );
+  // A list of animals is never one answer. Checked only when it could matter:
+  // an exact name is not a list, and a list needs more than one word.
+  const isList =
+    found !== null &&
+    found.strategy !== 'exact' &&
+    text.includes(' ') &&
+    namesSeveralAnimals(text, animals);
+  const hit = isList ? null : found;
   if (!hit) return { tier: 0, animalId: null, strategy: null, input: rawInput };
   return { tier: hit.tier, animalId: hit.animalId, strategy: hit.strategy, input: rawInput };
 }

@@ -13,6 +13,7 @@ import type { Pose } from './entities/idleMotion';
 import { tile } from './layers';
 import { propsInSegment, segmentsInView, type PlacedProp } from './props';
 import type { SpriteProvider, SpriteRef } from './sprites/spriteProvider';
+import { frameAt } from './sprites/sheet';
 import type { Viewport } from './viewport';
 import type { World } from './world';
 
@@ -49,6 +50,7 @@ export function createRenderer(
     opacity: 1,
     anchor: 'topleft',
     flipX: false,
+    frame: 0,
   };
   const sky: DrawRectOpt = { width: 0, height: NATIVE_HEIGHT, pos: k.vec2(0, 0), opacity: 1 };
   const print: DrawRectOpt = {
@@ -68,6 +70,7 @@ export function createRenderer(
 
   const drawImage = (name: string, x: number, y: number, opacity: number) => {
     sprite.sprite = name;
+    sprite.frame = 0;
     pos.x = x;
     pos.y = y;
     sprite.anchor = 'topleft';
@@ -115,9 +118,22 @@ export function createRenderer(
     }
   }
 
-  function drawCharacter(ref: SpriteRef, x: number, y: number, pose: Pose, pop: number) {
+  /**
+   * `walkS`: seconds into the walk, or -1 when standing (first frame). Blinking
+   * swaps in the eyes-closed copy of the same frame.
+   */
+  function drawCharacter(
+    ref: SpriteRef,
+    x: number,
+    y: number,
+    pose: Pose,
+    pop: number,
+    walkS = -1,
+    blinking = false,
+  ) {
     const s = pop < 1 ? popScale(pop) : 1;
-    sprite.sprite = ref.name;
+    sprite.sprite = blinking && ref.blinkName ? ref.blinkName : ref.name;
+    sprite.frame = ref.walk && walkS >= 0 ? frameAt(ref.walk, walkS) : 0;
     pos.x = x;
     pos.y = y + pose.dy;
     sprite.anchor = 'bot';
@@ -155,7 +171,9 @@ export function createRenderer(
       trail.pointBehind((i + 1) * FOLLOWER_SPACING, onPath);
       movementFor(f.animal.movement)(onPath, 0, 0, placed);
       const x = Math.round(placed.x) - cameraX;
-      drawCharacter(sprites.spriteFor(f.animal, f.shiny), x, Math.round(placed.y), f.pose, f.pop);
+      const walkS = world.player.walking ? world.player.stepTime + i * 0.13 : -1;
+      const ref = sprites.spriteFor(f.animal, f.shiny);
+      drawCharacter(ref, x, Math.round(placed.y), f.pose, f.pop, walkS, f.blink > 0);
     }
     drawCharacter(sprites.playerSprite(), playerX - cameraX, GROUND_Y, world.playerPose, 1);
   };

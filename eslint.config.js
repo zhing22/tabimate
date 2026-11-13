@@ -144,6 +144,12 @@ export default tseslint.config(
     rules: restrictImports(['ui'], 'scene/ must not import ui/; talk through core events.'),
   },
 
+  // Build and art scripts run in Node (npm run pixelate, npm run art:sample).
+  {
+    files: ['scripts/**/*.ts'],
+    languageOptions: { globals: { ...globals.node } },
+  },
+
   // Tool config files must use default exports, and run in Node.
   {
     files: ['*.config.ts', '*.config.js'],

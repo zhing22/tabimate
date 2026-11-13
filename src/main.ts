@@ -1,13 +1,16 @@
 // Composition root: the only place that picks real implementations and wires
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
+import { SPRITE_SOURCE } from '@/config/render';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
+import { loadSpriteArt, sheetUrls } from '@/data/spriteArtSource';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
+import { createPixelSpriteProvider, fetchSheet } from '@/scene/sprites/pixelSpriteProvider';
 import { browserScheduler } from '@/services/browserScheduler';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
@@ -44,7 +47,16 @@ function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId,
     const scene = createScene(container, bus, {
       animals,
       puzzleDate: puzzle.date,
-      createSprites: (k) => createEmojiSpriteProvider(k),
+      createSprites: (k) => {
+        const emoji = createEmojiSpriteProvider(k);
+        if (SPRITE_SOURCE === 'emoji') return emoji;
+        const baseUrl = import.meta.env.BASE_URL;
+        return createPixelSpriteProvider(k, {
+          loadArt: () => loadSpriteArt({ baseUrl }),
+          loadSheet: (archetype) => fetchSheet(sheetUrls(baseUrl, archetype)),
+          fallback: emoji,
+        });
+      },
     });
     scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
   } catch (error) {

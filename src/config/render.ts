@@ -1,6 +1,7 @@
 // The scene's pixel grid. Everything is drawn at this native size and scaled
 // up by a whole number of device pixels, so pixels stay crisp on every screen.
 import type { SizeClass } from './animals';
+import type { HexColour } from './colour';
 
 /** Scene height in native pixels, on every screen. Wider screens see more world. */
 export const NATIVE_HEIGHT = 180;
@@ -60,3 +61,43 @@ export const BIOME_FADE_MS = 1_200;
 
 /** Wait this long after the last resize before re-laying out the canvas. */
 export const RESIZE_DEBOUNCE_MS = 150;
+
+/**
+ * Sprite sheets are drawn only in these key colours (plus transparency), in
+ * slot order; each animal's palette replaces them. Pure, easy-to-pick colours
+ * so artists can't hit one by accident.
+ */
+export const TEMPLATE_KEYS = [
+  '#000000', // 0 outline
+  '#ff0000', // 1 base body
+  '#00ff00', // 2 shadow
+  '#0000ff', // 3 highlight
+  '#ffff00', // 4 accent (stripes, spots, beak, mane)
+  '#ff00ff', // 5 eyes and detail
+] as const satisfies readonly HexColour[];
+
+export const PALETTE_SLOTS = 6;
+
+/** Six colours in TEMPLATE_KEYS slot order. */
+export type Palette = readonly [
+  outline: HexColour,
+  base: HexColour,
+  shadow: HexColour,
+  highlight: HexColour,
+  accent: HexColour,
+  eye: HexColour,
+];
+
+/** An animal's colours (animals.json): palette names from palettes.json. */
+export interface AnimalArt {
+  readonly palette: string;
+  readonly shinyPalette?: string;
+  /** Per-slot tweaks on top of the palette, e.g. { "5": "#3a7d44" } for green eyes. */
+  readonly paletteOverride?: Readonly<Partial<Record<number, HexColour>>>;
+}
+
+/** Which sprites the scene draws: pixel sheets (falling back to emoji), or emoji only. */
+export const SPRITE_SOURCE: 'pixel' | 'emoji' = 'pixel';
+
+/** How long a blink shows its eyes-closed frame. */
+export const BLINK_MS = 140;

@@ -1,5 +1,12 @@
 import type { BiomeId } from '@/config/biomes';
-import { BIOME_FADE_MS, FOLLOWER_SPACING, GROUND_Y, MISS_WALK, POP_IN_MS } from '@/config/render';
+import {
+  BIOME_FADE_MS,
+  BLINK_MS,
+  FOLLOWER_SPACING,
+  GROUND_Y,
+  MISS_WALK,
+  POP_IN_MS,
+} from '@/config/render';
 import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import { biomeFor, distanceFor, pointsFor, totalScore } from '@/core/journey';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';
@@ -15,6 +22,8 @@ export interface Follower {
   readonly pose: Pose;
   /** 0 when it appears, 1 once fully popped in. */
   pop: number;
+  /** Seconds left of a blink (eyes-closed frames); 0 when the eyes are open. */
+  blink: number;
 }
 
 export interface BiomeFade {
@@ -86,16 +95,22 @@ export function createWorld(options: WorldOptions): World {
     const animal =
       result.match.animalId === null ? undefined : options.animals.get(result.match.animalId);
     if (animal) {
-      followers.push({
-        animal,
-        shiny: result.match.tier === 5,
-        idle: createIdleMotion({
-          seed: `${animal.id}|${followers.length}`,
-          reducedMotion: options.reducedMotion,
-        }),
-        pose: { dy: 0, scaleY: 1, angle: 0 },
-        pop: animate ? 0 : 1,
+      // The idle motion's blink hook closes this follower's eyes for a moment.
+      const eyes = { blink: 0 };
+      const idle = createIdleMotion({
+        seed: `${animal.id}|${followers.length}`,
+        reducedMotion: options.reducedMotion,
+        onBlink: () => (eyes.blink = BLINK_MS / 1000),
       });
+      followers.push(
+        Object.assign(eyes, {
+          animal,
+          shiny: result.match.tier === 5,
+          idle,
+          pose: { dy: 0, scaleY: 1, angle: 0 },
+          pop: animate ? 0 : 1,
+        }),
+      );
     } else {
       leaveFootprints(player.x);
     }
@@ -151,6 +166,7 @@ export function createWorld(options: WorldOptions): World {
         // Walk in step with the player, each a little out of time with the next.
         if (player.walking) stepPose(player.stepTime + (i + 1) * 0.13, follower.pose);
         else follower.idle.update(dtS, follower.pose);
+        if (follower.blink > 0) follower.blink = Math.max(0, follower.blink - dtS);
         if (follower.pop < 1) follower.pop = Math.min(1, follower.pop + (dtS * 1000) / POP_IN_MS);
       }
       if (biome.progress < 1) {

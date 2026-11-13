@@ -7,7 +7,9 @@
     "movement": "land",
     "size": "L",
     "tint": "#c8902c",
-    "emoji": "🦁"
+    "emoji": "🦁",
+    "palette": "lion",
+    "shinyPalette": "white-lion"
   },
   {
     "id": "tiger",
@@ -17,7 +19,9 @@
     "movement": "land",
     "size": "L",
     "tint": "#e07020",
-    "emoji": "🐅"
+    "emoji": "🐅",
+    "palette": "tiger",
+    "shinyPalette": "white-tiger"
   },
   {
     "id": "snow-leopard",
@@ -27,7 +31,9 @@
     "movement": "land",
     "size": "L",
     "tint": "#d8d8d0",
-    "emoji": "🐆"
+    "emoji": "🐆",
+    "palette": "snow-leopard",
+    "shinyPalette": "golden-snow-leopard"
   },
   {
     "id": "cheetah",
@@ -37,7 +43,9 @@
     "movement": "land",
     "size": "L",
     "tint": "#d8a848",
-    "emoji": "🐆"
+    "emoji": "🐆",
+    "palette": "cheetah",
+    "shinyPalette": "king-cheetah"
   },
   {
     "id": "african-elephant",

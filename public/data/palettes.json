@@ -1,0 +1,10 @@
+{
+  "tiger": ["#181425", "#f77622", "#be4a2f", "#feae34", "#181425", "#fee761"],
+  "white-tiger": ["#262b44", "#ffffff", "#c0cbdc", "#ffffff", "#3a4466", "#0099db"],
+  "snow-leopard": ["#262b44", "#c0cbdc", "#8b9bb4", "#ffffff", "#5a6988", "#63c74d"],
+  "golden-snow-leopard": ["#3e2731", "#feae34", "#e4a672", "#fee761", "#733e39", "#0099db"],
+  "lion": ["#3e2731", "#e4a672", "#c28569", "#ead4aa", "#b86f50", "#733e39"],
+  "white-lion": ["#262b44", "#ffffff", "#c0cbdc", "#ead4aa", "#e8b796", "#0099db"],
+  "cheetah": ["#181425", "#feae34", "#d77643", "#fee761", "#181425", "#733e39"],
+  "king-cheetah": ["#181425", "#ead4aa", "#c28569", "#ffffff", "#3e2731", "#3e8948"]
+}

@@ -12,7 +12,9 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "pixelate": "tsx scripts/pixelate.ts",
+    "art:sample": "tsx scripts/drawSampleSheet.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -20,8 +22,11 @@
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.14.0",
+    "image-q": "^4.0.0",
     "jsdom": "^31.0.0",
     "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.6",
