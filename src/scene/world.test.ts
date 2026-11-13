@@ -23,11 +23,9 @@ const settle = (w: World, seconds = 10) => {
 };
 
 describe('world: a run', () => {
-  it('adds the animal only once the reveal is done, then walks its distance', () => {
+  it('adds the animal as it joins, then walks its distance', () => {
     const w = world();
-    w.answered(hit('tiger', 4)); // 85 points
-    expect(w.followers).toHaveLength(0);
-    w.revealDone();
+    w.join(hit('tiger', 4)); // 85 points
     expect(w.followers).toHaveLength(1);
     expect(w.followers[0]?.pop).toBe(0);
     expect(w.player.walking).toBe(true);
@@ -38,27 +36,36 @@ describe('world: a run', () => {
 
   it('marks a tier 5 animal shiny', () => {
     const w = world();
-    w.answered(hit('amur-leopard', 5));
-    w.revealDone();
+    w.join(hit('amur-leopard', 5));
     expect(w.followers[0]?.shiny).toBe(true);
   });
 
   it('leaves footprints and walks a short way on a miss', () => {
     const w = world();
-    w.answered(miss);
-    w.revealDone();
+    w.join(miss);
     settle(w);
     expect(w.followers).toHaveLength(0);
     expect(w.player.x).toBe(MISS_WALK);
     expect([...w.footprints].filter((x) => !Number.isNaN(x))).toEqual([0]);
   });
 
-  it('ignores a second revealDone for the same answer', () => {
+  it('moves into the next biome on the answer that crosses its threshold', () => {
     const w = world();
-    w.answered(hit('tiger', 4));
-    w.revealDone();
-    w.revealDone();
-    expect(w.followers).toHaveLength(1);
+    w.join(hit('platypus', 2)); // 25: still the Town
+    expect(w.biome).toMatchObject({ from: null, to: 'town' });
+    w.join(hit('snow-leopard', 3)); // 75: Grassland starts at 50
+    expect(w.biome).toMatchObject({ from: 'town', to: 'grassland', progress: 0 });
+    settle(w, 2);
+    w.join(hit('tiger', 4)); // 160: Forest starts at 125
+    expect(w.biome).toMatchObject({ from: 'grassland', to: 'forest' });
+  });
+
+  it('counts a restored score, so the next join knows where it stands', () => {
+    const w = world();
+    w.restore([hit('snow-leopard', 3)]); // 50: Grassland, no fade
+    expect(w.biome).toMatchObject({ from: null, to: 'grassland' });
+    w.join(hit('tiger', 4)); // 135: Forest
+    expect(w.biome.to).toBe('forest');
   });
 
   it('three followers trail the player one spacing apart on its path', () => {
@@ -68,8 +75,7 @@ describe('world: a run', () => {
       ['snow-leopard', 3],
       ['tiger', 4],
     ] as const) {
-      w.answered(hit(id, tier));
-      w.revealDone();
+      w.join(hit(id, tier));
       settle(w);
     }
     const p: Point = { x: 0, y: 0 };

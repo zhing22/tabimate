@@ -36,9 +36,12 @@ export interface World {
   readonly biome: BiomeFade;
   /** Rebuilds the scene from a saved run, without animation. */
   restore(results: readonly RoundResult[]): void;
-  /** The animal (or miss) joins once the reveal is over: see revealDone. */
-  answered(result: RoundResult): void;
-  revealDone(): void;
+  /**
+   * An answer joins the journey now, animated: the animal pops in at the back
+   * of the party (a miss leaves footprints), everyone walks on, and if the
+   * score has crossed a threshold the next biome fades in.
+   */
+  join(result: RoundResult): void;
   enterBiome(id: BiomeId): void;
   update(dtS: number): void;
 }
@@ -58,7 +61,14 @@ export function createWorld(options: WorldOptions): World {
   const footprints = new Float32Array(MAX_FOOTPRINTS).fill(Number.NaN);
   let nextPrint = 0;
   const biome: BiomeFade = { from: null, to: biomeFor(0).id as BiomeId, progress: 1 };
-  let pending: RoundResult | null = null;
+  let score = 0;
+
+  function enterBiome(id: BiomeId) {
+    if (id === biome.to) return;
+    biome.from = biome.to;
+    biome.to = id;
+    biome.progress = 0;
+  }
 
   const leaveFootprints = (x: number) => {
     footprints[nextPrint] = x;
@@ -66,7 +76,7 @@ export function createWorld(options: WorldOptions): World {
   };
 
   /** A result joins the journey: a follower for a hit, footprints for a miss. */
-  function join(result: RoundResult, animate: boolean) {
+  function addToJourney(result: RoundResult, animate: boolean) {
     const animal =
       result.match.animalId === null ? undefined : options.animals.get(result.match.animalId);
     if (animal) {
@@ -95,30 +105,22 @@ export function createWorld(options: WorldOptions): World {
       followers.length = 0;
       footprints.fill(Number.NaN);
       nextPrint = 0;
-      pending = null;
       player.placeAt(0);
-      for (const result of results) join(result, false);
+      score = totalScore(results);
+      for (const result of results) addToJourney(result, false);
       trail.reset(player.x, GROUND_Y);
       biome.from = null;
       biome.to = biomeFor(totalScore(results)).id as BiomeId;
       biome.progress = 1;
     },
 
-    answered(result) {
-      pending = result;
+    join(result) {
+      addToJourney(result, true);
+      score += pointsFor(result);
+      enterBiome(biomeFor(score).id as BiomeId);
     },
 
-    revealDone() {
-      if (pending) join(pending, true);
-      pending = null;
-    },
-
-    enterBiome(id) {
-      if (id === biome.to) return;
-      biome.from = biome.to;
-      biome.to = id;
-      biome.progress = 0;
-    },
+    enterBiome,
 
     update(dtS) {
       player.update(dtS);

@@ -2,7 +2,6 @@
 // screenshotted) without playing. See dev/scene.html.
 import type { AnswerTierId } from '@/config/tiers';
 import { createBus, type GameEvents } from '@/core/events';
-import { biomesEntered } from '@/core/journey';
 import type { Animal, RoundResult, RunState } from '@/core/types';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
@@ -28,8 +27,6 @@ const resultOf = ([animalId, tier]: (typeof SCRIPT)[number]): RoundResult =>
     ? { promptId: 'p', timeMs: 1, match: { tier: 0, animalId: null, strategy: null, input: 'x' } }
     : { promptId: 'p', timeMs: 1, match: { tier, animalId, strategy: 'exact', input: animalId } };
 
-const points = [0, 10, 25, 50, 85, 100] as const;
-
 async function main() {
   const params = new URLSearchParams(location.search);
   const animals = (await loader.load(ANIMALS_FILE)) as Animal[];
@@ -49,15 +46,10 @@ async function main() {
   document.querySelector('#stats')!.textContent = 'loading sprites';
   await scene.ready;
 
-  let score = 0;
+  // The scene joins each answer as its reveal shows the name, and moves to a
+  // new biome by itself when the score crosses a threshold.
   const play = (i: number) => {
-    const step = SCRIPT[i]!;
-    const result = resultOf(step);
-    bus.emit('answerMatched', { round: i, result });
-    bus.emit('revealFinished', { index: i });
-    const before = score;
-    score += points[step[1]];
-    for (const biome of biomesEntered(before, score)) bus.emit('biomeEntered', { biome });
+    bus.emit('answerMatched', { round: i, result: resultOf(SCRIPT[i]!) });
   };
 
   if (params.has('restore')) {

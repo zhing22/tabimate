@@ -101,20 +101,22 @@ describe('createAudio', () => {
     vi.advanceTimersByTime(600 + 5 * 150 - 1);
     expect(t.notes()).toEqual([]);
     vi.advanceTimersByTime(1);
-    expect(t.notes()).toEqual(SOUNDS.tier5.map((n) => n.freq));
+    // The tier's sound, then the join (this setup has no delay before the name).
+    expect(t.notes()).toEqual([...SOUNDS.tier5.map((n) => n.freq), SOUNDS.join[0]!.freq]);
   });
 
-  it('plays the join sound when a follower joins, not after a miss', async () => {
+  it('plays the join sound as the animal joins during the reveal, not after a miss', async () => {
     const t = setup();
     await t.unlock();
+    const joins = () => t.notes().filter((f) => f === SOUNDS.join[0]!.freq).length;
     t.bus.emit('answerMatched', { round: 0, result: result(0) });
     vi.runAllTimers();
-    const before = t.notes().length;
-    t.bus.emit('revealFinished', { index: 0 });
-    expect(t.notes()).toHaveLength(before);
+    expect(joins()).toBe(0);
     t.bus.emit('answerMatched', { round: 1, result: result(1) });
-    t.bus.emit('revealFinished', { index: 1 });
-    expect(t.notes().slice(-1)).toEqual([SOUNDS.join[0]!.freq]);
+    vi.advanceTimersByTime(600 + 150); // the badge pops (name delay is 0 in this setup)
+    expect(joins()).toBe(1);
+    t.bus.emit('revealFinished', { index: 1 }); // Next: nothing more to play
+    expect(joins()).toBe(1);
   });
 
   it('ticks through the last seconds of a round, and stops when answered', async () => {

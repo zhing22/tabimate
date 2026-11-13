@@ -38,7 +38,6 @@ export function createAudio(deps: AudioDeps): GameAudio {
   const createContext = deps.createContext ?? (() => new AudioContext());
   let muted = deps.storage.get(MUTED_KEY) === true;
   let ctx: AudioContext | null = null;
-  let lastJoins = false; // whether the answer being revealed brings a follower
   const timers = new Set<ReturnType<typeof setTimeout>>();
   const ticks = new Set<ReturnType<typeof setTimeout>>();
 
@@ -117,14 +116,13 @@ export function createAudio(deps: AudioDeps): GameAudio {
     // The tier's sound lands on the badge pop, after the same drum-roll as the UI.
     deps.bus.on('answerMatched', ({ result }) => {
       cancel(ticks);
-      lastJoins = result.match.animalId !== null;
-      later(timers, revealBuildUpMs(result.match.tier, timing), tierSound(result.match.tier));
+      const badge = revealBuildUpMs(result.match.tier, timing);
+      later(timers, badge, tierSound(result.match.tier));
+      // The animal joins the party as its name shows (the scene uses the same timing).
+      if (result.match.animalId !== null) later(timers, badge + timing.nameDelayMs, 'join');
     }),
     deps.bus.on('answerRejected', () => play('miss')),
     deps.bus.on('answerSuggested', () => play('hint')),
-    deps.bus.on('revealFinished', () => {
-      if (lastJoins) play('join');
-    }),
     deps.bus.on('runFinished', () => cancel(ticks)),
   ];
 

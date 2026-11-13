@@ -18,7 +18,9 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
   plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE). After
   each answer the result stays up until the player taps Next (or presses Enter); the
-  next prompt's timer starts then.
+  next prompt's timer starts then. While the result is up, as its name shows, the animal joins
+  the party in the scene and everyone walks on (into the next biome if the score crossed
+  a threshold).
 - Tiers: 0 no match; 1 Least Concern, 2 Near Threatened, 3 Vulnerable,
   4 Endangered, 5 Critically Endangered.
 - Answering: only an answer's exact name scores (after normalising case, punctuation

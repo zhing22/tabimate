@@ -1,5 +1,6 @@
 import kaplay, { type KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
+import { REVEAL_TIMING, revealBuildUpMs } from '@/config/game';
 import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/render';
 import type { GameBus } from '@/core/events';
 import type { Portraits } from '@/core/portrait';
@@ -111,21 +112,30 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
     draw(view, loaded);
   });
 
+  // An answer joins the party while its reveal is still up, the moment the
+  // card shows its name (same timing config as the UI), so the player sees the
+  // animal fall in behind them and the walk, and any new biome, straight away.
+  const joins = new Set<ReturnType<typeof setTimeout>>();
+  const cancelJoins = () => {
+    for (const timer of joins) clearTimeout(timer);
+    joins.clear();
+  };
   const stops = [
     bus.on('runRestored', ({ state }) => {
-      // Mid-reveal, the last answer has not joined yet: it does on revealFinished.
-      const joined = state.status === 'revealing' ? state.results.slice(0, -1) : state.results;
-      world.restore(joined);
+      cancelJoins();
+      // Every saved answer has been revealed (a reload mid-reveal included).
+      world.restore(state.results);
       effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
-      const last = state.results[state.results.length - 1];
-      if (state.status === 'revealing' && last) world.answered(last);
     }),
-    bus.on('answerMatched', ({ result }) => world.answered(result)),
-    bus.on('revealFinished', () => {
-      world.revealDone();
-      effects.sync(world.followers, true); // the newcomer makes its entrance
+    bus.on('answerMatched', ({ result }) => {
+      const at = revealBuildUpMs(result.match.tier) + REVEAL_TIMING.nameDelayMs;
+      const timer = setTimeout(() => {
+        joins.delete(timer);
+        world.join(result);
+        effects.sync(world.followers, true); // the newcomer makes its entrance
+      }, at);
+      joins.add(timer);
     }),
-    bus.on('biomeEntered', ({ biome }) => world.enterBiome(biome.id as BiomeId)),
   ];
 
   return {
@@ -137,6 +147,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       ),
     dispose() {
       for (const stop of stops) stop();
+      cancelJoins();
       observer.disconnect();
       clearTimeout(resizeTimer);
       window.removeEventListener('orientationchange', relayout);
