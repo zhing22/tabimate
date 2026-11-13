@@ -35,6 +35,28 @@ export function clampInput(raw: string, max: number = MAX_INPUT_LENGTH): string 
   return last >= 0xd800 && last <= 0xdbff ? cut.slice(0, -1) : cut;
 }
 
+const words = (text: string) => text.split(' ').length;
+
+/**
+ * Whether a close (non-exact) hit is really one animal, not a list of them.
+ * Checked only for close hits on multi-word guesses: an exact name is never a
+ * list, and a list needs more than one word.
+ *  - At most one word more than the name it matched ("a red fox", "snow leo"),
+ *    so a list of misspelled names ("plattypus tigerr koalaa") can't pass.
+ *  - No two different animals named in full ("snow leopard tiger").
+ */
+function closeEnough(
+  text: string,
+  hit: Hit,
+  candidates: readonly Candidate[],
+  animals: ReadonlyMap<AnimalId, Animal>,
+): boolean {
+  if (!text.includes(' ')) return true;
+  const names = candidates.find((c) => c.animalId === hit.animalId)?.names ?? [];
+  const longest = Math.max(1, ...names.map(words));
+  return words(text) <= longest + 1 && !namesSeveralAnimals(text, animals);
+}
+
 /**
  * Scores what the player typed against one prompt. Empty input, and a list
  * naming several animals, is always a miss. Input past MAX_INPUT_LENGTH is ignored, and result.input holds the cut text.
@@ -48,23 +70,13 @@ export function matchAnswer(
 ): MatchResult {
   const rawInput = clampInput(typed);
   const text = normalize(rawInput);
+  const candidates = buildCandidates(prompt, animals);
   const found =
-    text === ''
-      ? null
-      : runStrategies(
-          { text, promptId: prompt.id },
-          buildCandidates(prompt, animals),
-          cfg,
-          strategies,
-        );
-  // A list of animals is never one answer. Checked only when it could matter:
-  // an exact name is not a list, and a list needs more than one word.
-  const isList =
-    found !== null &&
-    found.strategy !== 'exact' &&
-    text.includes(' ') &&
-    namesSeveralAnimals(text, animals);
-  const hit = isList ? null : found;
+    text === '' ? null : runStrategies({ text, promptId: prompt.id }, candidates, cfg, strategies);
+  const hit =
+    found && (found.strategy === 'exact' || closeEnough(text, found, candidates, animals))
+      ? found
+      : null;
   if (!hit) return { tier: 0, animalId: null, strategy: null, input: rawInput };
   return { tier: hit.tier, animalId: hit.animalId, strategy: hit.strategy, input: rawInput };
 }

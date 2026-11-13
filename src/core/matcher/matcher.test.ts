@@ -51,6 +51,34 @@ describe('lists of animals', () => {
   ])('%j still names one animal', (raw, id) => {
     expect(match(raw).animalId).toBe(id);
   });
+
+  // The list check only runs for a non-exact hit on a multi-word guess. These
+  // pin the cases around that shortcut.
+  it.each(['snow leopard', 'Killer whales', 'brown bear', 'amur leopard'])(
+    '%j, a multi-word exact name, is never treated as a list',
+    (raw) => {
+      expect(match(raw).strategy).toBe('exact');
+    },
+  );
+
+  it.each([
+    ['plattypus tigerr koalaa'], // misspelled, so no name is found in full: too many words
+    ['snow leopard tiger'], // an exact name plus another animal is a list, not exact
+    ['tigerr platypuss sun bearr'],
+  ])('%j is still rejected as a list', (raw) => {
+    expect(match(raw)).toMatchObject({ tier: 0, strategy: null });
+  });
+
+  it('still corrects a fuzzy multi-word guess naming one animal', () => {
+    expect(match('snow leo')).toMatchObject({ animalId: 'snow-leopard', strategy: 'partial' });
+  });
+
+  it.each([
+    ['a red foxx', 'red-fox'], // one extra word is fine
+    ['the platipus', 'platypus'],
+  ])('corrects %j: one word more than the name is allowed', (raw, id) => {
+    expect(match(raw).animalId).toBe(id);
+  });
 });
 
 describe('strategies', () => {
