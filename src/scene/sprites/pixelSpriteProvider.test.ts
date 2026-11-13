@@ -84,10 +84,10 @@ function setup(
     loadSheet,
     fallback,
     toImage: (pixels) => pixels as unknown as HTMLCanvasElement,
-    toPortrait: (_pixels, frame) => ({
-      src: `pixel:${frame.x},${frame.y}`,
-      width: frame.w,
-      height: frame.h,
+    toPortrait: (_pixels, sheet) => ({
+      src: `pixel:${sheet.frames[0]!.x},${sheet.frames[0]!.y}`,
+      width: sheet.frameWidth,
+      height: sheet.frameHeight,
       facesLeft: false,
     }),
   });

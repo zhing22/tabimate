@@ -26,8 +26,14 @@ export function partyLineup(rounds: readonly TeamRound[], portraits?: Portraits)
     },
     ...[...members]
       .reverse()
-      .map((r) => portrait(r.animal, r.result.match.tier === 5, { scale: SCALE, portraits })),
-    portrait(null, false, { scale: SCALE, portraits }),
+      .map((r) =>
+        portrait(r.animal, r.result.match.tier === 5, { scale: SCALE, portraits, walking: true }),
+      ),
+    portrait(null, false, { scale: SCALE, portraits, walking: true }),
+  );
+  // Each one bobs a little out of step with the next, like the scene's party.
+  [...el.children].forEach((child, i) =>
+    (child as HTMLElement).style.setProperty('--i', String(i)),
   );
   return { el, destroy: () => {} };
 }

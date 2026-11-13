@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_VISIBLE_WIDTH } from '@/config/render';
+import { MAX_VISIBLE_WIDTH, MIN_VISIBLE_WIDTH } from '@/config/render';
 import { computeViewport } from './viewport';
 
 describe('computeViewport', () => {
@@ -42,5 +42,25 @@ describe('computeViewport', () => {
   it('handles fractional device pixel ratios', () => {
     const v = computeViewport(412, 400, 2.625); // 1081.5 x 1050 device px
     expect(v).toMatchObject({ canvasW: 1082, canvasH: 1050, scale: 5, visibleWidth: 216 });
+  });
+});
+
+describe('computeViewport on tall screens', () => {
+  it('keeps a phone upright at the play scale when the scene fills the whole screen', () => {
+    const split = computeViewport(390, 360, 3); // the scene band during play
+    const full = computeViewport(390, 844, 3); // behind the results card
+    expect(full.scale).toBe(split.scale);
+    expect(full.visibleWidth).toBe(195);
+    expect(full.offsetY).toBe(844 * 3 - 180 * 6); // the rest is sky
+  });
+
+  it('never shows less than MIN_VISIBLE_WIDTH of world', () => {
+    for (const [w, h, dpr] of [
+      [320, 900, 2],
+      [390, 844, 3],
+      [360, 780, 4],
+    ] as const) {
+      expect(computeViewport(w, h, dpr).visibleWidth).toBeGreaterThanOrEqual(MIN_VISIBLE_WIDTH);
+    }
   });
 });

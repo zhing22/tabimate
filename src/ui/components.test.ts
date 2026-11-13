@@ -331,6 +331,35 @@ describe('results: team rows, answers and the party', () => {
     expect(img.classList.contains('portrait__sprite--flip')).toBe(true);
   });
 
+  it('plays the walk cycle in place when asked, from the frames strip', async () => {
+    const image = {
+      src: 'data:still',
+      width: 24,
+      height: 24,
+      facesLeft: false,
+      walk: { src: 'data:strip', frames: 4, fps: 8 },
+    };
+    const el = portrait(tiger, false, {
+      scale: 2,
+      portraits: () => Promise.resolve(image),
+      walking: true,
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+    const walk = el.querySelector<HTMLElement>('.portrait__walk')!;
+    expect(walk.style.width).toBe('48px');
+    expect(walk.style.backgroundImage).toContain('data:strip');
+    expect(walk.style.backgroundSize).toBe('192px 48px');
+    expect(walk.style.getPropertyValue('--walk-to')).toBe('-192px');
+    expect(walk.style.getPropertyValue('--walk-steps')).toBe('4');
+    expect(walk.style.getPropertyValue('--walk-s')).toBe('0.5s');
+
+    const still = portrait(tiger, false, { scale: 2, portraits: () => Promise.resolve(image) });
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(still.querySelector('img')?.getAttribute('src')).toBe('data:still');
+  });
+
   it('keeps the emoji when there is no sprite', async () => {
     const el = portrait(fox, false, { scale: 2, portraits: () => Promise.resolve(null) });
     await Promise.resolve();
@@ -341,5 +370,11 @@ describe('results: team rows, answers and the party', () => {
     const { el } = partyLineup([round(fox, 1), round(null, 0), round(tiger, 4)]);
     expect([...el.children].map((c) => c.textContent)).toEqual(['🐅', '🦊', '🧑']);
     expect(el.getAttribute('aria-label')).toBe('You and Red fox, Tiger');
+    // Each steps a little out of time with the next.
+    expect([...el.children].map((c) => (c as HTMLElement).style.getPropertyValue('--i'))).toEqual([
+      '0',
+      '1',
+      '2',
+    ]);
   });
 });

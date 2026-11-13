@@ -1,4 +1,4 @@
-import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT } from '@/config/render';
+import { MAX_VISIBLE_WIDTH, MIN_VISIBLE_WIDTH, NATIVE_HEIGHT } from '@/config/render';
 
 export interface Viewport {
   /** Device pixels per native pixel: always a whole number. */
@@ -24,7 +24,11 @@ export interface Viewport {
 export function computeViewport(cssW: number, cssH: number, dpr: number): Viewport {
   const canvasW = Math.round(cssW * dpr);
   const canvasH = Math.round(cssH * dpr);
-  const scale = Math.max(1, Math.floor(canvasH / NATIVE_HEIGHT));
+  // As tall as fits, but never so zoomed in that the world is narrower than
+  // MIN_VISIBLE_WIDTH (extra height is sky, above the scene).
+  const byHeight = Math.floor(canvasH / NATIVE_HEIGHT);
+  const byWidth = Math.floor(canvasW / MIN_VISIBLE_WIDTH);
+  const scale = Math.max(1, Math.min(byHeight, byWidth));
   const visibleWidth = Math.min(MAX_VISIBLE_WIDTH, Math.floor(canvasW / scale));
   const drawWidth = Math.min(MAX_VISIBLE_WIDTH, Math.ceil(canvasW / scale));
   return {

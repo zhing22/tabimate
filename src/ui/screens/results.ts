@@ -33,6 +33,9 @@ const SAID: Readonly<Record<ShareOutcome, string>> = {
   cancelled: SHARE_LABEL,
   failed: "Couldn't copy",
 };
+/** On <html> while the results show (base.css: no phone split-screen). */
+export const RESULTS_CLASS = 'is-results';
+
 /** How long the button says "Copied!" before it reads "Share" again. */
 export const SAID_MS = 2_000;
 
@@ -114,7 +117,10 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     ),
   );
   focus(heading);
+  // Lets the layout show the scene full-window behind this card on phones too.
+  document.documentElement.classList.add(RESULTS_CLASS);
   return () => {
+    document.documentElement.classList.remove(RESULTS_CLASS);
     timer.destroy();
     team.destroy();
     party.destroy();

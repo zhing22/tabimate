@@ -9,7 +9,7 @@ import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
 import { createApp, type FinishedRun } from './app';
 import type { ShareOutcome } from '@/core/share';
-import { SAID_MS } from './screens/results';
+import { RESULTS_CLASS, SAID_MS } from './screens/results';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
 
@@ -73,6 +73,7 @@ function answer(t: ReturnType<typeof setup>, text: string) {
 
 beforeEach(() => {
   document.body.innerHTML = '';
+  document.documentElement.className = ''; // a results screen left mounted marks <html>
 });
 
 describe('app: playing with the keyboard', () => {
@@ -478,5 +479,18 @@ describe('app: the Share button', () => {
     await settle();
     expect(seen.filter((text) => text === 'Copied!')).toHaveLength(2);
     expect(seen.at(-2)).toBe('');
+  });
+});
+
+describe('app: results layout', () => {
+  it('marks the page while the results show, so phones get the full-window scene', () => {
+    const t = setup();
+    t.app.showStart();
+    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(false);
+    t.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(true);
+    t.app.destroy();
+    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(false);
   });
 });

@@ -13,9 +13,43 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: var(--space-1);
+  /* Room between the animals and the traveller, as in the scene. */
+  gap: var(--space-4);
   min-height: 56px;
   padding: var(--space-2) var(--space-3) 0;
   overflow-x: auto;
   border-bottom: 4px solid var(--paper-edge);
+}
+
+/* The party walks on the spot: a pixel bob for everyone, each a step out of
+   time with the next, and the walk cycle for animals with a sprite sheet. */
+.party .portrait {
+  animation: party-step 0.5s steps(1) infinite;
+  animation-delay: calc(var(--i, 0) * -0.13s);
+}
+
+.portrait__walk {
+  display: block;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: walk-cycle var(--walk-s, 0.5s) steps(var(--walk-steps, 4)) infinite;
+}
+
+@keyframes party-step {
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes walk-cycle {
+  to {
+    background-position-x: var(--walk-to);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .party .portrait,
+  .portrait__walk {
+    animation: none;
+  }
 }

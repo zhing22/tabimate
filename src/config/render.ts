@@ -12,6 +12,13 @@ export const NATIVE_HEIGHT = 180;
  */
 export const MAX_VISIBLE_WIDTH = 640;
 
+/**
+ * Narrowest world view (native px). A tall, narrow screen (a phone upright,
+ * with the scene behind the whole page) would otherwise zoom right in; this
+ * keeps the scale where the world is at least this wide.
+ */
+export const MIN_VISIBLE_WIDTH = 180;
+
 /** The walk line: characters' feet rest here. */
 export const GROUND_Y = 150;
 
@@ -40,8 +47,11 @@ export const PROP_BASE_Y = GROUND_Y - 3;
 /** Where the player stands, as a share of the visible width from the left. */
 export const PLAYER_SCREEN_X = 0.75;
 
-/** Path distance between one follower and the next (native px). */
-export const FOLLOWER_SPACING = 19;
+/**
+ * Path distance between one follower and the next (native px): a large (24 px)
+ * animal plus a few pixels of space, so the party reads as separate animals.
+ */
+export const FOLLOWER_SPACING = 28;
 
 /** Each follower steps this much later than the one in front (seconds into the walk). */
 export const FOLLOWER_STEP_OFFSET_S = 0.13;

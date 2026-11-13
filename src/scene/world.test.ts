@@ -80,7 +80,8 @@ describe('world: a run', () => {
     }
     const p: Point = { x: 0, y: 0 };
     const xs = w.followers.map((_, k) => w.trail.pointBehind((k + 1) * FOLLOWER_SPACING, p).x);
-    expect(xs).toEqual([160 - 19, 160 - 38, 160 - 57]);
+    const s = FOLLOWER_SPACING;
+    expect(xs).toEqual([160 - s, 160 - 2 * s, 160 - 3 * s]);
   });
 
   it('crossfades to a new biome, and ends the fade', () => {
@@ -126,7 +127,9 @@ describe('world: restore', () => {
     expect(w.player.walking).toBe(false);
     expect(w.biome).toMatchObject({ from: null, to: 'grassland' });
     // Followers can stand behind a player restored mid-journey.
-    expect(w.trail.pointBehind(FOLLOWER_SPACING, { x: 0, y: 0 }).x).toBe(w.player.x - 19);
+    expect(w.trail.pointBehind(FOLLOWER_SPACING, { x: 0, y: 0 }).x).toBe(
+      w.player.x - FOLLOWER_SPACING,
+    );
   });
 
   it('starts over when restored again', () => {

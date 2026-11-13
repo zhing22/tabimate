@@ -5,7 +5,7 @@ import type { Animal, AnimalId } from '@/core/types';
 import { makeCanvas, portraitFrom } from './canvasArt';
 import { blinkPalette, resolvePalette } from './paletteUtils';
 import { recolor, type Pixels } from './recolor';
-import { parseAsepriteSheet, type FrameRect, type SheetInfo } from './sheet';
+import { parseAsepriteSheet, type SheetInfo } from './sheet';
 import type { SpriteProvider, SpriteRef } from './spriteProvider';
 
 /** What the provider needs about colours and sheets (see data/spriteArtSource). */
@@ -30,7 +30,7 @@ export interface PixelSpriteOptions {
   /** Turns recoloured pixels into something Kaplay can load. Tests swap it out. */
   readonly toImage?: (pixels: Pixels) => ImageSource;
   /** Turns a recoloured sheet's first frame into a UI still. Tests swap it out. */
-  readonly toPortrait?: (pixels: Pixels, frame: FrameRect) => PortraitImage;
+  readonly toPortrait?: (pixels: Pixels, sheet: SheetInfo) => PortraitImage;
 }
 
 /**
@@ -54,6 +54,24 @@ function toCanvas({ width, height, data }: Pixels): HTMLCanvasElement {
 }
 
 /**
+ * A UI still from a recoloured sheet: its first frame, plus its walk cycle
+ * laid out in one row so the page can play it in place.
+ */
+function portraitOfSheet(pixels: Pixels, sheet: SheetInfo): PortraitImage {
+  const canvas = toCanvas(pixels);
+  const still = portraitFrom(canvas, sheet.frames[0]!, false);
+  const walk = sheet.tags.walk;
+  if (!walk) return still;
+  const frames = walk.to - walk.from + 1;
+  const { canvas: strip, ctx } = makeCanvas(sheet.frameWidth * frames, sheet.frameHeight);
+  for (let i = 0; i < frames; i++) {
+    const f = sheet.frames[walk.from + i]!;
+    ctx.drawImage(canvas, f.x, f.y, f.w, f.h, i * sheet.frameWidth, 0, f.w, f.h);
+  }
+  return { ...still, walk: { src: strip.toDataURL('image/png'), frames, fps: walk.fps } };
+}
+
+/**
  * Real pixel sprites: each archetype's sheet is recoloured once per animal
  * (and once more for shiny, and for the blink frames) from palettes.json, and
  * registered with Kaplay with its frame tags. Anything without a sheet or a
@@ -66,11 +84,9 @@ export function createPixelSpriteProvider(
   const refs = new Map<Animal, readonly [plain: SpriteRef, shiny: SpriteRef]>();
   const warned = new Set<string>();
   const toImage = options.toImage ?? toCanvas;
-  const toPortrait =
-    options.toPortrait ??
-    ((pixels: Pixels, frame: FrameRect) => portraitFrom(toCanvas(pixels), frame, false));
-  // Each sprite's recoloured sheet and first frame, made into a portrait on first ask.
-  const stills = new Map<string, { pixels: Pixels; frame: FrameRect; image?: PortraitImage }>();
+  const toPortrait = options.toPortrait ?? portraitOfSheet;
+  // Each sprite's recoloured sheet, made into a portrait on first ask.
+  const stills = new Map<string, { pixels: Pixels; sheet: SheetInfo; image?: PortraitImage }>();
 
   const register = (name: string, pixels: Pixels, sheet: SheetInfo) => {
     const { width, height } = pixels;
@@ -99,7 +115,7 @@ export function createPixelSpriteProvider(
       if (!palette) return; // validation makes this rare; the emoji stands in
       const name = `pixel/${animal.id}${shiny ? '/shiny' : ''}`;
       const open = recolor(sheet.pixels, TEMPLATE_KEYS, palette);
-      stills.set(name, { pixels: open.pixels, frame: sheet.info.frames[0]! });
+      stills.set(name, { pixels: open.pixels, sheet: sheet.info });
       const shut = recolor(sheet.pixels, TEMPLATE_KEYS, blinkPalette(palette));
       if (import.meta.env.DEV && open.unknown.length > 0 && !warned.has(animal.archetype)) {
         warned.add(animal.archetype);
@@ -159,7 +175,7 @@ export function createPixelSpriteProvider(
       const ref = animal ? refs.get(animal)?.[shiny ? 1 : 0] : undefined;
       const still = ref && stills.get(ref.name);
       if (!still) return options.fallback.portrait(animal, shiny);
-      still.image ??= toPortrait(still.pixels, still.frame);
+      still.image ??= toPortrait(still.pixels, still.sheet);
       return still.image;
     },
   };

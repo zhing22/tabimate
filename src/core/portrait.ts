@@ -13,6 +13,11 @@ export interface PortraitImage {
   readonly height: number;
   /** The party walks right; a sprite drawn facing left should be flipped. */
   readonly facesLeft: boolean;
+  /**
+   * Its walk cycle, when the sprite has one: the frames side by side in one
+   * image (each `width` x `height`), to play in place at `fps`.
+   */
+  readonly walk?: { readonly src: string; readonly frames: number; readonly fps: number };
 }
 
 /**

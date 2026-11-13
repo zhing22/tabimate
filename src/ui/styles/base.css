@@ -147,13 +147,15 @@ input {
     }
   }
 
-  #scene {
+  /* The results screen (html.is-results) keeps the full-window scene with its
+     card over it, like desktop: the biome reached fills the whole screen. */
+  :root:not(.is-results) #scene {
     bottom: auto;
     top: calc(var(--vv-top, 0px) + var(--scene-shown) - var(--scene-h));
     height: var(--scene-h);
   }
 
-  #ui {
+  :root:not(.is-results) #ui {
     top: calc(var(--vv-top, 0px) + var(--scene-shown));
     height: calc(var(--vv-height, 100dvh) - var(--scene-shown));
     padding-top: var(--space-3);
