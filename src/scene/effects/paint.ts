@@ -1,4 +1,5 @@
 import type { Color, DrawRectOpt, KAPLAYCtx } from 'kaplay';
+import type { Range } from '@/config/effects';
 import type { Particles, Twinkle } from './particles';
 import type { EffectTarget } from './types';
 
@@ -21,6 +22,9 @@ export function createPainter(k: KAPLAYCtx, target: EffectTarget, hexes: readonl
     rect.color = colours[colour] ?? colours[0]!;
     k.drawRect(rect);
   };
+  // Made once and passed to every forEach: a new arrow per frame would allocate.
+  const dot = (x: number, y: number, alpha: number, colour: number) =>
+    fill(x, y, 1, 1, alpha, colour);
 
   return {
     /** A plus-shaped star: a centre pixel with arms `arm` long. */
@@ -33,7 +37,7 @@ export function createPainter(k: KAPLAYCtx, target: EffectTarget, hexes: readonl
       fill(x, y + 1, 1, arm, opacity * 0.8, colour);
     },
     particles(p: Particles) {
-      p.forEach((x, y, alpha, colour) => fill(x, y, 1, 1, alpha, colour));
+      p.forEach(dot);
     },
     /**
      * A twinkle: grows and shrinks, or with reduced motion only fades (a star
@@ -48,8 +52,8 @@ export function createPainter(k: KAPLAYCtx, target: EffectTarget, hexes: readonl
   };
 }
 
-/** Calls back every `min`-`max` seconds (random each time), as time is fed in. */
-export function every(minS: number, maxS: number, random: () => number) {
+/** Calls back every [min, max] seconds (random each time), as time is fed in. */
+export function every([minS, maxS]: Range, random: () => number) {
   const gap = () => minS + random() * (maxS - minS);
   let left = gap();
   return (dtS: number): boolean => {
@@ -59,6 +63,10 @@ export function every(minS: number, maxS: number, random: () => number) {
     return true;
   };
 }
+
+/** A value picked at random from [min, max]. */
+export const pick = ([min, max]: Range, random: () => number): number =>
+  min + random() * (max - min);
 
 /** A random point on the upper part of a sprite, relative to its feet. */
 export const pointOn = (target: EffectTarget, random: () => number) => ({

@@ -7,7 +7,8 @@ import { SOUNDS, tierSound, type SoundName } from './sounds';
 export const MUTED_KEY = 'tabimate.muted';
 /** Everything is quiet blips; this keeps them comfortably below full scale. */
 const MASTER_VOLUME = 0.5;
-const UNLOCK_EVENTS = ['pointerdown', 'keydown', 'touchend'] as const;
+// touchend and click as well as pointerdown: iOS only lets audio start on some of them.
+const UNLOCK_EVENTS = ['pointerdown', 'touchend', 'click', 'keydown'] as const;
 
 export interface AudioDeps {
   readonly bus: GameBus;
@@ -41,16 +42,35 @@ export function createAudio(deps: AudioDeps): GameAudio {
   const timers = new Set<ReturnType<typeof setTimeout>>();
   const ticks = new Set<ReturnType<typeof setTimeout>>();
 
-  const unlock = () => {
-    try {
-      ctx ??= createContext();
-      if (ctx.state === 'suspended') void ctx.resume();
-    } catch {
-      ctx = null; // no Web Audio here: the game is silent, and that's fine
+  // Every tap or key press tries to start audio until it is actually running:
+  // a browser may not count the first one (iOS and pointerdown), and audio can
+  // be suspended again later (a phone call), which starts the listening over.
+  let listening = false;
+  let broken = false;
+  const listen = (on: boolean) => {
+    if (on === listening || (on && broken)) return;
+    listening = on;
+    for (const type of UNLOCK_EVENTS) {
+      if (on) unlockOn.addEventListener(type, unlock);
+      else unlockOn.removeEventListener(type, unlock);
     }
-    for (const type of UNLOCK_EVENTS) unlockOn.removeEventListener(type, unlock);
   };
-  for (const type of UNLOCK_EVENTS) unlockOn.addEventListener(type, unlock);
+  const settle = () => listen(ctx?.state !== 'running');
+  function unlock() {
+    if (!ctx) {
+      try {
+        ctx = createContext();
+        ctx.addEventListener('statechange', settle);
+      } catch {
+        broken = true; // no Web Audio here: the game is silent, and that's fine
+        listen(false);
+        return;
+      }
+    }
+    if (ctx.state === 'running') settle();
+    else void ctx.resume().then(settle, settle);
+  }
+  listen(true);
 
   function play(name: SoundName) {
     if (muted || !ctx || ctx.state !== 'running') return;
@@ -120,7 +140,9 @@ export function createAudio(deps: AudioDeps): GameAudio {
       for (const stop of stops) stop();
       cancel(timers);
       cancel(ticks);
-      for (const type of UNLOCK_EVENTS) unlockOn.removeEventListener(type, unlock);
+      broken = true; // never listen again
+      listen(false);
+      ctx?.removeEventListener('statechange', settle);
       void ctx?.close();
     },
   };

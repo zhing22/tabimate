@@ -17,6 +17,7 @@ export interface EffectsLayer {
   /**
    * Starts effects for followers that don't have one (with their entrance if
    * `burst`) and stops those of followers that are gone (after a restore).
+   * Without `burst` (a rebuild) any running shake stops too.
    */
   sync(followers: readonly Decorated[], burst: boolean): void;
   dispose(): void;
@@ -67,6 +68,11 @@ export function createEffectsLayer(k: KAPLAYCtx, options: EffectsLayerOptions): 
       for (const step of steps) step();
     },
     sync(followers, burst) {
+      // A rebuild (a restore) starts from rest: no shake left over from before.
+      if (!burst) {
+        shakeLeftS = 0;
+        offset.x = offset.y = 0;
+      }
       const current = new Set(followers);
       for (const [follower, stop] of live) {
         if (current.has(follower)) continue;

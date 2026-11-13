@@ -1,7 +1,9 @@
+import { EFFECT_SETTINGS } from '@/config/effects';
 import { createTwinkle } from './particles';
 import { createPainter, every, pointOn } from './paint';
 import type { Effect } from './types';
 
+const S = EFFECT_SETTINGS.glint;
 const WHITE = '#ffffff';
 
 /**
@@ -11,9 +13,9 @@ const WHITE = '#ffffff';
  */
 export const glint: Effect = (k, target, opts) => {
   const paint = createPainter(k, target, [WHITE]);
-  const flash = createTwinkle(0.45);
-  const idle = createTwinkle(0.35);
-  const nextIdle = every(3, 6, opts.random);
+  const flash = createTwinkle(S.flashS);
+  const idle = createTwinkle(S.twinkleS);
+  const nextIdle = every(S.idleEveryS, opts.random);
   if (opts.burst) flash.start(Math.round(target.size * 0.3), -target.size + 2);
 
   const updating = k.onUpdate(() => {
@@ -26,7 +28,7 @@ export const glint: Effect = (k, target, opts) => {
     }
   });
   const removeDraw = opts.draw(() => {
-    paint.twinkle(flash, 3, opts.reducedMotion);
+    paint.twinkle(flash, S.flashArm, opts.reducedMotion);
     paint.twinkle(idle, 1, opts.reducedMotion);
   });
   return () => {

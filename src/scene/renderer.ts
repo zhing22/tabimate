@@ -1,46 +1,17 @@
-import type { Color, DrawCircleOpt, DrawRectOpt, DrawSpriteOpt, KAPLAYCtx } from 'kaplay';
+import type { Color, DrawRectOpt, DrawSpriteOpt, KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
-import {
-  FOLLOWER_SPACING,
-  GROUND_Y,
-  NATIVE_HEIGHT,
-  PLAYER_SCREEN_X,
-  PROP_BASE_Y,
-} from '@/config/render';
+import { GROUND_Y, NATIVE_HEIGHT, PLAYER_SCREEN_X, PROP_BASE_Y } from '@/config/render';
 import type { BiomeArtSprites } from './biomes/load';
 import type { EffectsLayer } from './effects/effectsLayer';
-import type { EffectTarget } from './effects/types';
-import { movementFor, type Point } from './entities/followerTrail';
-import type { Pose } from './entities/idleMotion';
 import { tile } from './layers';
 import { propsInSegment, segmentsInView, type PlacedProp } from './props';
-import type { SpriteProvider, SpriteRef } from './sprites/spriteProvider';
-import { frameAt } from './sprites/sheet';
+import { createPartyRenderer } from './renderParty';
+import type { SpriteProvider } from './sprites/spriteProvider';
 import type { Viewport } from './viewport';
-import { followerStepTime, type World } from './world';
+import type { World } from './world';
 
-const DEG = 180 / Math.PI;
-const GLOW_COLOUR = '#fbf236';
 const FOOTPRINT_COLOUR = '#222034';
 const PROP_CACHE_LIMIT = 64;
-
-/** How a character is drawn this frame, besides where. */
-interface Look {
-  pose: Pose;
-  /** 0..1 while popping in, then 1. */
-  pop: number;
-  /** Seconds into the walk, or -1 when standing (first frame). */
-  walkS: number;
-  /** Show the eyes-closed copy of the frame. */
-  blinking: boolean;
-}
-
-// A pop that overshoots a little before settling at 1.
-const popScale = (t: number) => {
-  const s = 1.70158;
-  const u = t - 1;
-  return 1 + (s + 1) * u * u * u + s * u * u;
-};
 
 /**
  * Draws the world each frame, back to front. Option objects and vectors are
@@ -55,8 +26,6 @@ export function createRenderer(
   effects: Pick<EffectsLayer, 'offset' | 'drawFront'>,
 ) {
   const pos = k.vec2(0, 0);
-  const glowPos = k.vec2(0, 0);
-  const glow: DrawCircleOpt = { radius: 0, pos: glowPos, color: k.rgb(GLOW_COLOUR), opacity: 0 };
   const scale = k.vec2(1, 1);
   const printPos = k.vec2(0, 0);
   const sprite: DrawSpriteOpt = {
@@ -82,8 +51,7 @@ export function createRenderer(
     skyColours.set(id, [k.rgb(a.sky[0]), k.rgb(a.sky[1])]);
   }
   const propCache = new Map<string, readonly PlacedProp[]>();
-  const onPath: Point = { x: 0, y: 0 };
-  const placed: Point = { x: 0, y: 0 };
+  const drawParty = createPartyRenderer(k, world, sprites);
 
   const drawImage = (name: string, x: number, y: number, opacity: number) => {
     sprite.sprite = name;
@@ -135,39 +103,6 @@ export function createRenderer(
     }
   }
 
-  // One object, refilled for each character, so drawing them allocates nothing.
-  const look: Look = { pose: world.playerPose, pop: 1, walkS: -1, blinking: false };
-
-  function drawCharacter(
-    ref: SpriteRef,
-    x: number,
-    y: number,
-    { pose, pop, walkS, blinking }: Look,
-  ) {
-    const s = pop < 1 ? popScale(pop) : 1;
-    sprite.sprite = blinking && ref.blinkName ? ref.blinkName : ref.name;
-    sprite.frame = ref.walk && walkS >= 0 ? frameAt(ref.walk, walkS) : 0;
-    pos.x = x;
-    pos.y = y + pose.dy;
-    sprite.anchor = 'bot';
-    sprite.flipX = ref.facesLeft;
-    sprite.angle = pose.angle * DEG;
-    sprite.opacity = 1;
-    scale.x = s;
-    scale.y = s * pose.scaleY;
-    k.drawSprite(sprite);
-  }
-
-  /** A soft halo behind a follower whose effect asks for one (shiny, sparkle). */
-  function drawGlow(target: EffectTarget) {
-    if (target.glow <= 0) return;
-    glowPos.x = target.x;
-    glowPos.y = target.y - target.size / 2;
-    glow.radius = target.size * 0.65;
-    glow.opacity = target.glow * 0.35;
-    k.drawCircle(glow);
-  }
-
   return function draw(view: Viewport, ready: boolean) {
     // Everything moves together when an effect shakes the scene.
     k.pushTransform();
@@ -195,27 +130,7 @@ export function createRenderer(
     }
     if (!ready) return;
 
-    // Farthest back first, so nearer followers overlap them.
-    const { followers, trail } = world;
-    for (let i = followers.length - 1; i >= 0; i--) {
-      const f = followers[i]!;
-      trail.pointBehind((i + 1) * FOLLOWER_SPACING, onPath);
-      movementFor(f.animal.movement)(onPath, 0, 0, placed);
-      const x = Math.round(placed.x) - cameraX;
-      f.target.x = x;
-      f.target.y = Math.round(placed.y) + f.pose.dy;
-      drawGlow(f.target);
-      look.pose = f.pose;
-      look.pop = f.pop;
-      look.walkS = world.player.walking ? followerStepTime(world.player, i) : -1;
-      look.blinking = f.blink > 0;
-      drawCharacter(sprites.spriteFor(f.animal, f.shiny), x, Math.round(placed.y), look);
-    }
-    look.pose = world.playerPose;
-    look.pop = 1;
-    look.walkS = world.player.walking ? world.player.stepTime : -1;
-    look.blinking = false;
-    drawCharacter(sprites.playerSprite(), playerX - cameraX, GROUND_Y, look);
+    drawParty(cameraX);
     effects.drawFront(); // sparks and twinkles, in front of everyone
   }
 }

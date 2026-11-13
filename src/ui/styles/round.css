@@ -5,6 +5,16 @@
   justify-content: space-between;
 }
 
+/*
+ * On a phone with the keyboard up the card reaches the top of the screen,
+ * under the corner sound button: keep the timer clear of it.
+ */
+@media (max-width: 767px) {
+  .round__header {
+    padding-right: calc(var(--tap) + var(--space-2));
+  }
+}
+
 .round__prompt {
   font-size: var(--text-xl);
   line-height: 1.2;

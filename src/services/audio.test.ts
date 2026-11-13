@@ -9,6 +9,9 @@ import { createMemoryStorageAdapter } from './storage';
 /** Records the notes played, as frequencies, instead of making sound. */
 function fakeContext() {
   const played: number[] = [];
+  const events = new EventTarget();
+  // How many resume() calls to ignore before one works (a tap the browser won't count).
+  const refusals = { left: 0 };
   const param = () => ({
     setValueAtTime: vi.fn((v: number) => played.push(v)),
     linearRampToValueAtTime: vi.fn(),
@@ -19,9 +22,17 @@ function fakeContext() {
     currentTime: 0,
     destination: {},
     resume: vi.fn(() => {
-      ctx.state = 'running';
+      if (refusals.left > 0) refusals.left--;
+      else ctx.state = 'running';
       return Promise.resolve();
     }),
+    /** The system suspends audio (a phone call, on iOS). */
+    suspend() {
+      ctx.state = 'suspended';
+      events.dispatchEvent(new Event('statechange'));
+    },
+    addEventListener: (type: string, fn: () => void) => events.addEventListener(type, fn),
+    removeEventListener: (type: string, fn: () => void) => events.removeEventListener(type, fn),
     close: vi.fn(() => Promise.resolve()),
     createGain: () => ({ gain: param(), connect: (to: unknown) => to }),
     createOscillator: () => {
@@ -35,7 +46,7 @@ function fakeContext() {
       };
     },
   };
-  return { ctx, played };
+  return { ctx, played, refusals };
 }
 
 const result = (tier: 0 | 1 | 5, animalId: string | null = tier ? 'tiger' : null): RoundResult =>
@@ -45,7 +56,7 @@ const result = (tier: 0 | 1 | 5, animalId: string | null = tier ? 'tiger' : null
     match: { tier, animalId, strategy: animalId ? 'exact' : null, input: '' },
   }) as RoundResult;
 
-function setup(muted = false) {
+function setup(muted = false, createContext?: () => AudioContext) {
   const bus = createBus<GameEvents>();
   const storage = createMemoryStorageAdapter();
   if (muted) storage.set(MUTED_KEY, true);
@@ -59,14 +70,15 @@ function setup(muted = false) {
     storage,
     unlockOn,
     clock: { now: () => new Date(now.ms) },
-    createContext: () => fake.ctx as unknown as AudioContext,
+    createContext: createContext ?? (() => fake.ctx as unknown as AudioContext),
     revealTiming: { suspenseMs: 600, perTierMs: 150, badgePopMs: 0, nameDelayMs: 0 },
   });
-  const unlock = async () => {
-    unlockOn.dispatchEvent(new Event('pointerdown'));
+  const unlock = async (type = 'pointerdown') => {
+    unlockOn.dispatchEvent(new Event(type));
+    await Promise.resolve();
     await Promise.resolve();
   };
-  return { bus, storage, audio, unlock, notes, fake };
+  return { bus, storage, audio, unlock, notes, fake, now };
 }
 
 beforeEach(() => vi.useFakeTimers());
@@ -156,5 +168,58 @@ describe('sounds', () => {
         expect(n.at + n.dur).toBeLessThan(1.5);
       }
     }
+  });
+});
+
+describe('createAudio: unlocking', () => {
+  const miss = (t: ReturnType<typeof setup>) =>
+    t.bus.emit('answerRejected', { round: 0, input: 'x' });
+
+  it('keeps trying on later taps when the first one does not start audio (iOS)', async () => {
+    const t = setup();
+    t.fake.refusals.left = 1;
+    await t.unlock('pointerdown'); // not counted by the browser
+    miss(t);
+    expect(t.notes()).toEqual([]);
+    await t.unlock('touchend'); // this one is
+    miss(t);
+    expect(t.notes()).toEqual(SOUNDS.miss.map((n) => n.freq));
+    const resumes = t.fake.ctx.resume.mock.calls.length;
+    await t.unlock('click'); // running now: nothing left listening
+    expect(t.fake.ctx.resume.mock.calls.length).toBe(resumes);
+  });
+
+  it('listens again when the system suspends audio, e.g. for a call', async () => {
+    const t = setup();
+    await t.unlock();
+    t.fake.ctx.suspend();
+    miss(t);
+    expect(t.notes()).toEqual([]);
+    await t.unlock('touchend');
+    miss(t);
+    expect(t.notes()).toEqual(SOUNDS.miss.map((n) => n.freq));
+  });
+
+  it('stays silent, without errors or retries, where Web Audio is missing', async () => {
+    const createContext = vi.fn(() => {
+      throw new Error('no AudioContext');
+    });
+    const t = setup(false, createContext);
+    await t.unlock();
+    await t.unlock('click');
+    miss(t);
+    expect(createContext).toHaveBeenCalledTimes(1);
+    expect(t.notes()).toEqual([]);
+  });
+});
+
+describe('createAudio: the last-seconds tick', () => {
+  it('only ticks for the seconds still ahead when a round starts late (a reload)', async () => {
+    const t = setup();
+    await t.unlock();
+    t.now.ms = 22_000; // 3 s left: ticks at 22, 23 and 24 s, not 20 and 21
+    t.bus.emit('roundStarted', { index: 0, prompt: PROMPT, endsAt: 25_000 });
+    vi.advanceTimersByTime(5_000);
+    expect(t.notes().filter((f) => f === SOUNDS.tick[0]!.freq)).toHaveLength(3);
   });
 });

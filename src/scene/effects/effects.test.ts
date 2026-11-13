@@ -162,3 +162,65 @@ describe('effects layer', () => {
     });
   });
 });
+
+describe('glint', () => {
+  const drawnAfter = (frames: number, burst: boolean, reducedMotion = false) => {
+    const f = fakeKaplay();
+    const layer = createEffectsLayer(f.k, { reducedMotion, random: steady() });
+    layer.sync([follower(2)], burst);
+    f.step(frames);
+    f.drawRect.mockClear();
+    layer.drawFront();
+    return f.drawRect.mock.calls;
+  };
+
+  it('flashes a star as the animal joins, and nothing when rebuilding', () => {
+    expect(drawnAfter(10, true).length).toBe(5); // centre + 4 arms
+    expect(drawnAfter(10, false)).toHaveLength(0);
+  });
+
+  it('twinkles now and then afterwards', () => {
+    let seen = 0;
+    const f = fakeKaplay();
+    const layer = createEffectsLayer(f.k, { reducedMotion: false, random: steady() });
+    layer.sync([follower(3)], false);
+    for (let i = 0; i < 60 * 8; i++) {
+      f.step();
+      f.drawRect.mockClear();
+      layer.drawFront();
+      if (f.drawRect.mock.calls.length > 0) seen++;
+    }
+    expect(seen).toBeGreaterThan(0);
+  });
+
+  it('with reduced motion, fades a fixed-size star instead of growing it', () => {
+    const calls = drawnAfter(10, true, true);
+    const sizes = calls.map(([opt]) => (opt as { width: number; height: number }).width);
+    expect(Math.max(...sizes)).toBe(1); // arms stay one pixel
+  });
+});
+
+describe('effects layer: stopping', () => {
+  it('dispose stops every effect, its drawing and the shake', () => {
+    const f = fakeKaplay();
+    const layer = createEffectsLayer(f.k, { reducedMotion: false, random: steady() });
+    layer.sync([follower(5), follower(4), follower(2)], true);
+    f.step();
+    layer.dispose();
+    expect(f.updates.size).toBe(0);
+    f.drawRect.mockClear();
+    layer.drawFront();
+    expect(f.drawRect).not.toHaveBeenCalled();
+  });
+
+  it('a restore in the middle of a shake leaves the scene still', () => {
+    const f = fakeKaplay();
+    const layer = createEffectsLayer(f.k, { reducedMotion: false, random: steady() });
+    layer.sync([follower(5)], true);
+    f.step(3); // shaking
+    layer.sync([follower(1)], false); // the run is rebuilt from a save
+    expect(layer.offset).toEqual({ x: 0, y: 0 });
+    f.step();
+    expect(layer.offset).toEqual({ x: 0, y: 0 });
+  });
+});
