@@ -1,20 +1,20 @@
-# Tabimate — project brief
+# Tabimate â€” project brief
 
 ## What it is
 
-Tabimate (旅 tabi = journey + mate) is a daily browser trivia game about animals.
+Tabimate (æ—… tabi = journey + mate) is a daily browser trivia game about animals.
 Everyone gets the same prompts each day (e.g. "Name an animal that lays eggs").
-The player types an animal; rarer matched answers score a higher tier (0–5).
+The player types an animal; rarer matched answers score a higher tier (0â€“5).
 Each matched animal joins a trail of followers behind the player. Each answer moves the
 player forward by its tier; crossing score thresholds enters new biomes
-(Town → Grassland → Forest → …). The run ends with a shareable team card.
-Original art and naming only: no Pokémon names, sprites or UI.
+(Town â†’ Grassland â†’ Forest â†’ â€¦). The run ends with a shareable team card.
+Original art and naming only: no PokÃ©mon names, sprites or UI.
 
 ## Rules of the game
 
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
-  00:00–11:59 SGT still plays the previous date's puzzle.
+  00:00â€“11:59 SGT still plays the previous date's puzzle.
 - MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
   plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE). After
   each answer the result stays up until the player taps Next (or presses Enter); the
@@ -50,6 +50,9 @@ Original art and naming only: no Pokémon names, sprites or UI.
   (TIERS[].effectId: none, glint, sparkle, shiny) has a scene effect in scene/effects/
   (entrance when the animal joins, then a subtle idle loop) and a badge style in
   reveal.css. Reduced motion: no shake or particles, only fades.
+- Sharing: services/share.ts builds the share text (title, tier squares, animal emoji, the
+  site link; never animal names or prompts) from shareCard(), plain data an image card
+  can reuse. Phones get the share sheet, desktops copy to the clipboard.
 - Sound: services/audio.ts is the only thing that plays audio, driven by bus events.
   Sounds are synthesised (services/sounds.ts), unlocked on the first tap or key, and
   muted with the corner button (kept via StorageAdapter).

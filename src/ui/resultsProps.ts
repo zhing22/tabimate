@@ -12,7 +12,7 @@ export interface FinishedRun {
 
 export type AnimalOf = (result: RoundResult) => Animal | null;
 
-/** What the results screen shows for a finished run (everything but the interval). */
+/** What the results screen shows for a finished run (everything but the delay). */
 export function resultsProps(
   puzzle: Puzzle,
   animalOf: AnimalOf,

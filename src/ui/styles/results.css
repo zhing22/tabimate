@@ -2,3 +2,8 @@
 .results__number {
   font-size: var(--text-2xl);
 }
+
+.results__share {
+  display: grid;
+  justify-items: center;
+}

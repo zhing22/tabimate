@@ -7,7 +7,8 @@ import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
 import { emptyStats } from '@/core/streak';
 import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
-import { createApp } from './app';
+import { createApp, type FinishedRun } from './app';
+import type { ShareResult } from './screens/results';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
 
@@ -21,7 +22,8 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
   document.body.innerHTML = '<main id="ui"></main>';
   const root = document.querySelector<HTMLElement>('#ui')!;
   const time = createFakeTime();
-  const ui = manualTime();
+  // UI time follows the game clock, so countdown delays fall due at the right moments.
+  const ui = manualTime(time.nowMs());
   const bus = createBus<GameEvents>();
   const controller = createGameController({
     puzzle,
@@ -31,6 +33,7 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     scheduler: time.scheduler,
   });
   const reload = vi.fn();
+  const share = vi.fn<(run: FinishedRun) => Promise<ShareResult>>(() => Promise.resolve('copied'));
   // Stands in for progress: 2-day streak until today's run is recorded.
   let stats = { ...emptyStats(), streak: 2, bestStreak: 4 };
   const getStats = () => stats;
@@ -43,9 +46,10 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     clock: time.clock,
     getStats,
     reload,
+    share,
     revealTiming,
     frames: ui.frames,
-    interval: ui.interval,
+    delay: ui.delay,
   });
   // As main.ts does: record the run, then show results.
   bus.on('runFinished', ({ results, score }) => {
@@ -56,7 +60,7 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
   const input = () => $<HTMLInputElement>('#answer')!;
   const live = () => $('[aria-live]')!.textContent;
   const flush = () => Promise.resolve(); // let the live region's microtask run
-  return { root, time, ui, controller, app, reload, $, input, live, flush };
+  return { root, time, ui, controller, app, reload, share, $, input, live, flush };
 }
 
 /** Answers, then presses Enter again to move on from the reveal. */
@@ -362,13 +366,59 @@ describe('app: next puzzle', () => {
     expect(button.hidden).toBe(true);
     // The run took no fake time, so the next reset is 24 h away.
     t.time.advance(24 * 3_600_000 - 1_000);
-    t.ui.set(0);
+    t.ui.set(t.time.nowMs());
     expect(t.$('.countdown')?.textContent).toBe('00:00:01');
     t.time.advance(1_000);
-    t.ui.set(0);
+    t.ui.set(t.time.nowMs());
     expect(t.$('.countdown')?.textContent).toBe('00:00:00');
     expect(button.hidden).toBe(false);
     button.click();
     expect(t.reload).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('app: sharing', () => {
+  it('shares the finished run and says it was copied', async () => {
+    const t = setup();
+    t.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    const button = [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
+    button.click();
+    await t.flush();
+    await t.flush();
+    expect(t.share).toHaveBeenCalledTimes(1);
+    expect(t.share.mock.calls[0]![0]).toMatchObject({ score: 25 + 85 + 10 });
+    expect(t.share.mock.calls[0]![0].results.map((r) => r.match.animalId)).toEqual([
+      'platypus',
+      'tiger',
+      'killer-whale',
+    ]);
+    expect(button.textContent).toBe('Copied!');
+    expect(t.$('[role="status"]')?.textContent).toBe('Copied!');
+  });
+
+  it('says nothing when the share sheet is dismissed', async () => {
+    const t = setup();
+    t.share.mockResolvedValueOnce('cancelled');
+    t.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    const button = [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
+    button.click();
+    await t.flush();
+    await t.flush();
+    expect(button.textContent).toBe('Share');
+    expect(t.$('[role="status"]')?.textContent).toBe('');
+  });
+
+  it('opens straight on the results, ready to share, when today is already done', () => {
+    const first = setup();
+    first.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(first, text);
+    const t = setup();
+    t.controller.restore(first.controller.getState());
+    expect(t.$('#results-title')).not.toBeNull();
+    expect([...t.root.querySelectorAll('button')].some((b) => b.textContent === 'Share')).toBe(
+      true,
+    );
   });
 });

@@ -1,11 +1,11 @@
 import { countdown } from '../components/countdown';
 import { focus, h } from '../dom';
-import type { Interval } from '../frames';
+import type { Delay } from '../frames';
 import type { Screen } from '../host';
 
 export interface NoPuzzleProps {
   readonly msUntilNext: () => number;
-  readonly interval?: Interval;
+  readonly delay?: Delay;
 }
 
 export interface ReloadActions {
@@ -19,7 +19,7 @@ export const noPuzzleScreen: Screen<NoPuzzleProps, ReloadActions> = (root, props
   const timer = countdown({
     msLeft: props.msUntilNext,
     onDone: () => actions.reload(),
-    ...(props.interval ? { interval: props.interval } : {}),
+    ...(props.delay ? { delay: props.delay } : {}),
   });
   const heading = h('h1', { class: 'title title--sm', tabindex: -1 }, 'No journey today');
   root.append(

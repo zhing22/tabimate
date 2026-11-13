@@ -10,6 +10,8 @@ export interface BiomePalette {
 export interface BiomeDef {
   readonly id: string;
   readonly name: string;
+  /** Shown beside the name in share text. */
+  readonly emoji: string;
   /** Total score needed to enter this biome. The first biome must be 0. */
   readonly minScore: number;
   readonly palette: BiomePalette;
@@ -24,18 +26,21 @@ export const BIOMES = [
   {
     id: 'town',
     name: 'Town',
+    emoji: '🏘️',
     minScore: 0,
     palette: { skyTop: '#8fd3ff', skyBottom: '#e8f6ff', ground: '#b08060', accent: '#d95763' },
   },
   {
     id: 'grassland',
     name: 'Grassland',
+    emoji: '🌾',
     minScore: 50,
     palette: { skyTop: '#6cc4f5', skyBottom: '#fff4c9', ground: '#6abe30', accent: '#fbf236' },
   },
   {
     id: 'forest',
     name: 'Forest',
+    emoji: '🌲',
     minScore: 125,
     palette: { skyTop: '#5fa8c8', skyBottom: '#cfe8d0', ground: '#37946e', accent: '#8f563b' },
   },

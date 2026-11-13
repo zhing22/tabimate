@@ -91,12 +91,37 @@ describe('countdown', () => {
   it('shows HH:MM:SS and calls onDone once at zero', () => {
     const t = manualTime();
     const onDone = vi.fn();
-    const c = countdown({ msLeft: () => 2_000 - t.now(), onDone, interval: t.interval });
+    const c = countdown({ msLeft: () => 2_000 - t.now(), onDone, delay: t.delay });
     expect(c.el.textContent).toBe('00:00:02');
     t.set(2_000);
     t.set(3_000);
     expect(c.el.textContent).toBe('00:00:00');
     expect(onDone).toHaveBeenCalledTimes(1);
+    expect(t.running()).toBe(0);
+  });
+
+  // Opened 0.4 s into a second: each update must land on the second boundary,
+  // not a second after the screen opened, so it reads 00:00:00 exactly at the target.
+  it('changes exactly when the second changes, and hits zero on time', () => {
+    const t = manualTime();
+    const onDone = vi.fn();
+    const c = countdown({ msLeft: () => 3_400 - t.now(), onDone, delay: t.delay });
+    expect(c.el.textContent).toBe('00:00:04');
+    t.set(399);
+    expect(c.el.textContent).toBe('00:00:04');
+    t.set(400);
+    expect(c.el.textContent).toBe('00:00:03');
+    t.set(3_399);
+    expect(c.el.textContent).toBe('00:00:01');
+    expect(onDone).not.toHaveBeenCalled();
+    t.set(3_400);
+    expect(c.el.textContent).toBe('00:00:00');
+    expect(onDone).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops its timer when destroyed', () => {
+    const t = manualTime();
+    countdown({ msLeft: () => 60_000 - t.now(), delay: t.delay }).destroy();
     expect(t.running()).toBe(0);
   });
 });

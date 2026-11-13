@@ -52,11 +52,7 @@ describe('message screens', () => {
     const { root, host } = setup();
     const t = manualTime();
     const reload = vi.fn();
-    host.show(
-      noPuzzleScreen,
-      { msUntilNext: () => 3_000 - t.now(), interval: t.interval },
-      { reload },
-    );
+    host.show(noPuzzleScreen, { msUntilNext: () => 3_000 - t.now(), delay: t.delay }, { reload });
     expect(root.querySelector('.countdown')?.textContent).toBe('00:00:03');
     expect(document.activeElement?.tagName).toBe('H1');
     t.set(3_000);

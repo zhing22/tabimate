@@ -6,10 +6,10 @@ import type { GameController } from '@/core/gameController';
 import { pointsFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
 import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
-import type { FrameLoop, Interval } from './frames';
+import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
-import { resultsScreen } from './screens/results';
+import { resultsScreen, type ShareResult } from './screens/results';
 import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
 
 export type { FinishedRun } from './resultsProps';
@@ -27,10 +27,12 @@ export interface AppDeps {
   readonly getStats: () => Stats;
   /** Loads the page again, e.g. when a new puzzle is out. */
   readonly reload: () => void;
+  /** Shares a finished run (main.ts builds the text; see services/share.ts). */
+  readonly share: (run: FinishedRun) => Promise<ShareResult>;
   /** The reveal's beats; tests pass INSTANT_REVEAL. */
   readonly revealTiming?: RevealTiming;
   readonly frames?: FrameLoop;
-  readonly interval?: Interval;
+  readonly delay?: Delay;
 }
 
 export interface App {
@@ -98,8 +100,8 @@ export function createApp(deps: AppDeps): App {
     const props = resultsProps(puzzle, animalOf, run, () => nextPuzzleAt - now());
     host.show(
       resultsScreen,
-      { ...props, ...(deps.interval ? { interval: deps.interval } : {}) },
-      { next: deps.reload },
+      { ...props, ...(deps.delay ? { delay: deps.delay } : {}) },
+      { next: deps.reload, share: () => deps.share(run) },
     );
     host.announce(`Journey complete: ${run.score} points.`);
   }

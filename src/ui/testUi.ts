@@ -1,38 +1,42 @@
 // Test-only helpers for the UI tests. Not imported by the app.
-import type { FrameLoop, Interval } from './frames';
+import type { Delay, FrameLoop } from './frames';
 
 /**
- * Hand-cranked time for UI components: set() moves the clock and runs every
- * frame loop and interval once, so tests can check what is drawn at a moment.
+ * Hand-cranked time for UI components: set() moves the clock, runs every frame
+ * loop once, and fires every delay that has come due (in order), so tests can
+ * check what is drawn at a moment.
  */
 export function manualTime(start = 0) {
   let now = start;
   const ticks = new Set<() => void>();
-  const add = (tick: () => void) => {
+  const delays = new Set<{ due: number; fn: () => void }>();
+  const frames: FrameLoop = (tick) => {
     const entry = () => tick();
     ticks.add(entry);
-    return () => ticks.delete(entry);
+    return () => void ticks.delete(entry);
   };
-  const frames: FrameLoop = (tick) => {
-    const stop = add(tick);
-    return () => void stop();
-  };
-  const interval: Interval = (tick) => {
-    const stop = add(tick);
-    return () => void stop();
+  const delay: Delay = (fn, ms) => {
+    const entry = { due: now + ms, fn };
+    delays.add(entry);
+    return () => void delays.delete(entry);
   };
   return {
     now: () => now,
     frames,
-    interval,
+    delay,
     set(ms: number) {
       now = ms;
       for (const tick of [...ticks]) tick();
+      for (;;) {
+        const next = [...delays].filter((d) => d.due <= now).sort((a, b) => a.due - b.due)[0];
+        if (!next) break;
+        delays.delete(next);
+        next.fn();
+      }
     },
-    running: () => ticks.size,
+    running: () => ticks.size + delays.size,
   };
 }
-
 /** Types into an input the way a player does, firing the input event. */
 export function type(input: HTMLInputElement, text: string): void {
   input.value = text;

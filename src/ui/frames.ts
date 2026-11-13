@@ -9,10 +9,13 @@ export const animationFrames: FrameLoop = (tick) => {
   return () => cancelAnimationFrame(id);
 };
 
-/** Calls `tick` every `ms` until stopped. For displays that change once a second. */
-export type Interval = (tick: () => void, ms: number) => () => void;
+/**
+ * Calls `fn` once after `ms`, unless cancelled with the returned function.
+ * Countdowns reschedule it for the exact moment their display next changes.
+ */
+export type Delay = (fn: () => void, ms: number) => () => void;
 
-export const browserInterval: Interval = (tick, ms) => {
-  const id = setInterval(tick, ms);
-  return () => clearInterval(id);
+export const browserDelay: Delay = (fn, ms) => {
+  const id = setTimeout(fn, ms);
+  return () => clearTimeout(id);
 };
