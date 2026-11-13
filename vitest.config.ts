@@ -7,6 +7,12 @@ export default defineConfig({
   resolve: { alias },
   test: {
     environment: 'node',
+    // Worker threads, not child processes (Vitest's default "forks"): some
+    // sandboxed environments restrict child processes, and every file then
+    // fails at its first describe ("reading 'config'"). Not "vmThreads": its
+    // per-file VM contexts make the matcher ~40x slower than real use, which
+    // the matcher's speed test would wrongly flag.
+    pool: 'threads',
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     passWithNoTests: true,
     // So tests can read stylesheets with ?raw (ui/styles.test.ts checks the tokens).
