@@ -368,13 +368,50 @@ describe('results: team rows, answers and the party', () => {
 
   it('lines the party up behind the traveller, first to join nearest, misses left out', () => {
     const { el } = partyLineup([round(fox, 1), round(null, 0), round(tiger, 4)]);
-    expect([...el.children].map((c) => c.textContent)).toEqual(['🐅', '🦊', '🧑']);
+    const row = el.querySelector('.party__members')!;
+    expect([...row.children].map((c) => c.textContent)).toEqual(['🐅', '🦊', '🧑']);
     expect(el.getAttribute('aria-label')).toBe('You and Red fox, Tiger');
     // Each steps a little out of time with the next.
-    expect([...el.children].map((c) => (c as HTMLElement).style.getPropertyValue('--i'))).toEqual([
+    expect([...row.children].map((c) => (c as HTMLElement).style.getPropertyValue('--i'))).toEqual([
       '0',
       '1',
       '2',
     ]);
+  });
+});
+
+describe('party line-up frame', () => {
+  const tiger = { ...ANIMALS.get('tiger')!, emoji: '🐅' };
+  const rounds: TeamRound[] = [
+    {
+      prompt: { id: 'p', text: 't', answers: [] },
+      animal: tiger,
+      result: {
+        promptId: 'p',
+        timeMs: 1,
+        match: { tier: 4, animalId: 'tiger', strategy: 'exact', input: 'Tiger' },
+      },
+      answers: [],
+    },
+  ];
+
+  it("shows the biome's colours at once, at the scene's proportions", () => {
+    const { el } = partyLineup(rounds, { biomeId: 'forest' });
+    expect(el.style.getPropertyValue('--party-ground')).toBe('#37946e');
+    expect(el.style.height).toBe('168px'); // 84 native rows x2
+    expect(el.style.paddingBottom).toBe('60px'); // feet 54 rows down
+  });
+
+  it('then stands the party in the painted scenery, feet on its walk line', async () => {
+    const image = { src: 'data:forest', width: 220, height: 90, groundY: 60 };
+    const backdrops = vi.fn(() => Promise.resolve(image));
+    const { el } = partyLineup(rounds, { biomeId: 'forest', backdrops });
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(backdrops).toHaveBeenCalledWith('forest');
+    expect(el.style.backgroundImage).toContain('data:forest');
+    expect(el.style.backgroundSize).toBe('440px 180px');
+    expect(el.style.height).toBe('180px');
+    expect(el.style.paddingBottom).toBe('60px'); // (90 - 60) x2
   });
 });

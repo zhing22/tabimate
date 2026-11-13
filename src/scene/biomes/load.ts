@@ -7,6 +7,8 @@ import type { Painter } from './types';
 
 interface Placed {
   readonly sprite: string;
+  /** The painted art itself, also used for UI stills (the results backdrop). */
+  readonly canvas: HTMLCanvasElement;
   readonly width: number;
   readonly height: number;
 }
@@ -24,7 +26,7 @@ function paint(k: KAPLAYCtx, name: string, source: Painter, width: number, heigh
   const { canvas, ctx } = makeCanvas(width, height);
   source(ctx, width, height);
   k.loadSprite(name, canvas);
-  return name;
+  return { sprite: name, canvas };
 }
 
 /** Paints every biome's layers and props once, at start-up. */
@@ -33,11 +35,11 @@ export function loadBiomeArt(k: KAPLAYCtx): Readonly<Record<BiomeId, BiomeArtSpr
   for (const art of Object.values(BIOME_ART)) {
     const layers = art.layers.map((layer, i) => ({
       ...layer,
-      sprite: paint(k, `${art.id}/layer${i}`, layer.source, layer.width, layer.height),
+      ...paint(k, `${art.id}/layer${i}`, layer.source, layer.width, layer.height),
     }));
     const props = art.props.map((prop, i) => ({
       ...prop,
-      sprite: paint(k, `${art.id}/prop${i}`, prop.source, prop.width, prop.height),
+      ...paint(k, `${art.id}/prop${i}`, prop.source, prop.width, prop.height),
     }));
     const maxPropWidth = Math.max(0, ...props.map((p) => p.width));
     out[art.id] = { sky: art.sky, layers, props, maxPropWidth };

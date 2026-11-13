@@ -26,3 +26,16 @@ export interface PortraitImage {
  * UI then shows the emoji.
  */
 export type Portraits = (animal: Animal | null, shiny: boolean) => Promise<PortraitImage | null>;
+
+/** A still of a biome's scenery, for the party line-up to stand in. */
+export interface BackdropImage {
+  readonly src: string;
+  /** Native pixel size: show it at a whole multiple to keep it crisp. */
+  readonly width: number;
+  readonly height: number;
+  /** Native rows from the top to where characters' feet rest. */
+  readonly groundY: number;
+}
+
+/** The backdrop for a biome id; null when there is none (no scene). */
+export type Backdrops = (biomeId: string) => Promise<BackdropImage | null>;

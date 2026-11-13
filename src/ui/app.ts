@@ -9,7 +9,7 @@ import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
 import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
-import type { Portraits } from '@/core/portrait';
+import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
 import { resultsScreen } from './screens/results';
 import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
@@ -31,6 +31,8 @@ export interface AppDeps {
   readonly reload: () => void;
   /** Pictures of the sprites, from the scene; without them the results use emoji. */
   readonly portraits?: Portraits;
+  /** Stills of the biomes, from the scene: the line-up stands in one. */
+  readonly backdrops?: Backdrops;
   /** Shares a finished run (main.ts builds the text; see services/share.ts). */
   readonly share: (run: FinishedRun) => Promise<ShareOutcome>;
   /** The reveal's beats; tests pass INSTANT_REVEAL. */
@@ -108,6 +110,7 @@ export function createApp(deps: AppDeps): App {
         ...props,
         ...(deps.delay ? { delay: deps.delay } : {}),
         ...(deps.portraits ? { portraits: deps.portraits } : {}),
+        ...(deps.backdrops ? { backdrops: deps.backdrops } : {}),
       },
       { next: deps.reload, share: () => deps.share(run) },
     );

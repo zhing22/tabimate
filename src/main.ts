@@ -6,12 +6,11 @@ import { dailyKey, msUntilNextReset } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
-import type { Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
 import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
-import { createScene } from '@/scene/sceneManager';
+import { createScene, type Scene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
 import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
 import { createAudio } from '@/services/audio';
@@ -54,7 +53,7 @@ function startScene(
   bus: GameBus,
   puzzle: Puzzle,
   animals: ReadonlyMap<AnimalId, Animal>,
-): Portraits | null {
+): Pick<Scene, 'portraits' | 'backdrops'> | null {
   const container = document.querySelector<HTMLElement>('#scene');
   if (!container) return null;
   try {
@@ -72,7 +71,7 @@ function startScene(
       },
     });
     scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
-    return scene.portraits;
+    return scene;
   } catch (error) {
     console.error('Scene failed to start; playing without it', error);
     return null;
@@ -113,7 +112,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
 
   // The results screen shows the scene's sprites; without a scene it uses emoji.
-  const portraits = startScene(bus, puzzle, animals);
+  const scene = startScene(bus, puzzle, animals);
   startAudio(bus);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
@@ -125,7 +124,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
     animals,
     clock,
     getStats: () => progress.getStats(),
-    ...(portraits ? { portraits } : {}),
+    ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
     reload,
     // The link is this site, whatever host serves it (dev, preview or the real domain).
     share: ({ results, score }) =>

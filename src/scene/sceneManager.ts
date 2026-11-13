@@ -3,7 +3,8 @@ import type { BiomeId } from '@/config/biomes';
 import { REVEAL_TIMING, revealBuildUpMs } from '@/config/game';
 import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/render';
 import type { GameBus } from '@/core/events';
-import type { Portraits } from '@/core/portrait';
+import type { Backdrops, Portraits } from '@/core/portrait';
+import { createBackdrops } from './backdrop';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { loadBiomeArt } from './biomes/load';
 import { createEffectsLayer } from './effects/effectsLayer';
@@ -25,6 +26,8 @@ export interface Scene {
   readonly ready: Promise<void>;
   /** Stills of the sprites for the UI, once they are loaded (null if they failed). */
   readonly portraits: Portraits;
+  /** A still of a biome's scenery, for the results line-up. */
+  readonly backdrops: Backdrops;
   dispose(): void;
 }
 
@@ -75,6 +78,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
     loaded = true;
   });
   const effects = createEffectsLayer(k, { reducedMotion });
+  const backdrop = createBackdrops(art, deps.puzzleDate);
   const draw = createRenderer(k, world, art, sprites, deps.puzzleDate, effects);
 
   let view: Viewport = computeViewport(1, 1, 1);
@@ -140,6 +144,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
 
   return {
     ready,
+    backdrops: (id) => Promise.resolve(backdrop(id)),
     portraits: (animal, shiny) =>
       ready.then(
         () => sprites.portrait(animal, shiny),

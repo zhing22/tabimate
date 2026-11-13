@@ -1,4 +1,4 @@
-import type { Portraits } from '@/core/portrait';
+import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
 import { countdown } from '../components/countdown';
 import { partyLineup } from '../components/partyLineup';
@@ -17,6 +17,9 @@ export interface ResultsProps {
   readonly delay?: Delay;
   /** Sprite pictures for the line-up and team list; emoji without. */
   readonly portraits?: Portraits;
+  /** The biome reached, its scenery behind the line-up. */
+  readonly biomeId: string;
+  readonly backdrops?: Backdrops;
 }
 
 export interface ResultsActions {
@@ -74,7 +77,11 @@ function shareButton(onShare: () => Promise<ShareOutcome>, delay: Delay) {
 
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
   const team = teamCard(props.rounds, props.portraits);
-  const party = partyLineup(props.rounds, props.portraits);
+  const party = partyLineup(props.rounds, {
+    portraits: props.portraits,
+    backdrops: props.backdrops,
+    biomeId: props.biomeId,
+  });
   const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const nextButton = h(
     'button',
