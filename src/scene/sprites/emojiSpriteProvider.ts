@@ -1,7 +1,8 @@
 import type { KAPLAYCtx } from 'kaplay';
 import { PLAYER_SIZE, SIZE_PX } from '@/config/render';
+import type { PortraitImage } from '@/core/portrait';
 import type { Animal } from '@/core/types';
-import { hardenAlpha, makeCanvas, outline } from './canvasArt';
+import { hardenAlpha, makeCanvas, outline, portraitFrom } from './canvasArt';
 import { paintPlayer } from './playerArt';
 import type { SpriteProvider, SpriteRef } from './spriteProvider';
 
@@ -46,7 +47,14 @@ export function createEmojiSpriteProvider(k: KAPLAYCtx): SpriteProvider {
     return pair[shiny ? 1 : 0];
   };
 
-  const register = (name: string, canvas: HTMLCanvasElement) =>
+  // Kept for portraits: the same pictures the scene draws.
+  const canvases = new Map<string, HTMLCanvasElement>();
+  const portraits = new Map<string, PortraitImage>();
+  const register = (name: string, canvas: HTMLCanvasElement) => {
+    canvases.set(name, canvas);
+    return registerSprite(name, canvas);
+  };
+  const registerSprite = (name: string, canvas: HTMLCanvasElement) =>
     new Promise<void>((resolve, reject) => {
       k.loadSprite(name, canvas)
         .onLoad(() => resolve())
@@ -68,5 +76,20 @@ export function createEmojiSpriteProvider(k: KAPLAYCtx): SpriteProvider {
     },
     spriteFor: refFor,
     playerSprite: () => player,
+    portrait(animal, shiny) {
+      const ref = animal ? refFor(animal, shiny) : player;
+      let image = portraits.get(ref.name);
+      if (!image) {
+        const canvas = canvases.get(ref.name);
+        if (!canvas) return null;
+        image = portraitFrom(
+          canvas,
+          { x: 0, y: 0, w: canvas.width, h: canvas.height },
+          ref.facesLeft,
+        );
+        portraits.set(ref.name, image);
+      }
+      return image;
+    },
   };
 }

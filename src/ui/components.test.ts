@@ -2,8 +2,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
 import { TIERS } from '@/config/tiers';
+import { ANIMALS } from '@/core/matcher/testFixtures';
 import { countdown } from './components/countdown';
-import { teamCard } from './components/teamCard';
+import { partyLineup } from './components/partyLineup';
+import { portrait } from './components/portrait';
+import { teamCard, type TeamRound } from './components/teamCard';
+import { answerLines } from './resultsProps';
 import { tierBadge } from './components/tierBadge';
 import { timerRing } from './components/timerRing';
 import { formatCountdown, secondsLeft } from './format';
@@ -155,6 +159,7 @@ describe('tierBadge and teamCard', () => {
       {
         prompt,
         animal: null,
+        answers: [],
         result: {
           promptId: 'p',
           timeMs: 1,
@@ -266,5 +271,75 @@ describe('revealScreen beats', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+});
+
+describe('results: team rows, answers and the party', () => {
+  const tiger = { ...ANIMALS.get('tiger')!, emoji: '🐅' };
+  const fox = { ...ANIMALS.get('red-fox')!, emoji: '🦊' };
+  const prompt = {
+    id: 'p',
+    text: 'Has stripes',
+    answers: [
+      { animalId: 'red-fox', tier: 1 as const },
+      { animalId: 'tiger', tier: 4 as const },
+      { animalId: 'snow-leopard', tier: 3 as const },
+    ],
+  };
+  const round = (animal: typeof tiger | null, tier: 0 | 1 | 4 | 5): TeamRound => ({
+    prompt,
+    animal,
+    result: {
+      promptId: 'p',
+      timeMs: 1,
+      match:
+        animal && tier
+          ? { tier, animalId: animal.id, strategy: 'exact', input: animal.display }
+          : { tier: 0, animalId: null, strategy: null, input: '' },
+    },
+    answers: answerLines(prompt, ANIMALS, animal?.id ?? null),
+  });
+
+  it('lists every answer by points, rarest first, marking the one found', () => {
+    expect(answerLines(prompt, ANIMALS, 'tiger')).toEqual([
+      { name: 'Tiger', tier: 4, points: 85, picked: true },
+      { name: 'Snow leopard', tier: 3, points: 50, picked: false },
+      { name: 'Red fox', tier: 1, points: 10, picked: false },
+    ]);
+  });
+
+  it('opens each row to show every answer and its points, with no pictures', () => {
+    const { el } = teamCard([round(tiger, 4)]);
+    const details = el.querySelector('details')!;
+    expect(details.open).toBe(false);
+    expect(details.querySelector('summary')?.textContent).toContain('Tiger');
+    const lines = [...details.querySelectorAll('.answer-line')].map((li) => li.textContent);
+    expect(lines).toEqual(['Tiger85 (your answer)', 'Snow leopard50', 'Red fox10']);
+    const list = details.querySelector('.team-card__answers')!;
+    expect(list.querySelector('img, .portrait')).toBeNull();
+    expect(list.textContent).not.toMatch(/🐅|🦊/u);
+  });
+
+  it('shows the emoji at once, then the sprite when it is ready', async () => {
+    const image = { src: 'data:x', width: 24, height: 20, facesLeft: true };
+    const el = portrait(tiger, false, { scale: 2, portraits: () => Promise.resolve(image) });
+    expect(el.textContent).toBe('🐅');
+    await Promise.resolve();
+    await Promise.resolve();
+    const img = el.querySelector('img')!;
+    expect([img.getAttribute('width'), img.getAttribute('height')]).toEqual(['48', '40']);
+    expect(img.classList.contains('portrait__sprite--flip')).toBe(true);
+  });
+
+  it('keeps the emoji when there is no sprite', async () => {
+    const el = portrait(fox, false, { scale: 2, portraits: () => Promise.resolve(null) });
+    await Promise.resolve();
+    expect(el.textContent).toBe('🦊');
+  });
+
+  it('lines the party up behind the traveller, first to join nearest, misses left out', () => {
+    const { el } = partyLineup([round(fox, 1), round(null, 0), round(tiger, 4)]);
+    expect([...el.children].map((c) => c.textContent)).toEqual(['🐅', '🦊', '🧑']);
+    expect(el.getAttribute('aria-label')).toBe('You and Red fox, Tiger');
   });
 });

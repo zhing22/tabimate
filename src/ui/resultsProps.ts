@@ -1,6 +1,8 @@
 import { biomeFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
-import type { Animal, Puzzle, RoundResult } from '@/core/types';
+import { TIERS } from '@/config/tiers';
+import type { Animal, AnimalId, Prompt, Puzzle, RoundResult } from '@/core/types';
+import type { AnswerLine } from './components/teamCard';
 import type { ResultsProps } from './screens/results';
 
 export interface FinishedRun {
@@ -13,16 +15,38 @@ export interface FinishedRun {
 export type AnimalOf = (result: RoundResult) => Animal | null;
 
 /** What the results screen shows for a finished run (everything but the delay). */
+/**
+ * Every answer a prompt accepted, rarest (most points) first, then by name;
+ * the player's own marked. Names only: the list shows no pictures.
+ */
+export function answerLines(
+  prompt: Prompt,
+  animals: ReadonlyMap<AnimalId, Animal>,
+  picked: AnimalId | null,
+): AnswerLine[] {
+  return prompt.answers
+    .map(({ animalId, tier }) => ({
+      name: animals.get(animalId)?.display ?? animalId.replace(/-/g, ' '),
+      tier,
+      points: TIERS[tier].points,
+      picked: animalId === picked,
+    }))
+    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+}
+
 export function resultsProps(
   puzzle: Puzzle,
   animalOf: AnimalOf,
+  animals: ReadonlyMap<AnimalId, Animal>,
   { results, score, stats }: FinishedRun,
   msUntilNext: () => number,
 ): ResultsProps {
   return {
     rounds: results.flatMap((result, i) => {
       const prompt = puzzle.prompts[i];
-      return prompt ? [{ prompt, result, animal: animalOf(result) }] : [];
+      if (!prompt) return [];
+      const answers = answerLines(prompt, animals, result.match.animalId);
+      return [{ prompt, result, animal: animalOf(result), answers }];
     }),
     score,
     biomeName: biomeFor(score).name,

@@ -1,5 +1,7 @@
+import type { Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
 import { countdown } from '../components/countdown';
+import { partyLineup } from '../components/partyLineup';
 import { teamCard, type TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
 import { browserDelay, type Delay } from '../frames';
@@ -13,6 +15,8 @@ export interface ResultsProps {
   readonly bestStreak: number;
   readonly msUntilNext: () => number;
   readonly delay?: Delay;
+  /** Sprite pictures for the line-up and team list; emoji without. */
+  readonly portraits?: Portraits;
 }
 
 export interface ResultsActions {
@@ -66,7 +70,8 @@ function shareButton(onShare: () => Promise<ShareOutcome>, delay: Delay) {
 }
 
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
-  const team = teamCard(props.rounds);
+  const team = teamCard(props.rounds, props.portraits);
+  const party = partyLineup(props.rounds, props.portraits);
   const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const nextButton = h(
     'button',
@@ -96,6 +101,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
         h('span', { class: 'results__number' }, props.score),
         ' points',
       ),
+      party.el,
       h('p', { class: 'meta' }, `Reached the ${props.biomeName}`),
       props.streak > 0
         ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
@@ -111,6 +117,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   return () => {
     timer.destroy();
     team.destroy();
+    party.destroy();
     shareIt.destroy();
   };
 };

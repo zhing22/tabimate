@@ -2,6 +2,7 @@ import kaplay, { type KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
 import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/render';
 import type { GameBus } from '@/core/events';
+import type { Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { loadBiomeArt } from './biomes/load';
 import { createEffectsLayer } from './effects/effectsLayer';
@@ -21,6 +22,8 @@ export interface SceneDeps {
 export interface Scene {
   /** Resolves once the sprites are loaded (the world is drawn before that). */
   readonly ready: Promise<void>;
+  /** Stills of the sprites for the UI, once they are loaded (null if they failed). */
+  readonly portraits: Portraits;
   dispose(): void;
 }
 
@@ -127,6 +130,11 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
 
   return {
     ready,
+    portraits: (animal, shiny) =>
+      ready.then(
+        () => sprites.portrait(animal, shiny),
+        () => null,
+      ),
     dispose() {
       for (const stop of stops) stop();
       observer.disconnect();

@@ -1,10 +1,11 @@
 import type { ImageSource, KAPLAYCtx, SpriteAnims } from 'kaplay';
 import { TEMPLATE_KEYS, type AnimalArt, type Palette } from '@/config/render';
+import type { PortraitImage } from '@/core/portrait';
 import type { Animal, AnimalId } from '@/core/types';
-import { makeCanvas } from './canvasArt';
+import { makeCanvas, portraitFrom } from './canvasArt';
 import { blinkPalette, resolvePalette } from './paletteUtils';
 import { recolor, type Pixels } from './recolor';
-import { parseAsepriteSheet, type SheetInfo } from './sheet';
+import { parseAsepriteSheet, type FrameRect, type SheetInfo } from './sheet';
 import type { SpriteProvider, SpriteRef } from './spriteProvider';
 
 /** What the provider needs about colours and sheets (see data/spriteArtSource). */
@@ -28,6 +29,8 @@ export interface PixelSpriteOptions {
   readonly fallback: SpriteProvider;
   /** Turns recoloured pixels into something Kaplay can load. Tests swap it out. */
   readonly toImage?: (pixels: Pixels) => ImageSource;
+  /** Turns a recoloured sheet's first frame into a UI still. Tests swap it out. */
+  readonly toPortrait?: (pixels: Pixels, frame: FrameRect) => PortraitImage;
 }
 
 /**
@@ -63,6 +66,11 @@ export function createPixelSpriteProvider(
   const refs = new Map<Animal, readonly [plain: SpriteRef, shiny: SpriteRef]>();
   const warned = new Set<string>();
   const toImage = options.toImage ?? toCanvas;
+  const toPortrait =
+    options.toPortrait ??
+    ((pixels: Pixels, frame: FrameRect) => portraitFrom(toCanvas(pixels), frame, false));
+  // Each sprite's recoloured sheet and first frame, made into a portrait on first ask.
+  const stills = new Map<string, { pixels: Pixels; frame: FrameRect; image?: PortraitImage }>();
 
   const register = (name: string, pixels: Pixels, sheet: SheetInfo) => {
     const { width, height } = pixels;
@@ -91,6 +99,7 @@ export function createPixelSpriteProvider(
       if (!palette) return; // validation makes this rare; the emoji stands in
       const name = `pixel/${animal.id}${shiny ? '/shiny' : ''}`;
       const open = recolor(sheet.pixels, TEMPLATE_KEYS, palette);
+      stills.set(name, { pixels: open.pixels, frame: sheet.info.frames[0]! });
       const shut = recolor(sheet.pixels, TEMPLATE_KEYS, blinkPalette(palette));
       if (import.meta.env.DEV && open.unknown.length > 0 && !warned.has(animal.archetype)) {
         warned.add(animal.archetype);
@@ -146,5 +155,12 @@ export function createPixelSpriteProvider(
     spriteFor: (animal, shiny) =>
       refs.get(animal)?.[shiny ? 1 : 0] ?? options.fallback.spriteFor(animal, shiny),
     playerSprite: () => options.fallback.playerSprite(),
+    portrait(animal, shiny) {
+      const ref = animal ? refs.get(animal)?.[shiny ? 1 : 0] : undefined;
+      const still = ref && stills.get(ref.name);
+      if (!still) return options.fallback.portrait(animal, shiny);
+      still.image ??= toPortrait(still.pixels, still.frame);
+      return still.image;
+    },
   };
 }

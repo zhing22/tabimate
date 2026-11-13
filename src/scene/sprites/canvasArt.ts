@@ -1,3 +1,4 @@
+import type { PortraitImage } from '@/core/portrait';
 // Small helpers for drawing placeholder art in code onto offscreen canvases.
 
 export function makeCanvas(
@@ -46,4 +47,18 @@ export function outline(canvas: HTMLCanvasElement, colour: string): HTMLCanvasEl
   }
   out.ctx.drawImage(canvas, 0, 0);
   return out.canvas;
+}
+
+/**
+ * A still for the UI from part of a canvas (a sheet's first frame), as a
+ * data: URL so the page can show it in as many <img>s as it likes.
+ */
+export function portraitFrom(
+  source: CanvasImageSource,
+  rect: { x: number; y: number; w: number; h: number },
+  facesLeft: boolean,
+): PortraitImage {
+  const { canvas, ctx } = makeCanvas(rect.w, rect.h);
+  ctx.drawImage(source, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+  return { src: canvas.toDataURL('image/png'), width: rect.w, height: rect.h, facesLeft };
 }

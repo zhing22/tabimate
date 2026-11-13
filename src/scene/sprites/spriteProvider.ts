@@ -1,3 +1,4 @@
+import type { PortraitImage } from '@/core/portrait';
 import type { Animal } from '@/core/types';
 import type { FrameTag } from './sheet';
 
@@ -21,4 +22,9 @@ export interface SpriteProvider {
   load(animals: Iterable<Animal>): Promise<void>;
   spriteFor(animal: Animal, shiny: boolean): SpriteRef;
   playerSprite(): SpriteRef;
+  /**
+   * A still of the sprite (its first frame) for the UI, or null if it isn't
+   * loaded. `animal` null means the player.
+   */
+  portrait(animal: Animal | null, shiny: boolean): PortraitImage | null;
 }

@@ -24,11 +24,19 @@
 .section-title,
 .round__prompt,
 .button,
-.tier-badge,
-.results__number,
-.reveal__points {
+.tier-badge {
   font-family: var(--font-pixel);
   letter-spacing: 0.02em;
+}
+
+/* Numbers players read at a glance: the body font, bold, with even-width digits
+   (the pixel font's numerals are hard to read). */
+.results__number,
+.reveal__points,
+.countdown {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .title {
@@ -159,18 +167,100 @@
 }
 
 .team-card__member {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: var(--tap);
-  padding: var(--space-2);
   background: rgb(255 255 255 / 0.4);
   border-radius: var(--radius-1);
 }
 
-.team-card__emoji {
+/* The row itself: sprite, name and prompt, tier, and a chevron to open it. */
+.team-card__summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2);
+  cursor: pointer;
+  list-style: none;
+}
+
+.team-card__summary::-webkit-details-marker {
+  display: none;
+}
+
+.team-card__summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--ink-soft);
+  border-bottom: 2px solid var(--ink-soft);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform var(--dur-fast);
+}
+
+.team-card__member[open] > .team-card__summary::after {
+  transform: rotate(-135deg) translateY(-2px);
+}
+
+/* Every answer to the prompt: small type in two columns, so many fit. */
+.team-card__answers-title {
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+}
+
+.team-card__answers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  column-gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) var(--space-2) var(--space-2);
+  list-style: none;
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+.answer-line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.answer-line__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.answer-line__points {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.answer-line--picked {
+  font-weight: 700;
+}
+
+.answer-line--picked .answer-line__points {
+  color: var(--ink);
+}
+
+/* A character's picture: the emoji, or its sprite once loaded, kept crisp. */
+.portrait {
+  display: inline-grid;
+  place-items: end center;
+  min-width: 2rem;
   font-size: var(--text-xl);
+  line-height: 1;
+}
+
+.portrait__sprite {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.portrait__sprite--flip {
+  transform: scaleX(-1);
 }
 
 .team-card__text {
@@ -191,7 +281,6 @@
 }
 
 .countdown {
-  font-family: var(--font-pixel);
   color: var(--ink);
 }
 

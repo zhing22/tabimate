@@ -68,6 +68,12 @@ function setup(
       facesLeft: true,
     }),
     playerSprite: () => ({ name: 'player', facesLeft: false }),
+    portrait: (animal) => ({
+      src: `emoji:${animal?.id ?? 'player'}`,
+      width: 26,
+      height: 26,
+      facesLeft: true,
+    }),
   };
   const loadSheet = vi.fn((archetype: string) =>
     overrides.sheetFails ? Promise.reject(new Error(`no ${archetype}`)) : Promise.resolve(SHEET),
@@ -78,6 +84,12 @@ function setup(
     loadSheet,
     fallback,
     toImage: (pixels) => pixels as unknown as HTMLCanvasElement,
+    toPortrait: (_pixels, frame) => ({
+      src: `pixel:${frame.x},${frame.y}`,
+      width: frame.w,
+      height: frame.h,
+      facesLeft: false,
+    }),
   });
   return { provider, loaded, loadSheet, fallbackLoad };
 }
@@ -156,5 +168,22 @@ describe('createPixelSpriteProvider', () => {
     const { provider } = setup();
     await provider.load([]);
     expect(provider.playerSprite().name).toBe('player');
+  });
+});
+
+describe('createPixelSpriteProvider: portraits', () => {
+  it('gives the first frame of a recoloured sprite, the same object each time', async () => {
+    const { provider } = setup();
+    await provider.load([TIGER]);
+    const still = provider.portrait(TIGER, false);
+    expect(still).toEqual({ src: 'pixel:0,0', width: 1, height: 1, facesLeft: false });
+    expect(provider.portrait(TIGER, false)).toBe(still);
+  });
+
+  it("leaves the player and sheetless animals to the fallback's pictures", async () => {
+    const { provider } = setup();
+    await provider.load([KOALA]);
+    expect(provider.portrait(null, false)?.src).toBe('emoji:player');
+    expect(provider.portrait(KOALA, false)?.src).toBe('emoji:koala');
   });
 });

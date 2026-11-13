@@ -6,6 +6,7 @@ import { dailyKey, msUntilNextReset } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
+import type { Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
@@ -49,9 +50,13 @@ async function load(): Promise<{ puzzle: Puzzle | null; animals: ReadonlyMap<Ani
  * The scene is scenery: if it can't start (no WebGL, say), the game is still
  * fully playable over the CSS backdrop, so a failure is only logged.
  */
-function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
+function startScene(
+  bus: GameBus,
+  puzzle: Puzzle,
+  animals: ReadonlyMap<AnimalId, Animal>,
+): Portraits | null {
   const container = document.querySelector<HTMLElement>('#scene');
-  if (!container) return;
+  if (!container) return null;
   try {
     const scene = createScene(container, bus, {
       animals,
@@ -67,8 +72,10 @@ function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId,
       },
     });
     scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
+    return scene.portraits;
   } catch (error) {
     console.error('Scene failed to start; playing without it', error);
+    return null;
   }
 }
 
@@ -105,7 +112,8 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   });
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
 
-  startScene(bus, puzzle, animals);
+  // The results screen shows the scene's sprites; without a scene it uses emoji.
+  const portraits = startScene(bus, puzzle, animals);
   startAudio(bus);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
@@ -117,6 +125,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
     animals,
     clock,
     getStats: () => progress.getStats(),
+    ...(portraits ? { portraits } : {}),
     reload,
     // The link is this site, whatever host serves it (dev, preview or the real domain).
     share: ({ results, score }) =>
