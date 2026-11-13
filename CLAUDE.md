@@ -31,6 +31,8 @@ Original art and naming only: no Pokémon names, sprites or UI.
     Go to answer." Go again submits it; typing replaces it.
   - no match: not scored. The box keeps the text and a one-line red message says
     it is not on today's list. The player can retry until time runs out.
+  - A guess naming two or more animals ("platypus tiger koala") counts as no match,
+    so pasting a list never beats naming one animal.
   - Time-up submits whatever is in the box: scored only if it is an exact name
     (e.g. a correction the player left in the box), otherwise tier 0. An empty box
     is tier 0. There is no random or "lucky" scoring.
