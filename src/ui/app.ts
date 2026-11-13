@@ -1,4 +1,4 @@
-import { REVEAL_SUSPENSE_MS, ROUND_TIME_MS } from '@/config/game';
+import { REVEAL_TIMING, ROUND_TIME_MS, type RevealTiming } from '@/config/game';
 import type { Clock } from '@/core/clock';
 import { msUntilNextReset } from '@/core/date';
 import type { GameBus } from '@/core/events';
@@ -27,7 +27,8 @@ export interface AppDeps {
   readonly getStats: () => Stats;
   /** Loads the page again, e.g. when a new puzzle is out. */
   readonly reload: () => void;
-  readonly suspenseMs?: number;
+  /** The reveal's beats; tests pass INSTANT_REVEAL. */
+  readonly revealTiming?: RevealTiming;
   readonly frames?: FrameLoop;
   readonly interval?: Interval;
 }
@@ -76,7 +77,7 @@ export function createApp(deps: AppDeps): App {
         result,
         animal: animalOf(result),
         points: pointsFor(result),
-        suspenseMs: deps.suspenseMs ?? REVEAL_SUSPENSE_MS,
+        timing: deps.revealTiming ?? REVEAL_TIMING,
         isLast: index === puzzle.prompts.length - 1,
         focusNext: !round.mounted,
       },

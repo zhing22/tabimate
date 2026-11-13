@@ -1,3 +1,4 @@
+import { revealBuildUpMs, type RevealTiming } from '@/config/game';
 import { TIERS } from '@/config/tiers';
 import type { Animal, RoundResult } from '@/core/types';
 import { tierBadge } from '../components/tierBadge';
@@ -8,8 +9,8 @@ export interface RevealProps {
   readonly result: RoundResult;
   readonly animal: Animal | null;
   readonly points: number;
-  /** Drum-roll before the tier shows; 0 shows it at once. */
-  readonly suspenseMs: number;
+  /** The drum-roll, badge and name beats (config REVEAL_TIMING; INSTANT_REVEAL in tests). */
+  readonly timing: RevealTiming;
   /** The last prompt: the button leads to the results instead. */
   readonly isLast: boolean;
   /**
@@ -20,7 +21,7 @@ export interface RevealProps {
 }
 
 export interface RevealActions {
-  /** Called when the tier becomes visible, with a sentence for screen readers. */
+  /** Called once the name is shown, with a sentence for screen readers. */
   revealed(summary: string): void;
   /** The player wants to move on. */
   next(): void;
@@ -57,6 +58,9 @@ function nextButton(isLast: boolean, next: () => void): HTMLButtonElement {
 /**
  * Shown as an overlay above the round, so the answer box keeps focus (and the
  * phone keeps its keyboard). Focus is not moved; the live region speaks instead.
+ *
+ * Three beats: a drum-roll (longer for rarer tiers), the tier badge popping in
+ * with an overshoot, then the name, points and Next button.
  */
 export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, actions) => {
   const { result, animal, points } = props;
@@ -69,7 +73,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
       'data-tier': tier,
       // Styled by effect, not tier number, so TIERS decides which tier is shiny.
       'data-effect': TIERS[tier].effectId,
-      style: `--reveal-tier: var(${TIERS[tier].colour})`,
+      style: `--reveal-tier: var(${TIERS[tier].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
       'aria-label': 'Result',
     },
     h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
@@ -82,22 +86,27 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
         animal?.emoji ?? (tier ? '🐾' : '💨'),
       ),
       h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
-      tierBadge(tier, { size: 'lg' }).el,
+      h('div', { class: 'reveal__badge' }, tierBadge(tier, { size: 'lg' }).el),
       h('p', { class: 'reveal__points' }, tier ? `+${points}` : '+0'),
       next,
     ),
   );
   root.append(card);
 
-  const show = () => {
-    card.classList.remove('reveal--pending');
+  const timers: ReturnType<typeof setTimeout>[] = [];
+  const after = (ms: number, step: () => void) => {
+    if (ms <= 0) step();
+    else timers.push(setTimeout(step, ms));
+  };
+  const showName = () => {
+    card.classList.replace('reveal--badge', 'reveal--named');
     actions.revealed(describeResult(result, animal, points));
     if (props.focusNext) focus(next);
   };
-  if (props.suspenseMs <= 0) {
-    show();
-    return () => {};
-  }
-  const timer = setTimeout(show, props.suspenseMs);
-  return () => clearTimeout(timer);
+  const showBadge = () => {
+    card.classList.replace('reveal--pending', 'reveal--badge');
+    after(props.timing.nameDelayMs, showName);
+  };
+  after(revealBuildUpMs(tier, props.timing), showBadge);
+  return () => timers.forEach(clearTimeout);
 };

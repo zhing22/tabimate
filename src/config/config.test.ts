@@ -6,7 +6,8 @@ import {
   MAX_PROMPTS_PER_PUZZLE,
   PROMPTS_PER_DAY,
   RESET_HOUR,
-  REVEAL_SUSPENSE_MS,
+  REVEAL_TIMING,
+  revealBuildUpMs,
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
@@ -14,9 +15,12 @@ import { TIERS } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
-  it('the reveal drum-roll is short enough not to drag', () => {
-    expect(REVEAL_SUSPENSE_MS).toBeGreaterThanOrEqual(0);
-    expect(REVEAL_SUSPENSE_MS).toBeLessThanOrEqual(1_500);
+  it('builds up longer for rarer tiers, without dragging', () => {
+    const steps = [0, 1, 2, 3, 4, 5].map((tier) => revealBuildUpMs(tier));
+    expect(steps).toEqual([...steps].sort((a, b) => a - b));
+    expect(steps[5]).toBeGreaterThan(steps[1]!);
+    expect(steps[5]! + REVEAL_TIMING.nameDelayMs).toBeLessThanOrEqual(2_500);
+    expect(REVEAL_TIMING.badgePopMs).toBeGreaterThan(0);
   });
 
   it('the timer warns only near the end of a round', () => {

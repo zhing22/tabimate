@@ -7,7 +7,10 @@ import {
   GROUND_Y,
   MISS_WALK,
   POP_IN_MS,
+  SIZE_PX,
 } from '@/config/render';
+import type { TierId } from '@/config/tiers';
+import type { EffectTarget } from './effects/types';
 import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import { biomeFor, distanceFor, pointsFor, totalScore } from '@/core/journey';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';
@@ -17,7 +20,10 @@ import { createPlayer, type Player } from './entities/player';
 
 export interface Follower {
   readonly animal: Animal;
+  readonly tier: TierId;
   readonly shiny: boolean;
+  /** Where its tier effect draws: the renderer keeps it on the sprite. */
+  readonly target: EffectTarget;
   readonly idle: IdleMotion;
   /** This frame's idle pose. */
   readonly pose: Pose;
@@ -106,7 +112,9 @@ export function createWorld(options: WorldOptions): World {
     if (animal) {
       const follower: Follower = {
         animal,
+        tier: result.match.tier,
         shiny: result.match.tier === 5,
+        target: { x: 0, y: 0, size: SIZE_PX[animal.size], glow: 0 },
         pose: { dy: 0, scaleY: 1, angle: 0 },
         pop: animate ? 0 : 1,
         blink: 0,

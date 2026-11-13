@@ -26,10 +26,39 @@ export const ROUND_TIME_MS = 25_000;
 export const TIMER_WARN_MS = 5_000;
 
 /**
- * Drum-roll before the tier appears on the reveal. The reveal then stays up
- * until the player taps Next (or presses Enter); the next timer starts then.
+ * The reveal's beats: a drum-roll (longer for rarer tiers), the tier badge
+ * popping in, then the animal's name. The reveal then stays up until the
+ * player taps Next (or presses Enter); the next timer starts then.
  */
-export const REVEAL_SUSPENSE_MS = 600;
+export interface RevealTiming {
+  /** Drum-roll before any tier shows. */
+  readonly suspenseMs: number;
+  /** Extra drum-roll per tier above 0, so a Critically Endangered find builds up most. */
+  readonly perTierMs: number;
+  /** The badge's scale-and-overshoot pop. */
+  readonly badgePopMs: number;
+  /** From the badge appearing to the animal's name appearing. */
+  readonly nameDelayMs: number;
+}
+
+export const REVEAL_TIMING: RevealTiming = {
+  suspenseMs: 600,
+  perTierMs: 150,
+  badgePopMs: 420,
+  nameDelayMs: 350,
+};
+
+/** Everything happens at once: for tests, and anything that wants no ceremony. */
+export const INSTANT_REVEAL: RevealTiming = {
+  suspenseMs: 0,
+  perTierMs: 0,
+  badgePopMs: 0,
+  nameDelayMs: 0,
+};
+
+/** How long the drum-roll lasts before a tier's badge appears. The audio uses it too. */
+export const revealBuildUpMs = (tier: number, timing: RevealTiming = REVEAL_TIMING): number =>
+  timing.suspenseMs + Math.max(0, tier) * timing.perTierMs;
 
 /** Journey distance (world units, scaled by the scene) the player moves per point. */
 export const DISTANCE_PER_POINT = 1;

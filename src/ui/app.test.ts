@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ROUND_TIME_MS } from '@/config/game';
+import { INSTANT_REVEAL, ROUND_TIME_MS, type RevealTiming } from '@/config/game';
 import { createBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
@@ -17,7 +17,7 @@ const puzzle: Puzzle = {
   prompts: ['r1', 'r2', 'r3'].map((id, i) => ({ ...PROMPT, id, text: `Prompt ${i + 1}` })),
 };
 
-function setup(suspenseMs = 0) {
+function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
   document.body.innerHTML = '<main id="ui"></main>';
   const root = document.querySelector<HTMLElement>('#ui')!;
   const time = createFakeTime();
@@ -43,7 +43,7 @@ function setup(suspenseMs = 0) {
     clock: time.clock,
     getStats,
     reload,
-    suspenseMs,
+    revealTiming,
     frames: ui.frames,
     interval: ui.interval,
   });
@@ -165,7 +165,7 @@ describe('app: playing with the keyboard', () => {
   it('ignores Enter while the drum-roll is still going', () => {
     vi.useFakeTimers();
     try {
-      const t = setup(600);
+      const t = setup({ ...INSTANT_REVEAL, suspenseMs: 600 });
       t.controller.start();
       type(t.input(), 'tiger');
       pressEnter(t.input());

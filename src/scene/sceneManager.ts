@@ -4,6 +4,7 @@ import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/r
 import type { GameBus } from '@/core/events';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { loadBiomeArt } from './biomes/load';
+import { createEffectsLayer } from './effects/effectsLayer';
 import { createRenderer } from './renderer';
 import type { SpriteProvider } from './sprites/spriteProvider';
 import { computeViewport, type Viewport } from './viewport';
@@ -69,7 +70,8 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
   const ready = sprites.load(deps.animals.values()).then(() => {
     loaded = true;
   });
-  const draw = createRenderer(k, world, art, sprites, deps.puzzleDate);
+  const effects = createEffectsLayer(k, { reducedMotion });
+  const draw = createRenderer(k, world, art, sprites, deps.puzzleDate, effects);
 
   let view: Viewport = computeViewport(1, 1, 1);
   let skyShown: BiomeId | null = null;
@@ -111,11 +113,15 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       // Mid-reveal, the last answer has not joined yet: it does on revealFinished.
       const joined = state.status === 'revealing' ? state.results.slice(0, -1) : state.results;
       world.restore(joined);
+      effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
       const last = state.results[state.results.length - 1];
       if (state.status === 'revealing' && last) world.answered(last);
     }),
     bus.on('answerMatched', ({ result }) => world.answered(result)),
-    bus.on('revealFinished', () => world.revealDone()),
+    bus.on('revealFinished', () => {
+      world.revealDone();
+      effects.sync(world.followers, true); // the newcomer makes its entrance
+    }),
     bus.on('biomeEntered', ({ biome }) => world.enterBiome(biome.id as BiomeId)),
   ];
 
@@ -127,6 +133,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       clearTimeout(resizeTimer);
       window.removeEventListener('orientationchange', relayout);
       document.removeEventListener('visibilitychange', onVisibility);
+      effects.dispose();
       k.quit();
       canvas.remove();
     },

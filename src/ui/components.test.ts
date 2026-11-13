@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
+import { INSTANT_REVEAL } from '@/config/game';
 import { TIERS } from '@/config/tiers';
 import { countdown } from './components/countdown';
 import { teamCard } from './components/teamCard';
@@ -145,7 +146,14 @@ describe('revealScreen', () => {
       const result = { promptId: 'p', timeMs: 1, match };
       revealScreen(
         root,
-        { result, animal: null, points: 0, suspenseMs: 0, isLast: false, focusNext: false },
+        {
+          result,
+          animal: null,
+          points: 0,
+          timing: INSTANT_REVEAL,
+          isLast: false,
+          focusNext: false,
+        },
         { revealed: () => {}, next: () => {} },
       );
       const card = root.querySelector<HTMLElement>('.reveal')!;
@@ -153,4 +161,76 @@ describe('revealScreen', () => {
       expect(card.getAttribute('style')).toContain(`var(--tier-${tier})`);
     },
   );
+});
+
+describe('revealScreen beats', () => {
+  const timing = { suspenseMs: 600, perTierMs: 150, badgePopMs: 420, nameDelayMs: 350 };
+  const reveal = (tier: 0 | 1 | 4 | 5) => {
+    const root = document.createElement('div');
+    const match =
+      tier === 0
+        ? ({ tier, animalId: null, strategy: null, input: '' } as const)
+        : ({ tier, animalId: 'tiger', strategy: 'exact', input: 'tiger' } as const);
+    const revealed = vi.fn();
+    revealScreen(
+      root,
+      {
+        result: { promptId: 'p', timeMs: 1, match },
+        animal: null,
+        points: 0,
+        timing,
+        isLast: false,
+        focusNext: false,
+      },
+      { revealed, next: () => {} },
+    );
+    const phase = () => root.querySelector('.reveal')!.className.replace(/card reveal /, '');
+    return { phase, revealed, root };
+  };
+
+  it('rolls the drums, pops the badge, then shows the name', () => {
+    vi.useFakeTimers();
+    try {
+      const r = reveal(4); // 600 + 4 x 150 = 1200 ms of build-up
+      expect(r.phase()).toBe('reveal--pending');
+      vi.advanceTimersByTime(1_199);
+      expect(r.phase()).toBe('reveal--pending');
+      vi.advanceTimersByTime(1);
+      expect(r.phase()).toBe('reveal--badge');
+      expect(r.revealed).not.toHaveBeenCalled(); // the name isn't out yet
+      vi.advanceTimersByTime(350);
+      expect(r.phase()).toBe('reveal--named');
+      expect(r.revealed).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it.each([
+    [0, 600],
+    [1, 750],
+    [5, 1_350],
+  ] as const)('builds up longer for rarer tiers: tier %i shows its badge at %i ms', (tier, ms) => {
+    vi.useFakeTimers();
+    try {
+      const r = reveal(tier);
+      vi.advanceTimersByTime(ms - 1);
+      expect(r.phase()).toBe('reveal--pending');
+      vi.advanceTimersByTime(1);
+      expect(r.phase()).toBe('reveal--badge');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('passes the badge pop time to the CSS', () => {
+    vi.useFakeTimers();
+    try {
+      expect(reveal(1).root.querySelector('.reveal')!.getAttribute('style')).toContain(
+        '--reveal-badge-ms: 420ms',
+      );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

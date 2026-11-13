@@ -45,6 +45,14 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Static hosting on Cloudflare Pages. No backend in the MVP.
 - Pixel art: scene is 180 native px tall, scaled by a whole number (computed in device pixels);
   layers tile horizontally. Sprites use 6 template key colours, recoloured from palettes.json.
+- Reveal and effects: the reveal card plays a drum-roll (longer for rarer tiers), the tier
+  badge popping in, then the name (REVEAL_TIMING in config/game.ts). Each tier's effect
+  (TIERS[].effectId: none, glint, sparkle, shiny) has a scene effect in scene/effects/
+  (entrance when the animal joins, then a subtle idle loop) and a badge style in
+  reveal.css. Reduced motion: no shake or particles, only fades.
+- Sound: services/audio.ts is the only thing that plays audio, driven by bus events.
+  Sounds are synthesised (services/sounds.ts), unlocked on the first tap or key, and
+  muted with the corner button (kept via StorageAdapter).
 - Sprite pipeline: public/assets/sprites/{archetype}.png + .json (Aseprite export, frame
   tags walk and flap or swim), listed in manifest.json, drawn only in TEMPLATE_KEYS
   (config/render.ts). animals.json gives each animal palette, shinyPalette and

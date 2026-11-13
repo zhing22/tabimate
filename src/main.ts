@@ -12,11 +12,13 @@ import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
 import { createScene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
 import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
+import { createAudio } from '@/services/audio';
 import { browserScheduler } from '@/services/browserScheduler';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
 import { systemClock } from '@/services/systemClock';
 import { createApp } from '@/ui/app';
+import { muteButton } from '@/ui/components/muteButton';
 import { createScreenHost } from '@/ui/host';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
@@ -30,7 +32,8 @@ const clock = systemClock;
 // One loader for all of public/, so animals.json is fetched once for puzzles and sprites.
 const loader = createJsonLoader({ baseUrl: import.meta.env.BASE_URL });
 const source = createLocalPuzzleSource({ loader });
-const progress = createProgressService(createLocalStorageAdapter(), clock);
+const storage = createLocalStorageAdapter();
+const progress = createProgressService(storage, clock);
 const reload = () => location.reload();
 
 async function load(): Promise<{ puzzle: Puzzle | null; animals: ReadonlyMap<AnimalId, Animal> }> {
@@ -66,6 +69,26 @@ function startScene(bus: GameBus, puzzle: Puzzle, animals: ReadonlyMap<AnimalId,
   }
 }
 
+/**
+ * Sound listens to the bus like the scene; the corner button only flips mute.
+ * Like the scene, it is extra: if it fails the game plays on, silently.
+ */
+function startAudio(bus: GameBus) {
+  try {
+    const audio = createAudio({ bus, storage, clock });
+    const toggle = muteButton({
+      muted: audio.muted,
+      onToggle: () => {
+        audio.setMuted(!audio.muted);
+        return audio.muted;
+      },
+    });
+    document.body.append(toggle.el);
+  } catch (error) {
+    console.error('Audio failed to start; playing without sound', error);
+  }
+}
+
 function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   const bus = createBus<GameEvents>({
     onError: (error, type) => console.error(`Listener for "${String(type)}" failed`, error),
@@ -80,6 +103,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
 
   startScene(bus, puzzle, animals);
+  startAudio(bus);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({
