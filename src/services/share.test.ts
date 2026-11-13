@@ -122,3 +122,25 @@ describe('share', () => {
     expect(await share('hi', env({ clipboard: broken }, false, () => false).env)).toBe('failed');
   });
 });
+
+describe('shareCard: animals', () => {
+  it('shows a paw for an animal the registry does not have', () => {
+    const card = shareCard({ results: [hit('mystery-beast', 3)], animals }, 1, forest);
+    expect(card.animalEmoji).toEqual(['🐾']);
+  });
+});
+
+describe('share: no clipboard API', () => {
+  // Browsers only offer navigator.clipboard on secure pages; a phone opening
+  // the dev server over the LAN (plain http) has none.
+  it('copies by hand when navigator.clipboard is missing', async () => {
+    const copyByHand = vi.fn(() => true);
+    const env: ShareEnvironment = { navigator: {}, preferSheet: false, copyByHand };
+    expect(await share('hi', env)).toBe('copied');
+    expect(copyByHand).toHaveBeenCalledWith('hi');
+  });
+
+  it('fails cleanly with neither', async () => {
+    expect(await share('hi', { navigator: {}, preferSheet: false })).toBe('failed');
+  });
+});

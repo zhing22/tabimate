@@ -1,6 +1,7 @@
 import type { BiomeDef } from '@/config/biomes';
 import { TIERS, type TierId } from '@/config/tiers';
 import { totalScore } from '@/core/journey';
+import type { ShareOutcome } from '@/core/share';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';
 
 /** A finished run, as the share text and (later) a share image need it. */
@@ -66,18 +67,22 @@ export function buildShareText(
   ].join('\n');
 }
 
-/** How a share went, so the UI can say "Copied!" or nothing at all. */
-export type ShareOutcome = 'shared' | 'copied' | 'cancelled' | 'failed';
+export type { ShareOutcome } from '@/core/share';
 
 export interface ShareEnvironment {
-  readonly navigator: Pick<Navigator, 'clipboard'> & { share?: Navigator['share'] };
+  readonly navigator: {
+    /** Missing on plain-HTTP pages (e.g. a phone testing over the LAN). */
+    readonly clipboard?: Pick<Clipboard, 'writeText'> | undefined;
+    readonly share?: Navigator['share'];
+  };
   /** Touch devices get the system share sheet; desktops copy (their sheets are clumsy). */
   readonly preferSheet: boolean;
   /** Last resort for old browsers without the clipboard API. */
   readonly copyByHand?: (text: string) => boolean;
 }
 
-const browserEnvironment = (): ShareEnvironment => ({
+/** The real browser: touch devices (pointer: coarse) prefer the share sheet. */
+export const browserEnvironment = (): ShareEnvironment => ({
   navigator,
   preferSheet: window.matchMedia('(pointer: coarse)').matches,
   copyByHand(text) {
@@ -116,10 +121,13 @@ export async function share(
       // Not allowed or not supported here: copy instead.
     }
   }
-  try {
-    await nav.clipboard.writeText(text);
-    return 'copied';
-  } catch {
-    return env.copyByHand?.(text) ? 'copied' : 'failed';
+  if (nav.clipboard) {
+    try {
+      await nav.clipboard.writeText(text);
+      return 'copied';
+    } catch {
+      // Blocked (no permission, page not focused): try the old way below.
+    }
   }
+  return env.copyByHand?.(text) ? 'copied' : 'failed';
 }

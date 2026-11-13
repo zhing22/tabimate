@@ -119,6 +119,15 @@ describe('countdown', () => {
     expect(onDone).toHaveBeenCalledTimes(1);
   });
 
+  it('finishes at once, scheduling nothing, if the time is already up', () => {
+    const t = manualTime();
+    const onDone = vi.fn();
+    const c = countdown({ msLeft: () => -500, onDone, delay: t.delay });
+    expect(c.el.textContent).toBe('00:00:00');
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(t.running()).toBe(0);
+  });
+
   it('stops its timer when destroyed', () => {
     const t = manualTime();
     countdown({ msLeft: () => 60_000 - t.now(), delay: t.delay }).destroy();

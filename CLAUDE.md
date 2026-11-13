@@ -1,20 +1,20 @@
-# Tabimate â€” project brief
+# Tabimate — project brief
 
 ## What it is
 
-Tabimate (æ—… tabi = journey + mate) is a daily browser trivia game about animals.
+Tabimate (旅 tabi = journey + mate) is a daily browser trivia game about animals.
 Everyone gets the same prompts each day (e.g. "Name an animal that lays eggs").
-The player types an animal; rarer matched answers score a higher tier (0â€“5).
+The player types an animal; rarer matched answers score a higher tier (0–5).
 Each matched animal joins a trail of followers behind the player. Each answer moves the
 player forward by its tier; crossing score thresholds enters new biomes
-(Town â†’ Grassland â†’ Forest â†’ â€¦). The run ends with a shareable team card.
-Original art and naming only: no PokÃ©mon names, sprites or UI.
+(Town → Grassland → Forest → …). The run ends with a shareable team card.
+Original art and naming only: no Pokémon names, sprites or UI.
 
 ## Rules of the game
 
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
-  00:00â€“11:59 SGT still plays the previous date's puzzle.
+  00:00–11:59 SGT still plays the previous date's puzzle.
 - MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
   plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE). After
   each answer the result stays up until the player taps Next (or presses Enter); the

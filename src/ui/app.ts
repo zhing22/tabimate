@@ -9,7 +9,8 @@ import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
 import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
-import { resultsScreen, type ShareResult } from './screens/results';
+import type { ShareOutcome } from '@/core/share';
+import { resultsScreen } from './screens/results';
 import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
 
 export type { FinishedRun } from './resultsProps';
@@ -28,7 +29,7 @@ export interface AppDeps {
   /** Loads the page again, e.g. when a new puzzle is out. */
   readonly reload: () => void;
   /** Shares a finished run (main.ts builds the text; see services/share.ts). */
-  readonly share: (run: FinishedRun) => Promise<ShareResult>;
+  readonly share: (run: FinishedRun) => Promise<ShareOutcome>;
   /** The reveal's beats; tests pass INSTANT_REVEAL. */
   readonly revealTiming?: RevealTiming;
   readonly frames?: FrameLoop;

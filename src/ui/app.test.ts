@@ -8,7 +8,8 @@ import { emptyStats } from '@/core/streak';
 import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
 import { createApp, type FinishedRun } from './app';
-import type { ShareResult } from './screens/results';
+import type { ShareOutcome } from '@/core/share';
+import { SAID_MS } from './screens/results';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
 
@@ -33,7 +34,7 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     scheduler: time.scheduler,
   });
   const reload = vi.fn();
-  const share = vi.fn<(run: FinishedRun) => Promise<ShareResult>>(() => Promise.resolve('copied'));
+  const share = vi.fn<(run: FinishedRun) => Promise<ShareOutcome>>(() => Promise.resolve('copied'));
   // Stands in for progress: 2-day streak until today's run is recorded.
   let stats = { ...emptyStats(), streak: 2, bestStreak: 4 };
   const getStats = () => stats;
@@ -420,5 +421,62 @@ describe('app: sharing', () => {
     expect([...t.root.querySelectorAll('button')].some((b) => b.textContent === 'Share')).toBe(
       true,
     );
+  });
+});
+
+describe('app: the Share button', () => {
+  const finish = (t: ReturnType<typeof setup>) => {
+    t.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    return [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
+  };
+  const settle = async () => {
+    for (let i = 0; i < 4; i++) await Promise.resolve();
+  };
+
+  it('ignores taps while a share is still going', async () => {
+    const t = setup();
+    let done: (outcome: 'shared') => void = () => {};
+    t.share.mockImplementationOnce(() => new Promise((resolve) => (done = resolve)));
+    const button = finish(t);
+    button.click();
+    button.click(); // the sheet is still open
+    expect(t.share).toHaveBeenCalledTimes(1);
+    done('shared');
+    await settle();
+    expect(button.textContent).toBe('Shared!');
+    button.click();
+    expect(t.share).toHaveBeenCalledTimes(2);
+  });
+
+  it(`reads "Share" again ${SAID_MS} ms after saying how it went`, async () => {
+    const t = setup();
+    const button = finish(t);
+    button.click();
+    await settle();
+    expect(button.textContent).toBe('Copied!');
+    const start = t.ui.now();
+    t.ui.set(start + SAID_MS - 1);
+    expect(button.textContent).toBe('Copied!');
+    t.ui.set(start + SAID_MS);
+    expect(button.textContent).toBe('Share');
+  });
+
+  it('clears and sets the status again, so a second "Copied!" is read out too', async () => {
+    const t = setup();
+    const button = finish(t);
+    const status = t.$('[role="status"]')!;
+    const seen: string[] = [];
+    new MutationObserver(() => seen.push(status.textContent ?? '')).observe(status, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    button.click();
+    await settle();
+    button.click();
+    await settle();
+    expect(seen.filter((text) => text === 'Copied!')).toHaveLength(2);
+    expect(seen.at(-2)).toBe('');
   });
 });

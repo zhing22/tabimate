@@ -1,7 +1,8 @@
+import type { ShareOutcome } from '@/core/share';
 import { countdown } from '../components/countdown';
 import { teamCard, type TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
-import type { Delay } from '../frames';
+import { browserDelay, type Delay } from '../frames';
 import type { Screen } from '../host';
 
 export interface ResultsProps {
@@ -14,47 +15,59 @@ export interface ResultsProps {
   readonly delay?: Delay;
 }
 
-/** How a share went (services/share.ts ShareOutcome). */
-export type ShareResult = 'shared' | 'copied' | 'cancelled' | 'failed';
-
 export interface ResultsActions {
   /** The next puzzle is out: load it. */
   next(): void;
   /** Shares (or copies) the run's share text. */
-  share(): Promise<ShareResult>;
+  share(): Promise<ShareOutcome>;
 }
 
 const SHARE_LABEL = 'Share';
-const SAID: Readonly<Record<ShareResult, string>> = {
+const SAID: Readonly<Record<ShareOutcome, string>> = {
   shared: 'Shared!',
   copied: 'Copied!',
   cancelled: SHARE_LABEL,
   failed: "Couldn't copy",
 };
-const SAID_MS = 2_000;
+/** How long the button says "Copied!" before it reads "Share" again. */
+export const SAID_MS = 2_000;
 
-/** The Share button: says how it went for a moment, and tells screen readers too. */
-function shareButton(onShare: () => Promise<ShareResult>) {
+/**
+ * The Share button: says how it went for a moment, and tells screen readers.
+ * Taps while a share is still going are ignored: a second navigator.share()
+ * with the sheet open fails, falls back to copying, and would say "Copied!"
+ * while the sheet is still up.
+ */
+function shareButton(onShare: () => Promise<ShareOutcome>, delay: Delay) {
   const button = h('button', { class: 'button button--primary', type: 'button' }, SHARE_LABEL);
   const status = h('p', { class: 'sr-only', role: 'status' });
-  let reset: ReturnType<typeof setTimeout> | undefined;
+  let busy = false;
+  let cancelReset = () => {};
   button.addEventListener('click', () => {
+    if (busy) return;
+    busy = true;
+    button.setAttribute('aria-busy', 'true');
     void onShare().then((result) => {
+      busy = false;
+      button.removeAttribute('aria-busy');
       button.textContent = SAID[result];
-      status.textContent = result === 'cancelled' ? '' : SAID[result];
-      clearTimeout(reset);
-      reset = setTimeout(() => (button.textContent = SHARE_LABEL), SAID_MS);
+      // Cleared, then set on a microtask: the same "Copied!" twice is still a
+      // change, so a screen reader reads it out again.
+      status.textContent = '';
+      if (result !== 'cancelled') queueMicrotask(() => (status.textContent = SAID[result]));
+      cancelReset();
+      cancelReset = delay(() => (button.textContent = SHARE_LABEL), SAID_MS);
     });
   });
   return {
     el: h('div', { class: 'results__share' }, button, status),
-    destroy: () => clearTimeout(reset),
+    destroy: () => cancelReset(),
   };
 }
 
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
   const team = teamCard(props.rounds);
-  const shareIt = shareButton(() => actions.share());
+  const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const nextButton = h(
     'button',
     { class: 'button button--primary', type: 'button', hidden: true },
