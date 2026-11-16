@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-23",
+  "number": 18,
+  "prompts": [
+    {
+      "id": "garden-farm",
+      "text": "Name an animal you might see on a farm or in a garden",
+      "answers": [
+        {
+          "animalId": "european-hedgehog",
+          "tier": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "tier": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "tier": 1
+        },
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "tier": 1
+        },
+        {
+          "animalId": "mallard",
+          "tier": 1
+        },
+        {
+          "animalId": "barn-owl",
+          "tier": 1
+        },
+        {
+          "animalId": "white-stork",
+          "tier": 1
+        },
+        {
+          "animalId": "indian-peafowl",
+          "tier": 1
+        },
+        {
+          "animalId": "northern-lapwing",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "big-ears",
+      "text": "Name an animal with big ears",
+      "answers": [
+        {
+          "animalId": "african-elephant",
+          "tier": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "tier": 4
+        },
+        {
+          "animalId": "red-kangaroo",
+          "tier": 1
+        },
+        {
+          "animalId": "european-rabbit",
+          "tier": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "tier": 1
+        },
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "tier": 3
+        },
+        {
+          "animalId": "koala",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "smaller-than-cat",
+      "text": "Name an animal smaller than a cat",
+      "answers": [
+        {
+          "animalId": "house-mouse",
+          "tier": 1
+        },
+        {
+          "animalId": "european-hedgehog",
+          "tier": 2
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "tier": 1
+        },
+        {
+          "animalId": "common-kingfisher",
+          "tier": 1
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "tier": 1
+        },
+        {
+          "animalId": "northern-lapwing",
+          "tier": 2
+        },
+        {
+          "animalId": "axolotl",
+          "tier": 5
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "tier": 3
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "date": "2026-11-18",
+  "number": 13,
+  "prompts": [
+    {
+      "id": "land-and-water",
+      "text": "Name an animal that lives both on land and in water",
+      "answers": [
+        {
+          "animalId": "saltwater-crocodile",
+          "tier": 1
+        },
+        {
+          "animalId": "hippo",
+          "tier": 3
+        },
+        {
+          "animalId": "platypus",
+          "tier": 2
+        },
+        {
+          "animalId": "harbour-seal",
+          "tier": 1
+        },
+        {
+          "animalId": "sea-otter",
+          "tier": 4
+        },
+        {
+          "animalId": "polar-bear",
+          "tier": 3
+        },
+        {
+          "animalId": "emperor-penguin",
+          "tier": 2
+        },
+        {
+          "animalId": "african-penguin",
+          "tier": 5
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "tier": 3
+        },
+        {
+          "animalId": "mallard",
+          "tier": 1
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "tier": 5
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "europe",
+      "text": "Name an animal that lives in Europe",
+      "answers": [
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        },
+        {
+          "animalId": "grey-wolf",
+          "tier": 1
+        },
+        {
+          "animalId": "brown-bear",
+          "tier": 1
+        },
+        {
+          "animalId": "european-hedgehog",
+          "tier": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "tier": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "tier": 1
+        },
+        {
+          "animalId": "barn-owl",
+          "tier": 1
+        },
+        {
+          "animalId": "white-stork",
+          "tier": 1
+        },
+        {
+          "animalId": "northern-lapwing",
+          "tier": 2
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "tier": 1
+        },
+        {
+          "animalId": "mallard",
+          "tier": 1
+        },
+        {
+          "animalId": "common-kingfisher",
+          "tier": 1
+        },
+        {
+          "animalId": "harbour-seal",
+          "tier": 1
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "tier": 3
+        },
+        {
+          "animalId": "peregrine-falcon",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "north-america",
+      "text": "Name an animal that lives in North America",
+      "answers": [
+        {
+          "animalId": "bald-eagle",
+          "tier": 1
+        },
+        {
+          "animalId": "california-condor",
+          "tier": 5
+        },
+        {
+          "animalId": "brown-bear",
+          "tier": 1
+        },
+        {
+          "animalId": "grey-wolf",
+          "tier": 1
+        },
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        },
+        {
+          "animalId": "snowy-owl",
+          "tier": 3
+        },
+        {
+          "animalId": "polar-bear",
+          "tier": 3
+        },
+        {
+          "animalId": "sea-otter",
+          "tier": 4
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "tier": 1
+        },
+        {
+          "animalId": "peregrine-falcon",
+          "tier": 1
+        },
+        {
+          "animalId": "barn-owl",
+          "tier": 1
+        },
+        {
+          "animalId": "mallard",
+          "tier": 1
+        },
+        {
+          "animalId": "harbour-seal",
+          "tier": 1
+        },
+        {
+          "animalId": "west-indian-manatee",
+          "tier": 3
+        },
+        {
+          "animalId": "house-mouse",
+          "tier": 1
+        }
+      ]
+    }
+  ]
+}

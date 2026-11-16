@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-20",
+  "number": 15,
+  "prompts": [
+    {
+      "id": "shark-or-whale",
+      "text": "Name a shark or a whale",
+      "answers": [
+        {
+          "animalId": "killer-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "blue-whale",
+          "tier": 4
+        },
+        {
+          "animalId": "humpback-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "great-white-shark",
+          "tier": 3
+        },
+        {
+          "animalId": "whale-shark",
+          "tier": 4
+        },
+        {
+          "animalId": "great-hammerhead",
+          "tier": 5
+        }
+      ]
+    },
+    {
+      "id": "eats-fruit",
+      "text": "Name an animal that eats fruit",
+      "answers": [
+        {
+          "animalId": "sumatran-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "chimpanzee",
+          "tier": 4
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "tier": 5
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "tier": 5
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "tier": 3
+        },
+        {
+          "animalId": "african-grey-parrot",
+          "tier": 4
+        },
+        {
+          "animalId": "kakapo",
+          "tier": 5
+        },
+        {
+          "animalId": "malayan-tapir",
+          "tier": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "tier": 4
+        },
+        {
+          "animalId": "emu",
+          "tier": 1
+        },
+        {
+          "animalId": "brown-bear",
+          "tier": 1
+        },
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "climbs-trees",
+      "text": "Name an animal that climbs trees",
+      "answers": [
+        {
+          "animalId": "koala",
+          "tier": 3
+        },
+        {
+          "animalId": "red-panda",
+          "tier": 4
+        },
+        {
+          "animalId": "giant-panda",
+          "tier": 3
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "chimpanzee",
+          "tier": 4
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "tier": 5
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "tier": 5
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "tier": 5
+        },
+        {
+          "animalId": "kakapo",
+          "tier": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-22",
+  "number": 17,
+  "prompts": [
+    {
+      "id": "red-or-pink",
+      "text": "Name an animal that is red or pink",
+      "answers": [
+        {
+          "animalId": "greater-flamingo",
+          "tier": 1
+        },
+        {
+          "animalId": "red-panda",
+          "tier": 4
+        },
+        {
+          "animalId": "red-fox",
+          "tier": 1
+        },
+        {
+          "animalId": "red-kangaroo",
+          "tier": 1
+        },
+        {
+          "animalId": "axolotl",
+          "tier": 5
+        }
+      ]
+    },
+    {
+      "id": "mostly-black",
+      "text": "Name an animal that is mostly black",
+      "answers": [
+        {
+          "animalId": "tasmanian-devil",
+          "tier": 4
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "tier": 5
+        },
+        {
+          "animalId": "chimpanzee",
+          "tier": 4
+        },
+        {
+          "animalId": "california-condor",
+          "tier": 5
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "migrates",
+      "text": "Name an animal that migrates",
+      "answers": [
+        {
+          "animalId": "humpback-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "blue-whale",
+          "tier": 4
+        },
+        {
+          "animalId": "white-stork",
+          "tier": 1
+        },
+        {
+          "animalId": "wandering-albatross",
+          "tier": 3
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "tier": 1
+        },
+        {
+          "animalId": "northern-lapwing",
+          "tier": 2
+        },
+        {
+          "animalId": "greater-flamingo",
+          "tier": 1
+        },
+        {
+          "animalId": "mallard",
+          "tier": 1
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "tier": 3
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "tier": 5
+        },
+        {
+          "animalId": "whale-shark",
+          "tier": 4
+        },
+        {
+          "animalId": "peregrine-falcon",
+          "tier": 1
+        },
+        {
+          "animalId": "snowy-owl",
+          "tier": 3
+        }
+      ]
+    }
+  ]
+}

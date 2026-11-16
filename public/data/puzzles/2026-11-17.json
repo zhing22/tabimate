@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-17",
+  "number": 12,
+  "prompts": [
+    {
+      "id": "primate",
+      "text": "Name a primate",
+      "answers": [
+        {
+          "animalId": "sumatran-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "tier": 5
+        },
+        {
+          "animalId": "chimpanzee",
+          "tier": 4
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "tier": 5
+        }
+      ]
+    },
+    {
+      "id": "bird-of-prey",
+      "text": "Name a bird of prey",
+      "answers": [
+        {
+          "animalId": "bald-eagle",
+          "tier": 1
+        },
+        {
+          "animalId": "peregrine-falcon",
+          "tier": 1
+        },
+        {
+          "animalId": "philippine-eagle",
+          "tier": 5
+        },
+        {
+          "animalId": "california-condor",
+          "tier": 5
+        },
+        {
+          "animalId": "barn-owl",
+          "tier": 1
+        },
+        {
+          "animalId": "snowy-owl",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "horns-tusks",
+      "text": "Name an animal with horns or tusks",
+      "answers": [
+        {
+          "animalId": "african-elephant",
+          "tier": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "tier": 4
+        },
+        {
+          "animalId": "black-rhino",
+          "tier": 5
+        },
+        {
+          "animalId": "white-rhino",
+          "tier": 2
+        },
+        {
+          "animalId": "giraffe",
+          "tier": 3
+        },
+        {
+          "animalId": "hippo",
+          "tier": 3
+        }
+      ]
+    }
+  ]
+}

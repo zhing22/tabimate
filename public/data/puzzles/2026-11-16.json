@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-16",
+  "number": 11,
+  "prompts": [
+    {
+      "id": "long-neck",
+      "text": "Name an animal with a long neck",
+      "answers": [
+        {
+          "animalId": "giraffe",
+          "tier": 3
+        },
+        {
+          "animalId": "ostrich",
+          "tier": 1
+        },
+        {
+          "animalId": "emu",
+          "tier": 1
+        },
+        {
+          "animalId": "greater-flamingo",
+          "tier": 1
+        },
+        {
+          "animalId": "red-crowned-crane",
+          "tier": 3
+        },
+        {
+          "animalId": "white-stork",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "reptile-amphibian",
+      "text": "Name a reptile or an amphibian",
+      "answers": [
+        {
+          "animalId": "komodo-dragon",
+          "tier": 4
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "tier": 1
+        },
+        {
+          "animalId": "axolotl",
+          "tier": 5
+        },
+        {
+          "animalId": "chinese-giant-salamander",
+          "tier": 5
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "tier": 5
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "rainforest",
+      "text": "Name an animal that lives in a rainforest",
+      "answers": [
+        {
+          "animalId": "sumatran-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "tier": 5
+        },
+        {
+          "animalId": "chimpanzee",
+          "tier": 4
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "tier": 5
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "tier": 5
+        },
+        {
+          "animalId": "malayan-tapir",
+          "tier": 4
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "tier": 5
+        },
+        {
+          "animalId": "philippine-eagle",
+          "tier": 5
+        },
+        {
+          "animalId": "tiger",
+          "tier": 4
+        },
+        {
+          "animalId": "african-grey-parrot",
+          "tier": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "tier": 4
+        }
+      ]
+    }
+  ]
+}

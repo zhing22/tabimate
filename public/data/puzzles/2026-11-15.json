@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-15",
+  "number": 10,
+  "prompts": [
+    {
+      "id": "flightless-bird",
+      "text": "Name a bird that cannot fly",
+      "answers": [
+        {
+          "animalId": "emu",
+          "tier": 1
+        },
+        {
+          "animalId": "ostrich",
+          "tier": 1
+        },
+        {
+          "animalId": "brown-kiwi",
+          "tier": 3
+        },
+        {
+          "animalId": "kakapo",
+          "tier": 5
+        },
+        {
+          "animalId": "emperor-penguin",
+          "tier": 2
+        },
+        {
+          "animalId": "african-penguin",
+          "tier": 5
+        }
+      ]
+    },
+    {
+      "id": "polar",
+      "text": "Name an animal that lives in the Arctic or Antarctic",
+      "answers": [
+        {
+          "animalId": "polar-bear",
+          "tier": 3
+        },
+        {
+          "animalId": "snowy-owl",
+          "tier": 3
+        },
+        {
+          "animalId": "emperor-penguin",
+          "tier": 2
+        },
+        {
+          "animalId": "harbour-seal",
+          "tier": 1
+        },
+        {
+          "animalId": "killer-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "humpback-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "blue-whale",
+          "tier": 4
+        },
+        {
+          "animalId": "grey-wolf",
+          "tier": 1
+        },
+        {
+          "animalId": "wandering-albatross",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "marine-mammal",
+      "text": "Name a mammal that lives in the sea",
+      "answers": [
+        {
+          "animalId": "killer-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "blue-whale",
+          "tier": 4
+        },
+        {
+          "animalId": "humpback-whale",
+          "tier": 1
+        },
+        {
+          "animalId": "vaquita",
+          "tier": 5
+        },
+        {
+          "animalId": "bottlenose-dolphin",
+          "tier": 1
+        },
+        {
+          "animalId": "dugong",
+          "tier": 3
+        },
+        {
+          "animalId": "west-indian-manatee",
+          "tier": 3
+        },
+        {
+          "animalId": "sea-otter",
+          "tier": 4
+        },
+        {
+          "animalId": "harbour-seal",
+          "tier": 1
+        }
+      ]
+    }
+  ]
+}
