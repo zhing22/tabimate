@@ -44,6 +44,12 @@ export const LAYERS = {
 /** Props stand on the ground a little behind the walk line. */
 export const PROP_BASE_Y = GROUND_Y - 3;
 
+/**
+ * The results line-up's snapshot of a biome: the scene from this row down
+ * (native px), so it shows the treetops or hills, the walk line and the ground.
+ */
+export const BACKDROP = { top: 96, width: 220 } as const;
+
 /** Where the player stands, as a share of the visible width from the left. */
 export const PLAYER_SCREEN_X = 0.75;
 

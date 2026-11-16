@@ -1,4 +1,5 @@
 import { BIOMES } from '@/config/biomes';
+import { BACKDROP, GROUND_Y, NATIVE_HEIGHT } from '@/config/render';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import type { Component } from './component';
@@ -7,8 +8,11 @@ import type { TeamRound } from './teamCard';
 
 /** Screen pixels per sprite pixel in the line-up (and its backdrop). */
 const SCALE = 2;
-/** Without a painted backdrop: the scene's proportions, so nothing jumps when one arrives. */
-const FALLBACK = { height: 84, groundY: 54 };
+/** Without a painted backdrop: the same crop of the scene, so nothing jumps when one arrives. */
+const FALLBACK = {
+  height: NATIVE_HEIGHT - BACKDROP.top,
+  groundY: GROUND_Y - BACKDROP.top,
+};
 
 export interface PartyLineupOptions {
   readonly portraits?: Portraits | undefined;
@@ -27,7 +31,6 @@ function showBackdrop(frame: HTMLElement, image: BackdropImage) {
   fit(frame, image);
   frame.style.backgroundImage = `url("${image.src}")`;
   frame.style.backgroundSize = `${image.width * SCALE}px ${image.height * SCALE}px`;
-  frame.classList.add('party--painted');
 }
 
 /**

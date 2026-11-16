@@ -52,6 +52,10 @@ Original art and naming only: no Pokémon names, sprites or UI.
   (TIERS[].effectId: none, glint, sparkle, shiny) has a scene effect in scene/effects/
   (entrance when the animal joins, then a subtle idle loop) and a badge style in
   reveal.css. Reduced motion: no shake or particles, only fades.
+- Results page: on phones too, the card floats over the full-window scene of the biome
+  reached. The party line-up (traveller in front, animals behind) walks on the spot in a
+  framed snapshot of that biome (Scene.backdrops; emoji and plain colours without a scene).
+  Team rows show sprites and open to list every accepted answer with its points.
 - Sharing: services/share.ts builds the share text (title, tier squares, animal emoji, the
   site link; never animal names or prompts) from shareCard(), plain data an image card
   can reuse. Phones get the share sheet, desktops copy to the clipboard.

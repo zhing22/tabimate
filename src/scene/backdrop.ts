@@ -1,13 +1,12 @@
 import type { BiomeId } from '@/config/biomes';
-import { GROUND_Y, NATIVE_HEIGHT, PROP_BASE_Y } from '@/config/render';
+import { BACKDROP, GROUND_Y, NATIVE_HEIGHT, PROP_BASE_Y } from '@/config/render';
 import type { BackdropImage } from '@/core/portrait';
 import type { BiomeArtSprites } from './biomes/load';
 import { propsInSegment } from './props';
 import { makeCanvas } from './sprites/canvasArt';
 
-/** Native size of the still: wide enough for a party, the lower part of the scene. */
-export const BACKDROP_WIDTH = 220;
-const CROP_TOP = 96;
+const BACKDROP_WIDTH = BACKDROP.width;
+const CROP_TOP = BACKDROP.top;
 
 /**
  * Paints a biome's scenery as one still (sky, layers, the day's props, ground),
