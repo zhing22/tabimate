@@ -93,7 +93,11 @@ Original art and naming only: no Pokémon names, sprites or UI.
 
 ## Commands
 
-- npm run dev | npm run build | npm run test | npm run check (typecheck + lint + test)
+- npm run dev | npm run build | npm run test | npm run check (data + typecheck + lint + test)
+- npm run validate-data: every file in public/data, plus a puzzle for each of the next 7
+  SGT days; part of check, and of the GitHub workflow (every push, PR, and daily).
+- ?debug=1 on any page (live too): the debug panel (play another date, see how the matcher
+  read each guess, reset local progress). PLAYTEST.md is the playtest checklist.
 - Dev-only pages (not in the build): /dev/scene.html replays a scripted run in the scene
   (?step=N jumps ahead, ?restore rebuilds a finished run, ?emoji for placeholders) with an
   fps readout. /dev/palettes.html tunes palettes by eye and copies them as JSON.

@@ -1,0 +1,46 @@
+/* The hidden debug panel (?debug=1): small, monospace, out of the way. */
+.debug {
+  position: fixed;
+  left: var(--space-2);
+  bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+  z-index: calc(var(--z-overlay) + 1);
+  max-width: min(26rem, calc(100vw - 2 * var(--space-2)));
+  max-height: 45vh;
+  overflow: auto;
+  padding: var(--space-2);
+  font:
+    11px/1.4 ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  color: #e8f6ff;
+  background: rgb(20 24 40 / 0.9);
+  border-radius: var(--radius-1);
+}
+
+.debug summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.debug__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-1) 0;
+}
+
+.debug button,
+.debug input {
+  font: inherit;
+  color: #1d2b3a; /* the panel's light text would vanish on the default light controls */
+}
+
+.debug__log {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+.debug__log li {
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,24 @@
+# Runs the full check (data, types, lint, tests) and a build on every push and
+# pull request. It also runs daily, so "a puzzle for each of the next 7 days"
+# fails here, in good time, before the puzzles actually run out.
+name: check
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *' # 08:00 SGT
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build

@@ -7,6 +7,7 @@ import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
+import { createDebugPanel, readDebugParams } from '@/debug/debugPanel';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
 import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
@@ -37,12 +38,14 @@ const source = createLocalPuzzleSource({ loader });
 const storage = createLocalStorageAdapter();
 const progress = createProgressService(storage, clock);
 const reload = () => location.reload();
+// ?debug=1 shows the debug panel; with it, ?date=YYYY-MM-DD plays that day's puzzle.
+const debug = readDebugParams(location.search);
 const shareUrl = () => new URL(import.meta.env.BASE_URL, location.origin).href;
 
-async function load(): Promise<{ puzzle: Puzzle | null; animals: ReadonlyMap<AnimalId, Animal> }> {
-  const key = dailyKey(clock.now());
+async function load() {
+  const key = debug.date ?? dailyKey(clock.now());
   const [puzzle, animals] = await Promise.all([source.getPuzzle(key), source.getAnimals()]);
-  return { puzzle, animals };
+  return { key, puzzle, animals };
 }
 
 /**
@@ -98,7 +101,7 @@ function startAudio(bus: GameBus) {
   }
 }
 
-function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
+function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): GameBus {
   const bus = createBus<GameEvents>({
     onError: (error, type) => console.error(`Listener for "${String(type)}" failed`, error),
   });
@@ -137,14 +140,25 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>) {
   });
   const saved = progress.loadToday(puzzle.date);
   if (!(saved && controller.restore(saved))) app.showStart();
+  return bus;
 }
 
 load()
-  .then(({ puzzle, animals }) => {
-    if (puzzle) {
-      play(puzzle, animals);
-      return;
+  .then(({ key, puzzle, animals }) => {
+    const bus = puzzle ? play(puzzle, animals) : undefined;
+    if (debug.enabled) {
+      const panel = createDebugPanel({
+        bus,
+        puzzle,
+        animals,
+        storage,
+        dateKey: key,
+        navigate: (search) => (location.search = search),
+        confirm: (question) => window.confirm(question),
+      });
+      document.body.append(panel.el);
     }
+    if (puzzle) return;
     // A fixed target, so the countdown reaches zero instead of restarting at noon.
     const nextAt = clock.now().getTime() + msUntilNextReset(clock.now());
     const msUntilNext = () => nextAt - clock.now().getTime();

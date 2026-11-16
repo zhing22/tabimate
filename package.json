@@ -12,7 +12,8 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
-    "check": "npm run typecheck && npm run lint && npm run test",
+    "check": "npm run validate-data && npm run typecheck && npm run lint && npm run test",
+    "validate-data": "tsx scripts/validate-data.ts",
     "pixelate": "tsx scripts/pixelate.ts",
     "art:sample": "tsx scripts/drawSampleSheet.ts"
   },
