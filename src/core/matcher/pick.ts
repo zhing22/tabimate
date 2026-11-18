@@ -1,5 +1,5 @@
 import { fnv1a } from './similarity';
-import type { Candidate, Found, NormalizedInput } from './types';
+import type { Candidate, Found, NormalizedInput, TieBreak, TieReason } from './types';
 
 export interface Scored {
   /** Higher is better. */
@@ -8,38 +8,74 @@ export interface Scored {
 }
 
 /**
- * Negative when `a` wins a tie with `b`. A suggestion must never jump to a
- * rarer answer than the player typed, so the lower level wins; then a group
- * ("penguin" over "African penguin"); then the shorter display name. Last, a
- * hash of input and id, so the winner never depends on the order answers are
- * listed in.
+ * The whole guess appears as whole words in the display name ("penguin" in
+ * "African penguin"). The display name, not an alias: "bear" must not favour
+ * Koala through its alias "koala bear" over Brown bear.
  */
-export function compareTies(input: NormalizedInput, a: Candidate, b: Candidate): number {
-  const hash = (c: Candidate) => fnv1a(`${input.text}\u0000${c.animalId}`);
-  return (
-    a.level - b.level ||
-    Number(b.group) - Number(a.group) ||
-    (a.names[0]?.length ?? 0) - (b.names[0]?.length ?? 0) ||
-    hash(a) - hash(b)
-  );
+const wholeWordMatch = (c: Candidate, text: string): boolean =>
+  ` ${c.names[0] ?? ''} `.includes(` ${text} `);
+
+/**
+ * How equally scored candidates are ordered, first rule first; lower key wins.
+ * A suggestion must never jump to a more specific or rarer answer than the
+ * guess supports, so whole-word matches, short names and groups come first.
+ * The hash comes last so the winner never depends on the order answers are listed in.
+ */
+const TIE_RULES: readonly {
+  readonly reason: TieReason;
+  readonly key: (input: NormalizedInput, c: Candidate) => number;
+}[] = [
+  { reason: 'whole-word', key: (input, c) => (wholeWordMatch(c, input.text) ? 0 : 1) },
+  { reason: 'shorter-name', key: (_, c) => c.names[0]?.length ?? 0 },
+  { reason: 'group', key: (_, c) => (c.group ? 0 : 1) },
+  { reason: 'lower-level', key: (_, c) => c.level },
+  { reason: 'hash', key: (input, c) => fnv1a(`${input.text}\u0000${c.animalId}`) },
+];
+
+/** The first rule that tells `a` and `b` apart, and which way: negative when `a` wins. */
+export function breakTie(
+  input: NormalizedInput,
+  a: Candidate,
+  b: Candidate,
+): { readonly order: number; readonly reason: TieReason | null } {
+  for (const { reason, key } of TIE_RULES) {
+    const order = key(input, a) - key(input, b);
+    if (order !== 0) return { order, reason };
+  }
+  return { order: 0, reason: null };
 }
 
-/** The candidate with the highest score; ties go by compareTies. */
+/** Comparator for equally scored candidates (see TIE_RULES): negative when `a` wins. */
+export const compareTies = (input: NormalizedInput, a: Candidate, b: Candidate): number =>
+  breakTie(input, a, b).order;
+
+/**
+ * The candidate with the highest score; ties go by compareTies. When there was
+ * a tie, `tie` says which rule decided it against the runner-up.
+ */
 export function pickBest(
   input: NormalizedInput,
   candidates: readonly Candidate[],
   scorer: (candidate: Candidate) => Scored | null,
 ): Found | null {
-  let best: { found: Found; score: number } | null = null;
+  let top: { candidate: Candidate; scored: Scored }[] = [];
   for (const candidate of candidates) {
     const scored = scorer(candidate);
-    if (!scored || (best && scored.score < best.score)) continue;
-    if (best && scored.score === best.score) {
-      if (compareTies(input, candidate, best.found.candidate) >= 0) continue;
-    }
-    best = { found: { candidate, confidence: scored.confidence }, score: scored.score };
+    if (!scored) continue;
+    const best = top[0]?.scored.score;
+    if (best === undefined || scored.score > best) top = [{ candidate, scored }];
+    else if (scored.score === best) top.push({ candidate, scored });
   }
-  return best?.found ?? null;
+  if (top.length === 0) return null;
+  top.sort((a, b) => compareTies(input, a.candidate, b.candidate));
+  const [winner, runnerUp] = [top[0]!, top[1]];
+  const tie: TieBreak | null = runnerUp
+    ? {
+        reason: breakTie(input, winner.candidate, runnerUp.candidate).reason ?? 'hash',
+        over: runnerUp.candidate.animalId,
+      }
+    : null;
+  return { candidate: winner.candidate, confidence: winner.scored.confidence, tie };
 }
 
 /** The best-scoring name of one candidate. */

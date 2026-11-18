@@ -48,6 +48,11 @@ export const typo: StrategyFn = (input, candidates, cfg) => {
  */
 export const partial: StrategyFn = (input, candidates, cfg) => {
   const text = input.text;
+  // A guess that is a group's whole name or alias goes to the group, never to a
+  // more specific species whose name merely starts with it. (In the pipeline,
+  // exact and alias catch this first; partial must hold the rule on its own.)
+  const group = candidates.find((c) => c.group && c.names.includes(text));
+  if (group) return { candidate: group, confidence: 1, tie: null };
   const spacedText = ` ${text} `;
   const scoreName = (name: string): Scored | null => {
     const inName = text.length <= name.length;

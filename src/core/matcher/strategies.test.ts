@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { MATCHER_CONFIG, type MatcherConfig } from '@/config/game';
 import type { StrategyId } from '../types';
 import { STRATEGIES, alias, exact, loose, partial, typo, typoAllowance } from './strategies';
-import { candidate } from './testFixtures';
+import { candidate, groupCandidate } from './testFixtures';
 import type { NormalizedInput } from './types';
 
 const cfg: MatcherConfig = MATCHER_CONFIG;
@@ -67,6 +67,22 @@ describe('typo', () => {
 });
 
 describe('partial', () => {
+  it('gives a group whose whole name or alias is the guess, not a species starting with it', () => {
+    const owls = groupCandidate('owl', 1, 'Owl');
+    const owlParrot = candidate('kakapo', 5, 'Owl parrot');
+    const rhinos = groupCandidate('rhinoceros', 1, 'Rhinoceros', 'rhino');
+    const rhinoX = candidate('rhino-x', 3, 'Rhino x');
+    for (const list of [
+      [owls, owlParrot],
+      [owlParrot, owls],
+    ]) {
+      expect(idOf(partial(input('owl'), list, cfg))).toBe('owl');
+    }
+    expect(idOf(partial(input('rhino'), [rhinoX, rhinos], cfg))).toBe('rhinoceros');
+    // A species named exactly gets no such shortcut: normal partial scoring applies.
+    expect(idOf(partial(input('owl'), [owlParrot], cfg))).toBe(null);
+  });
+
   it('finds the input inside a name, or a name inside the input', () => {
     expect(idOf(partial(input('plat'), all, cfg))).toBe('platypus');
     expect(idOf(partial(input('whale'), all, cfg))).toBe('killer-whale');

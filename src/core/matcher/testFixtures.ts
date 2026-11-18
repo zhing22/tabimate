@@ -30,7 +30,7 @@ export const ANIMALS: ReadonlyMap<AnimalId, Animal> = new Map(
     // A group and two of its species, at different levels.
     { ...animal('penguin', 'Penguin'), kind: 'group' as const, representative: 'emperor-penguin' },
     { ...animal('emperor-penguin', 'Emperor penguin'), parent: 'penguin' },
-    { ...animal('african-penguin', 'African penguin'), parent: 'penguin' },
+    { ...animal('african-penguin', 'African penguin', ['cape penguin']), parent: 'penguin' },
   ].map((a) => [a.id, a]),
 );
 

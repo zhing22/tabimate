@@ -9,6 +9,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { dailyKey, shiftKey } from '../src/core/date.ts';
+import { nameCollisions } from '../src/data/checkNames.ts';
 import { validateAnimals, validatePuzzle } from '../src/data/validate.ts';
 import {
   validateAnimalArt,
@@ -68,7 +69,7 @@ const keys = new Set(files.map((name) => name.replace(/\.json$/, '')));
 if (animals) {
   for (const name of files) {
     const key = name.replace(/\.json$/, '');
-    check(`puzzles/${name}`, () =>
+    const puzzle = check(`puzzles/${name}`, () =>
       validatePuzzle(readJson(`${DATA}/puzzles/${name}`), {
         file: `data/puzzles/${name}`,
         key,
@@ -76,6 +77,10 @@ if (animals) {
         warn: (message) => warnings.push(message),
       }),
     );
+    // Each answer's names must lead back to it, or a correct name could not score.
+    for (const collision of puzzle ? nameCollisions(puzzle, animals) : []) {
+      problems.push(`puzzles/${name}: ${collision}`);
+    }
   }
 }
 

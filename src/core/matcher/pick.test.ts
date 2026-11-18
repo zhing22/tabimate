@@ -1,60 +1,67 @@
 import { describe, expect, it } from 'vitest';
-import { MATCHER_CONFIG } from '@/config/game';
-import { compareTies, pickBest } from './pick';
-import { partial } from './strategies';
+import type { AnswerLevel } from '@/config/tiers';
+import { breakTie, compareTies, pickBest } from './pick';
 import { candidate, groupCandidate } from './testFixtures';
-import type { NormalizedInput } from './types';
+import type { Candidate, NormalizedInput, TieReason } from './types';
 
 const input = (text: string): NormalizedInput => ({ text, promptId: 'p' });
 const SAME = () => ({ score: 1, confidence: 1 });
-const winner = (text: string, ...cs: ReturnType<typeof candidate>[]) =>
-  pickBest(input(text), cs, SAME)?.candidate.animalId;
+const sp = (id: string, level: AnswerLevel, ...names: string[]) => candidate(id, level, ...names);
+const gr = (id: string, level: AnswerLevel, ...names: string[]) =>
+  groupCandidate(id, level, ...names);
 
-describe('compareTies', () => {
-  it('prefers the lower level first, whatever else', () => {
-    const common = candidate('common', 1, 'a much longer name');
-    const rare = groupCandidate('rare', 4, 'short');
-    expect(compareTies(input('x'), common, rare)).toBeLessThan(0);
-    expect(compareTies(input('x'), rare, common)).toBeGreaterThan(0);
-  });
+// [guess, winner, loser, the rule that decides]
+const TIES: readonly [string, Candidate, Candidate, TieReason][] = [
+  // The whole guess as whole words beats a longer, rarer, or group candidate without it.
+  ['seal', sp('harbour-seal', 3, 'Harbour seal'), gr('sea-lion', 1, 'Sealion'), 'whole-word'],
+  ['bear', sp('polar-bear', 4, 'Polar bear'), sp('bearded', 1, 'Bearded dragon'), 'whole-word'],
+  // Only the display name counts: Koala's alias "koala bear" does not make "bear" a word of Koala.
+  ['bear', sp('brown-bear', 1, 'Brown bear'), sp('koala', 3, 'Koala', 'koala bear'), 'whole-word'],
+  // Then the shorter display name, even over a group or a lower level.
+  ['peng', sp('emperor', 4, 'Penguin e'), gr('penguins', 1, 'Penguin fam'), 'shorter-name'],
+  ['owl', sp('barn-owl', 2, 'Barn owl'), sp('snowy-owl', 1, 'Snowy owl'), 'shorter-name'],
+  // Then a group over a species.
+  ['cat', gr('big-cat', 4, 'Big cat'), sp('sea-cat', 1, 'Sea cat'), 'group'],
+  // Then the existing rule: lower level, then the hash.
+  ['bear', sp('brown-bear', 1, 'Brown bear'), sp('polar-bear', 2, 'Polar bear'), 'lower-level'],
+];
 
-  it('then a group over a species, then the shorter display name', () => {
-    const group = groupCandidate('penguin', 1, 'Long group name');
-    const species = candidate('emperor', 1, 'Emperor');
-    expect(compareTies(input('x'), group, species)).toBeLessThan(0);
-    const short = candidate('owl', 2, 'Owl');
-    const long = candidate('barn-owl', 2, 'Barn owl');
-    expect(compareTies(input('x'), short, long)).toBeLessThan(0);
+describe('breakTie and compareTies', () => {
+  it.each(TIES)('%j: %o beats %o by %s', (guess, winner, loser, reason) => {
+    expect(breakTie(input(guess), winner, loser)).toEqual({
+      order: expect.any(Number) as number,
+      reason,
+    });
+    expect(compareTies(input(guess), winner, loser)).toBeLessThan(0);
+    expect(compareTies(input(guess), loser, winner)).toBeGreaterThan(0);
   });
 
   it('falls back to a hash, so only the same animal compares equal', () => {
-    const a = candidate('a', 1, 'cat x');
-    const b = candidate('b', 1, 'cat y');
-    expect(compareTies(input('cat'), a, b)).not.toBe(0);
-    expect(compareTies(input('cat'), a, a)).toBe(0);
+    const a = sp('a', 1, 'cat x');
+    const b = sp('b', 1, 'cat y');
+    expect(breakTie(input('cat'), a, b).reason).toBe('hash');
+    expect(breakTie(input('cat'), a, a)).toEqual({ order: 0, reason: null });
   });
 });
 
-describe('pickBest ties', () => {
-  it('picks the same winner in any list order', () => {
-    const a = candidate('a', 1, 'cat x');
-    const b = candidate('b', 1, 'cat y');
-    expect(winner('cat', a, b)).toBe(winner('cat', b, a));
+describe('pickBest', () => {
+  it.each(TIES)('%j picks the same winner in either order, and says why', (g, w, l, reason) => {
+    for (const list of [
+      [w, l],
+      [l, w],
+    ]) {
+      expect(pickBest(input(g), list, SAME)).toEqual({
+        candidate: w,
+        confidence: 1,
+        tie: { reason, over: l.animalId },
+      });
+    }
   });
 
-  it('never moves a tied suggestion to a rarer answer or past the group', () => {
-    const african = candidate('african-penguin', 4, 'Penguin a');
-    const emperor = candidate('emperor-penguin', 2, 'Penguin b');
-    const group = groupCandidate('penguin-group', 2, 'Penguin c');
-    for (const list of [
-      [african, emperor, group],
-      [group, african, emperor],
-      [emperor, group, african],
-    ]) {
-      // Each name is "penguin" plus one letter: partial scores them all the same.
-      expect(partial(input('penguin'), list, MATCHER_CONFIG)?.candidate.animalId).toBe(
-        'penguin-group',
-      );
-    }
+  it('reports no tie when one candidate scores best', () => {
+    const a = sp('a', 1, 'A');
+    const b = sp('b', 1, 'B');
+    const found = pickBest(input('a'), [a, b], (c) => (c === a ? SAME() : null));
+    expect(found).toEqual({ candidate: a, confidence: 1, tie: null });
   });
 });

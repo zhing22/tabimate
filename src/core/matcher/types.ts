@@ -20,11 +20,22 @@ export interface Candidate {
   readonly grams: readonly ReadonlySet<string>[];
 }
 
+/** Which tie-break rule decided between equally scored candidates (see pick.ts TIE_RULES). */
+export type TieReason = 'whole-word' | 'shorter-name' | 'group' | 'lower-level' | 'hash';
+
+export interface TieBreak {
+  readonly reason: TieReason;
+  /** The runner-up it beat. */
+  readonly over: AnimalId;
+}
+
 /** What a strategy finds. The pipeline adds which strategy it was, so none can mislabel itself. */
 export interface Found {
   readonly candidate: Candidate;
   /** 0..1, how sure the strategy is. */
   readonly confidence: number;
+  /** Set when other candidates scored the same: why this one won. */
+  readonly tie: TieBreak | null;
 }
 
 export type StrategyFn = (
@@ -43,4 +54,5 @@ export interface Hit {
   readonly level: AnswerLevel;
   readonly strategy: StrategyId;
   readonly confidence: number;
+  readonly tie: TieBreak | null;
 }

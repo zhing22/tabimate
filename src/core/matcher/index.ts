@@ -17,7 +17,8 @@ export function runStrategies(
     const found = strategy.match(input, candidates, cfg);
     if (found) {
       const { animalId, level } = found.candidate;
-      return { animalId, level, strategy: strategy.id, confidence: found.confidence };
+      const { confidence, tie } = found;
+      return { animalId, level, strategy: strategy.id, confidence, tie };
     }
   }
   return null;

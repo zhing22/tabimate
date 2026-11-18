@@ -124,6 +124,7 @@ describe('runStrategies', () => {
       level: 1,
       strategy: 'alias',
       confidence: 1,
+      tie: null,
     });
   });
 
@@ -184,22 +185,27 @@ describe('performance', () => {
   });
 });
 
+// Groups, species and aliases on one prompt: penguin (group, level 1), Emperor
+// penguin (2) and African penguin (4, alias "cape penguin"). A guess must never
+// land on an answer more specific or rarer than it supports.
 describe('a group and its species on one prompt', () => {
-  it.each(['penguin', 'Penguins', 'PENGUIN!'])('%j is the group, exactly', (raw) => {
-    expect(match(raw)).toEqual({ level: 1, animalId: 'penguin', strategy: 'exact', input: raw });
-  });
-
-  it('a typo of the group suggests the group, never a rarer species', () => {
-    expect(match('penguinn')).toMatchObject({ animalId: 'penguin', level: 1, strategy: 'typo' });
-    expect(match('pengiun')).toMatchObject({ animalId: 'penguin', level: 1 });
-  });
-
-  it('a species word goes to that species', () => {
-    expect(match('emperor')).toMatchObject({ animalId: 'emperor-penguin', strategy: 'partial' });
-    expect(match('african')).toMatchObject({ animalId: 'african-penguin', strategy: 'partial' });
-    expect(match('emperor penguin')).toMatchObject({
-      animalId: 'emperor-penguin',
-      strategy: 'exact',
-    });
+  it.each([
+    // [guess, animal, level, strategy]
+    ['penguin', 'penguin', 1, 'exact'],
+    ['Penguins', 'penguin', 1, 'exact'],
+    ['PENGUIN!', 'penguin', 1, 'exact'],
+    ['pengu', 'penguin', 1, 'typo'],
+    ['peng', 'penguin', 1, 'partial'],
+    ['penguinn', 'penguin', 1, 'typo'],
+    ['pengiun', 'penguin', 1, 'typo'],
+    ['african peng', 'african-penguin', 4, 'partial'],
+    ['african', 'african-penguin', 4, 'partial'],
+    ['cape penguin', 'african-penguin', 4, 'alias'],
+    ['Cape penguins', 'african-penguin', 4, 'alias'],
+    ['emperor', 'emperor-penguin', 2, 'partial'],
+    ['emperor penguin', 'emperor-penguin', 2, 'exact'],
+    ['emperer penguin', 'emperor-penguin', 2, 'typo'],
+  ] as const)('%j -> %s (level %i, %s)', (raw, animalId, level, strategy) => {
+    expect(match(raw)).toEqual({ level, animalId, strategy, input: raw });
   });
 });

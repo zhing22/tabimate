@@ -899,7 +899,7 @@
   {
     "id": "african-penguin",
     "display": "African penguin",
-    "aliases": ["jackass penguin", "black-footed penguin"],
+    "aliases": ["jackass penguin", "black-footed penguin", "cape penguin"],
     "kind": "species",
     "parent": "penguin",
     "archetype": "penguin",

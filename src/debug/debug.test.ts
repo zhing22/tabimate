@@ -31,6 +31,14 @@ describe('explainGuess', () => {
     if (strategy) expect(g.confidence).toBeGreaterThan(0);
   });
 
+  it('says when a tie-break picked the answer, and why', () => {
+    // Snow leopard and Amur leopard score the same for "leopard"; the lower level wins.
+    const g = explainGuess('leopard', PROMPT, ANIMALS);
+    expect(g).toMatchObject({ animal: 'Snow leopard', strategy: 'partial' });
+    expect(g.tie).toBe('tie with Amur leopard, won by lower level');
+    expect(explainGuess('Tiger', PROMPT, ANIMALS).tie).toBeNull();
+  });
+
   it('says when a strategy hit was overruled as a list', () => {
     const g = explainGuess('snow leopard tiger', PROMPT, ANIMALS);
     expect(g.strategy).not.toBeNull();
