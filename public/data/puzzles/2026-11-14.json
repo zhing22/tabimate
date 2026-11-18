@@ -23,7 +23,7 @@
           "level": 2
         },
         {
-          "animalId": "echidna",
+          "animalId": "short-beaked-echidna",
           "level": 1
         },
         {
@@ -72,6 +72,42 @@
         },
         {
           "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "kiwi",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
           "level": 1
         }
       ]
@@ -175,6 +211,26 @@
         {
           "animalId": "parrot",
           "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "peafowl",
+          "level": 1
+        },
+        {
+          "animalId": "crane",
+          "level": 1
+        },
+        {
+          "animalId": "magpie",
+          "level": 1
         }
       ]
     },
@@ -219,7 +275,7 @@
           "level": 4
         },
         {
-          "animalId": "echidna",
+          "animalId": "short-beaked-echidna",
           "level": 1
         },
         {
@@ -248,6 +304,38 @@
         },
         {
           "animalId": "orangutan",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "kiwi",
+          "level": 1
+        },
+        {
+          "animalId": "giant-salamander",
+          "level": 1
+        },
+        {
+          "animalId": "duck",
           "level": 1
         }
       ]

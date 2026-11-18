@@ -49,6 +49,38 @@
         {
           "animalId": "penguin",
           "level": 1
+        },
+        {
+          "animalId": "flamingo",
+          "level": 1
+        },
+        {
+          "animalId": "crane",
+          "level": 1
+        },
+        {
+          "animalId": "stork",
+          "level": 1
+        },
+        {
+          "animalId": "lapwing",
+          "level": 1
+        },
+        {
+          "animalId": "kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "duck",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
+          "level": 1
         }
       ]
     },
@@ -178,6 +210,22 @@
         },
         {
           "animalId": "orangutan",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
           "level": 1
         }
       ]

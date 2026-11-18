@@ -11,7 +11,7 @@
           "level": 5
         },
         {
-          "animalId": "ostrich",
+          "animalId": "common-ostrich",
           "level": 1
         },
         {
@@ -28,6 +28,22 @@
         },
         {
           "animalId": "white-stork",
+          "level": 1
+        },
+        {
+          "animalId": "ostrich",
+          "level": 1
+        },
+        {
+          "animalId": "flamingo",
+          "level": 1
+        },
+        {
+          "animalId": "crane",
+          "level": 1
+        },
+        {
+          "animalId": "stork",
           "level": 1
         }
       ]
@@ -70,6 +86,10 @@
         },
         {
           "animalId": "salamander",
+          "level": 1
+        },
+        {
+          "animalId": "giant-salamander",
           "level": 1
         }
       ]
@@ -140,6 +160,22 @@
         },
         {
           "animalId": "parrot",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
           "level": 1
         }
       ]

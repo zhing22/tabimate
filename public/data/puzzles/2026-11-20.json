@@ -37,6 +37,10 @@
         {
           "animalId": "shark",
           "level": 1
+        },
+        {
+          "animalId": "hammerhead-shark",
+          "level": 1
         }
       ]
     },
@@ -111,6 +115,26 @@
         {
           "animalId": "parrot",
           "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
         }
       ]
     },
@@ -164,6 +188,14 @@
         },
         {
           "animalId": "parrot",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
           "level": 1
         }
       ]

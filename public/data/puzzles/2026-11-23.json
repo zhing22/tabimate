@@ -49,6 +49,38 @@
         {
           "animalId": "owl",
           "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "peafowl",
+          "level": 1
+        },
+        {
+          "animalId": "lapwing",
+          "level": 1
+        },
+        {
+          "animalId": "magpie",
+          "level": 1
+        },
+        {
+          "animalId": "duck",
+          "level": 1
         }
       ]
     },
@@ -91,6 +123,22 @@
         {
           "animalId": "elephant",
           "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
         }
       ]
     },
@@ -129,6 +177,34 @@
         {
           "animalId": "atlantic-puffin",
           "level": 3
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "lapwing",
+          "level": 1
+        },
+        {
+          "animalId": "hummingbird",
+          "level": 1
+        },
+        {
+          "animalId": "kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "magpie",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
         }
       ]
     }

@@ -119,6 +119,9 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Animals are `group` ("penguin") or `species` ("African penguin", parent: penguin).
   Groups are normal answers, usually low level. A group has a `representative` species
   used for its sprite.
+- A family name ("hummingbird", "duck", "fox") is never a species alias: it is its own
+  group answer, so a general guess scores the group's level, not a rarer species'.
+  Groups can nest (giant salamander under salamander).
 - The validator (data/validate.ts, data/checkHierarchy.ts) enforces: levels 1–5, the CR
   rule (PuzzleContext.maxCR), parents that exist and are groups (no loops), each group's
   representative a species below it, no animal twice on a prompt. A species ranked below

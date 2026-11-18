@@ -29,6 +29,14 @@
         {
           "animalId": "orangutan",
           "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
         }
       ]
     },
@@ -66,6 +74,14 @@
         },
         {
           "animalId": "owl",
+          "level": 1
+        },
+        {
+          "animalId": "falcon",
+          "level": 1
+        },
+        {
+          "animalId": "condor",
           "level": 1
         }
       ]

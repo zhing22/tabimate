@@ -117,6 +117,38 @@
         {
           "animalId": "orangutan",
           "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
         }
       ]
     },
@@ -210,6 +242,26 @@
         },
         {
           "animalId": "dolphin",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "hammerhead-shark",
+          "level": 1
+        },
+        {
+          "animalId": "sea-cow",
+          "level": 1
+        },
+        {
+          "animalId": "manatee",
           "level": 1
         }
       ]
@@ -328,6 +380,38 @@
         },
         {
           "animalId": "shark",
+          "level": 1
+        },
+        {
+          "animalId": "giant-salamander",
+          "level": 1
+        },
+        {
+          "animalId": "crane",
+          "level": 1
+        },
+        {
+          "animalId": "stork",
+          "level": 1
+        },
+        {
+          "animalId": "kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
+          "level": 1
+        },
+        {
+          "animalId": "hammerhead-shark",
+          "level": 1
+        },
+        {
+          "animalId": "octopus",
           "level": 1
         }
       ]

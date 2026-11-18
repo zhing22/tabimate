@@ -113,6 +113,46 @@
         {
           "animalId": "parrot",
           "level": 1
+        },
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "lemur",
+          "level": 1
+        },
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "sea-cow",
+          "level": 1
+        },
+        {
+          "animalId": "manatee",
+          "level": 1
         }
       ]
     },
@@ -137,7 +177,7 @@
           "level": 1
         },
         {
-          "animalId": "echidna",
+          "animalId": "short-beaked-echidna",
           "level": 1
         },
         {
@@ -211,6 +251,50 @@
         {
           "animalId": "owl",
           "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "kiwi",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "octopus",
+          "level": 1
         }
       ]
     },
@@ -279,7 +363,7 @@
           "level": 4
         },
         {
-          "animalId": "ostrich",
+          "animalId": "common-ostrich",
           "level": 1
         },
         {
@@ -336,6 +420,30 @@
         },
         {
           "animalId": "whale",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "ostrich",
+          "level": 1
+        },
+        {
+          "animalId": "sea-cow",
+          "level": 1
+        },
+        {
+          "animalId": "manatee",
           "level": 1
         }
       ]

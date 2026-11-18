@@ -25,6 +25,10 @@
         {
           "animalId": "axolotl",
           "level": 5
+        },
+        {
+          "animalId": "flamingo",
+          "level": 1
         }
       ]
     },
@@ -51,6 +55,14 @@
         {
           "animalId": "leatherback-turtle",
           "level": 3
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "condor",
+          "level": 1
         }
       ]
     },
@@ -116,6 +128,18 @@
         },
         {
           "animalId": "whale",
+          "level": 1
+        },
+        {
+          "animalId": "stork",
+          "level": 1
+        },
+        {
+          "animalId": "duck",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
           "level": 1
         }
       ]
