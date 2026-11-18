@@ -24,7 +24,7 @@
 .section-title,
 .round__prompt,
 .button,
-.tier-badge {
+.level-badge {
   font-family: var(--font-pixel);
   letter-spacing: 0.02em;
 }
@@ -136,7 +136,7 @@
 }
 
 /* Tier badge */
-.tier-badge {
+.level-badge {
   display: inline-block;
   justify-self: center;
   padding: var(--space-1) var(--space-2);
@@ -148,7 +148,7 @@
   white-space: nowrap;
 }
 
-.tier-badge--lg {
+.level-badge--lg {
   max-width: 100%;
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-md);

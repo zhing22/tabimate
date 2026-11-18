@@ -16,7 +16,8 @@ export function tierBadge(level: LevelId, options: TierBadgeOptions = {}): Compo
   const el = h(
     'span',
     {
-      class: `level-badge level-badge--${options.size ?? 'sm'}`,
+      // Small is the base style; only large has a modifier.
+      class: options.size === 'lg' ? 'level-badge level-badge--lg' : 'level-badge',
       'data-tier': level,
       style: `--badge: var(${def.colour}); --badge-ink: var(${def.colour}-ink)`,
       title: text === full ? null : def.name,

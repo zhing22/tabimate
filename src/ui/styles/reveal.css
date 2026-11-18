@@ -98,14 +98,14 @@
  * effect to another tier is a config change. Each looks different on the badge:
  * glint a shine sweeping across, sparkle a pulsing halo, shiny a glow on it all.
  */
-.reveal[data-effect='glint'] .tier-badge,
-.reveal[data-effect='sparkle'] .tier-badge,
-.reveal[data-effect='shiny'] .tier-badge {
+.reveal[data-effect='glint'] .level-badge,
+.reveal[data-effect='sparkle'] .level-badge,
+.reveal[data-effect='shiny'] .level-badge {
   position: relative;
   overflow: hidden;
 }
 
-.reveal[data-effect='glint'] .tier-badge::after {
+.reveal[data-effect='glint'] .level-badge::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -119,17 +119,17 @@
   animation: glint 700ms ease-out var(--reveal-badge-ms, 420ms) both;
 }
 
-.reveal[data-effect='sparkle'] .tier-badge {
+.reveal[data-effect='sparkle'] .level-badge {
   animation: halo 1.2s ease-in-out var(--reveal-badge-ms, 420ms) infinite;
 }
 
-.reveal[data-effect='shiny'] .tier-badge {
+.reveal[data-effect='shiny'] .level-badge {
   overflow: visible;
   animation: halo 0.9s ease-in-out var(--reveal-badge-ms, 420ms) infinite;
 }
 
 .reveal[data-effect='shiny'] .reveal__body {
-  text-shadow: 0 0 12px var(--reveal-tier);
+  text-shadow: 0 0 12px var(--reveal-level);
 }
 
 @keyframes glint {
@@ -142,7 +142,7 @@
   50% {
     box-shadow:
       0 0 0 2px var(--ink),
-      0 0 14px 4px var(--reveal-tier);
+      0 0 14px 4px var(--reveal-level);
   }
 }
 
@@ -154,12 +154,12 @@
   }
 
   .reveal--pending .reveal__suspense,
-  .reveal .tier-badge,
-  .reveal .tier-badge::after {
+  .reveal .level-badge,
+  .reveal .level-badge::after {
     animation: none;
   }
 
-  .reveal[data-effect='glint'] .tier-badge::after {
+  .reveal[data-effect='glint'] .level-badge::after {
     display: none;
   }
 }
