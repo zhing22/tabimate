@@ -1,17 +1,23 @@
 # Runs the full check (data, types, lint, tests) and a build on every push and
 # pull request. It also runs daily, so "a puzzle for each of the next 7 days"
 # fails here, in good time, before the puzzles actually run out.
+#
+# The record job freezes each puzzle once it goes live: just after the noon
+# SGT reset it adds the new day's fingerprint to scripts/released-puzzles.json
+# and commits it. From then on, any change to that day fails validate-data.
 name: check
 
 on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 * * *' # 08:00 SGT
+    - cron: '0 0 * * *' # 08:00 SGT: the check
+    - cron: '5 4 * * *' # 12:05 SGT, just after the reset: record the new live day
   workflow_dispatch:
 
 jobs:
   check:
+    if: github.event.schedule != '5 4 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,3 +28,30 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+
+  record:
+    if: github.event.schedule == '5 4 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Records first, then reports. Other data problems still exit non-zero; the
+      # check job reports those, so here they must not stop the day being recorded.
+      - run: npm run validate-data -- --record || true
+      - name: Commit the record
+        run: |
+          git add scripts/released-puzzles.json
+          if git diff --cached --quiet; then
+            echo "Nothing new to record."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Record released puzzles'
+          git push

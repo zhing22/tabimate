@@ -22,6 +22,7 @@ describe('checkReleased', () => {
     const result = checkReleased(puzzles, '2026-11-18', record);
     expect(result.changed).toEqual(['2026-11-17']);
     expect(result.unrecorded).toEqual(['2026-11-18']);
+    expect(result.overdue).toEqual([]); // today's day may wait for the record job
     // Recording never overwrites: the changed day keeps its original print.
     expect(result.updated).toEqual({
       '2026-11-17': fingerprint(day(1)),
@@ -31,6 +32,18 @@ describe('checkReleased', () => {
 
   it('leaves days that are not live yet alone', () => {
     const result = checkReleased(puzzles, '2026-11-16', {});
-    expect(result).toEqual({ changed: [], unrecorded: [], updated: {} });
+    expect(result).toEqual({ changed: [], unrecorded: [], overdue: [], updated: {} });
+  });
+});
+
+describe('checkReleased: falling behind', () => {
+  it('marks unrecorded days before today as overdue', () => {
+    const puzzles = new Map<string, unknown>([
+      ['2026-11-17', day(5)],
+      ['2026-11-18', day(4)],
+    ]);
+    const result = checkReleased(puzzles, '2026-11-18', {});
+    expect(result.unrecorded).toEqual(['2026-11-17', '2026-11-18']);
+    expect(result.overdue).toEqual(['2026-11-17']);
   });
 });

@@ -106,17 +106,26 @@ const live = new Map(
     .filter(([, json]) => json !== undefined),
 );
 const released = checkReleased(live, today, record);
+// A changed live day fails: players who finished it keep levels the file no longer has.
 for (const date of released.changed) {
-  warnings.push(
-    `puzzles/${date}.json changed after it went live; players' stored levels no longer match it`,
+  problems.push(
+    `puzzles/${date}.json changed after it went live; players' stored levels no longer match it ` +
+      `(restore it, and fix a future day instead)`,
   );
 }
 if (values.record && released.unrecorded.length > 0) {
   writeFileSync(RELEASED, `${JSON.stringify(released.updated, null, 2)}\n`);
   console.log(`Recorded ${released.unrecorded.length} released day(s) in ${RELEASED}.`);
+} else if (released.overdue.length > 0) {
+  // The daily "record" job (.github/workflows/check.yml) should have added these.
+  problems.push(
+    `released days not recorded: ${released.overdue.join(', ')}; the daily record job fell ` +
+      `behind (run npm run validate-data -- --record and commit ${RELEASED})`,
+  );
 } else if (released.unrecorded.length > 0) {
   warnings.push(
-    `released days not recorded yet: ${released.unrecorded.join(', ')} (run validate-data -- --record)`,
+    `today's puzzle ${released.unrecorded.join(', ')} is live but not recorded yet ` +
+      `(the daily record job adds it just after noon SGT)`,
   );
 }
 

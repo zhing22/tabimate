@@ -28,6 +28,11 @@ export interface ReleaseCheck {
   readonly changed: string[];
   /** Released days not in the record yet (run with --record to add them). */
   readonly unrecorded: string[];
+  /**
+   * Unrecorded days older than today. The daily record job adds each day just
+   * after it goes live, so only today may be missing; older ones mean it fell behind.
+   */
+  readonly overdue: string[];
   /** The record with the unrecorded days added; never overwrites a day. */
   readonly updated: ReleasedRecord;
 }
@@ -50,5 +55,5 @@ export function checkReleased(
       updated[date] = print;
     } else if (known !== print) changed.push(date);
   }
-  return { changed, unrecorded, updated };
+  return { changed, unrecorded, overdue: unrecorded.filter((d) => d < today), updated };
 }

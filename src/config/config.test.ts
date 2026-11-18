@@ -11,7 +11,7 @@ import {
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
-import { LEVELS } from './tiers';
+import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
@@ -75,5 +75,28 @@ describe('config invariants', () => {
     expect(MATCHER_CONFIG.partialMinLength).toBeGreaterThanOrEqual(1);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeGreaterThan(0);
     expect(MATCHER_CONFIG.partialMinCoverage).toBeLessThanOrEqual(1);
+  });
+});
+
+// Derived from LEVELS; isLevelId also guards loading saved runs.
+describe('level helpers', () => {
+  it('ANSWER_LEVELS is every level but the miss, lowest first; TOP_LEVEL is the last', () => {
+    expect(ANSWER_LEVELS).toEqual([1, 2, 3, 4, 5]);
+    expect(TOP_LEVEL).toBe(5);
+    expect(TOP_LEVEL).toBe(LEVELS[LEVELS.length - 1]!.id);
+  });
+
+  it.each([0, 1, 2, 3, 4, 5])('isLevelId(%j) is true', (value) => {
+    expect(isLevelId(value)).toBe(true);
+  });
+
+  it.each([6, -1, 1.5, '1', null, undefined, Number.NaN, {}])('isLevelId(%j) is false', (value) => {
+    expect(isLevelId(value)).toBe(false);
+  });
+
+  it('isShiny is true only for the level whose effect is shiny', () => {
+    const shiny = LEVELS.filter((l) => l.effectId === 'shiny').map((l) => l.id);
+    expect(shiny).toEqual([5]);
+    for (const { id } of LEVELS) expect(isShiny(id)).toBe(id === 5);
   });
 });
