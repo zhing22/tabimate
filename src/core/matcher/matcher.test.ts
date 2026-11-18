@@ -20,17 +20,17 @@ describe('matchAnswer', () => {
     ['snow leo', 'snow-leopard', 3, 'partial'],
     // 3 edits away, so too far for typo, but most of its trigrams match.
     ['plaatyypuss', 'platypus', 2, 'loose'],
-  ] as const)('%j -> %s (tier %i, %s)', (raw, animalId, tier, strategy) => {
-    expect(match(raw)).toEqual({ tier, animalId, strategy, input: raw });
+  ] as const)('%j -> %s (level %i, %s)', (raw, animalId, level, strategy) => {
+    expect(match(raw)).toEqual({ level, animalId, strategy, input: raw });
   });
 
   it.each(['', '   ', '!!!'])('%j is always a miss', (raw) => {
-    expect(match(raw)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
+    expect(match(raw)).toEqual({ level: 0, animalId: null, strategy: null, input: raw });
   });
 
   // "er" is inside "tiger" and "ar" inside "bear": fragments that short match nothing.
   it.each(['James', 'zzzz', 'er', 'an', 'ar'])('%j matches nothing', (raw) => {
-    expect(match(raw)).toEqual({ tier: 0, animalId: null, strategy: null, input: raw });
+    expect(match(raw)).toEqual({ level: 0, animalId: null, strategy: null, input: raw });
   });
 });
 
@@ -40,7 +40,7 @@ describe('lists of animals', () => {
   it.each(['platypus tiger', 'tiger, platypus, red fox', 'brown bear sun bear', 'orca tiger'])(
     '%j matches nothing',
     (raw) => {
-      expect(match(raw)).toMatchObject({ tier: 0, animalId: null, strategy: null });
+      expect(match(raw)).toMatchObject({ level: 0, animalId: null, strategy: null });
     },
   );
 
@@ -66,7 +66,7 @@ describe('lists of animals', () => {
     ['snow leopard tiger'], // an exact name plus another animal is a list, not exact
     ['tigerr platypuss sun bearr'],
   ])('%j is still rejected as a list', (raw) => {
-    expect(match(raw)).toMatchObject({ tier: 0, strategy: null });
+    expect(match(raw)).toMatchObject({ level: 0, strategy: null });
   });
 
   it('still corrects a fuzzy multi-word guess naming one animal', () => {
@@ -121,7 +121,7 @@ describe('runStrategies', () => {
   it('reports which strategy hit, with its confidence', () => {
     expect(runStrategies(input, candidates, MATCHER_CONFIG)).toEqual({
       animalId: 'killer-whale',
-      tier: 1,
+      level: 1,
       strategy: 'alias',
       confidence: 1,
     });
@@ -140,7 +140,7 @@ describe('buildCandidates', () => {
   });
 
   it('falls back to the animal id when the registry lacks it', () => {
-    const prompt: Prompt = { id: 'x', text: 'x', answers: [{ animalId: 'snow-owl', tier: 1 }] };
+    const prompt: Prompt = { id: 'x', text: 'x', answers: [{ animalId: 'snow-owl', level: 1 }] };
     expect(buildCandidates(prompt, new Map())[0]?.names).toEqual(['snow owl']);
   });
 });
@@ -162,7 +162,7 @@ describe('performance', () => {
       display: nameOf(i),
       aliases: [`${nameOf(i)} x`],
     });
-    return { animalId: id, tier: ((i % 5) + 1) as 1 | 2 | 3 | 4 | 5 };
+    return { animalId: id, level: ((i % 5) + 1) as 1 | 2 | 3 | 4 | 5 };
   });
   const prompt: Prompt = { id: 'bench', text: 'bench', answers };
   // A mix of exact names, typos, fragments and nonsense, so every strategy runs.

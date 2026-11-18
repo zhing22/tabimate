@@ -94,7 +94,7 @@ describe('app: playing with the keyboard', () => {
     pressEnter(input);
     // The reveal sits over the round; the same input keeps focus (keyboard stays up).
     expect(t.$('.reveal .reveal__name')?.textContent).toBe('Platypus');
-    expect(t.$('.reveal .tier-badge')?.textContent).toBe('NT · Near Threatened');
+    expect(t.$('.reveal .level-badge')?.textContent).toBe('NT · Near Threatened');
     expect(document.activeElement).toBe(input);
     expect(input.readOnly).toBe(true);
     await t.flush();

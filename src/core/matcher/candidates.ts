@@ -13,12 +13,12 @@ export function buildCandidates(prompt: Prompt, animals: Animals): readonly Cand
   const cached = cache.get(prompt);
   if (cached?.animals === animals) return cached.candidates;
 
-  const candidates = prompt.answers.map(({ animalId, tier }): Candidate => {
+  const candidates = prompt.answers.map(({ animalId, level }): Candidate => {
     const animal = animals.get(animalId);
     // Validation guarantees the animal exists; the id is a fallback so play goes on.
     const raw = animal ? [animal.display, ...animal.aliases] : [animalId];
     const names = [...new Set(raw.map(normalize).filter((name) => name !== ''))];
-    return { animalId, tier, names, grams: names.map(trigrams) };
+    return { animalId, level, names, grams: names.map(trigrams) };
   });
   cache.set(prompt, { animals, candidates });
   return candidates;

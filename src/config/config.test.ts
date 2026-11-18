@@ -11,12 +11,12 @@ import {
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
-import { TIERS } from './tiers';
+import { LEVELS } from './tiers';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
-  it('builds up longer for rarer tiers, without dragging', () => {
-    const steps = [0, 1, 2, 3, 4, 5].map((tier) => revealBuildUpMs(tier));
+  it('builds up longer for rarer levels, without dragging', () => {
+    const steps = [0, 1, 2, 3, 4, 5].map((level) => revealBuildUpMs(level));
     expect(steps).toEqual([...steps].sort((a, b) => a - b));
     expect(steps[5]).toBeGreaterThan(steps[1]!);
     expect(steps[5]! + REVEAL_TIMING.nameDelayMs).toBeLessThanOrEqual(2_500);
@@ -28,18 +28,18 @@ describe('config invariants', () => {
     expect(TIMER_WARN_MS).toBeLessThan(ROUND_TIME_MS);
   });
 
-  it('TIERS is indexed by tier id', () => {
-    expect(TIERS).toHaveLength(6);
-    TIERS.forEach((tier, index) => {
-      expect(tier.id).toBe(index);
-      expect(tier.colour).toBe(`--tier-${index}`);
+  it('LEVELS is indexed by level id', () => {
+    expect(LEVELS).toHaveLength(6);
+    LEVELS.forEach((level, index) => {
+      expect(level.id).toBe(index);
+      expect(level.colour).toBe(`--tier-${index}`);
     });
   });
 
-  it('tier points rise with rarity, and a miss scores nothing', () => {
-    expect(TIERS[0].points).toBe(0);
-    for (let i = 1; i < TIERS.length; i++) {
-      expect(TIERS[i]?.points).toBeGreaterThan(TIERS[i - 1]?.points ?? Infinity);
+  it('level points rise with rarity, and a miss scores nothing', () => {
+    expect(LEVELS[0].points).toBe(0);
+    for (let i = 1; i < LEVELS.length; i++) {
+      expect(LEVELS[i]?.points).toBeGreaterThan(LEVELS[i - 1]?.points ?? Infinity);
     }
   });
 

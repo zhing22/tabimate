@@ -1,7 +1,8 @@
 import type { BiomeId } from '@/config/biomes';
 import { BIOME_FADE_MS, FOLLOWER_SPACING, GROUND_Y, MISS_WALK } from '@/config/render';
 import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
-import { biomeFor, distanceFor, pointsFor, totalScore } from '@/core/journey';
+import { biomeFor, distanceFor } from '@/core/journey';
+import { dayTotal, pointsFor } from '@/core/scoring';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';
 import { createTrail, type Trail } from './entities/followerTrail';
 import { createIdleMotion, type Pose } from './entities/idleMotion';
@@ -80,15 +81,16 @@ export function createWorld(options: WorldOptions): World {
     const animal =
       result.match.animalId === null ? undefined : options.animals.get(result.match.animalId);
     if (animal) {
-      const { tier } = result.match;
+      const { level } = result.match;
       const { reducedMotion } = options;
       followers.push(
-        createFollower({ animal, tier, index: followers.length, animate, reducedMotion }),
+        createFollower({ animal, level, index: followers.length, animate, reducedMotion }),
       );
     } else {
       leaveFootprints(player.x);
     }
-    const distance = result.match.tier === 0 ? MISS_WALK : distanceFor(pointsFor(result));
+    const distance =
+      result.match.level === 0 ? MISS_WALK : distanceFor(pointsFor(result.match.level));
     if (animate) player.walkBy(distance);
     else player.placeAt(player.x + distance);
   }
@@ -106,17 +108,17 @@ export function createWorld(options: WorldOptions): World {
       footprints.fill(Number.NaN);
       nextPrint = 0;
       player.placeAt(0);
-      score = totalScore(results);
+      score = dayTotal(results);
       for (const result of results) addToJourney(result, false);
       trail.reset(player.x, GROUND_Y);
       biome.from = null;
-      biome.to = biomeFor(totalScore(results)).id as BiomeId;
+      biome.to = biomeFor(dayTotal(results)).id as BiomeId;
       biome.progress = 1;
     },
 
     join(result) {
       addToJourney(result, true);
-      score += pointsFor(result);
+      score += pointsFor(result.match.level);
       enterBiome(biomeFor(score).id as BiomeId);
     },
 

@@ -4,15 +4,15 @@ import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
 import { buildShareText, MISS_EMOJI, share, shareCard, type ShareEnvironment } from './share';
 
-const hit = (animalId: string, tier: 1 | 2 | 3 | 4 | 5): RoundResult => ({
+const hit = (animalId: string, level: 1 | 2 | 3 | 4 | 5): RoundResult => ({
   promptId: 'p',
   timeMs: 1,
-  match: { tier, animalId, strategy: 'exact', input: animalId },
+  match: { level, animalId, strategy: 'exact', input: animalId },
 });
 const timeUp: RoundResult = {
   promptId: 'p',
   timeMs: 25_000,
-  match: { tier: 0, animalId: null, strategy: null, input: '' },
+  match: { level: 0, animalId: null, strategy: null, input: '' },
 };
 
 // Emoji per animal for the test, as animals.json gives them.
@@ -25,7 +25,7 @@ const animals = new Map(
 const forest = BIOMES.find((b) => b.id === 'forest')!;
 
 describe('buildShareText', () => {
-  it('writes the title, tier squares with points, animal emoji and the link', () => {
+  it('writes the title, level squares with points, animal emoji and the link', () => {
     const text = buildShareText(
       { results: [hit('platypus', 2), hit('tiger', 4), timeUp], animals },
       12,
@@ -67,7 +67,7 @@ describe('shareCard', () => {
     expect(shareCard({ results: [hit('tiger', 5), timeUp], animals }, 7, forest)).toEqual({
       puzzleNumber: 7,
       biome: { name: 'Forest', emoji: '🌲' },
-      tiers: [5, 0],
+      levels: [5, 0],
       animalEmoji: ['🐅', MISS_EMOJI],
       score: 100,
     });

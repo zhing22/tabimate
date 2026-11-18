@@ -10,7 +10,7 @@ describe('judgeGuess', () => {
   it('scores an exact name', () => {
     expect(judge('Killer whales')).toEqual({
       kind: 'exact',
-      match: { tier: 1, animalId: 'killer-whale', strategy: 'exact', input: 'Killer whales' },
+      match: { level: 1, animalId: 'killer-whale', strategy: 'exact', input: 'Killer whales' },
     });
   });
 
@@ -35,10 +35,10 @@ describe('judgeGuess', () => {
 
 describe('timeUpMatch', () => {
   it('scores only an exact name', () => {
-    expect(timeUp('tiger')).toMatchObject({ tier: 4, animalId: 'tiger' });
+    expect(timeUp('tiger')).toMatchObject({ level: 4, animalId: 'tiger' });
   });
 
   it.each(['platipus', 'James', ''])('counts %j as a miss, keeping the text', (draft) => {
-    expect(timeUp(draft)).toEqual({ tier: 0, animalId: null, strategy: null, input: draft });
+    expect(timeUp(draft)).toEqual({ level: 0, animalId: null, strategy: null, input: draft });
   });
 });

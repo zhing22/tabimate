@@ -16,8 +16,8 @@ export function runStrategies(
   for (const strategy of strategies) {
     const found = strategy.match(input, candidates, cfg);
     if (found) {
-      const { animalId, tier } = found.candidate;
-      return { animalId, tier, strategy: strategy.id, confidence: found.confidence };
+      const { animalId, level } = found.candidate;
+      return { animalId, level, strategy: strategy.id, confidence: found.confidence };
     }
   }
   return null;
@@ -77,7 +77,7 @@ export function matchAnswer(
     found && (found.strategy === 'exact' || closeEnough(text, found, candidates, animals))
       ? found
       : null;
-  if (!hit) return { tier: 0, animalId: null, strategy: null, input: rawInput };
-  return { tier: hit.tier, animalId: hit.animalId, strategy: hit.strategy, input: rawInput };
+  if (!hit) return { level: 0, animalId: null, strategy: null, input: rawInput };
+  return { level: hit.level, animalId: hit.animalId, strategy: hit.strategy, input: rawInput };
 }
 export { STRATEGIES } from './strategies';

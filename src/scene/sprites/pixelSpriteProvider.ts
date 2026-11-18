@@ -1,5 +1,6 @@
 import type { ImageSource, KAPLAYCtx, SpriteAnims } from 'kaplay';
 import { TEMPLATE_KEYS, type AnimalArt, type Palette } from '@/config/render';
+import { representativeFor } from '@/core/hierarchy';
 import type { PortraitImage } from '@/core/portrait';
 import type { Animal, AnimalId } from '@/core/types';
 import { makeCanvas, portraitFrom } from './canvasArt';
@@ -159,11 +160,14 @@ export function createPixelSpriteProvider(
         }
         return sheets.get(archetype)!;
       };
+      // A group ("penguin") has no art of its own: it is drawn as its representative.
+      const lookup = new Map(list.map((a) => [a.id, a]));
       await Promise.all(
         list.map(async (animal) => {
-          const colours = art.animals.get(animal.id);
-          if (!colours || !art.sheets.includes(animal.archetype)) return;
-          const sheet = await sheetFor(animal.archetype);
+          const source = representativeFor(animal, lookup);
+          const colours = art.animals.get(source.id);
+          if (!colours || !art.sheets.includes(source.archetype)) return;
+          const sheet = await sheetFor(source.archetype);
           if (sheet) await build(animal, colours, art.palettes, sheet);
         }),
       );

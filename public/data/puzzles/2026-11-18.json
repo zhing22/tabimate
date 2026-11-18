@@ -8,51 +8,67 @@
       "answers": [
         {
           "animalId": "saltwater-crocodile",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "hippo",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "platypus",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "harbour-seal",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "sea-otter",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "polar-bear",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "emperor-penguin",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "african-penguin",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "atlantic-puffin",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "hawksbill-turtle",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "leatherback-turtle",
-          "tier": 3
+          "level": 3
+        },
+        {
+          "animalId": "penguin",
+          "level": 1
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "seal",
+          "level": 1
         }
       ]
     },
@@ -62,63 +78,75 @@
       "answers": [
         {
           "animalId": "red-fox",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "grey-wolf",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "brown-bear",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "european-hedgehog",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "european-rabbit",
-          "tier": 4
+          "level": 5
         },
         {
           "animalId": "house-mouse",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "barn-owl",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "white-stork",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "northern-lapwing",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "eurasian-magpie",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "common-kingfisher",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "harbour-seal",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "atlantic-puffin",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "peregrine-falcon",
-          "tier": 1
+          "level": 1
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "seal",
+          "level": 1
+        },
+        {
+          "animalId": "owl",
+          "level": 1
         }
       ]
     },
@@ -128,63 +156,79 @@
       "answers": [
         {
           "animalId": "bald-eagle",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "california-condor",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "brown-bear",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "grey-wolf",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-fox",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "snowy-owl",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "polar-bear",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "sea-otter",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "ruby-throated-hummingbird",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "peregrine-falcon",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "barn-owl",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "harbour-seal",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "west-indian-manatee",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "house-mouse",
-          "tier": 1
+          "level": 1
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "seal",
+          "level": 1
+        },
+        {
+          "animalId": "eagle",
+          "level": 1
+        },
+        {
+          "animalId": "owl",
+          "level": 1
         }
       ]
     }

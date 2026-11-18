@@ -6,71 +6,250 @@
       "id": "burrow",
       "text": "Name an animal that lives in a burrow or den",
       "answers": [
-        { "animalId": "european-rabbit", "tier": 4 },
-        { "animalId": "house-mouse", "tier": 1 },
-        { "animalId": "european-hedgehog", "tier": 2 },
-        { "animalId": "platypus", "tier": 2 },
-        { "animalId": "echidna", "tier": 1 },
-        { "animalId": "sunda-pangolin", "tier": 5 },
-        { "animalId": "red-fox", "tier": 1 },
-        { "animalId": "grey-wolf", "tier": 1 },
-        { "animalId": "brown-bear", "tier": 1 },
-        { "animalId": "polar-bear", "tier": 3 },
-        { "animalId": "atlantic-puffin", "tier": 3 },
-        { "animalId": "african-penguin", "tier": 5 },
-        { "animalId": "brown-kiwi", "tier": 3 },
-        { "animalId": "kakapo", "tier": 5 },
-        { "animalId": "tasmanian-devil", "tier": 4 },
-        { "animalId": "komodo-dragon", "tier": 4 }
+        {
+          "animalId": "european-rabbit",
+          "level": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "level": 1
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 2
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 5
+        },
+        {
+          "animalId": "red-fox",
+          "level": 1
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 1
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 1
+        },
+        {
+          "animalId": "polar-bear",
+          "level": 3
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 3
+        },
+        {
+          "animalId": "african-penguin",
+          "level": 4
+        },
+        {
+          "animalId": "brown-kiwi",
+          "level": 3
+        },
+        {
+          "animalId": "kakapo",
+          "level": 4
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 4
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 4
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        }
       ]
     },
     {
       "id": "loud",
       "text": "Name an animal known for being loud",
       "answers": [
-        { "animalId": "lion", "tier": 3 },
-        { "animalId": "humpback-whale", "tier": 1 },
-        { "animalId": "grey-wolf", "tier": 1 },
-        { "animalId": "indian-peafowl", "tier": 1 },
-        { "animalId": "chimpanzee", "tier": 4 },
-        { "animalId": "african-elephant", "tier": 4 },
-        { "animalId": "asian-elephant", "tier": 4 },
-        { "animalId": "kakapo", "tier": 5 },
-        { "animalId": "red-crowned-crane", "tier": 3 },
-        { "animalId": "tasmanian-devil", "tier": 4 },
-        { "animalId": "northern-lapwing", "tier": 2 },
-        { "animalId": "emperor-penguin", "tier": 2 },
-        { "animalId": "african-penguin", "tier": 5 },
-        { "animalId": "blue-whale", "tier": 4 },
-        { "animalId": "hippo", "tier": 3 },
-        { "animalId": "eastern-gorilla", "tier": 5 },
-        { "animalId": "barn-owl", "tier": 1 },
-        { "animalId": "sumatran-orangutan", "tier": 5 },
-        { "animalId": "eurasian-magpie", "tier": 1 },
-        { "animalId": "african-grey-parrot", "tier": 4 },
-        { "animalId": "red-fox", "tier": 1 }
+        {
+          "animalId": "lion",
+          "level": 3
+        },
+        {
+          "animalId": "humpback-whale",
+          "level": 1
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 1
+        },
+        {
+          "animalId": "indian-peafowl",
+          "level": 1
+        },
+        {
+          "animalId": "chimpanzee",
+          "level": 4
+        },
+        {
+          "animalId": "african-elephant",
+          "level": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 4
+        },
+        {
+          "animalId": "kakapo",
+          "level": 4
+        },
+        {
+          "animalId": "red-crowned-crane",
+          "level": 3
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 4
+        },
+        {
+          "animalId": "northern-lapwing",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "african-penguin",
+          "level": 4
+        },
+        {
+          "animalId": "blue-whale",
+          "level": 4
+        },
+        {
+          "animalId": "hippo",
+          "level": 3
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "level": 4
+        },
+        {
+          "animalId": "barn-owl",
+          "level": 1
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 5
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "level": 1
+        },
+        {
+          "animalId": "african-grey-parrot",
+          "level": 4
+        },
+        {
+          "animalId": "red-fox",
+          "level": 1
+        },
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "whale",
+          "level": 1
+        },
+        {
+          "animalId": "parrot",
+          "level": 1
+        }
       ]
     },
     {
       "id": "brown",
       "text": "Name an animal that is mostly brown",
       "answers": [
-        { "animalId": "brown-bear", "tier": 1 },
-        { "animalId": "platypus", "tier": 2 },
-        { "animalId": "european-hedgehog", "tier": 2 },
-        { "animalId": "european-rabbit", "tier": 4 },
-        { "animalId": "house-mouse", "tier": 1 },
-        { "animalId": "brown-kiwi", "tier": 3 },
-        { "animalId": "sea-otter", "tier": 4 },
-        { "animalId": "bornean-orangutan", "tier": 5 },
-        { "animalId": "komodo-dragon", "tier": 4 },
-        { "animalId": "echidna", "tier": 1 },
-        { "animalId": "sunda-pangolin", "tier": 5 },
-        { "animalId": "chinese-giant-salamander", "tier": 5 },
-        { "animalId": "barn-owl", "tier": 1 },
-        { "animalId": "philippine-eagle", "tier": 5 },
-        { "animalId": "emu", "tier": 1 },
-        { "animalId": "mallard", "tier": 1 }
+        {
+          "animalId": "brown-bear",
+          "level": 1
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "level": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "level": 1
+        },
+        {
+          "animalId": "brown-kiwi",
+          "level": 3
+        },
+        {
+          "animalId": "sea-otter",
+          "level": 4
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "level": 4
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 4
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "chinese-giant-salamander",
+          "level": 5
+        },
+        {
+          "animalId": "barn-owl",
+          "level": 1
+        },
+        {
+          "animalId": "philippine-eagle",
+          "level": 4
+        },
+        {
+          "animalId": "emu",
+          "level": 1
+        },
+        {
+          "animalId": "mallard",
+          "level": 1
+        },
+        {
+          "animalId": "orangutan",
+          "level": 1
+        }
       ]
     }
   ]

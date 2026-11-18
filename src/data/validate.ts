@@ -1,34 +1,21 @@
-import { MOVEMENTS, SIZE_CLASSES } from '@/config/animals';
 import { MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
-import type { AnswerTierId } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/tiers';
 import { puzzleNumber } from '@/core/date';
-import type { Animal, AnimalId, DateKey, Prompt, Puzzle, PuzzleAnswer } from '@/core/types';
+import type {
+  Animal,
+  AnimalId,
+  AnimalLookup,
+  DateKey,
+  Prompt,
+  Puzzle,
+  PuzzleAnswer,
+} from '@/core/types';
+import { checkHierarchy, checkPromptLevels, type PromptLevelRules } from './checkHierarchy';
 import { createJsonReader, field, item, type JsonReader } from './jsonReader';
+import { readAnimal, slug } from './readAnimal';
 
-const ANSWER_TIERS: readonly AnswerTierId[] = [1, 2, 3, 4, 5];
-// Ids end up in URLs, sprite keys and hashes, so keep them plain.
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
-export type AnimalRegistry = ReadonlyMap<AnimalId, Animal>;
-
-function slug(r: JsonReader, value: unknown, path: string): string {
-  const s = r.string(value, path);
-  return SLUG.test(s) ? s : r.fail(path, `must be lowercase-with-dashes (got "${s}")`);
-}
-
-function readAnimal(r: JsonReader, value: unknown, path: string): Animal {
-  const o = r.object(value, path);
-  return {
-    id: slug(r, o.id, field(path, 'id')),
-    display: r.string(o.display, field(path, 'display')),
-    aliases: r.stringArray(o.aliases, field(path, 'aliases')),
-    archetype: slug(r, o.archetype, field(path, 'archetype')),
-    movement: r.oneOf(o.movement, MOVEMENTS, field(path, 'movement')),
-    size: r.oneOf(o.size, SIZE_CLASSES, field(path, 'size')),
-    tint: r.hex(o.tint, field(path, 'tint')),
-    emoji: r.string(o.emoji, field(path, 'emoji')),
-  };
-}
+const ANSWER_LEVELS: readonly AnswerLevel[] = [1, 2, 3, 4, 5];
+export type AnimalRegistry = AnimalLookup;
 
 /**
  * Two animals sharing a name or alias would make matching ambiguous, so every
@@ -69,6 +56,7 @@ export function validateAnimals(json: unknown, file: string): AnimalRegistry {
     return animal;
   });
   checkNamesUnique(r, animals);
+  checkHierarchy(r, animals, registry);
   return registry;
 }
 
@@ -78,11 +66,12 @@ function readAnswer(r: JsonReader, value: unknown, path: string, animals: Animal
   if (!animals.has(animalId)) {
     r.fail(field(path, 'animalId'), `"${animalId}" is not in the animal registry`);
   }
-  const tier = r.oneOf(o.tier, ANSWER_TIERS, field(path, 'tier'));
-  return { animalId, tier } satisfies PuzzleAnswer;
+  const level = r.oneOf(o.level, ANSWER_LEVELS, field(path, 'level'));
+  return { animalId, level } satisfies PuzzleAnswer;
 }
 
-function readPrompt(r: JsonReader, value: unknown, path: string, animals: AnimalRegistry): Prompt {
+function readPrompt(r: JsonReader, value: unknown, path: string, rules: PromptLevelRules): Prompt {
+  const { animals } = rules;
   const o = r.object(value, path);
   const answersPath = field(path, 'answers');
   const list = r.array(o.answers, answersPath);
@@ -97,6 +86,7 @@ function readPrompt(r: JsonReader, value: unknown, path: string, animals: Animal
     seen.add(answer.animalId);
     return answer;
   });
+  checkPromptLevels(r, answers, answersPath, rules);
   return {
     id: slug(r, o.id, field(path, 'id')),
     text: r.string(o.text, field(path, 'text')),
@@ -109,10 +99,15 @@ export interface PuzzleContext {
   /** The key the file was requested for; the puzzle's date must match it. */
   readonly key: DateKey;
   readonly animals: AnimalRegistry;
+  /** The day's theme may allow more than one CR answer per prompt. */
+  readonly maxCR?: number | undefined;
+  /** Non-fatal problems (full messages); validation still passes. */
+  readonly warn?: ((message: string) => void) | undefined;
 }
 
 /** Validates one puzzle file against its expected key and the animal registry. */
-export function validatePuzzle(json: unknown, { file, key, animals }: PuzzleContext): Puzzle {
+export function validatePuzzle(json: unknown, context: PuzzleContext): Puzzle {
+  const { file, key } = context;
   const r = createJsonReader(file);
   const o = r.object(json, '');
 
@@ -128,7 +123,7 @@ export function validatePuzzle(json: unknown, { file, key, animals }: PuzzleCont
   if (list.length < 1 || list.length > MAX_PROMPTS_PER_PUZZLE) {
     r.fail('prompts', `must have 1 to ${MAX_PROMPTS_PER_PUZZLE} prompts (got ${list.length})`);
   }
-  const prompts = list.map((value, i) => readPrompt(r, value, item('prompts', i), animals));
+  const prompts = list.map((value, i) => readPrompt(r, value, item('prompts', i), context));
   const ids = new Set<string>();
   prompts.forEach((prompt, i) => {
     if (ids.has(prompt.id)) r.fail(`prompts[${i}].id`, `"${prompt.id}" is a duplicate`);

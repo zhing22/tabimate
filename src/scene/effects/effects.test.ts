@@ -1,6 +1,6 @@
 import type { KAPLAYCtx } from 'kaplay';
 import { describe, expect, it, vi } from 'vitest';
-import { TIERS, type TierId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/tiers';
 import { createEffectsLayer, type Decorated } from './effectsLayer';
 import { createParticles, createTwinkle } from './particles';
 import { EFFECTS } from './registry';
@@ -27,8 +27,8 @@ function fakeKaplay() {
   return { k, step, drawRect, updates };
 }
 
-const follower = (tier: TierId): Decorated => ({
-  tier,
+const follower = (level: LevelId): Decorated => ({
+  level,
   target: { x: 100, y: 150, size: 24, glow: 0 },
 });
 
@@ -72,8 +72,8 @@ describe('particles', () => {
 });
 
 describe('effects registry', () => {
-  it('has an effect for every effectId in TIERS', () => {
-    for (const tier of TIERS) expect(typeof EFFECTS[tier.effectId]).toBe('function');
+  it('has an effect for every effectId in LEVELS', () => {
+    for (const level of LEVELS) expect(typeof EFFECTS[level.effectId]).toBe('function');
   });
 });
 
@@ -94,7 +94,7 @@ describe('effects layer', () => {
     expect(f.updates.size).toBe(0);
   });
 
-  it('bursts sparks for a tier 4 entrance, but not when rebuilding the party', () => {
+  it('bursts sparks for a level 4 entrance, but not when rebuilding the party', () => {
     const sparksDrawn = (burst: boolean) => {
       const f = fakeKaplay();
       const layer = createEffectsLayer(f.k, { reducedMotion: false, random: steady() });
@@ -147,7 +147,7 @@ describe('effects layer', () => {
       expect(shiny.target.glow).toBeGreaterThan(0.5);
     });
 
-    it('swaps the tier 4 burst for a fading glow', () => {
+    it('swaps the level 4 burst for a fading glow', () => {
       const f = fakeKaplay();
       const layer = createEffectsLayer(f.k, { reducedMotion: true, random: steady() });
       const sparkly = follower(4);

@@ -12,7 +12,7 @@ export type Verdict =
   | { readonly kind: 'none'; readonly input: string };
 
 const miss = (input: string): MatchResult => ({
-  tier: 0,
+  level: 0,
   animalId: null,
   strategy: null,
   input,

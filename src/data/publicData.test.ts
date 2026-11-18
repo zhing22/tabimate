@@ -47,10 +47,10 @@ describe('public/data', () => {
   it('scores every answer when its exact display name is typed', () => {
     for (const puzzle of puzzles) {
       for (const prompt of puzzle.prompts) {
-        for (const { animalId, tier } of prompt.answers) {
+        for (const { animalId, level } of prompt.answers) {
           const display = registry.get(animalId)!.display;
           expect(matchAnswer(display, prompt, registry), `${puzzle.date} ${prompt.id}`).toEqual({
-            tier,
+            level,
             animalId,
             strategy: 'exact',
             input: display,

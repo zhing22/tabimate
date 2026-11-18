@@ -23,4 +23,12 @@ describe('createJsonReader', () => {
   it('shows undefined values readably', () => {
     expect(() => r.string(undefined, 'name')).toThrow(/got undefined/);
   });
+
+  it('reads booleans and finite numbers', () => {
+    expect(r.boolean(false, 'b')).toBe(false);
+    expect(() => r.boolean('yes', 'b')).toThrow(/b must be true or false/);
+    expect(r.number(-2.5, 'n')).toBe(-2.5);
+    expect(() => r.number(Number.NaN, 'n')).toThrow(/n must be a number/);
+    expect(() => r.number('3', 'n')).toThrow(/n must be a number/);
+  });
 });

@@ -36,7 +36,7 @@ const line = (g: GuessExplained) =>
   [
     `"${g.input}" -> "${g.normalized}"`,
     g.strategy ? `${g.strategy} ${g.confidence?.toFixed(2)}` : 'no strategy matched',
-    g.animal ? `${g.animal} (tier ${g.tier})` : '',
+    g.animal ? `${g.animal} (level ${g.level})` : '',
     `=> ${g.verdict}${g.note ? ` (${g.note})` : ''}`,
   ]
     .filter(Boolean)

@@ -7,7 +7,7 @@ const S = EFFECT_SETTINGS.glint;
 const WHITE = '#ffffff';
 
 /**
- * Tiers 2-3: a quick shine. On joining, a star flashes at the top corner;
+ * Levels 2-3: a quick shine. On joining, a star flashes at the top corner;
  * afterwards a small twinkle now and then, so the follower still reads as
  * "a good find" while walking.
  */

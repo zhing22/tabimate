@@ -1,6 +1,6 @@
 import type { BiomeDef } from '@/config/biomes';
-import { TIERS, type TierId } from '@/config/tiers';
-import { totalScore } from '@/core/journey';
+import { LEVELS, type LevelId } from '@/config/tiers';
+import { dayTotal } from '@/core/scoring';
 import type { ShareOutcome } from '@/core/share';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';
 
@@ -21,7 +21,7 @@ export interface ShareCard {
   readonly puzzleNumber: number;
   readonly biome: { readonly name: string; readonly emoji: string };
   /** One per prompt, in order. */
-  readonly tiers: readonly TierId[];
+  readonly levels: readonly LevelId[];
   /** Each prompt's animal as an emoji (MISS_EMOJI for none), in order. */
   readonly animalEmoji: readonly string[];
   readonly score: number;
@@ -31,11 +31,11 @@ export function shareCard(run: ShareRun, puzzleNumber: number, biome: BiomeDef):
   return {
     puzzleNumber,
     biome: { name: biome.name, emoji: biome.emoji },
-    tiers: run.results.map((r) => r.match.tier),
+    levels: run.results.map((r) => r.match.level),
     animalEmoji: run.results.map((r) =>
       r.match.animalId === null ? MISS_EMOJI : (run.animals.get(r.match.animalId)?.emoji ?? '🐾'),
     ),
-    score: totalScore(run.results),
+    score: dayTotal(run.results),
   };
 }
 
@@ -47,7 +47,7 @@ export function shareCard(run: ShareRun, puzzleNumber: number, biome: BiomeDef):
  *   🦊🦉🐸
  *   https://…
  *
- * Tiers come from config (TIERS[].emoji), animals as emoji only: the prompts
+ * Levels come from config (LEVELS[].emoji), animals as emoji only: the prompts
  * and the animals' names stay unspoiled. Plain lines joined by \n, the link on
  * its own last line, so WhatsApp, Telegram and X all show it as written and
  * turn the link into a preview.
@@ -61,7 +61,7 @@ export function buildShareText(
   const card = shareCard(run, puzzleNumber, biomeReached);
   return [
     `Tabimate #${card.puzzleNumber} ${card.biome.emoji} ${card.biome.name}`,
-    `${card.tiers.map((tier) => TIERS[tier].emoji).join('')}  ${card.score} pts`,
+    `${card.levels.map((level) => LEVELS[level].emoji).join('')}  ${card.score} pts`,
     card.animalEmoji.join(''),
     url,
   ].join('\n');

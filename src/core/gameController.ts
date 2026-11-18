@@ -1,7 +1,8 @@
 import { MATCHER_CONFIG, ROUND_TIME_MS } from '@/config/game';
 import type { GameBus } from './events';
 import { canRestore, createRunState, gameReducer, type GameAction } from './game';
-import { biomesEntered, totalScore } from './journey';
+import { biomesEntered } from './journey';
+import { dayTotal } from './scoring';
 import { judgeGuess, timeUpMatch } from './answering';
 import type { GameController, GameControllerDeps } from './controllerTypes';
 import { createRoundTimer } from './roundTimer';
@@ -65,11 +66,11 @@ export function createGameController(deps: GameControllerDeps): GameController {
 
   function finishReveal() {
     const index = state.results.length - 1;
-    const scoreBefore = totalScore(state.results.slice(0, -1));
+    const scoreBefore = dayTotal(state.results.slice(0, -1));
     if (!dispatch({ type: 'revealDone', nextRoundEndsAt: nextDeadline() })) return;
     emit('revealFinished', { index });
-    // Biomes change after the reveal, so the tier is seen before the scene moves on.
-    const score = totalScore(state.results);
+    // Biomes change after the reveal, so the level is seen before the scene moves on.
+    const score = dayTotal(state.results);
     for (const biome of biomesEntered(scoreBefore, score)) emit('biomeEntered', { biome });
     if (state.status === 'finished') emit('runFinished', { results: state.results, score });
     else runRound();
@@ -95,7 +96,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
     if (state.status === 'playing') {
       runRound();
     } else if (state.status === 'finished') {
-      emit('runFinished', { results: state.results, score: totalScore(state.results) });
+      emit('runFinished', { results: state.results, score: dayTotal(state.results) });
     }
   }
 

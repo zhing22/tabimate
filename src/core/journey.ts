@@ -1,13 +1,5 @@
 import { BIOMES, type BiomeDef } from '@/config/biomes';
 import { DISTANCE_PER_POINT } from '@/config/game';
-import { TIERS } from '@/config/tiers';
-import type { RoundResult } from './types';
-
-/** Points one round scored, from its tier. */
-export const pointsFor = (result: RoundResult): number => TIERS[result.match.tier].points;
-
-export const totalScore = (results: readonly RoundResult[]): number =>
-  results.reduce((sum, result) => sum + pointsFor(result), 0);
 
 /** How far along the journey a score puts the player. */
 export const distanceFor = (score: number): number => score * DISTANCE_PER_POINT;

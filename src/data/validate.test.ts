@@ -71,8 +71,8 @@ describe('validatePuzzle', () => {
     expect(puzzle.date).toBe(FIXTURE_KEY);
     expect(puzzle.prompts).toHaveLength(3);
     expect(puzzle.prompts[2]?.answers).toEqual([
-      { animalId: 'red-fox', tier: 1 },
-      { animalId: 'killer-whale', tier: 1 },
+      { animalId: 'red-fox', level: 1 },
+      { animalId: 'killer-whale', level: 5 },
     ]);
   });
 
@@ -104,9 +104,9 @@ describe('validatePuzzle', () => {
       /"dodo" is not in the animal registry/,
     ],
     [
-      'tier 0 answer',
-      (p) => (((p.prompts[0]!.answers[0] as Json).tier = 0), p),
-      'prompts[0].answers[0].tier',
+      'level 0 answer',
+      (p) => (((p.prompts[0]!.answers[0] as Json).level = 0), p),
+      'prompts[0].answers[0].level',
       /one of 1, 2, 3, 4, 5/,
     ],
     [
@@ -121,5 +121,171 @@ describe('validatePuzzle', () => {
   ])('rejects %s', (_name, mutate, field, problem) => {
     const json = mutate(fixturePuzzle());
     expectDataError(() => checkPuzzle(json), PUZZLE, field, problem);
+  });
+});
+
+/** The fixture animals plus a "canid" group over the red fox. */
+const withGroup = (list: Json[] = fixtureAnimals()): Json[] => {
+  list[0]!.parent = 'canid';
+  return [
+    ...list,
+    {
+      id: 'canid',
+      display: 'Canid',
+      aliases: ['dog family'],
+      archetype: 'canine',
+      movement: 'land',
+      size: 'M',
+      tint: '#d86a28',
+      emoji: 'x',
+      kind: 'group',
+      representative: 'red-fox',
+    },
+  ];
+};
+
+describe('validateAnimals: groups and extra fields', () => {
+  it('accepts a group over a species, with the optional fields', () => {
+    const list = withGroup();
+    Object.assign(list[1]!, {
+      description: 'The largest dolphin, a black and white hunter of every ocean.',
+      descriptionReviewed: false,
+      wiki: 'https://en.wikipedia.org/wiki/Orca',
+      traits: { class: 'mammal', diet: ['carnivore'], depthM: [0, 300], flies: false },
+    });
+    const animals = validateAnimals(list, ANIMALS);
+    expect(animals.get('red-fox')?.parent).toBe('canid');
+    expect(animals.get('canid')?.representative).toBe('red-fox');
+    expect(animals.get('killer-whale')?.traits).toEqual({
+      class: 'mammal',
+      diet: ['carnivore'],
+      depthM: [0, 300],
+      flies: false,
+    });
+    expect(animals.get('platypus')).not.toHaveProperty('traits');
+  });
+
+  it.each<[string, (list: Json[]) => unknown, string, RegExp]>([
+    ['missing kind', (l) => (delete l[2]!.kind, l), '[2].kind', /one of "group", "species"/],
+    ['unknown parent', (l) => ((l[2]!.parent = 'mole'), l), '[2].parent', /not in the animal/],
+    ['species as parent', (l) => ((l[2]!.parent = 'red-fox'), l), '[2].parent', /is a species/],
+    [
+      'a parent loop',
+      (l) => (
+        Object.assign(l[3]!, { parent: 'pack' }),
+        [...l, { ...l[3], id: 'pack', display: 'Pack', aliases: [], parent: 'canid' }]
+      ),
+      '[3].parent',
+      /leads back to "canid"/,
+    ],
+    [
+      'group without a representative',
+      (l) => (delete l[3]!.representative, l),
+      '[3].representative',
+      /must be set for a group/,
+    ],
+    [
+      'representative on a species',
+      (l) => ((l[2]!.representative = 'red-fox'), l),
+      '[2].representative',
+      /only for groups/,
+    ],
+    [
+      'representative outside the group',
+      (l) => ((l[3]!.representative = 'platypus'), l),
+      '[3].representative',
+      /must be a species under "canid"/,
+    ],
+    [
+      'unknown representative',
+      (l) => ((l[3]!.representative = 'dodo'), l),
+      '[3].representative',
+      /not in the animal registry/,
+    ],
+    ['bad trait', (l) => ((l[0]!.traits = { diet: ['meat'] }), l), '[0].traits.diet[0]', /one of/],
+    ['unknown trait', (l) => ((l[0]!.traits = { wings: 2 }), l), '[0].traits.wings', /not a known/],
+    [
+      'backwards range',
+      (l) => ((l[0]!.traits = { altitudeM: [900, 0] }), l),
+      '[0].traits.altitudeM',
+      /min 900 is more than max 0/,
+    ],
+    [
+      'long description',
+      (l) => ((l[0]!.description = Array.from({ length: 16 }, () => 'word').join(' ')), l),
+      '[0].description',
+      /has 16 words \(at most 15\)/,
+    ],
+    ['plain-http wiki', (l) => ((l[0]!.wiki = 'http://x.org'), l), '[0].wiki', /https:\/\//],
+  ])('rejects %s', (_name, mutate, field, problem) => {
+    const json = mutate(withGroup());
+    expectDataError(() => validateAnimals(json, ANIMALS), ANIMALS, field, problem);
+  });
+});
+
+describe('validatePuzzle: levels', () => {
+  type Answer = { animalId: string; level: number };
+  const grouped = () => validateAnimals(withGroup(), ANIMALS);
+  const eatsMeat = (answers: Answer[]) => {
+    const json = fixturePuzzle();
+    json.prompts[2]!.answers = answers;
+    return json;
+  };
+  const check = (json: unknown, extra: { maxCR?: number; warn?: (m: string) => void } = {}) =>
+    validatePuzzle(json, { file: PUZZLE, key: FIXTURE_KEY, animals: grouped(), ...extra });
+
+  it('rejects a prompt with two CR answers', () => {
+    const json = eatsMeat([
+      { animalId: 'red-fox', level: 5 },
+      { animalId: 'killer-whale', level: 5 },
+    ]);
+    expectDataError(
+      () => check(json),
+      PUZZLE,
+      'prompts[2].answers',
+      /exactly one level-5 \(CR\) answer \(got 2\)/,
+    );
+  });
+
+  it('rejects a prompt with no CR answer', () => {
+    const json = eatsMeat([{ animalId: 'red-fox', level: 4 }]);
+    expectDataError(() => check(json), PUZZLE, 'prompts[2].answers', /exactly one.*\(got 0\)/);
+  });
+
+  it("allows up to the theme's maxCR", () => {
+    const two = eatsMeat([
+      { animalId: 'red-fox', level: 5 },
+      { animalId: 'killer-whale', level: 5 },
+    ]);
+    expect(check(two, { maxCR: 2 }).prompts[2]?.answers).toHaveLength(2);
+    expectDataError(
+      () => check(eatsMeat([{ animalId: 'red-fox', level: 3 }]), { maxCR: 2 }),
+      PUZZLE,
+      'prompts[2].answers',
+      /1 to 2 level-5 \(CR\) answers \(got 0\)/,
+    );
+  });
+
+  it('warns, without failing, when a species is below its own group', () => {
+    const warnings: string[] = [];
+    const json = eatsMeat([
+      { animalId: 'canid', level: 3 },
+      { animalId: 'red-fox', level: 2 },
+      { animalId: 'killer-whale', level: 5 },
+    ]);
+    expect(() => check(json, { warn: (m) => warnings.push(m) })).not.toThrow();
+    expect(warnings).toEqual([
+      `${PUZZLE}: prompts[2].answers[1].level "red-fox" is level 2 (NT), below its group "canid" at level 3 (VU)`,
+    ]);
+  });
+
+  it('does not warn when the group is the lower level', () => {
+    const warnings: string[] = [];
+    const json = eatsMeat([
+      { animalId: 'canid', level: 1 },
+      { animalId: 'red-fox', level: 5 },
+    ]);
+    check(json, { warn: (m) => warnings.push(m) });
+    expect(warnings).toEqual([]);
   });
 });

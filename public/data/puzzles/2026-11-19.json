@@ -8,43 +8,47 @@
       "answers": [
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "greater-flamingo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-crowned-crane",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "white-stork",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "common-kingfisher",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "atlantic-puffin",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "wandering-albatross",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "emperor-penguin",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "african-penguin",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "northern-lapwing",
-          "tier": 2
+          "level": 2
+        },
+        {
+          "animalId": "penguin",
+          "level": 1
         }
       ]
     },
@@ -54,111 +58,127 @@
       "answers": [
         {
           "animalId": "tiger",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "african-elephant",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "asian-elephant",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "red-panda",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "tasmanian-devil",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "sumatran-orangutan",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "bornean-orangutan",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "eastern-gorilla",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "chimpanzee",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "ruffed-lemur",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "black-rhino",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "malayan-tapir",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "sunda-pangolin",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "komodo-dragon",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "kakapo",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "axolotl",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "chinese-giant-salamander",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "philippine-eagle",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "california-condor",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "african-grey-parrot",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "blue-whale",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "vaquita",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "whale-shark",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "great-hammerhead",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "hawksbill-turtle",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "sea-otter",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "african-penguin",
-          "tier": 5
+          "level": 4
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "rhinoceros",
+          "level": 1
+        },
+        {
+          "animalId": "orangutan",
+          "level": 1
         }
       ]
     },
@@ -168,19 +188,19 @@
       "answers": [
         {
           "animalId": "cheetah",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "snow-leopard",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "giraffe",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "whale-shark",
-          "tier": 4
+          "level": 5
         }
       ]
     }

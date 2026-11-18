@@ -9,7 +9,7 @@ export const SAVE_KEY = 'tabimate.save';
 export const BACKUP_KEY = 'tabimate.save.bak';
 
 /** Bump when the shape changes, and add a migration from the old version. */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export interface SaveData {
   readonly version: number;
@@ -25,7 +25,41 @@ export type Migration = (data: Json) => Json;
  * MIGRATIONS[n] turns version n data into version n + 1. To change the shape:
  * bump SCHEMA_VERSION and add an entry here; old saves are upgraded on load.
  */
-export const MIGRATIONS: Readonly<Record<number, Migration>> = {};
+/** Renames a key on a plain object, leaving anything else untouched. */
+function renameKey(value: unknown, from: string, to: string): unknown {
+  if (!isObject(value) || !(from in value)) return value;
+  const { [from]: moved, ...rest } = value;
+  return { ...rest, [to]: moved };
+}
+
+/** v1 to v2: tiers became levels (match.tier to match.level, history tiers to levels). */
+function tiersToLevels(data: Json): Json {
+  const runs = isObject(data.runs)
+    ? Object.fromEntries(
+        Object.entries(data.runs).map(([key, run]) => [
+          key,
+          isObject(run) && Array.isArray(run.results)
+            ? {
+                ...run,
+                results: run.results.map((r: unknown) =>
+                  isObject(r) ? { ...r, match: renameKey(r.match, 'tier', 'level') } : r,
+                ),
+              }
+            : run,
+        ]),
+      )
+    : data.runs;
+  const stats =
+    isObject(data.stats) && Array.isArray(data.stats.history)
+      ? {
+          ...data.stats,
+          history: data.stats.history.map((e: unknown) => renameKey(e, 'tiers', 'levels')),
+        }
+      : data.stats;
+  return { ...data, runs, stats };
+}
+
+export const MIGRATIONS: Readonly<Record<number, Migration>> = { 1: tiersToLevels };
 
 export const emptySaveData = (): SaveData => ({
   version: SCHEMA_VERSION,

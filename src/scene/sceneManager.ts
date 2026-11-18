@@ -132,7 +132,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
     }),
     bus.on('answerMatched', ({ result }) => {
-      const at = revealBuildUpMs(result.match.tier) + REVEAL_TIMING.nameDelayMs;
+      const at = revealBuildUpMs(result.match.level) + REVEAL_TIMING.nameDelayMs;
       const timer = setTimeout(() => {
         joins.delete(timer);
         world.join(result);

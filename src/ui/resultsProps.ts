@@ -1,6 +1,6 @@
 import { biomeFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
-import { TIERS } from '@/config/tiers';
+import { pointsFor } from '@/core/scoring';
 import type { Animal, AnimalId, Prompt, Puzzle, RoundResult } from '@/core/types';
 import type { AnswerLine } from './components/teamCard';
 import type { ResultsProps } from './screens/results';
@@ -25,10 +25,10 @@ export function answerLines(
   picked: AnimalId | null,
 ): AnswerLine[] {
   return prompt.answers
-    .map(({ animalId, tier }) => ({
+    .map(({ animalId, level }) => ({
       name: animals.get(animalId)?.display ?? animalId.replace(/-/g, ' '),
-      tier,
-      points: TIERS[tier].points,
+      level,
+      points: pointsFor(level),
       picked: animalId === picked,
     }))
     .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));

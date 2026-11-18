@@ -2,7 +2,7 @@ import { REVEAL_TIMING, TIMER_WARN_MS, revealBuildUpMs, type RevealTiming } from
 import type { Clock } from '@/core/clock';
 import type { GameBus } from '@/core/events';
 import type { StorageAdapter } from '@/core/storage';
-import { SOUNDS, tierSound, type SoundName } from './sounds';
+import { SOUNDS, levelSound, type SoundName } from './sounds';
 
 export const MUTED_KEY = 'tabimate.muted';
 /** Everything is quiet blips; this keeps them comfortably below full scale. */
@@ -17,7 +17,7 @@ export interface AudioDeps {
   /** Browsers only allow sound after a tap or key press, on this target. */
   readonly unlockOn?: EventTarget;
   readonly createContext?: () => AudioContext;
-  /** Must match the UI's, so a tier's sound plays as its badge pops. */
+  /** Must match the UI's, so a level's sound plays as its badge pops. */
   readonly revealTiming?: RevealTiming;
 }
 
@@ -113,11 +113,11 @@ export function createAudio(deps: AudioDeps): GameAudio {
         if (at >= 0) later(ticks, at, 'tick');
       }
     }),
-    // The tier's sound lands on the badge pop, after the same drum-roll as the UI.
+    // The level's sound lands on the badge pop, after the same drum-roll as the UI.
     deps.bus.on('answerMatched', ({ result }) => {
       cancel(ticks);
-      const badge = revealBuildUpMs(result.match.tier, timing);
-      later(timers, badge, tierSound(result.match.tier));
+      const badge = revealBuildUpMs(result.match.level, timing);
+      later(timers, badge, levelSound(result.match.level));
       // The animal joins the party as its name shows (the scene uses the same timing).
       if (result.match.animalId !== null) later(timers, badge + timing.nameDelayMs, 'join');
     }),

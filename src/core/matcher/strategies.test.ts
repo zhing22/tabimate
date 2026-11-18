@@ -82,7 +82,7 @@ describe('partial', () => {
     expect(partial(input('pl'), all, cfg)).toBeNull();
   });
 
-  // Names and tiers from the real puzzles, where these short guesses used to win
+  // Names and levels from the real puzzles, where these short guesses used to win
   // rare animals for everyone.
   const real = [
     candidate('tiger', 4, 'Tiger'),

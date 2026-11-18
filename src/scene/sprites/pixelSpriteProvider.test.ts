@@ -119,6 +119,22 @@ describe('createPixelSpriteProvider', () => {
     });
   });
 
+  it("draws a group as its representative's art, under its own name", async () => {
+    const { provider, loaded } = setup();
+    const group: Animal = {
+      ...ANIMALS.get('tiger')!,
+      id: 'big-cat',
+      archetype: 'marsupial', // ignored: the representative's archetype is used
+      kind: 'group',
+      representative: 'tiger',
+    };
+    await provider.load([group, TIGER]);
+    expect(provider.spriteFor(group, false).name).toBe('pixel/big-cat');
+    expect(Array.from(loaded.get('pixel/big-cat/shiny')!.pixels.data.slice(0, 3))).toEqual(
+      hexToRgb(SHINY[1]),
+    );
+  });
+
   it('uses the normal palette for shiny when an animal has no shiny palette', async () => {
     const { provider, loaded } = setup();
     await provider.load([LEOPARD]);

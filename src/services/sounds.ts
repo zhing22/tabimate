@@ -1,6 +1,8 @@
 // Every sound in the game, synthesised: a few oscillator notes each, so there
 // are no audio files to load. Data only; services/audio.ts plays them.
 
+import { LEVELS, type LevelId, type LevelSoundId } from '@/config/tiers';
+
 export interface Note {
   /** Hz. */
   readonly freq: number;
@@ -15,10 +17,10 @@ export interface Note {
   readonly to?: number;
 }
 
-export type SoundName =
-  'tier0' | 'tier1' | 'tier2' | 'tier3' | 'tier4' | 'tier5' | 'join' | 'miss' | 'hint' | 'tick';
+/** Each level's reveal sound (config LEVELS[].soundId), plus the game's other sounds. */
+export type SoundName = LevelSoundId | 'join' | 'miss' | 'hint' | 'tick';
 
-// Notes of a major scale around C5, for arpeggios that rise with the tier.
+// Notes of a major scale around C5, for arpeggios that rise with the level.
 const C5 = 523.25;
 const E5 = 659.25;
 const G5 = 783.99;
@@ -48,23 +50,23 @@ const shimmer = (start: number, count: number): Note[] =>
   );
 
 /**
- * Each tier sounds clearly different, and grander as it gets rarer: tier 0 a
+ * Each level sounds clearly different, and grander as it gets rarer: level 0 a
  * flat "time's up" buzz, then one note, two, a three-note arpeggio, a four-note
- * arpeggio with a sparkle, and for tier 5 a fanfare with a long shimmer.
+ * arpeggio with a sparkle, and for level 5 a fanfare with a long shimmer.
  */
 export const SOUNDS: Readonly<Record<SoundName, readonly Note[]>> = {
-  tier0: [note(220, 0, 0.18, 0.2, 'sawtooth'), note(165, 0.16, 0.3, 0.2, 'sawtooth')],
-  tier1: [note(C5, 0, 0.18)],
-  tier2: [note(C5, 0, 0.1), note(G5, 0.09, 0.22)],
-  tier3: [note(C5, 0, 0.09), note(E5, 0.08, 0.09), note(G5, 0.16, 0.28)],
-  tier4: [
+  level0: [note(220, 0, 0.18, 0.2, 'sawtooth'), note(165, 0.16, 0.3, 0.2, 'sawtooth')],
+  level1: [note(C5, 0, 0.18)],
+  level2: [note(C5, 0, 0.1), note(G5, 0.09, 0.22)],
+  level3: [note(C5, 0, 0.09), note(E5, 0.08, 0.09), note(G5, 0.16, 0.28)],
+  level4: [
     note(C5, 0, 0.08),
     note(E5, 0.07, 0.08),
     note(G5, 0.14, 0.08),
     note(C6, 0.21, 0.32),
     ...shimmer(0.3, 5),
   ],
-  tier5: [
+  level5: [
     note(C5, 0, 0.08),
     note(E5, 0.07, 0.08),
     note(G5, 0.14, 0.08),
@@ -84,7 +86,5 @@ export const SOUNDS: Readonly<Record<SoundName, readonly Note[]>> = {
   tick: [note(1200, 0, 0.03, 0.1, 'square')],
 };
 
-export const tierSound = (tier: number): SoundName =>
-  (['tier0', 'tier1', 'tier2', 'tier3', 'tier4', 'tier5'] as const)[
-    Math.min(5, Math.max(0, tier))
-  ]!;
+/** The sound a level's reveal plays: its soundId in config/tiers.ts. */
+export const levelSound = (level: LevelId): SoundName => LEVELS[level].soundId;

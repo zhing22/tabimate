@@ -3,7 +3,7 @@ import type { Clock } from '@/core/clock';
 import { msUntilNextReset } from '@/core/date';
 import type { GameBus } from '@/core/events';
 import type { GameController } from '@/core/gameController';
-import { pointsFor } from '@/core/journey';
+import { pointsFor } from '@/core/scoring';
 import type { Stats } from '@/core/streak';
 import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
 import type { Delay, FrameLoop } from './frames';
@@ -84,7 +84,7 @@ export function createApp(deps: AppDeps): App {
       {
         result,
         animal: animalOf(result),
-        points: pointsFor(result),
+        points: pointsFor(result.match.level),
         timing: deps.revealTiming ?? REVEAL_TIMING,
         isLast: index === puzzle.prompts.length - 1,
         focusNext: !round.mounted,

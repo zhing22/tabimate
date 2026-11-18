@@ -28,7 +28,7 @@ const nameFor = (animal: Animal, shiny: boolean) => `emoji/${animal.id}${shiny ?
 
 /**
  * Placeholder art: each animal is its emoji, rendered small and scaled up like
- * pixel art. Shiny (tier 5) adds a gold outline until palettes arrive (8b).
+ * pixel art. Shiny (level 5) adds a gold outline until palettes arrive (8b).
  */
 export function createEmojiSpriteProvider(k: KAPLAYCtx): SpriteProvider {
   const player: SpriteRef = { name: 'player', facesLeft: false };

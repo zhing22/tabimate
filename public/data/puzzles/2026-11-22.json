@@ -8,23 +8,23 @@
       "answers": [
         {
           "animalId": "greater-flamingo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-panda",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "red-fox",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-kangaroo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "axolotl",
-          "tier": 5
+          "level": 5
         }
       ]
     },
@@ -34,23 +34,23 @@
       "answers": [
         {
           "animalId": "tasmanian-devil",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "eastern-gorilla",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "chimpanzee",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "california-condor",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "leatherback-turtle",
-          "tier": 3
+          "level": 3
         }
       ]
     },
@@ -60,55 +60,63 @@
       "answers": [
         {
           "animalId": "humpback-whale",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "blue-whale",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "white-stork",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "wandering-albatross",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "ruby-throated-hummingbird",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "northern-lapwing",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "greater-flamingo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "leatherback-turtle",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "hawksbill-turtle",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "whale-shark",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "peregrine-falcon",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "snowy-owl",
-          "tier": 3
+          "level": 3
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "whale",
+          "level": 1
         }
       ]
     }

@@ -6,3 +6,6 @@ export type Movement = (typeof MOVEMENTS)[number];
 
 export const SIZE_CLASSES = ['S', 'M', 'L'] as const;
 export type SizeClass = (typeof SIZE_CLASSES)[number];
+
+/** An animal's one-line description stays short enough to read at a glance. */
+export const DESCRIPTION_MAX_WORDS = 15;

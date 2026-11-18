@@ -48,7 +48,7 @@ export function partyLineup(
   const row = h(
     'div',
     { class: 'party__members' },
-    ...[...members].reverse().map((r) => portrait(r.animal, r.result.match.tier === 5, sprite)),
+    ...[...members].reverse().map((r) => portrait(r.animal, r.result.match.level === 5, sprite)),
     portrait(null, false, sprite),
   );
   // Each one bobs a little out of step with the next, like the scene's party.

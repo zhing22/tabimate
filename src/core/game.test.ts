@@ -13,9 +13,9 @@ import type { MatchResult, Puzzle, RunState, RunStatus } from './types';
 const puzzle: Puzzle = {
   date: '2026-11-07',
   number: 2,
-  prompts: ['a', 'b', 'c'].map((id) => ({ id, text: id, answers: [{ animalId: 'x', tier: 1 }] })),
+  prompts: ['a', 'b', 'c'].map((id) => ({ id, text: id, answers: [{ animalId: 'x', level: 1 }] })),
 };
-const hit: MatchResult = { tier: 1, animalId: 'x', strategy: 'exact', input: 'x' };
+const hit: MatchResult = { level: 1, animalId: 'x', strategy: 'exact', input: 'x' };
 const submit = (promptId: string): GameAction => ({
   type: 'submit',
   promptId,
@@ -76,7 +76,7 @@ describe('gameReducer: legal transitions', () => {
     expect(state.results[0]).toEqual({
       promptId: 'a',
       timeMs: 25_000,
-      match: { tier: 0, animalId: null, strategy: null, input: '' },
+      match: { level: 0, animalId: null, strategy: null, input: '' },
     });
   });
 
@@ -218,7 +218,7 @@ describe('runProgress and canOverwrite', () => {
 });
 
 describe('canOverwrite: the same run, carried further', () => {
-  const miss: MatchResult = { tier: 0, animalId: null, strategy: null, input: 'cat' };
+  const miss: MatchResult = { level: 0, animalId: null, strategy: null, input: 'cat' };
   const other = (state: RunState) =>
     gameReducer(state, { type: 'submit', promptId: 'b', match: miss, timeMs: 5 });
   const playing1 = gameReducer(revealing0, { type: 'revealDone', nextRoundEndsAt: 2000 });

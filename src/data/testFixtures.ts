@@ -13,6 +13,7 @@ export const fixtureAnimals = () => [
     size: 'M',
     tint: '#d86a28',
     emoji: '🦊',
+    kind: 'species',
   },
   {
     id: 'killer-whale',
@@ -23,6 +24,7 @@ export const fixtureAnimals = () => [
     size: 'L',
     tint: '#1a1a1a',
     emoji: '🐋',
+    kind: 'species',
   },
   {
     id: 'platypus',
@@ -33,6 +35,7 @@ export const fixtureAnimals = () => [
     size: 'M',
     tint: '#7a5030',
     emoji: '🦫',
+    kind: 'species',
   },
 ];
 
@@ -43,19 +46,19 @@ export const fixturePuzzle = () => ({
     {
       id: 'lays-eggs',
       text: 'Name an animal that lays eggs',
-      answers: [{ animalId: 'platypus', tier: 2 }],
+      answers: [{ animalId: 'platypus', level: 5 }],
     },
     {
       id: 'ocean',
       text: 'Name an animal that lives in the ocean',
-      answers: [{ animalId: 'killer-whale', tier: 1 }],
+      answers: [{ animalId: 'killer-whale', level: 5 }],
     },
     {
       id: 'eats-meat',
       text: 'Name an animal that eats meat',
       answers: [
-        { animalId: 'red-fox', tier: 1 },
-        { animalId: 'killer-whale', tier: 1 },
+        { animalId: 'red-fox', level: 1 },
+        { animalId: 'killer-whale', level: 5 },
       ],
     },
   ],

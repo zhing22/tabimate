@@ -20,6 +20,8 @@ const DATA = 'public/data';
 const SPRITES = 'public/assets/sprites';
 
 const problems: string[] = [];
+// Non-fatal: printed, but the check still passes.
+const warnings: string[] = [];
 /** Runs one check; a thrown error (DataError names file and field) is collected. */
 function check<T>(what: string, run: () => T): T | undefined {
   try {
@@ -64,6 +66,7 @@ if (animals) {
         file: `data/puzzles/${name}`,
         key,
         animals,
+        warn: (message) => warnings.push(message),
       }),
     );
   }
@@ -77,6 +80,10 @@ if (missing.length > 0) {
   problems.push(`missing puzzles for the next ${DAYS_AHEAD} SGT days: ${missing.join(', ')}`);
 }
 
+if (warnings.length > 0) {
+  console.warn(`Data warnings (${warnings.length}):`);
+  for (const warning of warnings) console.warn(`  - ${warning}`);
+}
 if (problems.length > 0) {
   console.error(`Data check failed (${problems.length}):`);
   for (const problem of problems) console.error(`  - ${problem}`);

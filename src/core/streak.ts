@@ -1,12 +1,12 @@
-import type { TierId } from '@/config/tiers';
+import type { LevelId } from '@/config/tiers';
 import { shiftKey } from './date';
-import { totalScore } from './journey';
+import { dayTotal } from './scoring';
 import type { DateKey, RunState } from './types';
 
 export interface HistoryEntry {
   readonly key: DateKey;
   readonly score: number;
-  readonly tiers: readonly TierId[];
+  readonly levels: readonly LevelId[];
 }
 
 export interface Stats {
@@ -28,8 +28,8 @@ export const emptyStats = (): Stats => ({
 /** The history entry for a finished run. */
 export const historyEntry = (state: RunState): HistoryEntry => ({
   key: state.puzzleDate,
-  score: totalScore(state.results),
-  tiers: state.results.map((result) => result.match.tier),
+  score: dayTotal(state.results),
+  levels: state.results.map((result) => result.match.level),
 });
 
 /**

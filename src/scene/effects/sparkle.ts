@@ -6,7 +6,7 @@ import type { Effect } from './types';
 const S = EFFECT_SETTINGS.sparkle;
 
 /**
- * Tier 4: particles. On joining, a burst of sparks flies out of the follower
+ * Level 4: particles. On joining, a burst of sparks flies out of the follower
  * and falls away; afterwards one drifts up now and then. With reduced motion,
  * a soft glow fades instead of the burst, and the drift becomes a twinkle.
  */

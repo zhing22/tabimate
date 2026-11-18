@@ -41,7 +41,7 @@ export function currentRoundIndex(state: RunState): number | null {
   return null;
 }
 
-const timedOut = (): MatchResult => ({ tier: 0, animalId: null, strategy: null, input: '' });
+const timedOut = (): MatchResult => ({ level: 0, animalId: null, strategy: null, input: '' });
 
 function answer(state: RunState, result: RoundResult): RunState {
   if (state.status !== 'playing' || state.results.length >= state.promptCount) return state;
@@ -124,7 +124,7 @@ export const runProgress = (state: RunState): number =>
   state.results.length * 4 + STATUS_RANK[state.status];
 
 const sameMatch = (a: MatchResult, b: MatchResult): boolean =>
-  a.tier === b.tier &&
+  a.level === b.level &&
   a.animalId === b.animalId &&
   a.strategy === b.strategy &&
   a.input === b.input;

@@ -72,7 +72,7 @@ describe('progress: resume', () => {
     const storage = createMemoryStorageAdapter();
     openPage(storage, '2026-11-07T05:00:00Z');
     const later = openPage(storage, '2026-11-07T05:10:00Z');
-    expect(later.game.getState().results[0]?.match.tier).toBe(0);
+    expect(later.game.getState().results[0]?.match.level).toBe(0);
   });
 });
 
@@ -210,7 +210,7 @@ describe('progress: two tabs', () => {
 });
 
 describe('progress: damaged saves', () => {
-  const entry = (key: string) => ({ key, score: 25, tiers: [2, 0, 0] });
+  const entry = (key: string) => ({ key, score: 25, levels: [2, 0, 0] });
   const damaged = {
     version: SCHEMA_VERSION,
     runs: {},

@@ -6,67 +6,230 @@
       "id": "colourful",
       "text": "Name a colourful animal",
       "answers": [
-        { "animalId": "indian-peafowl", "tier": 1 },
-        { "animalId": "ruby-throated-hummingbird", "tier": 1 },
-        { "animalId": "common-kingfisher", "tier": 1 },
-        { "animalId": "greater-flamingo", "tier": 1 },
-        { "animalId": "mallard", "tier": 1 },
-        { "animalId": "atlantic-puffin", "tier": 3 },
-        { "animalId": "red-panda", "tier": 4 },
-        { "animalId": "kakapo", "tier": 5 },
-        { "animalId": "axolotl", "tier": 5 },
-        { "animalId": "tiger", "tier": 4 },
-        { "animalId": "red-fox", "tier": 1 },
-        { "animalId": "northern-lapwing", "tier": 2 },
-        { "animalId": "common-octopus", "tier": 1 },
-        { "animalId": "sumatran-orangutan", "tier": 5 },
-        { "animalId": "eurasian-magpie", "tier": 1 },
-        { "animalId": "hawksbill-turtle", "tier": 5 }
+        {
+          "animalId": "indian-peafowl",
+          "level": 1
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "level": 1
+        },
+        {
+          "animalId": "common-kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "greater-flamingo",
+          "level": 1
+        },
+        {
+          "animalId": "mallard",
+          "level": 1
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 3
+        },
+        {
+          "animalId": "red-panda",
+          "level": 4
+        },
+        {
+          "animalId": "kakapo",
+          "level": 4
+        },
+        {
+          "animalId": "axolotl",
+          "level": 4
+        },
+        {
+          "animalId": "tiger",
+          "level": 4
+        },
+        {
+          "animalId": "red-fox",
+          "level": 1
+        },
+        {
+          "animalId": "northern-lapwing",
+          "level": 2
+        },
+        {
+          "animalId": "common-octopus",
+          "level": 1
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 4
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "level": 1
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "level": 5
+        },
+        {
+          "animalId": "parrot",
+          "level": 1
+        }
       ]
     },
     {
       "id": "island",
       "text": "Name an animal that lives on an island",
       "answers": [
-        { "animalId": "komodo-dragon", "tier": 4 },
-        { "animalId": "kakapo", "tier": 5 },
-        { "animalId": "brown-kiwi", "tier": 3 },
-        { "animalId": "ruffed-lemur", "tier": 5 },
-        { "animalId": "sumatran-orangutan", "tier": 5 },
-        { "animalId": "bornean-orangutan", "tier": 5 },
-        { "animalId": "philippine-eagle", "tier": 5 },
-        { "animalId": "tasmanian-devil", "tier": 4 },
-        { "animalId": "platypus", "tier": 2 },
-        { "animalId": "echidna", "tier": 1 },
-        { "animalId": "atlantic-puffin", "tier": 3 },
-        { "animalId": "wandering-albatross", "tier": 3 },
-        { "animalId": "sunda-pangolin", "tier": 5 },
-        { "animalId": "malayan-tapir", "tier": 4 },
-        { "animalId": "saltwater-crocodile", "tier": 1 },
-        { "animalId": "tiger", "tier": 4 },
-        { "animalId": "asian-elephant", "tier": 4 },
-        { "animalId": "red-crowned-crane", "tier": 3 }
+        {
+          "animalId": "komodo-dragon",
+          "level": 4
+        },
+        {
+          "animalId": "kakapo",
+          "level": 4
+        },
+        {
+          "animalId": "brown-kiwi",
+          "level": 3
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "level": 4
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 4
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "level": 4
+        },
+        {
+          "animalId": "philippine-eagle",
+          "level": 5
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 4
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 3
+        },
+        {
+          "animalId": "wandering-albatross",
+          "level": 3
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "malayan-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 4
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 4
+        },
+        {
+          "animalId": "red-crowned-crane",
+          "level": 3
+        },
+        {
+          "animalId": "orangutan",
+          "level": 1
+        }
       ]
     },
     {
       "id": "sleepy",
       "text": "Name an animal that sleeps a lot",
       "answers": [
-        { "animalId": "koala", "tier": 3 },
-        { "animalId": "brown-bear", "tier": 1 },
-        { "animalId": "european-hedgehog", "tier": 2 },
-        { "animalId": "platypus", "tier": 2 },
-        { "animalId": "lion", "tier": 3 },
-        { "animalId": "tiger", "tier": 4 },
-        { "animalId": "house-mouse", "tier": 1 },
-        { "animalId": "echidna", "tier": 1 },
-        { "animalId": "grey-headed-flying-fox", "tier": 3 },
-        { "animalId": "red-panda", "tier": 4 },
-        { "animalId": "cheetah", "tier": 3 },
-        { "animalId": "sunda-pangolin", "tier": 5 },
-        { "animalId": "tasmanian-devil", "tier": 4 },
-        { "animalId": "giant-panda", "tier": 3 },
-        { "animalId": "snow-leopard", "tier": 3 }
+        {
+          "animalId": "koala",
+          "level": 3
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 1
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 2
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "lion",
+          "level": 3
+        },
+        {
+          "animalId": "tiger",
+          "level": 4
+        },
+        {
+          "animalId": "house-mouse",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "red-panda",
+          "level": 4
+        },
+        {
+          "animalId": "cheetah",
+          "level": 3
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 5
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 4
+        },
+        {
+          "animalId": "giant-panda",
+          "level": 3
+        },
+        {
+          "animalId": "snow-leopard",
+          "level": 3
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "big-cat",
+          "level": 1
+        }
       ]
     }
   ]

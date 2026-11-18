@@ -3,7 +3,7 @@ import { createBus, type GameEvents } from '@/core/events';
 import type { RoundResult } from '@/core/types';
 import { PROMPT } from '@/core/matcher/testFixtures';
 import { createAudio, MUTED_KEY } from './audio';
-import { SOUNDS, tierSound } from './sounds';
+import { SOUNDS, levelSound } from './sounds';
 import { createMemoryStorageAdapter } from './storage';
 
 /** Records the notes played, as frequencies, instead of making sound. */
@@ -49,11 +49,11 @@ function fakeContext() {
   return { ctx, played, refusals };
 }
 
-const result = (tier: 0 | 1 | 5, animalId: string | null = tier ? 'tiger' : null): RoundResult =>
+const result = (level: 0 | 1 | 5, animalId: string | null = level ? 'tiger' : null): RoundResult =>
   ({
     promptId: 'p',
     timeMs: 1,
-    match: { tier, animalId, strategy: animalId ? 'exact' : null, input: '' },
+    match: { level, animalId, strategy: animalId ? 'exact' : null, input: '' },
   }) as RoundResult;
 
 function setup(muted = false, createContext?: () => AudioContext) {
@@ -71,7 +71,7 @@ function setup(muted = false, createContext?: () => AudioContext) {
     unlockOn,
     clock: { now: () => new Date(now.ms) },
     createContext: createContext ?? (() => fake.ctx as unknown as AudioContext),
-    revealTiming: { suspenseMs: 600, perTierMs: 150, badgePopMs: 0, nameDelayMs: 0 },
+    revealTiming: { suspenseMs: 600, perLevelMs: 150, badgePopMs: 0, nameDelayMs: 0 },
   });
   const unlock = async (type = 'pointerdown') => {
     unlockOn.dispatchEvent(new Event(type));
@@ -94,15 +94,15 @@ describe('createAudio', () => {
     expect(t.notes()).toEqual(SOUNDS.miss.map((n) => n.freq));
   });
 
-  it("plays a tier's sound as its badge pops, after the same drum-roll as the UI", async () => {
+  it("plays a level's sound as its badge pops, after the same drum-roll as the UI", async () => {
     const t = setup();
     await t.unlock();
     t.bus.emit('answerMatched', { round: 0, result: result(5) });
     vi.advanceTimersByTime(600 + 5 * 150 - 1);
     expect(t.notes()).toEqual([]);
     vi.advanceTimersByTime(1);
-    // The tier's sound, then the join (this setup has no delay before the name).
-    expect(t.notes()).toEqual([...SOUNDS.tier5.map((n) => n.freq), SOUNDS.join[0]!.freq]);
+    // The level's sound, then the join (this setup has no delay before the name).
+    expect(t.notes()).toEqual([...SOUNDS.level5.map((n) => n.freq), SOUNDS.join[0]!.freq]);
   });
 
   it('plays the join sound as the animal joins during the reveal, not after a miss', async () => {
@@ -154,11 +154,11 @@ describe('createAudio', () => {
 });
 
 describe('sounds', () => {
-  it('gives every tier its own sound, grander as it gets rarer', () => {
-    const tiers = [0, 1, 2, 3, 4, 5].map((tier) => SOUNDS[tierSound(tier)]);
-    const signatures = tiers.map((notes) => notes.map((n) => `${n.freq}@${n.at}`).join());
+  it('gives every level its own sound, grander as it gets rarer', () => {
+    const levels = ([0, 1, 2, 3, 4, 5] as const).map((level) => SOUNDS[levelSound(level)]);
+    const signatures = levels.map((notes) => notes.map((n) => `${n.freq}@${n.at}`).join());
     expect(new Set(signatures).size).toBe(6);
-    for (let i = 2; i <= 5; i++) expect(tiers[i]!.length).toBeGreaterThan(tiers[i - 1]!.length);
+    for (let i = 2; i <= 5; i++) expect(levels[i]!.length).toBeGreaterThan(levels[i - 1]!.length);
   });
 
   it('keeps every note audible and short', () => {

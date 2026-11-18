@@ -10,11 +10,11 @@ export const puzzleFor = (date: DateKey): Puzzle => ({
   prompts: PROMPT_IDS.map((id) => ({
     id,
     text: id,
-    answers: [{ animalId: 'platypus', tier: 2 }],
+    answers: [{ animalId: 'platypus', level: 2 }],
   })),
 });
 
-const hit: MatchResult = { tier: 2, animalId: 'platypus', strategy: 'exact', input: 'platypus' };
+const hit: MatchResult = { level: 2, animalId: 'platypus', strategy: 'exact', input: 'platypus' };
 
 const runOf = (date: DateKey, actions: GameAction[]): RunState =>
   actions.reduce(gameReducer, createRunState(puzzleFor(date)));
@@ -27,7 +27,7 @@ export const playingRun = (date: DateKey): RunState =>
     { type: 'revealDone', nextRoundEndsAt: 2 },
   ]);
 
-/** Tier 2, then two timeouts: 25 points. */
+/** Level 2, then two timeouts: 25 points. */
 export const finishedRun = (date: DateKey): RunState =>
   runOf(date, [
     { type: 'start', roundEndsAt: 1 },

@@ -1,5 +1,5 @@
 import { revealBuildUpMs, type RevealTiming } from '@/config/game';
-import { TIERS } from '@/config/tiers';
+import { LEVELS } from '@/config/tiers';
 import type { Animal, RoundResult } from '@/core/types';
 import { tierBadge } from '../components/tierBadge';
 import { focus, h } from '../dom';
@@ -30,17 +30,17 @@ export interface RevealActions {
 /** What to say about a result, for the screen and for screen readers. */
 export function describeResult(result: RoundResult, animal: Animal | null, points: number): string {
   const { match } = result;
-  if (match.tier === 0) {
+  if (match.level === 0) {
     // A miss only reaches a reveal when time runs out (other misses can be retried).
     return match.input === ''
       ? "Time's up. No match."
       : `Time's up. No match for "${match.input}".`;
   }
-  return `${animal?.display ?? match.animalId}: ${TIERS[match.tier].name}, ${points} points.`;
+  return `${animal?.display ?? match.animalId}: ${LEVELS[match.level].name}, ${points} points.`;
 }
 
 /**
- * Inside the reveal, so it only appears once the tier is shown. Pressing it
+ * Inside the reveal, so it only appears once the level is shown. Pressing it
  * must not take focus from the answer box: on a phone that would close the
  * keyboard, and the next prompt wants it open.
  */
@@ -59,21 +59,21 @@ function nextButton(isLast: boolean, next: () => void): HTMLButtonElement {
  * Shown as an overlay above the round, so the answer box keeps focus (and the
  * phone keeps its keyboard). Focus is not moved; the live region speaks instead.
  *
- * Three beats: a drum-roll (longer for rarer tiers), the tier badge popping in
+ * Three beats: a drum-roll (longer for rarer levels), the level badge popping in
  * with an overshoot, then the name, points and Next button.
  */
 export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, actions) => {
   const { result, animal, points } = props;
-  const tier = result.match.tier;
+  const level = result.match.level;
   const next = nextButton(props.isLast, () => actions.next());
   const card = h(
     'section',
     {
       class: 'card reveal reveal--pending',
-      'data-tier': tier,
-      // Styled by effect, not tier number, so TIERS decides which tier is shiny.
-      'data-effect': TIERS[tier].effectId,
-      style: `--reveal-tier: var(${TIERS[tier].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
+      'data-tier': level,
+      // Styled by effect, not level number, so LEVELS decides which level is shiny.
+      'data-effect': LEVELS[level].effectId,
+      style: `--reveal-level: var(${LEVELS[level].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
       'aria-label': 'Result',
     },
     h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
@@ -83,11 +83,11 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
       h(
         'p',
         { class: 'reveal__emoji', 'aria-hidden': 'true' },
-        animal?.emoji ?? (tier ? '🐾' : '💨'),
+        animal?.emoji ?? (level ? '🐾' : '💨'),
       ),
       h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
-      h('div', { class: 'reveal__badge' }, tierBadge(tier, { size: 'lg' }).el),
-      h('p', { class: 'reveal__points' }, tier ? `+${points}` : '+0'),
+      h('div', { class: 'reveal__badge' }, tierBadge(level, { size: 'lg' }).el),
+      h('p', { class: 'reveal__points' }, level ? `+${points}` : '+0'),
       next,
     ),
   );
@@ -107,6 +107,6 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
     card.classList.replace('reveal--pending', 'reveal--badge');
     after(props.timing.nameDelayMs, showName);
   };
-  after(revealBuildUpMs(tier, props.timing), showBadge);
+  after(revealBuildUpMs(level, props.timing), showBadge);
   return () => timers.forEach(clearTimeout);
 };

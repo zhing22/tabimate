@@ -8,103 +8,119 @@
       "answers": [
         {
           "animalId": "emu",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "ostrich",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "brown-kiwi",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "kakapo",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "indian-peafowl",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "bald-eagle",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "peregrine-falcon",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "philippine-eagle",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "california-condor",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "barn-owl",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "snowy-owl",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "african-grey-parrot",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "greater-flamingo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-crowned-crane",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "white-stork",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "northern-lapwing",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "ruby-throated-hummingbird",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "common-kingfisher",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "eurasian-magpie",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "mallard",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "atlantic-puffin",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "wandering-albatross",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "emperor-penguin",
-          "tier": 2
+          "level": 2
         },
         {
           "animalId": "african-penguin",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "platypus",
-          "tier": 2
+          "level": 2
+        },
+        {
+          "animalId": "penguin",
+          "level": 1
+        },
+        {
+          "animalId": "eagle",
+          "level": 1
+        },
+        {
+          "animalId": "owl",
+          "level": 1
+        },
+        {
+          "animalId": "parrot",
+          "level": 1
         }
       ]
     },
@@ -114,55 +130,63 @@
       "answers": [
         {
           "animalId": "red-panda",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "ruffed-lemur",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "red-kangaroo",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "snow-leopard",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "tiger",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "lion",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "cheetah",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "komodo-dragon",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "saltwater-crocodile",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "red-fox",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "indian-peafowl",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "house-mouse",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "sunda-pangolin",
-          "tier": 5
+          "level": 5
+        },
+        {
+          "animalId": "big-cat",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
         }
       ]
     },
@@ -172,35 +196,47 @@
       "answers": [
         {
           "animalId": "snow-leopard",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "eastern-gorilla",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "red-panda",
-          "tier": 4
+          "level": 4
         },
         {
           "animalId": "giant-panda",
-          "tier": 3
+          "level": 3
         },
         {
           "animalId": "california-condor",
-          "tier": 5
+          "level": 5
         },
         {
           "animalId": "philippine-eagle",
-          "tier": 5
+          "level": 4
         },
         {
           "animalId": "brown-bear",
-          "tier": 1
+          "level": 1
         },
         {
           "animalId": "grey-wolf",
-          "tier": 1
+          "level": 1
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "big-cat",
+          "level": 1
+        },
+        {
+          "animalId": "eagle",
+          "level": 1
         }
       ]
     }

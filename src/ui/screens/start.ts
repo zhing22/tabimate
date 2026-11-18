@@ -33,7 +33,7 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
           'ul',
           {},
           h('li', {}, 'Each prompt asks for an animal. Type one before the ring runs out.'),
-          h('li', {}, 'Rarer animals score more: tiers follow the IUCN Red List.'),
+          h('li', {}, 'Rarer animals score more: levels follow the IUCN Red List.'),
           h(
             'li',
             {},

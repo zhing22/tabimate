@@ -1,5 +1,5 @@
 import type { MatcherConfig } from '@/config/game';
-import type { AnswerTierId } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/tiers';
 import type { AnimalId, PromptId, StrategyId } from '../types';
 
 /** A guess after normalize(), with the prompt it answers. */
@@ -11,7 +11,7 @@ export interface NormalizedInput {
 /** One accepted answer of a prompt, with its names ready for matching. */
 export interface Candidate {
   readonly animalId: AnimalId;
-  readonly tier: AnswerTierId;
+  readonly level: AnswerLevel;
   /** Normalized names: the display name first, then the aliases. */
   readonly names: readonly string[];
   /** Trigrams of each name, same order. Precomputed: 'loose' compares against all of them. */
@@ -38,7 +38,7 @@ export interface Strategy {
 
 export interface Hit {
   readonly animalId: AnimalId;
-  readonly tier: AnswerTierId;
+  readonly level: AnswerLevel;
   readonly strategy: StrategyId;
   readonly confidence: number;
 }

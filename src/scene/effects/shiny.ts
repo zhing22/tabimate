@@ -6,7 +6,7 @@ import type { Effect } from './types';
 const S = EFFECT_SETTINGS.shiny;
 
 /**
- * Tier 5, the rarest find: its sprite already uses the shiny palette (the
+ * Level 5, the rarest find: its sprite already uses the shiny palette (the
  * palette shift); this adds a pulsing golden glow, a big burst of gold sparks
  * and a short screen shake as it joins, then a steady trickle of sparkles.
  * With reduced motion: a steady glow that fades up, twinkles, no shake or sparks.

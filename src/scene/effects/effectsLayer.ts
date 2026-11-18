@@ -1,11 +1,11 @@
 import type { KAPLAYCtx } from 'kaplay';
-import { TIERS, type TierId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/tiers';
 import { EFFECTS } from './registry';
 import type { EffectTarget } from './types';
 
 /** Anything an effect can be attached to: a follower, as far as effects care. */
 export interface Decorated {
-  readonly tier: TierId;
+  readonly level: LevelId;
   readonly target: EffectTarget;
 }
 
@@ -28,7 +28,7 @@ export interface EffectsLayerOptions {
   readonly random?: () => number;
 }
 
-/** Owns every follower's tier effect, the screen shake, and the effect draw steps. */
+/** Owns every follower's level effect, the screen shake, and the effect draw steps. */
 export function createEffectsLayer(k: KAPLAYCtx, options: EffectsLayerOptions): EffectsLayer {
   const random = options.random ?? Math.random;
   const steps = new Set<() => void>();
@@ -81,7 +81,7 @@ export function createEffectsLayer(k: KAPLAYCtx, options: EffectsLayerOptions): 
       }
       for (const follower of followers) {
         if (live.has(follower)) continue;
-        const effect = EFFECTS[TIERS[follower.tier].effectId];
+        const effect = EFFECTS[LEVELS[follower.level].effectId];
         live.set(follower, effect(k, follower.target, optionsFor(burst)));
       }
     },

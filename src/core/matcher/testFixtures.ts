@@ -1,5 +1,5 @@
 // Test-only data shared by the matcher tests. Not imported by the app.
-import type { AnswerTierId } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/tiers';
 import type { Animal, AnimalId, Prompt } from '../types';
 import { normalize } from './normalize';
 import { trigrams } from './similarity';
@@ -14,6 +14,7 @@ const animal = (id: AnimalId, display: string, aliases: string[] = []): Animal =
   size: 'M',
   tint: '#808080',
   emoji: '🐾',
+  kind: 'species',
 });
 
 export const ANIMALS: ReadonlyMap<AnimalId, Animal> = new Map(
@@ -33,19 +34,19 @@ export const PROMPT: Prompt = {
   id: 'test-prompt',
   text: 'Name any animal',
   answers: [
-    { animalId: 'platypus', tier: 2 },
-    { animalId: 'killer-whale', tier: 1 },
-    { animalId: 'red-fox', tier: 1 },
-    { animalId: 'brown-bear', tier: 1 },
-    { animalId: 'sun-bear', tier: 3 },
-    { animalId: 'snow-leopard', tier: 3 },
-    { animalId: 'tiger', tier: 4 },
-    { animalId: 'amur-leopard', tier: 5 },
+    { animalId: 'platypus', level: 2 },
+    { animalId: 'killer-whale', level: 1 },
+    { animalId: 'red-fox', level: 1 },
+    { animalId: 'brown-bear', level: 1 },
+    { animalId: 'sun-bear', level: 3 },
+    { animalId: 'snow-leopard', level: 3 },
+    { animalId: 'tiger', level: 4 },
+    { animalId: 'amur-leopard', level: 5 },
   ],
 };
 
 /** A candidate built by hand, for strategy tests that skip the registry. */
-export function candidate(animalId: AnimalId, tier: AnswerTierId, ...names: string[]): Candidate {
+export function candidate(animalId: AnimalId, level: AnswerLevel, ...names: string[]): Candidate {
   const normalized = names.map(normalize);
-  return { animalId, tier, names: normalized, grams: normalized.map(trigrams) };
+  return { animalId, level, names: normalized, grams: normalized.map(trigrams) };
 }

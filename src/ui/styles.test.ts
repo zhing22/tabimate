@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TIERS } from '@/config/tiers';
+import { LEVELS } from '@/config/tiers';
 import tokens from './styles/tokens.css?raw';
 
 const token = (name: string): string | undefined =>
@@ -19,8 +19,8 @@ const contrast = (a: string, b: string): number => {
 };
 
 describe('tokens.css', () => {
-  it.each(TIERS.map((t) => [t.id, t.colour] as const))(
-    'defines tier %i colour %s and readable text on it',
+  it.each(LEVELS.map((t) => [t.id, t.colour] as const))(
+    'defines level %i colour %s and readable text on it',
     (_id, name) => {
       const bg = token(name);
       const ink = token(`${name}-ink`);
@@ -60,8 +60,8 @@ describe('style sheets', () => {
     }
   });
 
-  // Effects are chosen by TIERS[].effectId; a selector on the tier number would bypass it.
-  it('no selector styles a tier by its number', () => {
+  // Effects are chosen by LEVELS[].effectId; a selector on the level number would bypass it.
+  it('no selector styles a level by its number', () => {
     for (const [path, css] of Object.entries(sheets)) {
       expect(css, path).not.toMatch(/\[data-tier=/);
     }

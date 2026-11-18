@@ -1,5 +1,5 @@
 import { BLINK_MS, FOLLOWER_STEP_OFFSET_S, POP_IN_MS, SIZE_PX } from '@/config/render';
-import type { TierId } from '@/config/tiers';
+import type { LevelId } from '@/config/tiers';
 import type { Animal } from '@/core/types';
 import type { EffectTarget } from './effects/types';
 import { createIdleMotion, type IdleMotion, type Pose } from './entities/idleMotion';
@@ -8,9 +8,9 @@ import type { Player } from './entities/player';
 /** An animal in the party, and everything that animates it. */
 export interface Follower {
   readonly animal: Animal;
-  readonly tier: TierId;
+  readonly level: LevelId;
   readonly shiny: boolean;
-  /** Where its tier effect draws: the renderer keeps it on the sprite. */
+  /** Where its level effect draws: the renderer keeps it on the sprite. */
   readonly target: EffectTarget;
   readonly idle: IdleMotion;
   /** This frame's idle pose. */
@@ -40,7 +40,7 @@ export const followerStepTime = (player: Player, index: number): number =>
 
 export interface NewFollower {
   readonly animal: Animal;
-  readonly tier: TierId;
+  readonly level: LevelId;
   /** Its place in the party; also varies its idle motion from the others'. */
   readonly index: number;
   /** False when rebuilding a saved run: it is simply there, no pop-in. */
@@ -50,15 +50,15 @@ export interface NewFollower {
 
 export function createFollower({
   animal,
-  tier,
+  level,
   index,
   animate,
   reducedMotion,
 }: NewFollower): Follower {
   const follower: Follower = {
     animal,
-    tier,
-    shiny: tier === 5,
+    level,
+    shiny: level === 5,
     target: { x: 0, y: 0, size: SIZE_PX[animal.size], glow: 0 },
     pose: { dy: 0, scaleY: 1, angle: 0 },
     pop: animate ? 0 : 1,

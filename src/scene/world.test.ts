@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { FOLLOWER_SPACING, MISS_WALK } from '@/config/render';
-import type { AnswerTierId } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/tiers';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
 import { type Point } from './entities/followerTrail';
 import { createWorld, type World } from './world';
 
-const hit = (animalId: string, tier: AnswerTierId): RoundResult => ({
+const hit = (animalId: string, level: AnswerLevel): RoundResult => ({
   promptId: 'p',
   timeMs: 1,
-  match: { tier, animalId, strategy: 'exact', input: animalId },
+  match: { level, animalId, strategy: 'exact', input: animalId },
 });
 const miss: RoundResult = {
   promptId: 'p',
   timeMs: 1,
-  match: { tier: 0, animalId: null, strategy: null, input: 'zzz' },
+  match: { level: 0, animalId: null, strategy: null, input: 'zzz' },
 };
 
 const world = () => createWorld({ animals: ANIMALS, reducedMotion: false });
@@ -34,7 +34,7 @@ describe('world: a run', () => {
     expect(w.followers[0]?.pop).toBe(1);
   });
 
-  it('marks a tier 5 animal shiny', () => {
+  it('marks a level 5 animal shiny', () => {
     const w = world();
     w.join(hit('amur-leopard', 5));
     expect(w.followers[0]?.shiny).toBe(true);
@@ -70,12 +70,12 @@ describe('world: a run', () => {
 
   it('three followers trail the player one spacing apart on its path', () => {
     const w = world();
-    for (const [id, tier] of [
+    for (const [id, level] of [
       ['platypus', 2],
       ['snow-leopard', 3],
       ['tiger', 4],
     ] as const) {
-      w.join(hit(id, tier));
+      w.join(hit(id, level));
       settle(w);
     }
     const p: Point = { x: 0, y: 0 };

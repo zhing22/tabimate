@@ -45,7 +45,8 @@ function setup() {
       .filter(([name]) => name !== 'stateChanged')
       .map(([name, p]) => {
         if (name === 'roundStarted') return `roundStarted ${p.index}`;
-        if (name === 'answerMatched') return `answerMatched ${p.round} tier ${p.result.match.tier}`;
+        if (name === 'answerMatched')
+          return `answerMatched ${p.round} level ${p.result.match.level}`;
         if (name === 'answerRejected') return `answerRejected ${p.input}`;
         if (name === 'answerSuggested') return `answerSuggested ${p.input} -> ${p.suggestion}`;
         if (name === 'revealFinished') return `revealFinished ${p.index}`;
@@ -61,25 +62,25 @@ describe('gameController: a full run', () => {
     const { time, game, story, log } = setup();
     game.start();
     time.advance(3_000);
-    game.submit('Platypus'); // tier 2: 25 points
+    game.submit('Platypus'); // level 2: 25 points
     game.next();
     time.advance(4_000);
-    game.submit('snow leopard'); // tier 3: 75, enters Grassland at 50
+    game.submit('snow leopard'); // level 3: 75, enters Grassland at 50
     game.next();
-    game.submit('tiger'); // tier 4: 160, enters Forest at 125
+    game.submit('tiger'); // level 4: 160, enters Forest at 125
     game.next();
 
     expect(story()).toEqual([
       'runStarted',
       'roundStarted 0',
-      'answerMatched 0 tier 2',
+      'answerMatched 0 level 2',
       'revealFinished 0',
       'roundStarted 1',
-      'answerMatched 1 tier 3',
+      'answerMatched 1 level 3',
       'revealFinished 1',
       'biomeEntered grassland',
       'roundStarted 2',
-      'answerMatched 2 tier 4',
+      'answerMatched 2 level 4',
       'revealFinished 2',
       'biomeEntered forest',
       'runFinished 160',
@@ -113,13 +114,13 @@ describe('gameController: timers', () => {
     expect(game.getState().results[0]).toEqual({
       promptId: 'r1',
       timeMs: ROUND_TIME_MS,
-      match: { tier: 0, animalId: null, strategy: null, input: '' },
+      match: { level: 0, animalId: null, strategy: null, input: '' },
     });
     game.next();
     expect(story()).toEqual([
       'runStarted',
       'roundStarted 0',
-      'answerMatched 0 tier 0',
+      'answerMatched 0 level 0',
       'revealFinished 0',
       'roundStarted 1',
     ]);
@@ -221,7 +222,7 @@ describe('gameController: restore', () => {
     time.advance(deadline - 10_600 - 1);
     expect(game.getState().results).toHaveLength(1);
     time.advance(1);
-    expect(game.getState().results[1]?.match.tier).toBe(0);
+    expect(game.getState().results[1]?.match.level).toBe(0);
   });
 
   it('never adds time however often the page is reloaded', () => {
@@ -237,11 +238,11 @@ describe('gameController: restore', () => {
   it('records a timeout at once if the deadline passed while away', () => {
     const saved = savedAfterOneRound('playing');
     const { game, story } = reloadAt(saved, 60_000);
-    expect(story()).toEqual(['runRestored', 'answerMatched 1 tier 0']);
+    expect(story()).toEqual(['runRestored', 'answerMatched 1 level 0']);
     expect(game.getState().results[1]).toMatchObject({
       promptId: 'r2',
       timeMs: ROUND_TIME_MS,
-      match: { tier: 0, input: '' },
+      match: { level: 0, input: '' },
     });
   });
 
@@ -254,7 +255,7 @@ describe('gameController: restore', () => {
     // It was in the box when time ran out, so it counts, with the full round's time.
     expect(game.getState().results[0]).toMatchObject({
       timeMs: ROUND_TIME_MS,
-      match: { tier: 2, animalId: 'platypus' },
+      match: { level: 2, animalId: 'platypus' },
     });
     expect(time.pending()).toBe(0); // round timer cleared; the reveal waits for next()
   });
@@ -405,7 +406,7 @@ describe('gameController: retrying a guess', () => {
     expect(log.slice(changes).some(([name]) => name === 'stateChanged')).toBe(false);
     expect(time.pending()).toBe(1); // the round timer still runs
     game.submit('tiger');
-    expect(game.getState().results[0]?.match).toMatchObject({ animalId: 'tiger', tier: 4 });
+    expect(game.getState().results[0]?.match).toMatchObject({ animalId: 'tiger', level: 4 });
   });
 
   it('never scores nonsense, however often the player retries', () => {
@@ -422,7 +423,7 @@ describe('gameController: retrying a guess', () => {
     time.advance(ROUND_TIME_MS);
     expect(game.getState().results[0]).toMatchObject({
       timeMs: ROUND_TIME_MS,
-      match: { tier: 2, animalId: 'platypus', input: 'platypus' },
+      match: { level: 2, animalId: 'platypus', input: 'platypus' },
     });
   });
 
@@ -433,7 +434,7 @@ describe('gameController: retrying a guess', () => {
     game.setDraft('James');
     time.advance(ROUND_TIME_MS);
     expect(game.getState().results[0]?.match).toEqual({
-      tier: 0,
+      level: 0,
       animalId: null,
       strategy: null,
       input: 'James',
@@ -461,7 +462,7 @@ describe('gameController: retrying a guess', () => {
     game.setDraft('platipus');
     time.advance(ROUND_TIME_MS);
     expect(game.getState().results[0]?.match).toEqual({
-      tier: 0,
+      level: 0,
       animalId: null,
       strategy: null,
       input: 'platipus',
@@ -475,6 +476,6 @@ describe('gameController: retrying a guess', () => {
     game.submit('platypus');
     game.next();
     time.advance(ROUND_TIME_MS);
-    expect(game.getState().results[1]?.match).toMatchObject({ tier: 0, input: '' });
+    expect(game.getState().results[1]?.match).toMatchObject({ level: 0, input: '' });
   });
 });

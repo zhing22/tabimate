@@ -40,6 +40,14 @@ export function createJsonReader(file: string) {
       ? (value as number)
       : fail(path, `must be an integer (got ${show(value)})`);
 
+  const boolean = (value: unknown, path: string): boolean =>
+    typeof value === 'boolean' ? value : fail(path, `must be true or false (got ${show(value)})`);
+
+  const number = (value: unknown, path: string): number =>
+    typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : fail(path, `must be a number (got ${show(value)})`);
+
   const oneOf = <T>(value: unknown, options: readonly T[], path: string): T =>
     options.includes(value as T)
       ? (value as T)
@@ -53,7 +61,7 @@ export function createJsonReader(file: string) {
   const stringArray = (value: unknown, path: string): readonly string[] =>
     array(value, path).map((entry, i) => string(entry, item(path, i)));
 
-  return { fail, object, array, string, integer, oneOf, hex, stringArray };
+  return { fail, object, array, string, integer, boolean, number, oneOf, hex, stringArray };
 }
 
 export type JsonReader = ReturnType<typeof createJsonReader>;

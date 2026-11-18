@@ -10,7 +10,7 @@ import {
 } from './streak';
 import type { MatchResult, Puzzle } from './types';
 
-const day = (key: string, score = 10): HistoryEntry => ({ key, score, tiers: [1] });
+const day = (key: string, score = 10): HistoryEntry => ({ key, score, levels: [1] });
 const play = (...keys: string[]): Stats =>
   keys.reduce((s, k) => recordRun(s, day(k)), emptyStats());
 
@@ -67,13 +67,13 @@ describe('currentStreak', () => {
 });
 
 describe('historyEntry', () => {
-  it('records the date, score and each round tier', () => {
+  it('records the date, score and each round level', () => {
     const puzzle: Puzzle = {
       date: '2026-11-07',
       number: 2,
       prompts: ['a', 'b'].map((id) => ({ id, text: id, answers: [] })),
     };
-    const hit: MatchResult = { tier: 3, animalId: 'x', strategy: 'exact', input: 'x' };
+    const hit: MatchResult = { level: 3, animalId: 'x', strategy: 'exact', input: 'x' };
     const actions: GameAction[] = [
       { type: 'start', roundEndsAt: 1 },
       { type: 'submit', promptId: 'a', match: hit, timeMs: 1 },
@@ -82,6 +82,6 @@ describe('historyEntry', () => {
       { type: 'revealDone', nextRoundEndsAt: 3 },
     ];
     const finished = actions.reduce(gameReducer, createRunState(puzzle));
-    expect(historyEntry(finished)).toEqual({ key: '2026-11-07', score: 50, tiers: [3, 0] });
+    expect(historyEntry(finished)).toEqual({ key: '2026-11-07', score: 50, levels: [3, 0] });
   });
 });

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
-import { TIERS } from '@/config/tiers';
+import { LEVELS } from '@/config/tiers';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import { countdown } from './components/countdown';
 import { partyLineup } from './components/partyLineup';
@@ -140,7 +140,7 @@ describe('countdown', () => {
 });
 
 describe('tierBadge and teamCard', () => {
-  it('labels the tier and colours it from the tokens', () => {
+  it('labels the level and colours it from the tokens', () => {
     const { el } = tierBadge(3);
     expect(el.textContent).toBe('VU · Vulnerable');
     expect(el.getAttribute('style')).toContain('var(--tier-3)');
@@ -163,7 +163,7 @@ describe('tierBadge and teamCard', () => {
         result: {
           promptId: 'p',
           timeMs: 1,
-          match: { tier: 0, animalId: null, strategy: null, input: '' },
+          match: { level: 0, animalId: null, strategy: null, input: '' },
         },
       },
     ]);
@@ -174,14 +174,14 @@ describe('tierBadge and teamCard', () => {
 });
 
 describe('revealScreen', () => {
-  it.each(TIERS.map((t) => [t.id, t.effectId] as const))(
-    'tier %i carries its effect %s from TIERS',
-    (tier, effect) => {
+  it.each(LEVELS.map((t) => [t.id, t.effectId] as const))(
+    'level %i carries its effect %s from LEVELS',
+    (level, effect) => {
       const root = document.createElement('div');
       const match =
-        tier === 0
-          ? ({ tier, animalId: null, strategy: null, input: 'x' } as const)
-          : ({ tier, animalId: 'tiger', strategy: 'exact', input: 'x' } as const);
+        level === 0
+          ? ({ level, animalId: null, strategy: null, input: 'x' } as const)
+          : ({ level, animalId: 'tiger', strategy: 'exact', input: 'x' } as const);
       const result = { promptId: 'p', timeMs: 1, match };
       revealScreen(
         root,
@@ -197,19 +197,19 @@ describe('revealScreen', () => {
       );
       const card = root.querySelector<HTMLElement>('.reveal')!;
       expect(card.dataset['effect']).toBe(effect);
-      expect(card.getAttribute('style')).toContain(`var(--tier-${tier})`);
+      expect(card.getAttribute('style')).toContain(`var(--tier-${level})`);
     },
   );
 });
 
 describe('revealScreen beats', () => {
-  const timing = { suspenseMs: 600, perTierMs: 150, badgePopMs: 420, nameDelayMs: 350 };
-  const reveal = (tier: 0 | 1 | 4 | 5) => {
+  const timing = { suspenseMs: 600, perLevelMs: 150, badgePopMs: 420, nameDelayMs: 350 };
+  const reveal = (level: 0 | 1 | 4 | 5) => {
     const root = document.createElement('div');
     const match =
-      tier === 0
-        ? ({ tier, animalId: null, strategy: null, input: '' } as const)
-        : ({ tier, animalId: 'tiger', strategy: 'exact', input: 'tiger' } as const);
+      level === 0
+        ? ({ level, animalId: null, strategy: null, input: '' } as const)
+        : ({ level, animalId: 'tiger', strategy: 'exact', input: 'tiger' } as const);
     const revealed = vi.fn();
     revealScreen(
       root,
@@ -249,18 +249,21 @@ describe('revealScreen beats', () => {
     [0, 600],
     [1, 750],
     [5, 1_350],
-  ] as const)('builds up longer for rarer tiers: tier %i shows its badge at %i ms', (tier, ms) => {
-    vi.useFakeTimers();
-    try {
-      const r = reveal(tier);
-      vi.advanceTimersByTime(ms - 1);
-      expect(r.phase()).toBe('reveal--pending');
-      vi.advanceTimersByTime(1);
-      expect(r.phase()).toBe('reveal--badge');
-    } finally {
-      vi.useRealTimers();
-    }
-  });
+  ] as const)(
+    'builds up longer for rarer levels: level %i shows its badge at %i ms',
+    (level, ms) => {
+      vi.useFakeTimers();
+      try {
+        const r = reveal(level);
+        vi.advanceTimersByTime(ms - 1);
+        expect(r.phase()).toBe('reveal--pending');
+        vi.advanceTimersByTime(1);
+        expect(r.phase()).toBe('reveal--badge');
+      } finally {
+        vi.useRealTimers();
+      }
+    },
+  );
 
   it('passes the badge pop time to the CSS', () => {
     vi.useFakeTimers();
@@ -281,30 +284,30 @@ describe('results: team rows, answers and the party', () => {
     id: 'p',
     text: 'Has stripes',
     answers: [
-      { animalId: 'red-fox', tier: 1 as const },
-      { animalId: 'tiger', tier: 4 as const },
-      { animalId: 'snow-leopard', tier: 3 as const },
+      { animalId: 'red-fox', level: 1 as const },
+      { animalId: 'tiger', level: 4 as const },
+      { animalId: 'snow-leopard', level: 3 as const },
     ],
   };
-  const round = (animal: typeof tiger | null, tier: 0 | 1 | 4 | 5): TeamRound => ({
+  const round = (animal: typeof tiger | null, level: 0 | 1 | 4 | 5): TeamRound => ({
     prompt,
     animal,
     result: {
       promptId: 'p',
       timeMs: 1,
       match:
-        animal && tier
-          ? { tier, animalId: animal.id, strategy: 'exact', input: animal.display }
-          : { tier: 0, animalId: null, strategy: null, input: '' },
+        animal && level
+          ? { level, animalId: animal.id, strategy: 'exact', input: animal.display }
+          : { level: 0, animalId: null, strategy: null, input: '' },
     },
     answers: answerLines(prompt, ANIMALS, animal?.id ?? null),
   });
 
   it('lists every answer by points, rarest first, marking the one found', () => {
     expect(answerLines(prompt, ANIMALS, 'tiger')).toEqual([
-      { name: 'Tiger', tier: 4, points: 85, picked: true },
-      { name: 'Snow leopard', tier: 3, points: 50, picked: false },
-      { name: 'Red fox', tier: 1, points: 10, picked: false },
+      { name: 'Tiger', level: 4, points: 85, picked: true },
+      { name: 'Snow leopard', level: 3, points: 50, picked: false },
+      { name: 'Red fox', level: 1, points: 10, picked: false },
     ]);
   });
 
@@ -389,7 +392,7 @@ describe('party line-up frame', () => {
       result: {
         promptId: 'p',
         timeMs: 1,
-        match: { tier: 4, animalId: 'tiger', strategy: 'exact', input: 'Tiger' },
+        match: { level: 4, animalId: 'tiger', strategy: 'exact', input: 'Tiger' },
       },
       answers: [],
     },

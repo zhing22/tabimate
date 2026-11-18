@@ -1,26 +1,39 @@
-/** 0 = no match; 1–5 follow IUCN Red List categories, rarer is higher. */
-export type TierId = 0 | 1 | 2 | 3 | 4 | 5;
+// Answer levels (v2). Every answer on every prompt has a hand-set level 1-5;
+// points are fixed per level. The labels borrow the IUCN Red List's names for
+// flavour only: an answer's level is not the animal's real conservation status.
 
-/** Tiers a real answer can have (tier 0 is only ever a miss). */
-export type AnswerTierId = Exclude<TierId, 0>;
+/** 0 = no match (a miss or time-up); 1-5 are answer levels, rarer is higher. */
+export type LevelId = 0 | 1 | 2 | 3 | 4 | 5;
 
-/** Keys into the scene's tier effect registry, which must cover every id. */
+/** Levels a real answer can have (0 is only ever a miss). */
+export type AnswerLevel = Exclude<LevelId, 0>;
+
+/** The highest level: exactly one per prompt, unless the day's theme allows more. */
+export const TOP_LEVEL = 5 satisfies AnswerLevel;
+
+/** Keys into the scene's effect registry, which must cover every id. */
 export type EffectId = 'none' | 'glint' | 'sparkle' | 'shiny';
 
-export interface TierDef {
-  readonly id: TierId;
+/** Keys into services/sounds.ts: the sound a level's reveal plays. */
+export type LevelSoundId = `level${LevelId}`;
+
+export interface LevelDef {
+  readonly id: LevelId;
   readonly name: string;
+  /** Badge code: LC NT VU EN CR. */
   readonly shortName: string;
   /** CSS custom property defined in ui/styles/tokens.css. */
-  readonly colour: `--tier-${TierId}`;
+  readonly colour: `--tier-${LevelId}`;
   /** Square emoji used in share text. */
   readonly emoji: string;
+  /** Fixed per level; read through core/scoring.ts, not from here. */
   readonly points: number;
   readonly effectId: EffectId;
+  readonly soundId: LevelSoundId;
 }
 
-/** Indexed by TierId: TIERS[tier] is that tier's definition. */
-export const TIERS = [
+/** Indexed by LevelId: LEVELS[level] is that level's definition. */
+export const LEVELS = [
   {
     id: 0,
     name: 'No match',
@@ -29,6 +42,7 @@ export const TIERS = [
     emoji: '⬛',
     points: 0,
     effectId: 'none',
+    soundId: 'level0',
   },
   {
     id: 1,
@@ -38,6 +52,7 @@ export const TIERS = [
     emoji: '⬜',
     points: 10,
     effectId: 'none',
+    soundId: 'level1',
   },
   {
     id: 2,
@@ -47,6 +62,7 @@ export const TIERS = [
     emoji: '🟦',
     points: 25,
     effectId: 'glint',
+    soundId: 'level2',
   },
   {
     id: 3,
@@ -56,6 +72,7 @@ export const TIERS = [
     emoji: '🟥',
     points: 50,
     effectId: 'glint',
+    soundId: 'level3',
   },
   {
     id: 4,
@@ -65,6 +82,7 @@ export const TIERS = [
     emoji: '🟪',
     points: 85,
     effectId: 'sparkle',
+    soundId: 'level4',
   },
   {
     id: 5,
@@ -74,5 +92,6 @@ export const TIERS = [
     emoji: '🟨',
     points: 100,
     effectId: 'shiny',
+    soundId: 'level5',
   },
-] as const satisfies readonly TierDef[];
+] as const satisfies readonly LevelDef[];

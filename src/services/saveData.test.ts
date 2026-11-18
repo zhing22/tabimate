@@ -54,7 +54,7 @@ describe('parseSaveData', () => {
         streak: 1,
         bestStreak: 1,
         lastPlayedKey: '2026-11-07',
-        history: [{ key: '2026-11-07', score: 25, tiers: [2, 0, 0] }],
+        history: [{ key: '2026-11-07', score: 25, levels: [2, 0, 0] }],
       },
     };
     expect(parseSaveData(JSON.parse(JSON.stringify(data)))).toEqual(data);
@@ -85,7 +85,7 @@ describe('parseSaveData', () => {
   });
 
   it('keeps the good history entries when one is bad', () => {
-    const good = (key: string) => ({ key, score: 25, tiers: [2, 0, 0] });
+    const good = (key: string) => ({ key, score: 25, levels: [2, 0, 0] });
     const raw = {
       version: SCHEMA_VERSION,
       runs: {},
@@ -107,7 +107,7 @@ describe('parseSaveData', () => {
   });
 
   it('keeps history and best streak when the streak fields are broken', () => {
-    const entry = { key: '2026-11-07', score: 10, tiers: [1] };
+    const entry = { key: '2026-11-07', score: 10, levels: [1] };
     const raw = {
       version: SCHEMA_VERSION,
       runs: {},
@@ -129,13 +129,13 @@ describe('parseSaveData', () => {
         bestStreak: 1,
         lastPlayedKey: '2026-11-07',
         history: [
-          { key: '2026-11-07', score: 10, tiers: [1] },
-          { key: '2026-11-07', score: 99, tiers: [5] },
+          { key: '2026-11-07', score: 10, levels: [1] },
+          { key: '2026-11-07', score: 99, levels: [5] },
         ],
       },
     };
     expect(parseSaveData(raw).stats.history).toEqual([
-      { key: '2026-11-07', score: 10, tiers: [1] },
+      { key: '2026-11-07', score: 10, levels: [1] },
     ]);
   });
 
@@ -180,5 +180,37 @@ describe('readSaveData: lossy', () => {
     ['stats of the wrong type', { version: SCHEMA_VERSION, stats: 'x' }, true],
   ])('%s -> %s', (_name, raw, lossy) => {
     expect(readSaveData(raw).lossy).toBe(lossy);
+  });
+});
+
+describe('the real migrations', () => {
+  it('upgrades a v1 save (tiers) to levels without losing anything', () => {
+    const run = finishedRun('2026-11-07');
+    const v1Run = {
+      ...run,
+      results: run.results.map(({ match: { level, ...match }, ...r }) => ({
+        ...r,
+        match: { ...match, tier: level },
+      })),
+    };
+    const history = [{ key: '2026-11-07', score: 25, levels: [2, 0, 0] }];
+    const v1 = {
+      version: 1,
+      runs: { '2026-11-07': v1Run },
+      stats: {
+        streak: 1,
+        bestStreak: 1,
+        lastPlayedKey: '2026-11-07',
+        history: history.map(({ levels, ...e }) => ({ ...e, tiers: levels })),
+      },
+    };
+    expect(readSaveData(JSON.parse(JSON.stringify(v1)))).toEqual({
+      data: {
+        version: SCHEMA_VERSION,
+        runs: { '2026-11-07': run },
+        stats: { streak: 1, bestStreak: 1, lastPlayedKey: '2026-11-07', history },
+      },
+      lossy: false,
+    });
   });
 });

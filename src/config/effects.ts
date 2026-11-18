@@ -1,4 +1,4 @@
-// Tuning for the tier effects (scene/effects/). One entry per effect id in
+// Tuning for the level effects (scene/effects/). One entry per effect id in
 // config/tiers.ts. Distances are native pixels, speeds px/s, times seconds.
 import type { HexColour } from './colour';
 import type { EffectId } from './tiers';

@@ -1,6 +1,6 @@
 // Dev only: drives the scene with a scripted run so it can be watched (and
 // screenshotted) without playing. See dev/scene.html.
-import type { AnswerTierId } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/tiers';
 import { createBus, type GameEvents } from '@/core/events';
 import type { Animal, RoundResult, RunState } from '@/core/types';
 import { createScene } from '@/scene/sceneManager';
@@ -12,7 +12,7 @@ import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
 
 const loader = createJsonLoader({ baseUrl: '/' });
 
-const SCRIPT: readonly (readonly [string | null, AnswerTierId | 0])[] = [
+const SCRIPT: readonly (readonly [string | null, AnswerLevel | 0])[] = [
   ['tiger', 4],
   ['snow-leopard', 3], // two big cats, one sheet
   ['platypus', 2], // no sheet yet: emoji
@@ -22,10 +22,10 @@ const SCRIPT: readonly (readonly [string | null, AnswerTierId | 0])[] = [
 ];
 const STEP_MS = 2_500;
 
-const resultOf = ([animalId, tier]: (typeof SCRIPT)[number]): RoundResult =>
-  animalId === null || tier === 0
-    ? { promptId: 'p', timeMs: 1, match: { tier: 0, animalId: null, strategy: null, input: 'x' } }
-    : { promptId: 'p', timeMs: 1, match: { tier, animalId, strategy: 'exact', input: animalId } };
+const resultOf = ([animalId, level]: (typeof SCRIPT)[number]): RoundResult =>
+  animalId === null || level === 0
+    ? { promptId: 'p', timeMs: 1, match: { level: 0, animalId: null, strategy: null, input: 'x' } }
+    : { promptId: 'p', timeMs: 1, match: { level, animalId, strategy: 'exact', input: animalId } };
 
 async function main() {
   const params = new URLSearchParams(location.search);

@@ -14,7 +14,7 @@ export interface GuessExplained {
   /** 0..1, how sure that strategy was; null for no match. */
   readonly confidence: number | null;
   readonly animal: string | null;
-  readonly tier: number;
+  readonly level: number;
   /** What the game did with it: scored, offered the exact name, or said no. */
   readonly verdict: Verdict['kind'];
   /** Why a strategy's hit was still rejected (a list of animals), if it was. */
@@ -46,6 +46,6 @@ export function explainGuess(
     strategy: hit?.strategy ?? null,
     confidence: hit ? Math.round(hit.confidence * 100) / 100 : null,
     animal: hit ? (animals.get(hit.animalId)?.display ?? hit.animalId) : null,
-    tier: hit?.tier ?? 0,
+    level: hit?.level ?? 0,
   };
 }
