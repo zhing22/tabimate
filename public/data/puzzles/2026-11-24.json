@@ -1,0 +1,380 @@
+{
+  "date": "2026-11-24",
+  "number": 19,
+  "prompts": [
+    {
+      "id": "four-legs",
+      "text": "Name an animal that walks on four legs",
+      "answers": [
+        {
+          "animalId": "big-cat",
+          "level": 1
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "rhinoceros",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "salamander",
+          "level": 1
+        },
+        {
+          "animalId": "giant-salamander",
+          "level": 1
+        },
+        {
+          "animalId": "lion",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 1
+        },
+        {
+          "animalId": "giraffe",
+          "level": 1
+        },
+        {
+          "animalId": "african-elephant",
+          "level": 1
+        },
+        {
+          "animalId": "cheetah",
+          "level": 2
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "plains-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 2
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 2
+        },
+        {
+          "animalId": "polar-bear",
+          "level": 2
+        },
+        {
+          "animalId": "giant-panda",
+          "level": 2
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 2
+        },
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "level": 2
+        },
+        {
+          "animalId": "house-mouse",
+          "level": 2
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "snow-leopard",
+          "level": 3
+        },
+        {
+          "animalId": "white-rhino",
+          "level": 3
+        },
+        {
+          "animalId": "black-rhino",
+          "level": 3
+        },
+        {
+          "animalId": "red-panda",
+          "level": 3
+        },
+        {
+          "animalId": "koala",
+          "level": 3
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 3
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 3
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 4
+        },
+        {
+          "animalId": "malayan-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "short-beaked-echidna",
+          "level": 4
+        },
+        {
+          "animalId": "platypus",
+          "level": 4
+        },
+        {
+          "animalId": "axolotl",
+          "level": 4
+        },
+        {
+          "animalId": "chinese-giant-salamander",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "sharp-teeth",
+      "text": "Name an animal with sharp teeth",
+      "answers": [
+        {
+          "animalId": "big-cat",
+          "level": 1
+        },
+        {
+          "animalId": "shark",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "seal",
+          "level": 1
+        },
+        {
+          "animalId": "hammerhead-shark",
+          "level": 1
+        },
+        {
+          "animalId": "lion",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 1
+        },
+        {
+          "animalId": "great-white-shark",
+          "level": 1
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 2
+        },
+        {
+          "animalId": "polar-bear",
+          "level": 2
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 2
+        },
+        {
+          "animalId": "cheetah",
+          "level": 2
+        },
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "killer-whale",
+          "level": 2
+        },
+        {
+          "animalId": "snow-leopard",
+          "level": 3
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 3
+        },
+        {
+          "animalId": "great-hammerhead",
+          "level": 3
+        },
+        {
+          "animalId": "harbour-seal",
+          "level": 3
+        },
+        {
+          "animalId": "bottlenose-dolphin",
+          "level": 4
+        },
+        {
+          "animalId": "sea-otter",
+          "level": 4
+        },
+        {
+          "animalId": "hippo",
+          "level": 4
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "long-nose",
+      "text": "Name an animal with a long nose, trunk or snout",
+      "answers": [
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "dolphin",
+          "level": 1
+        },
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "african-elephant",
+          "level": 1
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 1
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "bottlenose-dolphin",
+          "level": 2
+        },
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 3
+        },
+        {
+          "animalId": "malayan-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "short-beaked-echidna",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}
