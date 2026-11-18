@@ -48,5 +48,11 @@ export const PROMPT: Prompt = {
 /** A candidate built by hand, for strategy tests that skip the registry. */
 export function candidate(animalId: AnimalId, level: AnswerLevel, ...names: string[]): Candidate {
   const normalized = names.map(normalize);
-  return { animalId, level, names: normalized, grams: normalized.map(trigrams) };
+  return { animalId, level, group: false, names: normalized, grams: normalized.map(trigrams) };
 }
+
+/** The same, as a group ("penguin") rather than a species. */
+export const groupCandidate = (animalId: AnimalId, level: AnswerLevel, ...names: string[]) => ({
+  ...candidate(animalId, level, ...names),
+  group: true,
+});

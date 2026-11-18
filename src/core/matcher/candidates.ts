@@ -18,7 +18,8 @@ export function buildCandidates(prompt: Prompt, animals: Animals): readonly Cand
     // Validation guarantees the animal exists; the id is a fallback so play goes on.
     const raw = animal ? [animal.display, ...animal.aliases] : [animalId];
     const names = [...new Set(raw.map(normalize).filter((name) => name !== ''))];
-    return { animalId, level, names, grams: names.map(trigrams) };
+    const group = animal?.kind === 'group';
+    return { animalId, level, group, names, grams: names.map(trigrams) };
   });
   cache.set(prompt, { animals, candidates });
   return candidates;

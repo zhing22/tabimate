@@ -134,8 +134,9 @@ Original art and naming only: no Pokémon names, sprites or UI.
 
 - Only an exact display name or alias scores. Close guesses (typo, partial, loose) are
   corrected to the exact name and must be confirmed with Go. Wrong guesses can be retried.
-- Ties between candidates prefer the shorter name / the group, so a suggestion never
-  jumps to a rarer answer than the player typed.
+- Ties between equally scored candidates go to the lower level, then the group, then the
+  shorter display name, then a hash (core/matcher/pick.ts compareTies), so a suggestion
+  never jumps to a rarer answer than the player typed.
 - No random or lucky matching, ever.
 
 ## Content

@@ -12,6 +12,8 @@ export interface NormalizedInput {
 export interface Candidate {
   readonly animalId: AnimalId;
   readonly level: AnswerLevel;
+  /** A group ("penguin") rather than a species: preferred when scores tie. */
+  readonly group: boolean;
   /** Normalized names: the display name first, then the aliases. */
   readonly names: readonly string[];
   /** Trigrams of each name, same order. Precomputed: 'loose' compares against all of them. */
