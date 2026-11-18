@@ -53,8 +53,8 @@ export function checkHierarchy(r: JsonReader, list: readonly Animal[], animals: 
 export interface PromptLevelRules {
   readonly file: string;
   readonly animals: AnimalLookup;
-  /** Most CR answers a prompt may have (a theme's maxCR). Unset: exactly one. */
-  readonly maxCR?: number | undefined;
+  /** False for puzzles released before the rule (see LEVEL_RULES_FROM): they stay as played. */
+  readonly oneCR: boolean;
   /** Gets each non-fatal problem as a full message. Unset: warnings are dropped. */
   readonly warn?: ((message: string) => void) | undefined;
 }
@@ -62,25 +62,19 @@ export interface PromptLevelRules {
 const levelName = (level: AnswerLevel) => `level ${level} (${LEVELS[level].shortName})`;
 
 /**
- * The top level is the one prize per prompt: exactly one CR answer, or 1 to
- * maxCR on a themed day. A species ranked below its own group is allowed but
- * odd (the specific answer should be at least as rare), so it only warns.
+ * The top level is the one prize per prompt: exactly one CR answer. A species
+ * ranked below its own group is allowed but odd (the specific answer should be
+ * at least as rare), so it only warns.
  */
 export function checkPromptLevels(
   r: JsonReader,
   answers: readonly PuzzleAnswer[],
   path: string,
-  { file, animals, maxCR, warn }: PromptLevelRules,
+  { file, animals, oneCR, warn }: PromptLevelRules,
 ) {
   const top = answers.filter((a) => a.level === TOP_LEVEL).length;
-  const most = maxCR ?? 1;
-  if (top < 1 || top > most) {
-    r.fail(
-      path,
-      maxCR === undefined
-        ? `must have exactly one level-${TOP_LEVEL} (CR) answer (got ${top})`
-        : `must have 1 to ${most} level-${TOP_LEVEL} (CR) answers (got ${top})`,
-    );
+  if (oneCR && top !== 1) {
+    r.fail(path, `must have exactly one level-${TOP_LEVEL} (CR) answer (got ${top})`);
   }
   if (!warn) return;
   const levelOf = new Map(answers.map((a) => [a.animalId, a.level]));

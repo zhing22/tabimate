@@ -8,7 +8,7 @@
       "answers": [
         {
           "animalId": "sumatran-orangutan",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "bornean-orangutan",
@@ -16,7 +16,7 @@
         },
         {
           "animalId": "eastern-gorilla",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "chimpanzee",
@@ -24,19 +24,7 @@
         },
         {
           "animalId": "ruffed-lemur",
-          "level": 4
-        },
-        {
-          "animalId": "orangutan",
-          "level": 1
-        },
-        {
-          "animalId": "gorilla",
-          "level": 1
-        },
-        {
-          "animalId": "lemur",
-          "level": 1
+          "level": 5
         }
       ]
     },
@@ -54,7 +42,7 @@
         },
         {
           "animalId": "philippine-eagle",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "california-condor",
@@ -67,22 +55,6 @@
         {
           "animalId": "snowy-owl",
           "level": 3
-        },
-        {
-          "animalId": "eagle",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "falcon",
-          "level": 1
-        },
-        {
-          "animalId": "condor",
-          "level": 1
         }
       ]
     },
@@ -113,14 +85,6 @@
         {
           "animalId": "hippo",
           "level": 3
-        },
-        {
-          "animalId": "elephant",
-          "level": 1
-        },
-        {
-          "animalId": "rhinoceros",
-          "level": 1
         }
       ]
     }

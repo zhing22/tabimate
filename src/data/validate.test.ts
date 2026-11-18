@@ -86,7 +86,7 @@ describe('validatePuzzle', () => {
   it.each<[string, (p: Puzzle) => unknown, string | null, RegExp]>([
     ['not an object', () => [], null, /must be an object/],
     ['date not matching the file', (p) => ((p.date = '2026-11-08'), p), 'date', /requested key/],
-    ['wrong number', (p) => ((p.number = 99), p), 'number', /is puzzle 2/],
+    ['wrong number', (p) => ((p.number = 99), p), 'number', /is puzzle 15/],
     ['missing date', (p) => (delete (p as Json).date, p), 'date', /non-empty string/],
     ['non-integer number', (p) => ((p.number = 2.5), p), 'number', /must be an integer/],
     ['number as a string', (p) => (((p as Json).number = '2'), p), 'number', /must be an integer/],
@@ -217,6 +217,37 @@ describe('validateAnimals: groups and extra fields', () => {
       /has 16 words \(at most 15\)/,
     ],
     ['plain-http wiki', (l) => ((l[0]!.wiki = 'http://x.org'), l), '[0].wiki', /https:\/\//],
+    [
+      'range of the wrong length',
+      (l) => ((l[0]!.traits = { altitudeM: [100] }), l),
+      '[0].traits.altitudeM',
+      /must be \[min, max\] \(got 1 values\)/,
+    ],
+    [
+      'non-number range value',
+      (l) => ((l[0]!.traits = { depthM: [0, 'deep'] }), l),
+      '[0].traits.depthM[1]',
+      /must be a number/,
+    ],
+    ['negative legs', (l) => ((l[0]!.traits = { legs: -2 }), l), '[0].traits.legs', /0 or more/],
+    [
+      'non-boolean flag',
+      (l) => ((l[0]!.traits = { tail: 'yes' }), l),
+      '[0].traits.tail',
+      /true or false/,
+    ],
+    [
+      'non-boolean descriptionReviewed',
+      (l) => ((l[0]!.descriptionReviewed = 'yes'), l),
+      '[0].descriptionReviewed',
+      /true or false/,
+    ],
+    [
+      'non-slug parent',
+      (l) => ((l[0]!.parent = 'Canid'), l),
+      '[0].parent',
+      /lowercase-with-dashes/,
+    ],
   ])('rejects %s', (_name, mutate, field, problem) => {
     const json = mutate(withGroup());
     expectDataError(() => validateAnimals(json, ANIMALS), ANIMALS, field, problem);
@@ -231,7 +262,7 @@ describe('validatePuzzle: levels', () => {
     json.prompts[2]!.answers = answers;
     return json;
   };
-  const check = (json: unknown, extra: { maxCR?: number; warn?: (m: string) => void } = {}) =>
+  const check = (json: unknown, extra: { warn?: (m: string) => void } = {}) =>
     validatePuzzle(json, { file: PUZZLE, key: FIXTURE_KEY, animals: grouped(), ...extra });
 
   it('rejects a prompt with two CR answers', () => {
@@ -252,18 +283,22 @@ describe('validatePuzzle: levels', () => {
     expectDataError(() => check(json), PUZZLE, 'prompts[2].answers', /exactly one.*\(got 0\)/);
   });
 
-  it("allows up to the theme's maxCR", () => {
-    const two = eatsMeat([
-      { animalId: 'red-fox', level: 5 },
-      { animalId: 'killer-whale', level: 5 },
-    ]);
-    expect(check(two, { maxCR: 2 }).prompts[2]?.answers).toHaveLength(2);
-    expectDataError(
-      () => check(eatsMeat([{ animalId: 'red-fox', level: 3 }]), { maxCR: 2 }),
-      PUZZLE,
-      'prompts[2].answers',
-      /1 to 2 level-5 \(CR\) answers \(got 0\)/,
-    );
+  it('leaves puzzles released before LEVEL_RULES_FROM as they were played', () => {
+    const json = {
+      ...eatsMeat([
+        { animalId: 'red-fox', level: 5 },
+        { animalId: 'killer-whale', level: 5 },
+      ]),
+      date: '2026-11-18',
+      number: 13,
+    };
+    json.prompts[0]!.answers = [{ animalId: 'platypus', level: 2 }];
+    const puzzle = validatePuzzle(json, {
+      file: 'data/puzzles/2026-11-18.json',
+      key: '2026-11-18',
+      animals: grouped(),
+    });
+    expect(puzzle.prompts[2]?.answers).toHaveLength(2);
   });
 
   it('warns, without failing, when a species is below its own group', () => {

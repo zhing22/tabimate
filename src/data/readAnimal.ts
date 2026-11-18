@@ -30,57 +30,68 @@ function optional<T, K extends string>(
   return o[key] === undefined ? {} : ({ [key]: read(o[key], field(path, key)) } as { [P in K]: T });
 }
 
-function range(r: JsonReader, value: unknown, path: string): MetreRange {
+/** Reads one trait value; fails (DataError) on a bad one. */
+type Reader<T> = (r: JsonReader, value: unknown, path: string) => T;
+
+const one =
+  <T>(options: readonly T[]): Reader<T> =>
+  (r, v, p) =>
+    r.oneOf(v, options, p);
+const many =
+  <T>(options: readonly T[]): Reader<readonly T[]> =>
+  (r, v, p) =>
+    r.array(v, p).map((entry, i) => r.oneOf(entry, options, item(p, i)));
+const flag: Reader<boolean> = (r, v, p) => r.boolean(v, p);
+
+const count: Reader<number> = (r, v, p) => {
+  const n = r.integer(v, p);
+  return n >= 0 ? n : r.fail(p, `must be 0 or more (got ${n})`);
+};
+
+const range: Reader<MetreRange> = (r, value, path) => {
   const list = r.array(value, path);
   if (list.length !== 2) r.fail(path, `must be [min, max] (got ${list.length} values)`);
   const min = r.number(list[0], item(path, 0));
   const max = r.number(list[1], item(path, 1));
   if (min > max) r.fail(path, `min ${min} is more than max ${max}`);
   return [min, max];
-}
+};
+
+/**
+ * One reader per trait. Typed against AnimalTraits, so a new trait won't
+ * compile until it has a reader here; the known keys come from this table too.
+ */
+const TRAIT_READERS: { readonly [K in keyof AnimalTraits]-?: Reader<AnimalTraits[K] & {}> } = {
+  class: one(ANIMAL_CLASSES),
+  diet: many(DIETS),
+  habitat: many(HABITATS),
+  continent: many(CONTINENTS),
+  legs: count,
+  tail: flag,
+  gills: flag,
+  shell: flag,
+  horns: flag,
+  feathers: flag,
+  pouch: flag,
+  flies: flag,
+  social: one(SOCIAL),
+  active: one(ACTIVE_TIMES),
+  extinct: flag,
+  altitudeM: range,
+  depthM: range,
+  size: one(BODY_SIZES),
+};
+
+const isTrait = (key: string): key is keyof AnimalTraits => Object.hasOwn(TRAIT_READERS, key);
 
 function readTraits(r: JsonReader, value: unknown, path: string): AnimalTraits {
   const o = r.object(value, path);
-  const known = new Set<string>();
-  const opt = <T, K extends string>(key: K, read: (v: unknown, p: string) => T) => {
-    known.add(key);
-    return optional(o, key, path, read);
-  };
-  const many =
-    <T>(options: readonly T[]) =>
-    (v: unknown, p: string): readonly T[] =>
-      r.array(v, p).map((entry, i) => r.oneOf(entry, options, item(p, i)));
-  const one =
-    <T>(options: readonly T[]) =>
-    (v: unknown, p: string): T =>
-      r.oneOf(v, options, p);
-  const flag = (v: unknown, p: string) => r.boolean(v, p);
-  const traits: AnimalTraits = {
-    ...opt('class', one(ANIMAL_CLASSES)),
-    ...opt('diet', many(DIETS)),
-    ...opt('habitat', many(HABITATS)),
-    ...opt('continent', many(CONTINENTS)),
-    ...opt('legs', (v, p) => {
-      const n = r.integer(v, p);
-      return n >= 0 ? n : r.fail(p, `must be 0 or more (got ${n})`);
-    }),
-    ...opt('tail', flag),
-    ...opt('gills', flag),
-    ...opt('shell', flag),
-    ...opt('horns', flag),
-    ...opt('feathers', flag),
-    ...opt('pouch', flag),
-    ...opt('flies', flag),
-    ...opt('social', one(SOCIAL)),
-    ...opt('active', one(ACTIVE_TIMES)),
-    ...opt('extinct', flag),
-    ...opt('altitudeM', (v, p) => range(r, v, p)),
-    ...opt('depthM', (v, p) => range(r, v, p)),
-    ...opt('size', one(BODY_SIZES)),
-  };
-  // A misspelt trait would silently never match a prompt, so unknown keys fail.
-  const extra = Object.keys(o).find((key) => !known.has(key));
-  if (extra !== undefined) r.fail(field(path, extra), 'is not a known trait');
+  const traits: Record<string, unknown> = {};
+  for (const [key, v] of Object.entries(o)) {
+    // A misspelt trait would silently never match a prompt, so unknown keys fail.
+    if (!isTrait(key)) return r.fail(field(path, key), 'is not a known trait');
+    if (v !== undefined) traits[key] = TRAIT_READERS[key](r, v, field(path, key));
+  }
   return traits;
 }
 

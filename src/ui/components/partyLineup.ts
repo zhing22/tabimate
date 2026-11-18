@@ -1,4 +1,5 @@
 import { BIOMES } from '@/config/biomes';
+import { isShiny } from '@/config/tiers';
 import { BACKDROP, GROUND_Y, NATIVE_HEIGHT } from '@/config/render';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
@@ -48,7 +49,7 @@ export function partyLineup(
   const row = h(
     'div',
     { class: 'party__members' },
-    ...[...members].reverse().map((r) => portrait(r.animal, r.result.match.level === 5, sprite)),
+    ...[...members].reverse().map((r) => portrait(r.animal, isShiny(r.result.match.level), sprite)),
     portrait(null, false, sprite),
   );
   // Each one bobs a little out of step with the next, like the scene's party.

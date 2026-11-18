@@ -28,7 +28,7 @@
         },
         {
           "animalId": "kakapo",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "african-grey-parrot",
@@ -48,7 +48,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "ruby-throated-hummingbird",
@@ -88,7 +88,7 @@
         },
         {
           "animalId": "hawksbill-turtle",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "leatherback-turtle",
@@ -96,7 +96,7 @@
         },
         {
           "animalId": "axolotl",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "common-octopus",
@@ -104,7 +104,7 @@
         },
         {
           "animalId": "chinese-giant-salamander",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "mallard",
@@ -117,90 +117,6 @@
         {
           "animalId": "california-condor",
           "level": 5
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "sea-turtle",
-          "level": 1
-        },
-        {
-          "animalId": "crocodile",
-          "level": 1
-        },
-        {
-          "animalId": "eagle",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "parrot",
-          "level": 1
-        },
-        {
-          "animalId": "salamander",
-          "level": 1
-        },
-        {
-          "animalId": "echidna",
-          "level": 1
-        },
-        {
-          "animalId": "kiwi",
-          "level": 1
-        },
-        {
-          "animalId": "ostrich",
-          "level": 1
-        },
-        {
-          "animalId": "peafowl",
-          "level": 1
-        },
-        {
-          "animalId": "giant-salamander",
-          "level": 1
-        },
-        {
-          "animalId": "falcon",
-          "level": 1
-        },
-        {
-          "animalId": "condor",
-          "level": 1
-        },
-        {
-          "animalId": "flamingo",
-          "level": 1
-        },
-        {
-          "animalId": "crane",
-          "level": 1
-        },
-        {
-          "animalId": "lapwing",
-          "level": 1
-        },
-        {
-          "animalId": "hummingbird",
-          "level": 1
-        },
-        {
-          "animalId": "duck",
-          "level": 1
-        },
-        {
-          "animalId": "puffin",
-          "level": 1
-        },
-        {
-          "animalId": "octopus",
-          "level": 1
         }
       ]
     },
@@ -246,7 +162,7 @@
         },
         {
           "animalId": "eastern-gorilla",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "common-ostrich",
@@ -258,7 +174,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "greater-flamingo",
@@ -278,7 +194,7 @@
         },
         {
           "animalId": "ruffed-lemur",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "white-stork",
@@ -287,66 +203,6 @@
         {
           "animalId": "great-white-shark",
           "level": 3
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "big-cat",
-          "level": 1
-        },
-        {
-          "animalId": "elephant",
-          "level": 1
-        },
-        {
-          "animalId": "rhinoceros",
-          "level": 1
-        },
-        {
-          "animalId": "shark",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "parrot",
-          "level": 1
-        },
-        {
-          "animalId": "fox",
-          "level": 1
-        },
-        {
-          "animalId": "gorilla",
-          "level": 1
-        },
-        {
-          "animalId": "lemur",
-          "level": 1
-        },
-        {
-          "animalId": "zebra",
-          "level": 1
-        },
-        {
-          "animalId": "ostrich",
-          "level": 1
-        },
-        {
-          "animalId": "falcon",
-          "level": 1
-        },
-        {
-          "animalId": "flamingo",
-          "level": 1
-        },
-        {
-          "animalId": "stork",
-          "level": 1
         }
       ]
     },
@@ -368,7 +224,7 @@
         },
         {
           "animalId": "vaquita",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "bottlenose-dolphin",
@@ -388,7 +244,7 @@
         },
         {
           "animalId": "hawksbill-turtle",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "leatherback-turtle",
@@ -420,7 +276,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "atlantic-puffin",
@@ -437,54 +293,6 @@
         {
           "animalId": "polar-bear",
           "level": 3
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "sea-turtle",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "whale",
-          "level": 1
-        },
-        {
-          "animalId": "dolphin",
-          "level": 1
-        },
-        {
-          "animalId": "shark",
-          "level": 1
-        },
-        {
-          "animalId": "puffin",
-          "level": 1
-        },
-        {
-          "animalId": "albatross",
-          "level": 1
-        },
-        {
-          "animalId": "hammerhead-shark",
-          "level": 1
-        },
-        {
-          "animalId": "octopus",
-          "level": 1
-        },
-        {
-          "animalId": "sea-cow",
-          "level": 1
-        },
-        {
-          "animalId": "manatee",
-          "level": 1
         }
       ]
     }

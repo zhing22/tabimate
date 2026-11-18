@@ -183,3 +183,23 @@ describe('performance', () => {
     expect(best).toBeLessThan(50);
   });
 });
+
+describe('a group and its species on one prompt', () => {
+  it.each(['penguin', 'Penguins', 'PENGUIN!'])('%j is the group, exactly', (raw) => {
+    expect(match(raw)).toEqual({ level: 1, animalId: 'penguin', strategy: 'exact', input: raw });
+  });
+
+  it('a typo of the group suggests the group, never a rarer species', () => {
+    expect(match('penguinn')).toMatchObject({ animalId: 'penguin', level: 1, strategy: 'typo' });
+    expect(match('pengiun')).toMatchObject({ animalId: 'penguin', level: 1 });
+  });
+
+  it('a species word goes to that species', () => {
+    expect(match('emperor')).toMatchObject({ animalId: 'emperor-penguin', strategy: 'partial' });
+    expect(match('african')).toMatchObject({ animalId: 'african-penguin', strategy: 'partial' });
+    expect(match('emperor penguin')).toMatchObject({
+      animalId: 'emperor-penguin',
+      strategy: 'exact',
+    });
+  });
+});

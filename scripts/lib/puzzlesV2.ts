@@ -1,6 +1,8 @@
 // Pure steps of the v2 data migration (scripts/migrate-puzzles-v2.ts), kept
 // apart from the file handling so they can be tested.
 
+import { TOP_LEVEL as TOP } from '../../src/config/tiers.ts';
+
 type Json = Record<string, unknown>;
 
 export interface Answer {
@@ -17,8 +19,6 @@ export interface PuzzleJson {
   prompts: PromptJson[];
   [key: string]: unknown;
 }
-
-const TOP = 5;
 
 /** v1 answers had `tier`; v2 calls it `level`. Already-migrated answers pass through. */
 export function puzzleToV2(puzzle: Json): PuzzleJson {

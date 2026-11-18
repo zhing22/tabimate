@@ -15,7 +15,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
 - Daily reset at 12:00 (noon) Asia/Singapore (RESET_HOUR in config/game.ts).
   Puzzle key = the SGT date (YYYY-MM-DD) on which that puzzle started, so
   00:00–11:59 SGT still plays the previous date's puzzle.
-- MVP: 3 prompts per day (config value, will become 7), 25 s timer per prompt. The game
+- 7 prompts per day, 25 s timer per prompt. The game
   plays however many prompts a puzzle file has (1 to MAX_PROMPTS_PER_PUZZLE). After
   each answer the result stays up until the player taps Next (or presses Enter); the
   next prompt's timer starts then. While the result is up, as its name shows, the animal joins
@@ -116,6 +116,13 @@ Original art and naming only: no Pokémon names, sprites or UI.
   config/tiers.ts: 1 LC 10, 2 NT 25, 3 VU 50, 4 EN 85, 5 CR 100. Labels are flavour only;
   they do not mean real conservation status.
 - Exactly one level-5 (CR) answer per prompt, unless the day sets maxCR (Sunday Deep Dive).
+  maxCR is not built yet: it arrives with config/themes.ts; until then every prompt has
+  exactly one.
+- Released puzzles are frozen: a player's stored levels must keep matching the file.
+  Puzzles before LEVEL_RULES_FROM (config/game.ts, 2026-11-19) keep their v1 answers and
+  levels and are only checked for shape. validate-data warns when a day that has gone live
+  differs from scripts/released-puzzles.json; record new live days with
+  `npm run validate-data -- --record`. Fix a released day by changing a future one.
 - Animals are `group` ("penguin") or `species` ("African penguin", parent: penguin).
   Groups are normal answers, usually low level. A group has a `representative` species
   used for its sprite.
@@ -123,7 +130,7 @@ Original art and naming only: no Pokémon names, sprites or UI.
   group answer, so a general guess scores the group's level, not a rarer species'.
   Groups can nest (giant salamander under salamander).
 - The validator (data/validate.ts, data/checkHierarchy.ts) enforces: levels 1–5, the CR
-  rule (PuzzleContext.maxCR), parents that exist and are groups (no loops), each group's
+  rule (from LEVEL_RULES_FROM), parents that exist and are groups (no loops), each group's
   representative a species below it, no animal twice on a prompt. A species ranked below
   its own group on a prompt is only a warning (validate-data prints it).
 - Saves: SCHEMA_VERSION 2. Migration 1 renamed match.tier to match.level and history

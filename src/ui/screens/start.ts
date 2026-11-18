@@ -1,3 +1,4 @@
+import { ANSWER_LEVELS, LEVELS, TOP_LEVEL } from '@/config/tiers';
 import { h, focus } from '../dom';
 import type { Screen } from '../host';
 
@@ -6,6 +7,13 @@ export interface StartProps {
   readonly promptCount: number;
   /** Current streak; 0 hides the line. */
   readonly streak: number;
+}
+
+/** "Rarer answers score more, from LC (10) up to CR (100).", read from LEVELS. */
+function scoringLine(): string {
+  const low = LEVELS[ANSWER_LEVELS[0] ?? TOP_LEVEL];
+  const high = LEVELS[TOP_LEVEL];
+  return `Rarer answers score more, from ${low.shortName} (${low.points}) up to ${high.shortName} (${high.points}).`;
 }
 
 export interface StartActions {
@@ -33,7 +41,7 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
           'ul',
           {},
           h('li', {}, 'Each prompt asks for an animal. Type one before the ring runs out.'),
-          h('li', {}, 'Rarer animals score more: levels follow the IUCN Red List.'),
+          h('li', {}, scoringLine()),
           h(
             'li',
             {},

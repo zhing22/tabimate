@@ -2,8 +2,11 @@
 // the game uses, and checks a puzzle exists for each of the next days in SGT,
 // so a broken or missing puzzle can't deploy. Part of `npm run check`.
 //
-//   npm run validate-data [-- --days 7]
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+//   npm run validate-data [-- --days 7] [-- --record]
+//
+// --record adds days that have gone live to scripts/released-puzzles.json, so a
+// later edit to them is flagged. It never overwrites a recorded day.
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { dailyKey, shiftKey } from '../src/core/date.ts';
 import { validateAnimals, validatePuzzle } from '../src/data/validate.ts';
@@ -13,8 +16,12 @@ import {
   validatePalettes,
 } from '../src/data/validateArt.ts';
 import { parseAsepriteSheet } from '../src/scene/sprites/sheet.ts';
+import { checkReleased, type ReleasedRecord } from './lib/released.ts';
 
-const { values } = parseArgs({ options: { days: { type: 'string', default: '7' } } });
+const { values } = parseArgs({
+  options: { days: { type: 'string', default: '7' }, record: { type: 'boolean', default: false } },
+});
+const RELEASED = 'scripts/released-puzzles.json';
 const DAYS_AHEAD = Number(values.days);
 const DATA = 'public/data';
 const SPRITES = 'public/assets/sprites';
@@ -78,6 +85,34 @@ const needed = Array.from({ length: DAYS_AHEAD }, (_, i) => shiftKey(today, i));
 const missing = needed.filter((key) => !keys.has(key));
 if (missing.length > 0) {
   problems.push(`missing puzzles for the next ${DAYS_AHEAD} SGT days: ${missing.join(', ')}`);
+}
+
+// Days that have gone live (today included) must not change; see scripts/lib/released.ts.
+const record = existsSync(RELEASED) ? (readJson(RELEASED) as ReleasedRecord) : {};
+const live = new Map(
+  files
+    .map(
+      (name) =>
+        [
+          name.replace(/\.json$/, ''),
+          check(name, () => readJson(`${DATA}/puzzles/${name}`)),
+        ] as const,
+    )
+    .filter(([, json]) => json !== undefined),
+);
+const released = checkReleased(live, today, record);
+for (const date of released.changed) {
+  warnings.push(
+    `puzzles/${date}.json changed after it went live; players' stored levels no longer match it`,
+  );
+}
+if (values.record && released.unrecorded.length > 0) {
+  writeFileSync(RELEASED, `${JSON.stringify(released.updated, null, 2)}\n`);
+  console.log(`Recorded ${released.unrecorded.length} released day(s) in ${RELEASED}.`);
+} else if (released.unrecorded.length > 0) {
+  warnings.push(
+    `released days not recorded yet: ${released.unrecorded.join(', ')} (run validate-data -- --record)`,
+  );
 }
 
 if (warnings.length > 0) {

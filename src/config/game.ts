@@ -11,6 +11,13 @@ export const RESET_HOUR = 12;
 export const LAUNCH_DATE_KEY = '2026-11-06';
 
 /**
+ * First puzzle written under the v2 level rules (exactly one CR per prompt,
+ * groups). Earlier puzzles were already played, so they keep their original
+ * answers and levels; the validator only checks their shape.
+ */
+export const LEVEL_RULES_FROM = '2026-11-19';
+
+/**
  * How many prompts new puzzles are written with. MVP value; planned to become 7.
  * The game plays however many prompts a puzzle file has, so raising this does
  * not invalidate puzzles already shipped.

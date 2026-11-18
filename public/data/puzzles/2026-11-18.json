@@ -36,7 +36,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "atlantic-puffin",
@@ -53,30 +53,6 @@
         {
           "animalId": "leatherback-turtle",
           "level": 3
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "sea-turtle",
-          "level": 1
-        },
-        {
-          "animalId": "crocodile",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "duck",
-          "level": 1
-        },
-        {
-          "animalId": "puffin",
-          "level": 1
         }
       ]
     },
@@ -102,7 +78,7 @@
         },
         {
           "animalId": "european-rabbit",
-          "level": 5
+          "level": 4
         },
         {
           "animalId": "house-mouse",
@@ -142,66 +118,6 @@
         },
         {
           "animalId": "peregrine-falcon",
-          "level": 1
-        },
-        {
-          "animalId": "bear",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "wolf",
-          "level": 1
-        },
-        {
-          "animalId": "fox",
-          "level": 1
-        },
-        {
-          "animalId": "hedgehog",
-          "level": 1
-        },
-        {
-          "animalId": "rabbit",
-          "level": 1
-        },
-        {
-          "animalId": "mouse",
-          "level": 1
-        },
-        {
-          "animalId": "falcon",
-          "level": 1
-        },
-        {
-          "animalId": "stork",
-          "level": 1
-        },
-        {
-          "animalId": "lapwing",
-          "level": 1
-        },
-        {
-          "animalId": "kingfisher",
-          "level": 1
-        },
-        {
-          "animalId": "magpie",
-          "level": 1
-        },
-        {
-          "animalId": "duck",
-          "level": 1
-        },
-        {
-          "animalId": "puffin",
           "level": 1
         }
       ]
@@ -268,58 +184,6 @@
         },
         {
           "animalId": "house-mouse",
-          "level": 1
-        },
-        {
-          "animalId": "bear",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "eagle",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "wolf",
-          "level": 1
-        },
-        {
-          "animalId": "fox",
-          "level": 1
-        },
-        {
-          "animalId": "mouse",
-          "level": 1
-        },
-        {
-          "animalId": "falcon",
-          "level": 1
-        },
-        {
-          "animalId": "condor",
-          "level": 1
-        },
-        {
-          "animalId": "hummingbird",
-          "level": 1
-        },
-        {
-          "animalId": "duck",
-          "level": 1
-        },
-        {
-          "animalId": "sea-cow",
-          "level": 1
-        },
-        {
-          "animalId": "manatee",
           "level": 1
         }
       ]

@@ -12,6 +12,7 @@ import { tierBadge } from './components/tierBadge';
 import { timerRing } from './components/timerRing';
 import { formatCountdown, secondsLeft } from './format';
 import { revealScreen } from './screens/reveal';
+import { startScreen } from './screens/start';
 import { manualTime } from './testUi';
 
 describe('format', () => {
@@ -416,5 +417,15 @@ describe('party line-up frame', () => {
     expect(el.style.backgroundSize).toBe('440px 180px');
     expect(el.style.height).toBe('180px');
     expect(el.style.paddingBottom).toBe('60px'); // (90 - 60) x2
+  });
+});
+
+describe('startScreen', () => {
+  it('explains scoring from LEVELS, without claiming real conservation status', () => {
+    const root = document.createElement('div');
+    startScreen(root, { puzzleNumber: 1, promptCount: 3, streak: 0 }, { play: () => {} });
+    const text = root.textContent ?? '';
+    expect(text).toContain('from LC (10) up to CR (100)');
+    expect(text).not.toMatch(/IUCN|Red List/);
   });
 });

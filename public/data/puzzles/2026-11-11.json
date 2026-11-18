@@ -76,7 +76,7 @@
         },
         {
           "animalId": "sumatran-orangutan",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "bornean-orangutan",
@@ -84,7 +84,7 @@
         },
         {
           "animalId": "eastern-gorilla",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "chimpanzee",
@@ -92,7 +92,7 @@
         },
         {
           "animalId": "ruffed-lemur",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "grey-headed-flying-fox",
@@ -101,54 +101,6 @@
         {
           "animalId": "platypus",
           "level": 2
-        },
-        {
-          "animalId": "bear",
-          "level": 1
-        },
-        {
-          "animalId": "big-cat",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "orangutan",
-          "level": 1
-        },
-        {
-          "animalId": "wolf",
-          "level": 1
-        },
-        {
-          "animalId": "fox",
-          "level": 1
-        },
-        {
-          "animalId": "kangaroo",
-          "level": 1
-        },
-        {
-          "animalId": "rabbit",
-          "level": 1
-        },
-        {
-          "animalId": "mouse",
-          "level": 1
-        },
-        {
-          "animalId": "gorilla",
-          "level": 1
-        },
-        {
-          "animalId": "lemur",
-          "level": 1
-        },
-        {
-          "animalId": "flying-fox",
-          "level": 1
         }
       ]
     },
@@ -170,7 +122,7 @@
         },
         {
           "animalId": "black-rhino",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "hippo",
@@ -214,7 +166,7 @@
         },
         {
           "animalId": "vaquita",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "humpback-whale",
@@ -231,38 +183,6 @@
         {
           "animalId": "grey-headed-flying-fox",
           "level": 3
-        },
-        {
-          "animalId": "elephant",
-          "level": 1
-        },
-        {
-          "animalId": "rhinoceros",
-          "level": 1
-        },
-        {
-          "animalId": "dolphin",
-          "level": 1
-        },
-        {
-          "animalId": "wolf",
-          "level": 1
-        },
-        {
-          "animalId": "mouse",
-          "level": 1
-        },
-        {
-          "animalId": "hammerhead-shark",
-          "level": 1
-        },
-        {
-          "animalId": "sea-cow",
-          "level": 1
-        },
-        {
-          "animalId": "manatee",
-          "level": 1
         }
       ]
     },
@@ -308,7 +228,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "wandering-albatross",
@@ -332,15 +252,15 @@
         },
         {
           "animalId": "chinese-giant-salamander",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "axolotl",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "vaquita",
-          "level": 4
+          "level": 5
         },
         {
           "animalId": "humpback-whale",
@@ -357,62 +277,6 @@
         {
           "animalId": "whale-shark",
           "level": 4
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "bear",
-          "level": 1
-        },
-        {
-          "animalId": "crocodile",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "dolphin",
-          "level": 1
-        },
-        {
-          "animalId": "shark",
-          "level": 1
-        },
-        {
-          "animalId": "giant-salamander",
-          "level": 1
-        },
-        {
-          "animalId": "crane",
-          "level": 1
-        },
-        {
-          "animalId": "stork",
-          "level": 1
-        },
-        {
-          "animalId": "kingfisher",
-          "level": 1
-        },
-        {
-          "animalId": "puffin",
-          "level": 1
-        },
-        {
-          "animalId": "albatross",
-          "level": 1
-        },
-        {
-          "animalId": "hammerhead-shark",
-          "level": 1
-        },
-        {
-          "animalId": "octopus",
-          "level": 1
         }
       ]
     }

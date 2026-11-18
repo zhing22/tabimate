@@ -1,7 +1,8 @@
 // Test-only data shared by the data/ tests. Not imported by the app.
 import { puzzleNumber } from '@/core/date';
 
-export const FIXTURE_KEY = '2026-11-07';
+// On or after LEVEL_RULES_FROM, so the v2 level rules apply.
+export const FIXTURE_KEY = '2026-11-20';
 
 export const fixtureAnimals = () => [
   {

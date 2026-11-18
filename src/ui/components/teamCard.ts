@@ -1,5 +1,5 @@
 import type { Portraits } from '@/core/portrait';
-import type { LevelId } from '@/config/tiers';
+import { isShiny, type LevelId } from '@/config/tiers';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
 import { h } from '../dom';
 import type { Component } from './component';
@@ -62,7 +62,7 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): C
             'summary',
             { class: 'team-card__summary' },
             animal
-              ? portrait(animal, result.match.level === 5, { scale: SCALE, portraits })
+              ? portrait(animal, isShiny(result.match.level), { scale: SCALE, portraits })
               : h('span', { class: 'portrait', 'aria-hidden': 'true' }, '·'),
             h(
               'span',

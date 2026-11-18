@@ -27,6 +27,10 @@ export const ANIMALS: ReadonlyMap<AnimalId, Animal> = new Map(
     animal('snow-leopard', 'Snow leopard'),
     animal('tiger', 'Tiger'),
     animal('amur-leopard', 'Amur leopard'),
+    // A group and two of its species, at different levels.
+    { ...animal('penguin', 'Penguin'), kind: 'group' as const, representative: 'emperor-penguin' },
+    { ...animal('emperor-penguin', 'Emperor penguin'), parent: 'penguin' },
+    { ...animal('african-penguin', 'African penguin'), parent: 'penguin' },
   ].map((a) => [a.id, a]),
 );
 
@@ -42,6 +46,9 @@ export const PROMPT: Prompt = {
     { animalId: 'snow-leopard', level: 3 },
     { animalId: 'tiger', level: 4 },
     { animalId: 'amur-leopard', level: 5 },
+    { animalId: 'penguin', level: 1 },
+    { animalId: 'emperor-penguin', level: 2 },
+    { animalId: 'african-penguin', level: 4 },
   ],
 };
 

@@ -28,19 +28,7 @@
         },
         {
           "animalId": "african-penguin",
-          "level": 4
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "kiwi",
-          "level": 1
-        },
-        {
-          "animalId": "ostrich",
-          "level": 1
+          "level": 5
         }
       ]
     },
@@ -74,7 +62,7 @@
         },
         {
           "animalId": "blue-whale",
-          "level": 5
+          "level": 4
         },
         {
           "animalId": "grey-wolf",
@@ -83,34 +71,6 @@
         {
           "animalId": "wandering-albatross",
           "level": 3
-        },
-        {
-          "animalId": "penguin",
-          "level": 1
-        },
-        {
-          "animalId": "bear",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "whale",
-          "level": 1
-        },
-        {
-          "animalId": "owl",
-          "level": 1
-        },
-        {
-          "animalId": "wolf",
-          "level": 1
-        },
-        {
-          "animalId": "albatross",
-          "level": 1
         }
       ]
     },
@@ -152,26 +112,6 @@
         },
         {
           "animalId": "harbour-seal",
-          "level": 1
-        },
-        {
-          "animalId": "seal",
-          "level": 1
-        },
-        {
-          "animalId": "whale",
-          "level": 1
-        },
-        {
-          "animalId": "dolphin",
-          "level": 1
-        },
-        {
-          "animalId": "sea-cow",
-          "level": 1
-        },
-        {
-          "animalId": "manatee",
           "level": 1
         }
       ]

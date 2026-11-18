@@ -1,7 +1,7 @@
 // Shape checks for data read back from storage, which may be old, corrupt or
 // edited by hand. Deeper consistency (does a run fit its puzzle?) is checked
 // later by core's canRestore.
-import type { LevelId } from '@/config/tiers';
+import { isLevelId } from '@/config/tiers';
 import { isDateKey } from '@/core/date';
 import { emptyStats, type HistoryEntry, type Stats } from '@/core/streak';
 import type {
@@ -40,14 +40,13 @@ const STRATEGIES = {
 const oneOf = <T extends string>(table: Record<T, true>, value: unknown): value is T =>
   typeof value === 'string' && Object.prototype.hasOwnProperty.call(table, value);
 
-const isLevel = (value: unknown): value is LevelId =>
-  Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 5;
-
 function isMatch(value: unknown): value is MatchResult {
   if (!isObject(value) || typeof value.input !== 'string') return false;
   if (value.level === 0) return value.animalId === null && value.strategy === null;
   return (
-    isLevel(value.level) && typeof value.animalId === 'string' && oneOf(STRATEGIES, value.strategy)
+    isLevelId(value.level) &&
+    typeof value.animalId === 'string' &&
+    oneOf(STRATEGIES, value.strategy)
   );
 }
 
@@ -73,7 +72,7 @@ const isHistoryEntry = (value: unknown): value is HistoryEntry =>
   isKey(value.key) &&
   isTime(value.score) &&
   Array.isArray(value.levels) &&
-  value.levels.every(isLevel);
+  value.levels.every(isLevelId);
 
 /**
  * Salvages what it can from stored stats. Each history entry stands alone

@@ -8,9 +8,6 @@ export type LevelId = 0 | 1 | 2 | 3 | 4 | 5;
 /** Levels a real answer can have (0 is only ever a miss). */
 export type AnswerLevel = Exclude<LevelId, 0>;
 
-/** The highest level: exactly one per prompt, unless the day's theme allows more. */
-export const TOP_LEVEL = 5 satisfies AnswerLevel;
-
 /** Keys into the scene's effect registry, which must cover every id. */
 export type EffectId = 'none' | 'glint' | 'sparkle' | 'shiny';
 
@@ -95,3 +92,19 @@ export const LEVELS = [
     soundId: 'level5',
   },
 ] as const satisfies readonly LevelDef[];
+
+// Everything below is derived from LEVELS, so the range is written down once.
+
+/** Levels a real answer can have, lowest first. */
+export const ANSWER_LEVELS: readonly AnswerLevel[] = LEVELS.map((l) => l.id).filter(
+  (id): id is AnswerLevel => id !== 0,
+);
+
+/** The highest level: exactly one answer per prompt has it. */
+export const TOP_LEVEL: AnswerLevel = ANSWER_LEVELS[ANSWER_LEVELS.length - 1]!;
+
+/** True for any level id, including 0 (a miss). For reading untrusted data. */
+export const isLevelId = (value: unknown): value is LevelId => LEVELS.some((l) => l.id === value);
+
+/** Whether a level draws its animal shiny. Decided by LEVELS[].effectId, not the number. */
+export const isShiny = (level: LevelId): boolean => LEVELS[level].effectId === 'shiny';

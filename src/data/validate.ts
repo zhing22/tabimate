@@ -1,5 +1,5 @@
-import { MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
-import type { AnswerLevel } from '@/config/tiers';
+import { LEVEL_RULES_FROM, MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
+import { ANSWER_LEVELS } from '@/config/tiers';
 import { puzzleNumber } from '@/core/date';
 import type {
   Animal,
@@ -14,7 +14,6 @@ import { checkHierarchy, checkPromptLevels, type PromptLevelRules } from './chec
 import { createJsonReader, field, item, type JsonReader } from './jsonReader';
 import { readAnimal, slug } from './readAnimal';
 
-const ANSWER_LEVELS: readonly AnswerLevel[] = [1, 2, 3, 4, 5];
 export type AnimalRegistry = AnimalLookup;
 
 /**
@@ -99,8 +98,6 @@ export interface PuzzleContext {
   /** The key the file was requested for; the puzzle's date must match it. */
   readonly key: DateKey;
   readonly animals: AnimalRegistry;
-  /** The day's theme may allow more than one CR answer per prompt. */
-  readonly maxCR?: number | undefined;
   /** Non-fatal problems (full messages); validation still passes. */
   readonly warn?: ((message: string) => void) | undefined;
 }
@@ -123,7 +120,12 @@ export function validatePuzzle(json: unknown, context: PuzzleContext): Puzzle {
   if (list.length < 1 || list.length > MAX_PROMPTS_PER_PUZZLE) {
     r.fail('prompts', `must have 1 to ${MAX_PROMPTS_PER_PUZZLE} prompts (got ${list.length})`);
   }
-  const prompts = list.map((value, i) => readPrompt(r, value, item('prompts', i), context));
+  // Released puzzles are never rewritten, so ones from before the v2 rules keep
+  // their original levels (several CRs, or none) and are only checked for shape.
+  const rules = { file, animals: context.animals, oneCR: key >= LEVEL_RULES_FROM };
+  const prompts = list.map((value, i) =>
+    readPrompt(r, value, item('prompts', i), { ...rules, warn: context.warn }),
+  );
   const ids = new Set<string>();
   prompts.forEach((prompt, i) => {
     if (ids.has(prompt.id)) r.fail(`prompts[${i}].id`, `"${prompt.id}" is a duplicate`);
