@@ -1,7 +1,6 @@
 // Composition root: the only place that picks real implementations and wires
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
-import { SPRITE_SOURCE } from '@/config/render';
 import { themeFor } from '@/config/themes';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { biomeFor } from '@/core/journey';
@@ -11,21 +10,18 @@ import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { createDebugPanel, readDebugParams } from '@/debug/debugPanel';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
-import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
-import { createScene, type Scene } from '@/scene/sceneManager';
-import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
-import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
-import { createAudio } from '@/services/audio';
 import { buildShareText, share } from '@/services/share';
 import { browserScheduler } from '@/services/browserScheduler';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
 import { systemClock } from '@/services/systemClock';
 import { createApp } from '@/ui/app';
-import { muteButton } from '@/ui/components/muteButton';
+import { loadingLine } from '@/ui/loadingLine';
 import { createScreenHost } from '@/ui/host';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
+import { startAudio } from '@/wiring/startAudio';
+import { startScene } from '@/wiring/startScene';
 
 const root = document.querySelector<HTMLElement>('#ui');
 if (!root) throw new Error('index.html is missing #ui');
@@ -43,71 +39,11 @@ const reload = () => location.reload();
 const debug = readDebugParams(location.search);
 const shareUrl = () => new URL(import.meta.env.BASE_URL, location.origin).href;
 
-/** The day's theme is known from the date alone, so the loading line can name it at once. */
-function showThemeWhileLoading(key: string) {
-  const theme = themeFor(key);
-  const line = document.querySelector('.loading');
-  if (theme && line) line.textContent = `Packing your bag for ${theme.name}…`;
-}
-
 async function load() {
   const key = debug.date ?? dailyKey(clock.now());
-  showThemeWhileLoading(key);
+  loadingLine(themeFor(key));
   const [puzzle, animals] = await Promise.all([source.getPuzzle(key), source.getAnimals()]);
   return { key, puzzle, animals };
-}
-
-/**
- * The scene is scenery: if it can't start (no WebGL, say), the game is still
- * fully playable over the CSS backdrop, so a failure is only logged.
- */
-function startScene(
-  bus: GameBus,
-  puzzle: Puzzle,
-  animals: ReadonlyMap<AnimalId, Animal>,
-): Pick<Scene, 'portraits' | 'backdrops'> | null {
-  const container = document.querySelector<HTMLElement>('#scene');
-  if (!container) return null;
-  try {
-    const scene = createScene(container, bus, {
-      animals,
-      puzzleDate: puzzle.date,
-      createSprites: (k) => {
-        const emoji = createEmojiSpriteProvider(k);
-        if (SPRITE_SOURCE === 'emoji') return emoji;
-        return createPixelSpriteProvider(k, {
-          loadArt: () => loadSpriteArt(loader),
-          loadSheet: async (archetype) => readSheet(await loadSheetFiles(loader, archetype)),
-          fallback: emoji,
-        });
-      },
-    });
-    scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
-    return scene;
-  } catch (error) {
-    console.error('Scene failed to start; playing without it', error);
-    return null;
-  }
-}
-
-/**
- * Sound listens to the bus like the scene; the corner button only flips mute.
- * Like the scene, it is extra: if it fails the game plays on, silently.
- */
-function startAudio(bus: GameBus) {
-  try {
-    const audio = createAudio({ bus, storage, clock });
-    const toggle = muteButton({
-      muted: audio.muted,
-      onToggle: () => {
-        audio.setMuted(!audio.muted);
-        return audio.muted;
-      },
-    });
-    document.body.append(toggle.el);
-  } catch (error) {
-    console.error('Audio failed to start; playing without sound', error);
-  }
 }
 
 function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): GameBus {
@@ -124,8 +60,8 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): GameBus {
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
 
   // The results screen shows the scene's sprites; without a scene it uses emoji.
-  const scene = startScene(bus, puzzle, animals);
-  startAudio(bus);
+  const scene = startScene(bus, puzzle, animals, loader);
+  startAudio(bus, storage, clock);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({
