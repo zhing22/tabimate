@@ -74,6 +74,7 @@ const TRAIT_READERS: { readonly [K in keyof AnimalTraits]-?: Reader<AnimalTraits
   feathers: flag,
   pouch: flag,
   flies: flag,
+  eggs: flag,
   social: one(SOCIAL),
   active: one(ACTIVE_TIMES),
   extinct: flag,

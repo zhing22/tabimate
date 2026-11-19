@@ -78,6 +78,8 @@ export interface AnimalTraits {
   readonly feathers?: boolean;
   readonly pouch?: boolean;
   readonly flies?: boolean;
+  /** Lays eggs (true for birds and monotremes, false for most mammals). */
+  readonly eggs?: boolean;
   readonly social?: Social;
   readonly active?: ActiveTime;
   readonly extinct?: boolean;

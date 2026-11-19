@@ -11,6 +11,7 @@ import {
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
+import { DEFAULT_MAX_CR, maxCRFor, themeFor, weekdayOf } from './themes';
 import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL } from './levels';
 
 // Later steps index and search these arrays; these invariants keep that safe.
@@ -98,5 +99,21 @@ describe('level helpers', () => {
     const shiny = LEVELS.filter((l) => l.effectId === 'shiny').map((l) => l.id);
     expect(shiny).toEqual([5]);
     for (const { id } of LEVELS) expect(isShiny(id)).toBe(id === 5);
+  });
+});
+
+describe('themes', () => {
+  const sunday = { id: 'deep-dive', name: 'Deep Dive', weekday: 0 as const, maxCR: 3 };
+  it('reads the weekday from the key, not the clock', () => {
+    expect(weekdayOf('2026-11-22')).toBe(0); // a Sunday
+    expect(weekdayOf('2026-11-19')).toBe(4); // a Thursday
+  });
+
+  it('finds a weekday theme and its maxCR, defaulting to one CR', () => {
+    expect(themeFor('2026-11-22', [sunday])).toBe(sunday);
+    expect(maxCRFor('2026-11-22', [sunday])).toBe(3);
+    expect(themeFor('2026-11-19', [sunday])).toBeNull();
+    expect(maxCRFor('2026-11-19', [sunday])).toBe(DEFAULT_MAX_CR);
+    expect(maxCRFor('2026-11-22', [{ ...sunday, maxCR: undefined } as never])).toBe(1);
   });
 });
