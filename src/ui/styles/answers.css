@@ -62,6 +62,8 @@
   font: inherit;
   font-size: var(--text-2xs);
   line-height: 1.25;
+  /* Names and scores bold, to stand apart from an opened row's description. */
+  font-weight: 700;
   text-align: left;
   color: inherit;
   background: none;
@@ -84,10 +86,20 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The player's own answer: bold, with a bar in the accent colour. */
+/* The player's own answer: a bar in the accent colour (and its tag). */
 .answer--picked > .answer__row {
-  font-weight: 700;
   box-shadow: inset 4px 0 0 var(--accent);
+}
+
+/* "(your answer)" beside the player's own: a label, not part of the name. */
+.answer__mine {
+  font-weight: 400;
+  color: var(--accent);
+}
+
+/* Opened: the description sits right under the name. */
+.answer__row[aria-expanded='true'] {
+  padding-bottom: 0;
 }
 
 .answer__details {
@@ -97,7 +109,7 @@
 }
 
 .answer__description {
-  margin: 0 0 var(--space-1);
+  margin: 0 0 2px;
 }
 
 .answer__wiki {

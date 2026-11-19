@@ -87,7 +87,10 @@ describe('answerList', () => {
     expect(top!.textContent).toContain('CR · 100');
     expect(mine!.getAttribute('style')).toBe('--answer-tint: var(--level-2)');
     expect(mine!.classList.contains('answer--picked')).toBe(true);
-    expect(mine!.textContent).toContain('(your answer)');
+    // A visible tag beside the name, not only text for screen readers.
+    expect(mine!.querySelector('.answer__name .answer__mine')?.textContent).toBe(' (your answer)');
+    expect(mine!.querySelector('.sr-only')).toBeNull();
+    expect(rows(el)[1]!.querySelector('.answer__mine')).toBeNull();
   });
 
   it('shows just the name, level and points: no group tag', () => {
@@ -205,18 +208,21 @@ describe('teamCard', () => {
     },
   });
 
-  it('shows the full question, then the animal with its level and points on the same line', () => {
+  it('shows the question over the animal, with level and points in their own column', () => {
     const { el } = teamCard([round(tiger, 4, []), round(null, 0, []), round(penguin, 1, [])]);
     const summaries = [...el.querySelectorAll('summary')];
-    expect(summaries[0]!.querySelector('.team-card__prompt')!.textContent).toBe(
-      `Q1 · ${prompt.text}`,
-    );
-    const answer = summaries[0]!.querySelector('.team-card__answer')!;
-    expect(answer.querySelector('.team-card__name')!.textContent).toBe('Tiger');
-    expect(answer.querySelector('.team-card__score')!.textContent).toBe('EN · 85');
-    expect(summaries[1]!.querySelector('.team-card__answer')!.textContent).toBe(
-      'No matchNo match · 0',
-    );
+    // Picture, question over answer, score: the score is the summary's own column.
+    expect([...summaries[0]!.children].map((c) => c.className)).toEqual([
+      'team-card__picture',
+      'team-card__text',
+      'team-card__score',
+    ]);
+    const text = summaries[0]!.querySelector('.team-card__text')!;
+    expect(text.querySelector('.team-card__prompt')!.textContent).toBe(`Q1 · ${prompt.text}`);
+    expect(text.querySelector('.team-card__name')!.textContent).toBe('Tiger');
+    expect(summaries[0]!.querySelector('.team-card__score')!.textContent).toBe('EN · 85');
+    expect(summaries[1]!.querySelector('.team-card__name')!.textContent).toBe('No match');
+    expect(summaries[1]!.querySelector('.team-card__score')!.textContent).toBe('No match · 0');
     // A group answer is just its name: no tag.
     expect(summaries[2]!.querySelector('.team-card__name')!.textContent).toBe('Penguin');
     expect(el.querySelector('.tag')).toBeNull();

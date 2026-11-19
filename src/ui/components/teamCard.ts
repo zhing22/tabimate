@@ -22,7 +22,7 @@ export interface TeamRound {
 
 const SCALE = 2;
 
-/** The row: "Q3 · the full prompt", then the animal with "VU · 50" at the right. */
+/** The row: picture, "Q3 · the full prompt" over the animal, and "VU · 50" at the right. */
 function summary(round: TeamRound, index: number, portraits: Portraits | undefined) {
   const { prompt, result, animal } = round;
   const level = result.match.level;
@@ -42,17 +42,14 @@ function summary(round: TeamRound, index: number, portraits: Portraits | undefin
       'span',
       { class: 'team-card__text' },
       h('span', { class: 'team-card__prompt' }, `Q${index + 1} · ${prompt.text}`),
-      h(
-        'span',
-        { class: 'team-card__answer' },
-        h('span', { class: 'team-card__name' }, animal?.display ?? 'No match'),
-        h(
-          'span',
-          { class: 'team-card__score' },
-          levelBadge(level, { compact: true }).el,
-          ` · ${pointsFor(level)}`,
-        ),
-      ),
+      h('span', { class: 'team-card__name' }, animal?.display ?? 'No match'),
+    ),
+    // Its own column at the right, centred against the question and the answer.
+    h(
+      'span',
+      { class: 'team-card__score' },
+      levelBadge(level, { compact: true }).el,
+      ` · ${pointsFor(level)}`,
     ),
   );
 }

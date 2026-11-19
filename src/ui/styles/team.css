@@ -22,7 +22,8 @@
 /* The row: sprite, then the prompt, the animal and its level, then a chevron. */
 .team-card__summary {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  /* Picture, question over answer, rarity and points, then the chevron. */
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-2);
   min-height: var(--tap);
@@ -89,21 +90,13 @@
   overflow-wrap: anywhere;
 }
 
-/* The answer, with its rarity and points on the same line at the right. */
-.team-card__answer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-sm);
-}
-
 .team-card__name {
-  flex: 1;
-  min-width: 0;
+  font-size: var(--text-sm);
   font-weight: 700;
   overflow-wrap: anywhere;
 }
 
+/* Its own column, so it sits centred against the question and the answer. */
 .team-card__score {
   display: flex;
   align-items: center;
@@ -112,7 +105,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* A slimmer badge, to keep the answer line one row high. */
+/* A slimmer badge, to keep the row compact. */
 .team-card__score .level-badge {
   padding: 0 var(--space-1);
 }

@@ -52,9 +52,14 @@ export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
       'aria-expanded': 'false',
       'aria-controls': panel.id,
     },
-    h('span', { class: 'answer__name' }, answer.name),
+    h(
+      'span',
+      { class: 'answer__name' },
+      answer.name,
+      // Shown, not just read out: everyone should find their own answer at a glance.
+      answer.picked ? h('span', { class: 'answer__mine' }, ' (your answer)') : null,
+    ),
     h('span', { class: 'answer__level' }, levelPoints(answer.level, answer.points)),
-    answer.picked ? h('span', { class: 'sr-only' }, ' (your answer)') : null,
   );
   button.addEventListener('click', () => {
     const open = button.getAttribute('aria-expanded') !== 'true';
