@@ -27,6 +27,8 @@ export interface LevelDef {
   readonly points: number;
   readonly effectId: EffectId;
   readonly soundId: LevelSoundId;
+  /** navigator.vibrate pattern (ms on, off, on...) as the badge lands; rarer is stronger. */
+  readonly vibration: readonly number[];
 }
 
 /** Indexed by LevelId: LEVELS[level] is that level's definition. */
@@ -40,6 +42,7 @@ export const LEVELS = [
     points: 0,
     effectId: 'none',
     soundId: 'level0',
+    vibration: [30, 60, 30],
   },
   {
     id: 1,
@@ -50,6 +53,7 @@ export const LEVELS = [
     points: 10,
     effectId: 'none',
     soundId: 'level1',
+    vibration: [15],
   },
   {
     id: 2,
@@ -60,6 +64,7 @@ export const LEVELS = [
     points: 25,
     effectId: 'glint',
     soundId: 'level2',
+    vibration: [25],
   },
   {
     id: 3,
@@ -70,6 +75,7 @@ export const LEVELS = [
     points: 50,
     effectId: 'glint',
     soundId: 'level3',
+    vibration: [30, 40, 30],
   },
   {
     id: 4,
@@ -80,6 +86,7 @@ export const LEVELS = [
     points: 85,
     effectId: 'sparkle',
     soundId: 'level4',
+    vibration: [40, 40, 40, 40, 60],
   },
   {
     id: 5,
@@ -90,6 +97,7 @@ export const LEVELS = [
     points: 100,
     effectId: 'shiny',
     soundId: 'level5',
+    vibration: [80, 60, 80, 60, 200],
   },
 ] as const satisfies readonly LevelDef[];
 

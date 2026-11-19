@@ -10,6 +10,7 @@ import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
 import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import { revealScreen } from './screens/reveal';
+import { revealExtras } from './reveal/extras';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
 import { resultsScreen } from './screens/results';
@@ -80,11 +81,14 @@ export function createApp(deps: AppDeps): App {
   function showReveal(index: number, result: RoundResult) {
     resultShown = false;
     round.lock();
+    const animal = animalOf(result);
+    const prompt = puzzle.prompts[index];
     host.showOverlay(
       revealScreen,
       {
         result,
-        animal: animalOf(result),
+        animal,
+        extras: prompt ? revealExtras(result, { animal, prompt, animals }) : [],
         points: pointsFor(result.match.level),
         timing: deps.revealTiming ?? REVEAL_TIMING,
         isLast: index === puzzle.prompts.length - 1,

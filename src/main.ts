@@ -20,7 +20,7 @@ import { loadingLine } from '@/ui/loadingLine';
 import { createScreenHost } from '@/ui/host';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
-import { startAudio } from '@/wiring/startAudio';
+import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { startScene } from '@/wiring/startScene';
 
 const root = document.querySelector<HTMLElement>('#ui');
@@ -62,6 +62,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): GameBus {
   // The results screen shows the scene's sprites; without a scene it uses emoji.
   const scene = startScene(bus, puzzle, animals, loader);
   startAudio(bus, storage, clock);
+  startHaptics(bus, storage);
 
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({

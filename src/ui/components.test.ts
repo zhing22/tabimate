@@ -206,7 +206,14 @@ describe('revealScreen', () => {
 });
 
 describe('revealScreen beats', () => {
-  const timing = { suspenseMs: 600, perLevelMs: 150, badgePopMs: 420, nameDelayMs: 350 };
+  const timing = {
+    suspenseMs: 600,
+    perLevelMs: 150,
+    badgePopMs: 420,
+    nameDelayMs: 350,
+    jackpotFreezeMs: 500,
+    countUpMs: 0,
+  };
   const reveal = (level: 0 | 1 | 4 | 5) => {
     const root = document.createElement('div');
     const match =
@@ -267,6 +274,57 @@ describe('revealScreen beats', () => {
       }
     },
   );
+
+  it('holds a top-level find for the jackpot freeze, then flashes gold with the name', () => {
+    vi.useFakeTimers();
+    try {
+      const r = reveal(5); // badge at 1350 ms; name 350 + 500 ms freeze later
+      vi.advanceTimersByTime(1_350);
+      expect(r.phase()).toBe('reveal--badge');
+      vi.advanceTimersByTime(350 + 499);
+      expect(r.phase()).toBe('reveal--badge'); // frozen
+      vi.advanceTimersByTime(1);
+      expect(r.phase()).toBe('reveal--named reveal--jackpot');
+      // Any other level names after the usual delay, with no flash.
+      const en = reveal(4);
+      vi.advanceTimersByTime(1_200 + 350);
+      expect(en.phase()).toBe('reveal--named');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('shows the extras under the name', () => {
+    vi.useFakeTimers();
+    try {
+      const root = document.createElement('div');
+      const fact = document.createElement('p');
+      fact.textContent = 'A big cat.';
+      revealScreen(
+        root,
+        {
+          result: {
+            promptId: 'p',
+            timeMs: 1,
+            match: { level: 4, animalId: 'tiger', strategy: 'exact', input: 'tiger' },
+          },
+          animal: null,
+          points: 85,
+          timing: INSTANT_REVEAL,
+          isLast: false,
+          focusNext: false,
+          extras: [fact],
+        },
+        { revealed: () => {}, next: () => {} },
+      );
+      const name = root.querySelector('.reveal__name')!;
+      expect(name.nextElementSibling?.className).toBe('reveal__extras');
+      expect(name.nextElementSibling?.textContent).toBe('A big cat.');
+      expect(root.querySelector('.reveal__points')!.textContent).toBe('+85');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 
   it('passes the badge pop time to the CSS', () => {
     vi.useFakeTimers();

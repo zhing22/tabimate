@@ -1,4 +1,11 @@
-import { REVEAL_TIMING, TIMER_WARN_MS, revealBuildUpMs, type RevealTiming } from '@/config/game';
+import {
+  REVEAL_TIMING,
+  TIMER_WARN_MS,
+  revealBuildUpMs,
+  revealNameMs,
+  type RevealTiming,
+} from '@/config/game';
+import { TOP_LEVEL } from '@/config/levels';
 import type { Clock } from '@/core/clock';
 import type { GameBus } from '@/core/events';
 import type { StorageAdapter } from '@/core/storage';
@@ -116,10 +123,13 @@ export function createAudio(deps: AudioDeps): GameAudio {
     // The level's sound lands on the badge pop, after the same drum-roll as the UI.
     deps.bus.on('answerMatched', ({ result }) => {
       cancel(ticks);
-      const badge = revealBuildUpMs(result.match.level, timing);
-      later(timers, badge, levelSound(result.match.level));
-      // The animal joins the party as its name shows (the scene uses the same timing).
-      if (result.match.animalId !== null) later(timers, badge + timing.nameDelayMs, 'join');
+      const { level } = result.match;
+      later(timers, revealBuildUpMs(level, timing), levelSound(level));
+      // The animal joins the party as its name shows (the scene uses the same moment);
+      // a top-level find has its own fanfare there instead, after the jackpot freeze.
+      if (result.match.animalId !== null) {
+        later(timers, revealNameMs(level, timing), level === TOP_LEVEL ? 'jackpot' : 'join');
+      }
     }),
     deps.bus.on('answerRejected', () => play('miss')),
     deps.bus.on('answerSuggested', () => play('hint')),

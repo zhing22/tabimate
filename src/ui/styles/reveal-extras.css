@@ -1,0 +1,77 @@
+/* Lines under the revealed name (ui/reveal/extras.ts), and the jackpot moment. */
+.reveal__extras {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.reveal-extra {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.reveal-extra--fact {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* A group answer: the rarer species that would have scored more. */
+.reveal-extra--near-miss {
+  font-size: var(--text-xs);
+  color: var(--hint);
+}
+
+.reveal-extra--jackpot {
+  justify-self: center;
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-pixel);
+  font-size: var(--text-lg);
+  color: var(--level-5-ink);
+  background: var(--level-5);
+  border-radius: var(--radius-2);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+/* After the freeze, a gold flash washes over the card as the name lands. */
+.reveal--jackpot {
+  position: relative;
+}
+
+.reveal--jackpot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--level-5);
+  pointer-events: none;
+  animation: jackpot-flash 700ms ease-out both;
+}
+
+@keyframes jackpot-flash {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: still a fade, but a soft one. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal--jackpot::after {
+    animation-duration: 1200ms;
+    animation-name: jackpot-glow;
+  }
+
+  @keyframes jackpot-glow {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.35;
+    }
+  }
+}

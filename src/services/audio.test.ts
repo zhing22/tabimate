@@ -71,7 +71,14 @@ function setup(muted = false, createContext?: () => AudioContext) {
     unlockOn,
     clock: { now: () => new Date(now.ms) },
     createContext: createContext ?? (() => fake.ctx as unknown as AudioContext),
-    revealTiming: { suspenseMs: 600, perLevelMs: 150, badgePopMs: 0, nameDelayMs: 0 },
+    revealTiming: {
+      suspenseMs: 600,
+      perLevelMs: 150,
+      badgePopMs: 0,
+      nameDelayMs: 0,
+      jackpotFreezeMs: 500,
+      countUpMs: 0,
+    },
   });
   const unlock = async (type = 'pointerdown') => {
     unlockOn.dispatchEvent(new Event(type));
@@ -101,8 +108,17 @@ describe('createAudio', () => {
     vi.advanceTimersByTime(600 + 5 * 150 - 1);
     expect(t.notes()).toEqual([]);
     vi.advanceTimersByTime(1);
-    // The level's sound, then the join (this setup has no delay before the name).
-    expect(t.notes()).toEqual([...SOUNDS.level5.map((n) => n.freq), SOUNDS.join[0]!.freq]);
+    expect(t.notes()).toEqual(SOUNDS.level5.map((n) => n.freq));
+    // A top-level find: the jackpot freeze (500 ms here), then its own fanfare
+    // in place of the join pop.
+    vi.advanceTimersByTime(499);
+    expect(t.notes()).toHaveLength(SOUNDS.level5.length);
+    vi.advanceTimersByTime(1);
+    expect(t.notes()).toEqual([
+      ...SOUNDS.level5.map((n) => n.freq),
+      ...SOUNDS.jackpot.map((n) => n.freq),
+    ]);
+    expect(t.notes()).not.toContain(SOUNDS.join[0]!.freq);
   });
 
   it('plays the join sound as the animal joins during the reveal, not after a miss', async () => {

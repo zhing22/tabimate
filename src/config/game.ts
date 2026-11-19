@@ -1,3 +1,5 @@
+import { TOP_LEVEL } from './levels';
+
 /** Zone whose wall clock decides when a new puzzle starts. */
 export const TIMEZONE = 'Asia/Singapore';
 
@@ -39,8 +41,9 @@ export const TIMER_WARN_MS = 5_000;
 
 /**
  * The reveal's beats: a drum-roll (longer for rarer levels), the level badge
- * popping in, then the animal's name. The reveal then stays up until the
- * player taps Next (or presses Enter); the next timer starts then.
+ * popping in, then the animal's name. A top-level (CR) find holds still for a
+ * moment after its badge (the jackpot freeze), then flashes gold. The reveal
+ * then stays up until the player taps Next (or presses Enter).
  */
 export interface RevealTiming {
   /** Drum-roll before any level shows. */
@@ -51,6 +54,10 @@ export interface RevealTiming {
   readonly badgePopMs: number;
   /** From the badge appearing to the animal's name appearing. */
   readonly nameDelayMs: number;
+  /** A top-level find: everything holds this long after the badge, before the gold flash. */
+  readonly jackpotFreezeMs: number;
+  /** The points count up from 0 over this long as the name shows (0 with reduced motion). */
+  readonly countUpMs: number;
 }
 
 export const REVEAL_TIMING: RevealTiming = {
@@ -58,6 +65,8 @@ export const REVEAL_TIMING: RevealTiming = {
   perLevelMs: 150,
   badgePopMs: 420,
   nameDelayMs: 350,
+  jackpotFreezeMs: 500,
+  countUpMs: 400,
 };
 
 /** Everything happens at once: for tests, and anything that wants no ceremony. */
@@ -66,11 +75,23 @@ export const INSTANT_REVEAL: RevealTiming = {
   perLevelMs: 0,
   badgePopMs: 0,
   nameDelayMs: 0,
+  jackpotFreezeMs: 0,
+  countUpMs: 0,
 };
 
 /** How long the drum-roll lasts before a level's badge appears. The audio uses it too. */
 export const revealBuildUpMs = (level: number, timing: RevealTiming = REVEAL_TIMING): number =>
   timing.suspenseMs + Math.max(0, level) * timing.perLevelMs;
+
+/**
+ * When the name shows (and the animal joins the party): after the badge, plus
+ * the jackpot freeze for a top-level find. The reveal, the audio and the scene
+ * all use this, so the moment lands together everywhere.
+ */
+export const revealNameMs = (level: number, timing: RevealTiming = REVEAL_TIMING): number =>
+  revealBuildUpMs(level, timing) +
+  timing.nameDelayMs +
+  (level === TOP_LEVEL ? timing.jackpotFreezeMs : 0);
 
 /** Journey distance (world units, scaled by the scene) the player moves per point. */
 export const DISTANCE_PER_POINT = 1;

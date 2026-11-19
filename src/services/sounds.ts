@@ -18,7 +18,7 @@ export interface Note {
 }
 
 /** Each level's reveal sound (config LEVELS[].soundId), plus the game's other sounds. */
-export type SoundName = LevelSoundId | 'join' | 'miss' | 'hint' | 'tick';
+export type SoundName = LevelSoundId | 'join' | 'jackpot' | 'miss' | 'hint' | 'tick';
 
 // Notes of a major scale around C5, for arpeggios that rise with the level.
 const C5 = 523.25;
@@ -75,6 +75,18 @@ export const SOUNDS: Readonly<Record<SoundName, readonly Note[]>> = {
     note(G6, 0.37, 0.45, 0.22),
     note(C7, 0.37, 0.45, 0.1, 'triangle'),
     ...shimmer(0.45, 10),
+  ],
+  // A top-level find, after its freeze: a bright run up to a held chord, and a
+  // long shimmer. Unlike anything else, so it is recognisable by ear.
+  jackpot: [
+    note(G5, 0, 0.06, 0.2),
+    note(C6, 0.05, 0.06, 0.2),
+    note(E6, 0.1, 0.06, 0.2),
+    note(G6, 0.15, 0.06, 0.2),
+    note(C7, 0.2, 0.6, 0.18, 'triangle'),
+    note(G6, 0.2, 0.6, 0.12),
+    note(E6, 0.2, 0.6, 0.1),
+    ...shimmer(0.25, 16),
   ],
   // A follower joins the party: a soft upward pop.
   join: [{ freq: 300, to: 700, at: 0, dur: 0.09, wave: 'triangle', gain: 0.2 }],

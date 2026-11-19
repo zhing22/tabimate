@@ -1,6 +1,7 @@
-import { revealBuildUpMs, type RevealTiming } from '@/config/game';
-import { LEVELS } from '@/config/levels';
+import { revealBuildUpMs, revealNameMs, type RevealTiming } from '@/config/game';
+import { LEVELS, TOP_LEVEL } from '@/config/levels';
 import type { Animal, RoundResult } from '@/core/types';
+import { countUp } from '../components/countUp';
 import { levelBadge } from '../components/levelBadge';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
@@ -18,6 +19,8 @@ export interface RevealProps {
    * (a reload mid-reveal); otherwise the box keeps focus and Enter moves on.
    */
   readonly focusNext: boolean;
+  /** Lines under the name (ui/reveal/extras.ts): jackpot banner, fact, near-miss hint. */
+  readonly extras?: readonly HTMLElement[];
 }
 
 export interface RevealActions {
@@ -66,6 +69,8 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   const { result, animal, points } = props;
   const level = result.match.level;
   const next = nextButton(props.isLast, () => actions.next());
+  const pointsEl = h('p', { class: 'reveal__points' }, `+${level ? points : 0}`);
+  let stopCount = () => {};
   const card = h(
     'section',
     {
@@ -86,8 +91,9 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
         animal?.emoji ?? (level ? '🐾' : '💨'),
       ),
       h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
+      props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,
       h('div', { class: 'reveal__badge' }, levelBadge(level, { size: 'lg' }).el),
-      h('p', { class: 'reveal__points' }, level ? `+${points}` : '+0'),
+      pointsEl,
       next,
     ),
   );
@@ -100,13 +106,20 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   };
   const showName = () => {
     card.classList.replace('reveal--badge', 'reveal--named');
+    // A top-level find lands with a gold flash (reveal.css), after its freeze.
+    if (level === TOP_LEVEL) card.classList.add('reveal--jackpot');
+    stopCount = countUp(pointsEl, level ? points : 0, props.timing.countUpMs);
     actions.revealed(describeResult(result, animal, points));
     if (props.focusNext) focus(next);
   };
   const showBadge = () => {
     card.classList.replace('reveal--pending', 'reveal--badge');
-    after(props.timing.nameDelayMs, showName);
+    // The name's delay after the badge, plus the jackpot freeze for a top-level find.
+    after(revealNameMs(level, props.timing) - revealBuildUpMs(level, props.timing), showName);
   };
   after(revealBuildUpMs(level, props.timing), showBadge);
-  return () => timers.forEach(clearTimeout);
+  return () => {
+    timers.forEach(clearTimeout);
+    stopCount();
+  };
 };

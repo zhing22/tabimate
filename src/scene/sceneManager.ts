@@ -1,6 +1,6 @@
 import kaplay, { type KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
-import { REVEAL_TIMING, revealBuildUpMs } from '@/config/game';
+import { revealNameMs } from '@/config/game';
 import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/render';
 import type { GameBus } from '@/core/events';
 import type { Backdrops, Portraits } from '@/core/portrait';
@@ -132,7 +132,8 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
     }),
     bus.on('answerMatched', ({ result }) => {
-      const at = revealBuildUpMs(result.match.level) + REVEAL_TIMING.nameDelayMs;
+      // As the reveal shows the name (after the jackpot freeze for a top-level find).
+      const at = revealNameMs(result.match.level);
       const timer = setTimeout(() => {
         joins.delete(timer);
         world.join(result);
