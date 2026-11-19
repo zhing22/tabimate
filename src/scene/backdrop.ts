@@ -1,5 +1,11 @@
 import type { BiomeId } from '@/config/biomes';
-import { BACKDROP, GROUND_Y, NATIVE_HEIGHT, PROP_BASE_Y } from '@/config/render';
+import {
+  BACKDROP,
+  BACKDROP_GROUND_Y,
+  BACKDROP_HEIGHT,
+  NATIVE_HEIGHT,
+  PROP_BASE_Y,
+} from '@/config/render';
 import type { BackdropImage } from '@/core/portrait';
 import type { BiomeArtSprites } from './biomes/load';
 import { propsInSegment } from './props';
@@ -10,7 +16,8 @@ const CROP_TOP = BACKDROP.top;
 
 /**
  * Paints a biome's scenery as one still (sky, layers, the day's props, ground),
- * cropped to the strip around the walk line: the results line-up stands in it.
+ * cropped to the strip around the walk line (BACKDROP): the results line-up
+ * stands in it.
  */
 export function paintBackdrop(art: BiomeArtSprites, seed: string): BackdropImage {
   const { canvas, ctx } = makeCanvas(BACKDROP_WIDTH, NATIVE_HEIGHT);
@@ -26,14 +33,14 @@ export function paintBackdrop(art: BiomeArtSprites, seed: string): BackdropImage
     const prop = art.props[p.kind]!;
     if (p.x < BACKDROP_WIDTH) ctx.drawImage(prop.canvas, p.x, PROP_BASE_Y - prop.height);
   }
-  const height = NATIVE_HEIGHT - CROP_TOP;
+  const height = BACKDROP_HEIGHT;
   const { canvas: out, ctx: crop } = makeCanvas(BACKDROP_WIDTH, height);
   crop.drawImage(canvas, 0, CROP_TOP, BACKDROP_WIDTH, height, 0, 0, BACKDROP_WIDTH, height);
   return {
     src: out.toDataURL('image/png'),
     width: BACKDROP_WIDTH,
     height,
-    groundY: GROUND_Y - CROP_TOP,
+    groundY: BACKDROP_GROUND_Y,
   };
 }
 

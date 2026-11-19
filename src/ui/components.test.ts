@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
 import { LEVELS } from '@/config/levels';
+import { BACKDROP, BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
 import { THEMES } from '@/config/themes';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import { countdown } from './components/countdown';
@@ -380,11 +381,13 @@ describe('party line-up frame', () => {
     },
   ];
 
-  it("shows the biome's colours at once, at the scene's proportions", () => {
+  it("shows the biome's colours at once, cropped like the painted scenery", () => {
     const { el } = partyLineup(rounds, { biomeId: 'forest' });
     expect(el.style.getPropertyValue('--party-ground')).toBe('#37946e');
-    expect(el.style.height).toBe('168px'); // 84 native rows x2
-    expect(el.style.paddingBottom).toBe('60px'); // feet 54 rows down
+    // A high camera: the snapshot ends BACKDROP.groundBelow rows under the walk line.
+    expect(el.style.height).toBe(`${BACKDROP_HEIGHT * 2}px`);
+    expect(el.style.paddingBottom).toBe(`${BACKDROP.groundBelow * 2}px`);
+    expect(BACKDROP_HEIGHT - BACKDROP_GROUND_Y).toBe(BACKDROP.groundBelow);
   });
 
   it('then stands the party in the painted scenery, feet on its walk line', async () => {

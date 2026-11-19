@@ -1,6 +1,6 @@
 import { BIOMES } from '@/config/biomes';
 import { isShiny } from '@/config/levels';
-import { BACKDROP, GROUND_Y, NATIVE_HEIGHT } from '@/config/render';
+import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import type { Component } from './component';
@@ -10,10 +10,7 @@ import type { TeamRound } from './teamCard';
 /** Screen pixels per sprite pixel in the line-up (and its backdrop). */
 const SCALE = 2;
 /** Without a painted backdrop: the same crop of the scene, so nothing jumps when one arrives. */
-const FALLBACK = {
-  height: NATIVE_HEIGHT - BACKDROP.top,
-  groundY: GROUND_Y - BACKDROP.top,
-};
+const FALLBACK = { height: BACKDROP_HEIGHT, groundY: BACKDROP_GROUND_Y };
 
 export interface PartyLineupOptions {
   readonly portraits?: Portraits | undefined;

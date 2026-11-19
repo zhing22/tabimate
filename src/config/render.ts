@@ -45,10 +45,15 @@ export const LAYERS = {
 export const PROP_BASE_Y = GROUND_Y - 3;
 
 /**
- * The results line-up's snapshot of a biome: the scene from this row down
- * (native px), so it shows the treetops or hills, the walk line and the ground.
+ * The results line-up's snapshot of a biome (native px): from row `top` down to
+ * `groundBelow` rows under the walk line. A high camera: it shows the treetops
+ * or hills and the path, and only a strip of the empty ground below it.
  */
-export const BACKDROP = { top: 96, width: 220 } as const;
+export const BACKDROP = { top: 78, groundBelow: 12, width: 220 } as const;
+
+/** The snapshot's height, and where its walk line is (rows from its top). */
+export const BACKDROP_HEIGHT = GROUND_Y + BACKDROP.groundBelow - BACKDROP.top;
+export const BACKDROP_GROUND_Y = GROUND_Y - BACKDROP.top;
 
 /** Where the player stands, as a share of the visible width from the left. */
 export const PLAYER_SCREEN_X = 0.75;

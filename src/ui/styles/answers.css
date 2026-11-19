@@ -13,10 +13,11 @@
 
 .answer-list__search {
   width: 100%;
-  min-height: var(--tap);
+  /* Slim, so the answers below get the room. */
+  height: 28px;
   padding: 0 var(--space-2);
   font: inherit;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   background: var(--paper);
   border: 2px solid var(--paper-edge);
   border-radius: var(--radius-2);
