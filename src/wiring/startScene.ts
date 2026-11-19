@@ -17,7 +17,7 @@ export function startScene(
   puzzle: Puzzle,
   animals: ReadonlyMap<AnimalId, Animal>,
   loader: JsonLoader,
-): Pick<Scene, 'portraits' | 'backdrops'> | null {
+): Pick<Scene, 'portraits' | 'backdrops' | 'ready'> | null {
   const container = document.querySelector<HTMLElement>('#scene');
   if (!container) return null;
   try {

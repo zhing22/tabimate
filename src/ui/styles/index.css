@@ -2,6 +2,7 @@
 @import './tokens.css';
 @import './base.css';
 @import './components.css';
+@import './loading.css';
 @import './start.css';
 @import './round.css';
 @import './reveal.css';

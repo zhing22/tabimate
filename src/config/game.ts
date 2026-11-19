@@ -149,3 +149,13 @@ export const RESULTS_LIST = {
   /** Rows rendered at a time; more are added as the box scrolls. */
   renderWindow: 300,
 } as const;
+
+/** The loading screen (ui/screens/loading.ts). */
+export const LOADING = {
+  /** Once shown, it stays at least this long, so it never just flickers. */
+  minMs: 300,
+  /** Longest it waits for today's sprites; slower ones arrive in-game (emoji until then). */
+  spriteWaitMs: 4_000,
+  /** One of these walks behind the traveller, picked at random. */
+  animalEmoji: ['🦊', '🐧', '🐢', '🦉', '🐘', '🦔', '🐼', '🦒'],
+} as const;
