@@ -451,10 +451,10 @@ describe('party line-up frame', () => {
   it('then stands the party in the painted scenery, feet on its walk line', async () => {
     const image = { src: 'data:forest', width: 220, height: 90, groundY: 60 };
     const backdrops = vi.fn(() => Promise.resolve(image));
-    const { el } = partyLineup(rounds, { biomeId: 'forest', backdrops });
+    const { el } = partyLineup(rounds, { biomeId: 'forest', score: 160, backdrops });
     await Promise.resolve();
     await Promise.resolve();
-    expect(backdrops).toHaveBeenCalledWith('forest');
+    expect(backdrops).toHaveBeenCalledWith(160);
     expect(el.style.backgroundImage).toContain('data:forest');
     expect(el.style.backgroundSize).toBe('440px 180px');
     expect(el.style.height).toBe('180px');

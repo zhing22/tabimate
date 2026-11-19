@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import { GROUND_Y, WALK_SPEED } from '@/config/render';
+import { GROUND_Y, WALK } from '@/config/render';
 import { createTrail, movementFor, type Point } from './followerTrail';
 import { createIdleMotion, SQUASH_MIN, type Pose } from './idleMotion';
-import { createPlayer } from './player';
+import { createPlayer, walkSeconds } from './player';
 
 const point = (): Point => ({ x: 0, y: 0 });
 const pose = (): Pose => ({ dy: 0, scaleY: 1, angle: 0 });
@@ -96,14 +96,14 @@ describe('createIdleMotion', () => {
 });
 
 describe('createPlayer', () => {
-  it('walks the distance at about WALK_SPEED, easing in and out', () => {
+  it('walks the distance at about WALK.speed, easing in and out', () => {
     const player = createPlayer();
     player.walkBy(96);
     expect(player.walking).toBe(true);
     player.update(0.1);
     const early = player.x;
     expect(early).toBeGreaterThan(0);
-    expect(early).toBeLessThan(0.1 * WALK_SPEED); // slow start
+    expect(early).toBeLessThan(0.1 * WALK.speed); // slow start
     for (let i = 0; i < 200; i++) player.update(1 / 60);
     expect(player.x).toBe(96);
     expect(player.walking).toBe(false);
@@ -128,5 +128,15 @@ describe('createPlayer', () => {
     player.placeAt(250);
     expect(player.x).toBe(250);
     expect(player.walking).toBe(false);
+  });
+
+  it('caps a long walk at WALK.maxS, and keeps every walk short with reduced motion', () => {
+    expect(walkSeconds(WALK.speed)).toBe(1);
+    expect(walkSeconds(100_000)).toBe(WALK.maxS);
+    expect(walkSeconds(100_000, true)).toBe(WALK.reducedS);
+    const player = createPlayer({ reducedMotion: true });
+    player.walkBy(2_000);
+    player.update(WALK.reducedS);
+    expect(player.x).toBe(2_000);
   });
 });

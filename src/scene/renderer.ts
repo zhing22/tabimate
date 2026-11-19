@@ -1,44 +1,39 @@
-import type { Color, DrawRectOpt, DrawSpriteOpt, KAPLAYCtx } from 'kaplay';
+import type { DrawRectOpt, KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
-import { GROUND_Y, NATIVE_HEIGHT, PLAYER_SCREEN_X, PROP_BASE_Y } from '@/config/render';
+import { GROUND_Y, PLAYER_SCREEN_X } from '@/config/render';
 import type { BiomeArtSprites } from './biomes/load';
+import type { BorderSprites } from './borders/load';
+import type { BorderKey } from './borders/registry';
+import { createSceneryRenderer } from './drawScenery';
+import { createTitleCardRenderer } from './drawTitleCard';
+import { kaplaySceneryBackend } from './kaplayBackend';
 import type { EffectsLayer } from './effects/effectsLayer';
-import { tile } from './layers';
-import { propsInSegment, segmentsInView, type PlacedProp } from './props';
 import { createPartyRenderer } from './renderParty';
 import type { SpriteProvider } from './sprites/spriteProvider';
 import type { Viewport } from './viewport';
 import type { World } from './world';
 
 const FOOTPRINT_COLOUR = '#222034';
-const PROP_CACHE_LIMIT = 64;
+
+export interface RendererDeps {
+  readonly art: Readonly<Record<BiomeId, BiomeArtSprites>>;
+  readonly borders: ReadonlyMap<BorderKey, BorderSprites>;
+  readonly sprites: SpriteProvider;
+  readonly seed: string;
+  readonly effects: Pick<EffectsLayer, 'offset' | 'drawFront'>;
+  readonly reducedMotion: boolean;
+}
 
 /**
- * Draws the world each frame, back to front. Option objects and vectors are
- * made once and reused, so drawing allocates nothing of ours per frame.
+ * Draws the world each frame, back to front: scenery along the strip, the
+ * footprints of misses, the party, effects, and a biome's title card on top.
+ * Option objects are made once and reused, so drawing allocates nothing of ours.
  */
-export function createRenderer(
-  k: KAPLAYCtx,
-  world: World,
-  art: Readonly<Record<BiomeId, BiomeArtSprites>>,
-  sprites: SpriteProvider,
-  seed: string,
-  effects: Pick<EffectsLayer, 'offset' | 'drawFront'>,
-) {
-  const pos = k.vec2(0, 0);
-  const scale = k.vec2(1, 1);
+export function createRenderer(k: KAPLAYCtx, world: World, deps: RendererDeps) {
+  const drawScenery = createSceneryRenderer(kaplaySceneryBackend(k), deps);
+  const drawParty = createPartyRenderer(k, world, deps.sprites);
+  const drawTitleCard = createTitleCardRenderer(k);
   const printPos = k.vec2(0, 0);
-  const sprite: DrawSpriteOpt = {
-    sprite: '',
-    pos,
-    scale,
-    angle: 0,
-    opacity: 1,
-    anchor: 'topleft',
-    flipX: false,
-    frame: 0,
-  };
-  const sky: DrawRectOpt = { width: 0, height: NATIVE_HEIGHT, pos: k.vec2(0, 0), opacity: 1 };
   const print: DrawRectOpt = {
     width: 2,
     height: 1,
@@ -46,79 +41,8 @@ export function createRenderer(
     color: k.rgb(FOOTPRINT_COLOUR),
     opacity: 0.45,
   };
-  const skyColours = new Map<BiomeId, [Color, Color]>();
-  for (const [id, a] of Object.entries(art) as [BiomeId, BiomeArtSprites][]) {
-    skyColours.set(id, [k.rgb(a.sky[0]), k.rgb(a.sky[1])]);
-  }
-  const propCache = new Map<string, readonly PlacedProp[]>();
-  const drawParty = createPartyRenderer(k, world, sprites);
 
-  const drawImage = (name: string, x: number, y: number, opacity: number) => {
-    sprite.sprite = name;
-    sprite.frame = 0;
-    pos.x = x;
-    pos.y = y;
-    sprite.anchor = 'topleft';
-    sprite.angle = 0;
-    sprite.flipX = false;
-    sprite.opacity = opacity;
-    scale.x = 1;
-    scale.y = 1;
-    k.drawSprite(sprite);
-  };
-
-  function propsFor(id: BiomeId, segment: number) {
-    const key = `${id}|${segment}`;
-    let list = propCache.get(key);
-    if (!list) {
-      // Only when a new stretch of world comes into view.
-      if (propCache.size > PROP_CACHE_LIMIT) propCache.clear();
-      list = propsInSegment(`${seed}|${id}`, art[id].props, segment);
-      propCache.set(key, list);
-    }
-    return list;
-  }
-
-  function drawBiome(id: BiomeId, cameraX: number, drawWidth: number, opacity: number) {
-    const a = art[id];
-    sky.width = drawWidth;
-    const gradient = skyColours.get(id);
-    if (gradient) sky.gradient = gradient;
-    sky.opacity = opacity;
-    k.drawRect(sky);
-    for (const layer of a.layers) {
-      const { firstX, copies } = tile(cameraX, layer.parallax, layer.width, drawWidth);
-      for (let i = 0; i < copies; i++) {
-        drawImage(layer.sprite, firstX + i * layer.width, layer.y, opacity);
-      }
-    }
-    const { first, last } = segmentsInView(cameraX, drawWidth, a.maxPropWidth);
-    for (let s = first; s <= last; s++) {
-      for (const p of propsFor(id, s)) {
-        const x = p.x - cameraX;
-        const prop = a.props[p.kind]!;
-        if (x > drawWidth || x + prop.width < 0) continue;
-        drawImage(prop.sprite, x, PROP_BASE_Y - prop.height, opacity);
-      }
-    }
-  }
-
-  return function draw(view: Viewport, ready: boolean) {
-    // Everything moves together when an effect shakes the scene.
-    k.pushTransform();
-    k.pushTranslate(effects.offset.x, effects.offset.y);
-    drawWorld(view, ready);
-    k.popTransform();
-  };
-
-  function drawWorld(view: Viewport, ready: boolean) {
-    const playerX = Math.round(world.player.x);
-    // Whole native pixels only: a camera between pixels makes everything shimmer.
-    const cameraX = playerX - Math.round(PLAYER_SCREEN_X * view.visibleWidth);
-    const { biome } = world;
-    if (biome.from) drawBiome(biome.from, cameraX, view.drawWidth, 1);
-    drawBiome(biome.to, cameraX, view.drawWidth, biome.from ? biome.progress : 1);
-
+  function drawFootprints(cameraX: number) {
     for (const x of world.footprints) {
       if (Number.isNaN(x)) continue;
       printPos.x = Math.round(x) - cameraX;
@@ -128,9 +52,21 @@ export function createRenderer(
       printPos.y = GROUND_Y + 1;
       k.drawRect(print);
     }
-    if (!ready) return;
-
-    drawParty(cameraX);
-    effects.drawFront(); // sparks and twinkles, in front of everyone
   }
+
+  return function draw(view: Viewport, ready: boolean) {
+    // Whole native pixels only: a camera between pixels makes everything shimmer.
+    const cameraX = Math.round(world.player.x) - Math.round(PLAYER_SCREEN_X * view.visibleWidth);
+    // Everything in the world moves together when an effect shakes the scene.
+    k.pushTransform();
+    k.pushTranslate(deps.effects.offset.x, deps.effects.offset.y);
+    drawScenery(world.state, cameraX, view.drawWidth);
+    drawFootprints(cameraX);
+    if (ready) {
+      drawParty(cameraX);
+      deps.effects.drawFront(); // sparks and twinkles, in front of everyone
+    }
+    k.popTransform();
+    drawTitleCard(world.titleCard, view.visibleWidth);
+  };
 }

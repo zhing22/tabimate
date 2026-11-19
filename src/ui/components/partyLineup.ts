@@ -15,8 +15,10 @@ const FALLBACK = { height: BACKDROP_HEIGHT, groundY: BACKDROP_GROUND_Y };
 export interface PartyLineupOptions {
   readonly portraits?: Portraits | undefined;
   readonly backdrops?: Backdrops | undefined;
-  /** The biome reached: its scenery fills the frame. */
+  /** The biome reached: its colours fill the frame until the backdrop arrives. */
   readonly biomeId?: string | undefined;
+  /** The run's final score: the backdrop is the scenery where the walk ended. */
+  readonly score?: number | undefined;
 }
 
 /** Sizes the frame so the party's feet rest on the backdrop's walk line. */
@@ -73,8 +75,8 @@ export function partyLineup(
     el.style.setProperty('--party-ground', biome.palette.ground);
   }
   fit(el, FALLBACK);
-  if (opts.biomeId && opts.backdrops) {
-    void opts.backdrops(opts.biomeId).then((image) => {
+  if (opts.score !== undefined && opts.backdrops) {
+    void opts.backdrops(opts.score).then((image) => {
       if (image) showBackdrop(el, image);
     });
   }

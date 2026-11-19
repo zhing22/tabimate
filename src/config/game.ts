@@ -93,8 +93,13 @@ export const revealNameMs = (level: number, timing: RevealTiming = REVEAL_TIMING
   timing.nameDelayMs +
   (level === TOP_LEVEL ? timing.jackpotFreezeMs : 0);
 
-/** Journey distance (world units, scaled by the scene) the player moves per point. */
-export const DISTANCE_PER_POINT = 1;
+/**
+ * Journey distance (native scene px) the player walks per point. A full day
+ * (700 points) is a 5,600 px strip; the smallest gap between biome thresholds
+ * (50 points, 400 px) still holds a whole border segment (BIOME_BORDER, 320 px)
+ * plus some of the biome itself (checked in config.test.ts).
+ */
+export const DISTANCE_PER_POINT = 8;
 
 /**
  * Longest guess the matcher reads; anything after is cut off. Also the input

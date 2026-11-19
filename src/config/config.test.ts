@@ -1,6 +1,7 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import { BIOMES } from './biomes';
 import {
+  DISTANCE_PER_POINT,
   LAUNCH_DATE_KEY,
   MATCHER_CONFIG,
   MAX_PROMPTS_PER_PUZZLE,
@@ -13,9 +14,18 @@ import {
 } from './game';
 import { DEFAULT_MAX_CR, maxCRFor, themeFor, THEMES, WEEKDAY_NAMES, weekdayOf } from './themes';
 import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL, type TopLevel } from './levels';
+import { BIOME_BORDER, TITLE_CARD } from './render';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
+  it('fits a whole biome border into the shortest gap between biome starts', () => {
+    for (let i = 1; i < BIOMES.length; i++) {
+      const gap = BIOMES[i]!.minScore - BIOMES[i - 1]!.minScore;
+      expect(gap * DISTANCE_PER_POINT).toBeGreaterThanOrEqual(BIOME_BORDER);
+    }
+    expect(TITLE_CARD.fadeMs * 2).toBeLessThan(TITLE_CARD.totalMs);
+  });
+
   it('builds up longer for rarer levels, without dragging', () => {
     const steps = [0, 1, 2, 3, 4, 5].map((level) => revealBuildUpMs(level));
     expect(steps).toEqual([...steps].sort((a, b) => a - b));

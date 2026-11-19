@@ -1,4 +1,4 @@
-import { WALK_SPEED } from '@/config/render';
+import { WALK } from '@/config/render';
 
 /**
  * The player's walk along the journey. Pure state: the scene reads x and
@@ -10,6 +10,8 @@ export interface Player {
   readonly walking: boolean;
   /** Seconds spent walking in the current walk, for the step animation. */
   readonly stepTime: number;
+  /** Where the current walk ends (x itself when standing). */
+  readonly targetX: number;
   /** Walks `distance` further, eased in and out. Adds to a walk in progress. */
   walkBy(distance: number): void;
   /** Stands at x at once (restoring a saved run). */
@@ -17,10 +19,16 @@ export interface Player {
   update(dtS: number): void;
 }
 
-const MIN_WALK_S = 0.5;
 const easeInOut = (t: number) => (1 - Math.cos(Math.PI * t)) / 2;
 
-export function createPlayer(): Player {
+/**
+ * A walk's length in seconds: at WALK.speed, sped up past WALK.maxS so a long
+ * walk doesn't drag, never shorter than WALK.minS. Reduced motion: always short.
+ */
+export const walkSeconds = (distance: number, reducedMotion = false): number =>
+  reducedMotion ? WALK.reducedS : Math.min(WALK.maxS, Math.max(WALK.minS, distance / WALK.speed));
+
+export function createPlayer(options: { reducedMotion?: boolean } = {}): Player {
   let x = 0;
   let from = 0;
   let to = 0;
@@ -38,11 +46,14 @@ export function createPlayer(): Player {
     get stepTime() {
       return stepTime;
     },
+    get targetX() {
+      return to;
+    },
     walkBy(distance) {
       if (distance <= 0) return;
       from = x;
       to += distance;
-      duration = Math.max(MIN_WALK_S, (to - from) / WALK_SPEED);
+      duration = walkSeconds(to - from, options.reducedMotion);
       elapsed = 0;
     },
     placeAt(target) {

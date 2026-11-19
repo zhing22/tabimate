@@ -11,6 +11,11 @@ export interface PropRule {
 export interface PlacedProp {
   readonly kind: number;
   readonly x: number;
+  /**
+   * 0..1, seeded: in a border, whether this prop shows (strip.ts biomeOfProp), so
+   * the two biomes' props mix the same way for everyone that day.
+   */
+  readonly roll: number;
 }
 
 /** Props are placed a stretch of world at a time, so only new stretches cost anything. */
@@ -29,12 +34,14 @@ export function propsInSegment(
   const start = segment * PROP_SEGMENT;
   const end = start + PROP_SEGMENT;
   const placed: PlacedProp[] = [];
+  // Its own stream, so the rolls never change where props stand.
+  const rolls = seededRandom(`${seed}|roll|${segment}`);
   rules.forEach((rule, kind) => {
     const random = seededRandom(`${seed}|${kind}|${segment}`);
     const gap = () => rule.minGap + random() * (rule.maxGap - rule.minGap);
     // Start part way into a gap, so segments don't all begin with a prop.
     for (let x = start + random() * gap(); x < end; x += rule.width + gap()) {
-      placed.push({ kind, x: Math.floor(x) });
+      placed.push({ kind, x: Math.floor(x), roll: rolls() });
     }
   });
   return placed.sort((a, b) => a.x - b.x);

@@ -37,5 +37,8 @@ export interface BackdropImage {
   readonly groundY: number;
 }
 
-/** The backdrop for a biome id; null when there is none (no scene). */
-export type Backdrops = (biomeId: string) => Promise<BackdropImage | null>;
+/**
+ * A still of the scenery where a run with this final score ended (the scene's
+ * own strip, so it matches the walk); null when there is none (no scene).
+ */
+export type Backdrops = (score: number) => Promise<BackdropImage | null>;

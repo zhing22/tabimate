@@ -7,10 +7,12 @@ import type { Backdrops, Portraits } from '@/core/portrait';
 import { createBackdrops } from './backdrop';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { loadBiomeArt } from './biomes/load';
+import { loadBorderArt } from './borders/load';
 import { createEffectsLayer } from './effects/effectsLayer';
 import { createRenderer } from './renderer';
 import type { SpriteProvider } from './sprites/spriteProvider';
 import { computeViewport, type Viewport } from './viewport';
+import { dominantBiome } from './strip';
 import { createWorld } from './world';
 
 export interface SceneDeps {
@@ -26,7 +28,7 @@ export interface Scene {
   readonly ready: Promise<void>;
   /** Stills of the sprites for the UI, once they are loaded (null if they failed). */
   readonly portraits: Portraits;
-  /** A still of a biome's scenery, for the results line-up. */
+  /** A still of the scenery where a run ended, for the results line-up. */
   readonly backdrops: Backdrops;
   dispose(): void;
 }
@@ -78,8 +80,9 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
     loaded = true;
   });
   const effects = createEffectsLayer(k, { reducedMotion });
-  const backdrop = createBackdrops(art, deps.puzzleDate);
-  const draw = createRenderer(k, world, art, sprites, deps.puzzleDate, effects);
+  const scenery = { art, borders: loadBorderArt(k), seed: deps.puzzleDate, reducedMotion };
+  const backdrop = createBackdrops(scenery);
+  const draw = createRenderer(k, world, { ...scenery, sprites, effects });
 
   let view: Viewport = computeViewport(1, 1, 1);
   let skyShown: BiomeId | null = null;
@@ -109,9 +112,10 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
   k.onUpdate(() => world.update(Math.min(k.dt(), MAX_STEP_S)));
   k.onDraw(() => {
     // Rows above the scene show the sky's top colour; set only when it changes.
-    if (world.biome.to !== skyShown) {
-      skyShown = world.biome.to;
-      container.style.backgroundColor = art[skyShown].sky[0];
+    const sky = dominantBiome(world.state);
+    if (sky !== skyShown) {
+      skyShown = sky;
+      container.style.backgroundColor = art[sky].sky[0];
     }
     draw(view, loaded);
   });
@@ -145,7 +149,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
 
   return {
     ready,
-    backdrops: (id) => Promise.resolve(backdrop(id)),
+    backdrops: (score) => Promise.resolve(backdrop(score)),
     portraits: (animal, shiny) =>
       ready.then(
         () => sprites.portrait(animal, shiny),

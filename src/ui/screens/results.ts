@@ -81,6 +81,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     portraits: props.portraits,
     backdrops: props.backdrops,
     biomeId: props.biomeId,
+    score: props.score,
   });
   const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const nextButton = h(

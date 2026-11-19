@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { FOLLOWER_SPACING, MISS_WALK } from '@/config/render';
+import { BIOME_BORDER, FOLLOWER_SPACING, TITLE_CARD } from '@/config/render';
 import type { AnswerLevel } from '@/config/levels';
+import { distanceFor } from '@/core/journey';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
 import { type Point } from './entities/followerTrail';
+import { gatewayX } from './strip';
 import { createWorld, type World } from './world';
 
 const hit = (animalId: string, level: AnswerLevel): RoundResult => ({
@@ -17,7 +19,7 @@ const miss: RoundResult = {
   match: { level: 0, animalId: null, strategy: null, input: 'zzz' },
 };
 
-const world = () => createWorld({ animals: ANIMALS, reducedMotion: false });
+const world = (reducedMotion = false) => createWorld({ animals: ANIMALS, reducedMotion });
 const settle = (w: World, seconds = 10) => {
   for (let i = 0; i < seconds * 60; i++) w.update(1 / 60);
 };
@@ -30,7 +32,7 @@ describe('world: a run', () => {
     expect(w.followers[0]?.pop).toBe(0);
     expect(w.player.walking).toBe(true);
     settle(w);
-    expect(w.player.x).toBe(85);
+    expect(w.player.x).toBe(distanceFor(85));
     expect(w.followers[0]?.pop).toBe(1);
   });
 
@@ -40,32 +42,26 @@ describe('world: a run', () => {
     expect(w.followers[0]?.shiny).toBe(true);
   });
 
-  it('leaves footprints and walks a short way on a miss', () => {
+  it('leaves footprints where the party stands on a miss, and stays put', () => {
     const w = world();
     w.join(miss);
     settle(w);
     expect(w.followers).toHaveLength(0);
-    expect(w.player.x).toBe(MISS_WALK);
+    expect(w.player.x).toBe(0);
     expect([...w.footprints].filter((x) => !Number.isNaN(x))).toEqual([0]);
   });
 
-  it('moves into the next biome on the answer that crosses its threshold', () => {
+  it('walks into the next biome through its border', () => {
     const w = world();
-    w.join(hit('platypus', 2)); // 25: still the Town
-    expect(w.biome).toMatchObject({ from: null, to: 'town' });
-    w.join(hit('snow-leopard', 3)); // 75: Grassland starts at 50
-    expect(w.biome).toMatchObject({ from: 'town', to: 'grassland', progress: 0 });
-    settle(w, 2);
-    w.join(hit('tiger', 4)); // 160: Forest starts at 125
-    expect(w.biome).toMatchObject({ from: 'grassland', to: 'forest' });
-  });
-
-  it('counts a restored score, so the next join knows where it stands', () => {
-    const w = world();
-    w.restore([hit('snow-leopard', 3)]); // 50: Grassland, no fade
-    expect(w.biome).toMatchObject({ from: null, to: 'grassland' });
-    w.join(hit('tiger', 4)); // 135: Forest
-    expect(w.biome.to).toBe('forest');
+    expect(w.state).toMatchObject({ biome: 'town', nextBiome: 'grassland', blend: 0 });
+    w.join(hit('snow-leopard', 3)); // 50: Grassland starts at 50
+    let blended = false;
+    for (let i = 0; i < 600; i++) {
+      w.update(1 / 60);
+      if (w.state.blend > 0 && w.state.blend < 1) blended = true;
+    }
+    expect(blended).toBe(true);
+    expect(w.state.biome).toBe('grassland');
   });
 
   it('three followers trail the player one spacing apart on its path', () => {
@@ -81,20 +77,39 @@ describe('world: a run', () => {
     const p: Point = { x: 0, y: 0 };
     const xs = w.followers.map((_, k) => w.trail.pointBehind((k + 1) * FOLLOWER_SPACING, p).x);
     const s = FOLLOWER_SPACING;
-    expect(xs).toEqual([160 - s, 160 - 2 * s, 160 - 3 * s]);
+    const end = distanceFor(160);
+    expect(xs).toEqual([end - s, end - 2 * s, end - 3 * s]);
+  });
+});
+
+describe('world: title cards', () => {
+  it('shows the biome name as the player passes its gateway, then clears it', () => {
+    const w = world();
+    w.join(hit('snow-leopard', 3)); // 50: exactly into Grassland
+    let shownAt = Number.NaN;
+    for (let i = 0; i < 600 && Number.isNaN(shownAt); i++) {
+      w.update(1 / 60);
+      if (w.titleCard.biome === 'grassland') shownAt = w.player.x;
+    }
+    expect(shownAt).toBeGreaterThanOrEqual(gatewayX(1));
+    expect(shownAt).toBeLessThan(gatewayX(1) + BIOME_BORDER / 4);
+    settle(w, TITLE_CARD.totalMs / 1000 + 0.1);
+    expect(w.titleCard.biome).toBeNull();
   });
 
-  it('crossfades to a new biome, and ends the fade', () => {
-    const w = world();
-    expect(w.biome).toMatchObject({ from: null, to: 'town', progress: 1 });
-    w.enterBiome('grassland');
-    expect(w.biome).toMatchObject({ from: 'town', to: 'grassland', progress: 0 });
-    w.update(0.6);
-    expect(w.biome.progress).toBeCloseTo(0.5);
-    settle(w, 1);
-    expect(w.biome).toMatchObject({ from: null, to: 'grassland', progress: 1 });
-    w.enterBiome('grassland'); // already there
-    expect(w.biome.progress).toBe(1);
+  it('cuts at the border with reduced motion: no blend, still a title card', () => {
+    const w = world(true);
+    w.join(hit('snow-leopard', 3));
+    let blended = false;
+    let card = false;
+    for (let i = 0; i < 60; i++) {
+      w.update(1 / 60);
+      if (w.state.blend > 0) blended = true;
+      if (w.titleCard.biome === 'grassland') card = true;
+    }
+    expect(blended).toBe(false);
+    expect(card).toBe(true);
+    expect(w.state.biome).toBe('grassland');
   });
 });
 
@@ -116,16 +131,18 @@ describe('world: blinking', () => {
 });
 
 describe('world: restore', () => {
-  it('rebuilds followers, position and biome at once, without animation', () => {
+  it('rebuilds followers, position and biome at once, without animation or a card', () => {
     const w = world();
     w.restore([hit('platypus', 2), miss, hit('snow-leopard', 3)]); // 75 points
     expect(w.followers.map((f) => [f.animal.id, f.pop])).toEqual([
       ['platypus', 1],
       ['snow-leopard', 1],
     ]);
-    expect(w.player.x).toBe(25 + MISS_WALK + 50);
+    expect(w.player.x).toBe(distanceFor(75));
     expect(w.player.walking).toBe(false);
-    expect(w.biome).toMatchObject({ from: null, to: 'grassland' });
+    expect(w.state.biome).toBe('grassland');
+    w.update(1 / 60);
+    expect(w.titleCard.biome).toBeNull();
     // Followers can stand behind a player restored mid-journey.
     expect(w.trail.pointBehind(FOLLOWER_SPACING, { x: 0, y: 0 }).x).toBe(
       w.player.x - FOLLOWER_SPACING,
@@ -138,6 +155,6 @@ describe('world: restore', () => {
     w.restore([]);
     expect(w.followers).toHaveLength(0);
     expect(w.player.x).toBe(0);
-    expect(w.biome.to).toBe('town');
+    expect(w.state.biome).toBe('town');
   });
 });

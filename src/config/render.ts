@@ -71,17 +71,24 @@ export const SIZE_PX: Readonly<Record<SizeClass, number>> = { S: 12, M: 16, L: 2
 
 export const PLAYER_SIZE = { width: 16, height: 24 } as const;
 
-/** Walking speed, native px per second. */
-export const WALK_SPEED = 48;
+/**
+ * The walk after an answer: at least WALK.speed px/s, sped up so no walk takes
+ * longer than maxS (a CR answer walks 800 px), and never shorter than minS.
+ * With reduced motion every walk is a short scroll of reducedS.
+ */
+export const WALK = { speed: 160, minS: 0.5, maxS: 4.5, reducedS: 0.6 } as const;
 
-/** A miss still moves the journey on a little. */
-export const MISS_WALK = 8;
+/**
+ * The blended stretch before each biome's start: the scenery shifts from one
+ * biome to the next across it (scene/strip.ts worldStateAt).
+ */
+export const BIOME_BORDER = 320;
+
+/** The biome's title card, shown as the player passes the middle of its border. */
+export const TITLE_CARD = { fadeMs: 300, totalMs: 2_000 } as const;
 
 /** A new follower pops in over this long. */
 export const POP_IN_MS = 350;
-
-/** Crossfade between biomes. */
-export const BIOME_FADE_MS = 1_200;
 
 /** Wait this long after the last resize before re-laying out the canvas. */
 export const RESIZE_DEBOUNCE_MS = 150;

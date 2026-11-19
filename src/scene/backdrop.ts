@@ -1,59 +1,83 @@
 import type { BiomeId } from '@/config/biomes';
-import {
-  BACKDROP,
-  BACKDROP_GROUND_Y,
-  BACKDROP_HEIGHT,
-  NATIVE_HEIGHT,
-  PROP_BASE_Y,
-} from '@/config/render';
+import { BACKDROP, BACKDROP_GROUND_Y, BACKDROP_HEIGHT, NATIVE_HEIGHT } from '@/config/render';
+import { distanceFor } from '@/core/journey';
 import type { BackdropImage } from '@/core/portrait';
 import type { BiomeArtSprites } from './biomes/load';
-import { propsInSegment } from './props';
+import type { BorderSprites } from './borders/load';
+import type { BorderKey } from './borders/registry';
+import { createSceneryRenderer, type SceneryBackend } from './drawScenery';
 import { makeCanvas } from './sprites/canvasArt';
+import { worldStateAt } from './strip';
 
-const BACKDROP_WIDTH = BACKDROP.width;
-const CROP_TOP = BACKDROP.top;
+export interface BackdropDeps {
+  readonly art: Readonly<Record<BiomeId, BiomeArtSprites>>;
+  readonly borders: ReadonlyMap<BorderKey, BorderSprites>;
+  readonly seed: string;
+  readonly reducedMotion: boolean;
+}
+
+/** Scenery drawn on a 2D canvas, for the still. */
+function canvasBackend(ctx: CanvasRenderingContext2D): SceneryBackend {
+  return {
+    image(piece, x, y, opacity) {
+      ctx.globalAlpha = opacity;
+      ctx.drawImage(piece.canvas, x, y);
+      ctx.globalAlpha = 1;
+    },
+    sky(top, bottom, width) {
+      const gradient = ctx.createLinearGradient(0, 0, 0, NATIVE_HEIGHT);
+      gradient.addColorStop(0, `rgb(${top.r} ${top.g} ${top.b})`);
+      gradient.addColorStop(1, `rgb(${bottom.r} ${bottom.g} ${bottom.b})`);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, NATIVE_HEIGHT);
+    },
+  };
+}
 
 /**
- * Paints a biome's scenery as one still (sky, layers, the day's props, ground),
- * cropped to the strip around the walk line (BACKDROP): the results line-up
- * stands in it.
+ * The scenery where a run ended (world x = distanceFor(score), centred), with
+ * the same scenery code as the live scene: the same biome, blend, props and
+ * border art the player was standing in. Cropped to the strip around the walk
+ * line (BACKDROP): the results line-up stands in it.
  */
-export function paintBackdrop(art: BiomeArtSprites, seed: string): BackdropImage {
-  const { canvas, ctx } = makeCanvas(BACKDROP_WIDTH, NATIVE_HEIGHT);
-  const sky = ctx.createLinearGradient(0, 0, 0, NATIVE_HEIGHT);
-  sky.addColorStop(0, art.sky[0]);
-  sky.addColorStop(1, art.sky[1]);
-  ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, BACKDROP_WIDTH, NATIVE_HEIGHT);
-  for (const layer of art.layers) {
-    for (let x = 0; x < BACKDROP_WIDTH; x += layer.width) ctx.drawImage(layer.canvas, x, layer.y);
-  }
-  for (const p of propsInSegment(seed, art.props, 0)) {
-    const prop = art.props[p.kind]!;
-    if (p.x < BACKDROP_WIDTH) ctx.drawImage(prop.canvas, p.x, PROP_BASE_Y - prop.height);
-  }
-  const height = BACKDROP_HEIGHT;
-  const { canvas: out, ctx: crop } = makeCanvas(BACKDROP_WIDTH, height);
-  crop.drawImage(canvas, 0, CROP_TOP, BACKDROP_WIDTH, height, 0, 0, BACKDROP_WIDTH, height);
+export function paintBackdrop(deps: BackdropDeps, score: number): BackdropImage {
+  const x = distanceFor(score);
+  const { canvas, ctx } = makeCanvas(BACKDROP.width, NATIVE_HEIGHT);
+  const state = worldStateAt(x);
+  if (deps.reducedMotion) state.blend = 0;
+  createSceneryRenderer(canvasBackend(ctx), deps)(
+    state,
+    Math.round(x - BACKDROP.width / 2),
+    BACKDROP.width,
+  );
+  const { canvas: out, ctx: crop } = makeCanvas(BACKDROP.width, BACKDROP_HEIGHT);
+  crop.drawImage(
+    canvas,
+    0,
+    BACKDROP.top,
+    BACKDROP.width,
+    BACKDROP_HEIGHT,
+    0,
+    0,
+    BACKDROP.width,
+    BACKDROP_HEIGHT,
+  );
   return {
     src: out.toDataURL('image/png'),
-    width: BACKDROP_WIDTH,
-    height,
+    width: BACKDROP.width,
+    height: BACKDROP_HEIGHT,
     groundY: BACKDROP_GROUND_Y,
   };
 }
 
-/** One painted still per biome, made on first ask. */
-export function createBackdrops(art: Readonly<Record<BiomeId, BiomeArtSprites>>, seed: string) {
-  const made = new Map<BiomeId, BackdropImage>();
-  return (id: string): BackdropImage | null => {
-    const biome = art[id as BiomeId] as BiomeArtSprites | undefined;
-    if (!biome) return null;
-    let image = made.get(id as BiomeId);
+/** One painted still per final score, made on first ask. */
+export function createBackdrops(deps: BackdropDeps) {
+  const made = new Map<number, BackdropImage>();
+  return (score: number): BackdropImage => {
+    let image = made.get(score);
     if (!image) {
-      image = paintBackdrop(biome, `${seed}|${id}`);
-      made.set(id as BiomeId, image);
+      image = paintBackdrop(deps, score);
+      made.set(score, image);
     }
     return image;
   };
