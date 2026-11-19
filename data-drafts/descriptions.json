@@ -1,0 +1,2755 @@
+{
+  "generated": "2026-11-19T02:15:52.369Z",
+  "animals": [
+    {
+      "id": "lion",
+      "description": "A large cat of the genus Panthera, currently ranging only in sub-Saharan Africa and India.",
+      "wiki": "https://en.wikipedia.org/wiki/Lion"
+    },
+    {
+      "id": "tiger",
+      "description": "A large cat and a member of the genus Panthera native to Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Tiger"
+    },
+    {
+      "id": "snow-leopard",
+      "description": "A felid species in the genus Panthera.",
+      "wiki": "https://en.wikipedia.org/wiki/Snow_leopard"
+    },
+    {
+      "id": "cheetah",
+      "description": "A large feline and the only living member of the genus Acinonyx.",
+      "wiki": "https://en.wikipedia.org/wiki/Cheetah"
+    },
+    {
+      "id": "african-elephant",
+      "description": "Members of the genus Loxodonta comprising two living elephant species, the African bush elephant.",
+      "wiki": "https://en.wikipedia.org/wiki/African_elephant"
+    },
+    {
+      "id": "asian-elephant",
+      "description": "The only living species in the genus Elephas.",
+      "wiki": "https://en.wikipedia.org/wiki/Asian_elephant"
+    },
+    {
+      "id": "giant-panda",
+      "description": "A bear species endemic to China.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_panda"
+    },
+    {
+      "id": "red-panda",
+      "description": "A small mammal native to the eastern Himalayas and southwestern China.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_panda"
+    },
+    {
+      "id": "polar-bear",
+      "description": "A large bear native to the Arctic and nearby areas.",
+      "wiki": "https://en.wikipedia.org/wiki/Polar_bear"
+    },
+    {
+      "id": "brown-bear",
+      "description": "A large bear native to Eurasia and North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Brown_bear"
+    },
+    {
+      "id": "grey-wolf",
+      "description": "A canine native to Eurasia and North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Wolf"
+    },
+    {
+      "id": "red-fox",
+      "description": "The largest of the true foxes.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_fox"
+    },
+    {
+      "id": "koala",
+      "description": "An arboreal herbivorous marsupial native to Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Koala"
+    },
+    {
+      "id": "red-kangaroo",
+      "description": "The largest of all kangaroos, the largest terrestrial mammal native to Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_kangaroo"
+    },
+    {
+      "id": "tasmanian-devil",
+      "description": "A carnivorous marsupial of the family Dasyuridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Tasmanian_devil"
+    },
+    {
+      "id": "platypus",
+      "description": "A semiaquatic, egg-laying mammal endemic to eastern Australia, including Tasmania.",
+      "wiki": "https://en.wikipedia.org/wiki/Platypus"
+    },
+    {
+      "id": "short-beaked-echidna",
+      "description": "One of four living echidna, and the only member of the genus Tachyglossus.",
+      "wiki": "https://en.wikipedia.org/wiki/Short-beaked_echidna"
+    },
+    {
+      "id": "european-hedgehog",
+      "description": "A hedgehog species native to Europe from Iberia and Italy northwards into Scandinavia.",
+      "wiki": "https://en.wikipedia.org/wiki/European_hedgehog"
+    },
+    {
+      "id": "european-rabbit",
+      "description": "A rabbit native to the Iberian Peninsula and southwestern France.",
+      "wiki": "https://en.wikipedia.org/wiki/European_rabbit"
+    },
+    {
+      "id": "house-mouse",
+      "description": "A small mammal of the rodent family Muridae, characteristically having a pointed snout.",
+      "wiki": "https://en.wikipedia.org/wiki/House_mouse"
+    },
+    {
+      "id": "sumatran-orangutan",
+      "description": "One of the three orangutans.",
+      "wiki": "https://en.wikipedia.org/wiki/Sumatran_orangutan"
+    },
+    {
+      "id": "bornean-orangutan",
+      "description": "An orangutan species endemic to the island of Borneo.",
+      "wiki": "https://en.wikipedia.org/wiki/Bornean_orangutan"
+    },
+    {
+      "id": "eastern-gorilla",
+      "description": "A critically endangered genus Gorilla and the largest living primate.",
+      "wiki": "https://en.wikipedia.org/wiki/Eastern_gorilla"
+    },
+    {
+      "id": "chimpanzee",
+      "description": "A medium-sized great ape species found in the forests and savannas of equatorial Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Chimpanzee"
+    },
+    {
+      "id": "ruffed-lemur",
+      "description": "An endangered ruffed lemur, one of two which are endemic to the island of Madagascar.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur"
+    },
+    {
+      "id": "black-rhino",
+      "description": "A rhinoceros native to East and Southern Africa, including Angola, Botswana, Eswatini, Kenya, Lesotho, Malawi.",
+      "wiki": "https://en.wikipedia.org/wiki/Black_rhinoceros"
+    },
+    {
+      "id": "white-rhino",
+      "description": "The largest extant rhinoceros.",
+      "wiki": "https://en.wikipedia.org/wiki/White_rhinoceros"
+    },
+    {
+      "id": "giraffe",
+      "description": "Large African hoofed mammals.",
+      "wiki": "https://en.wikipedia.org/wiki/Giraffe"
+    },
+    {
+      "id": "plains-zebra",
+      "description": "The most common and geographically widespread zebra.",
+      "wiki": "https://en.wikipedia.org/wiki/Plains_zebra"
+    },
+    {
+      "id": "hippo",
+      "description": "A large semiaquatic mammal native to sub-Saharan Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Hippopotamus"
+    },
+    {
+      "id": "malayan-tapir",
+      "description": "The only living tapir species outside of the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Malayan_tapir"
+    },
+    {
+      "id": "sunda-pangolin",
+      "description": "A pangolin.",
+      "wiki": "https://en.wikipedia.org/wiki/Sunda_pangolin"
+    },
+    {
+      "id": "komodo-dragon",
+      "description": "A large reptile of the monitor lizard family Varanidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Komodo_dragon"
+    },
+    {
+      "id": "saltwater-crocodile",
+      "description": "A crocodilian native to saltwater habitats, brackish wetlands.",
+      "wiki": "https://en.wikipedia.org/wiki/Saltwater_crocodile"
+    },
+    {
+      "id": "emu",
+      "description": "A flightless bird endemic to Australia, where it is the tallest native bird.",
+      "wiki": "https://en.wikipedia.org/wiki/Emu"
+    },
+    {
+      "id": "common-ostrich",
+      "description": "A flightless bird native to certain areas of Africa and is the largest living bird.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_ostrich"
+    },
+    {
+      "id": "brown-kiwi",
+      "description": "A nocturnal flightless bird and kiwi.",
+      "wiki": "https://en.wikipedia.org/wiki/North_Island_brown_kiwi"
+    },
+    {
+      "id": "kakapo",
+      "description": "A large, nocturnal, ground-dwelling parrot of the superfamily Strigopoidea.",
+      "wiki": "https://en.wikipedia.org/wiki/K%C4%81k%C4%81p%C5%8D"
+    },
+    {
+      "id": "indian-peafowl",
+      "description": "A peafowl native to the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Indian_peafowl"
+    },
+    {
+      "id": "axolotl",
+      "description": "A mole salamander.",
+      "wiki": "https://en.wikipedia.org/wiki/Axolotl"
+    },
+    {
+      "id": "chinese-giant-salamander",
+      "description": "The largest salamander and the largest amphibian in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Chinese_giant_salamander"
+    },
+    {
+      "id": "bald-eagle",
+      "description": "A bird of prey found in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Bald_eagle"
+    },
+    {
+      "id": "peregrine-falcon",
+      "description": "A bird of prey in the family Falconidae known for its speed.",
+      "wiki": "https://en.wikipedia.org/wiki/Peregrine_falcon"
+    },
+    {
+      "id": "philippine-eagle",
+      "description": "A critically endangered eagle of the family Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Philippine_eagle"
+    },
+    {
+      "id": "california-condor",
+      "description": "A New World vulture and the largest North American land bird.",
+      "wiki": "https://en.wikipedia.org/wiki/California_condor"
+    },
+    {
+      "id": "barn-owl",
+      "description": "A barn owl native to Europe, southwestern Asia, and Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_barn_owl"
+    },
+    {
+      "id": "snowy-owl",
+      "description": "A large, white owl of the true owl family.",
+      "wiki": "https://en.wikipedia.org/wiki/Snowy_owl"
+    },
+    {
+      "id": "african-grey-parrot",
+      "description": "An African parrot in the family Psittacidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Grey_parrot"
+    },
+    {
+      "id": "greater-flamingo",
+      "description": "The largest and most widespread flamingo family.",
+      "wiki": "https://en.wikipedia.org/wiki/Greater_flamingo"
+    },
+    {
+      "id": "red-crowned-crane",
+      "description": "A large Northeast Asian crane among the rarest cranes in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Red-crowned_crane"
+    },
+    {
+      "id": "white-stork",
+      "description": "A large bird in the stork family, Ciconiidae.",
+      "wiki": "https://en.wikipedia.org/wiki/White_stork"
+    },
+    {
+      "id": "northern-lapwing",
+      "description": "A bird in the lapwing subfamily.",
+      "wiki": "https://en.wikipedia.org/wiki/Northern_lapwing"
+    },
+    {
+      "id": "ruby-throated-hummingbird",
+      "description": "A hummingbird that generally spends the winter in Central America, Mexico, and Florida.",
+      "wiki": "https://en.wikipedia.org/wiki/Ruby-throated_hummingbird"
+    },
+    {
+      "id": "common-kingfisher",
+      "description": "A small kingfisher with seven subspecies recognized within its wide distribution across Eurasia.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_kingfisher"
+    },
+    {
+      "id": "eurasian-magpie",
+      "description": "A resident breeding bird throughout the northern part of the Eurasian continent.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_magpie"
+    },
+    {
+      "id": "mallard",
+      "description": "A dabbling duck that breeds throughout temperate and subtropical North America, Eurasia, and North Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Mallard"
+    },
+    {
+      "id": "atlantic-puffin",
+      "description": "A seabird in the auk family.",
+      "wiki": "https://en.wikipedia.org/wiki/Atlantic_puffin"
+    },
+    {
+      "id": "wandering-albatross",
+      "description": "A large seabird from the family Diomedeidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Snowy_albatross"
+    },
+    {
+      "id": "grey-headed-flying-fox",
+      "description": "A megabat native to Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Grey-headed_flying_fox"
+    },
+    {
+      "id": "killer-whale",
+      "description": "A toothed whale and the largest member of the oceanic dolphin family.",
+      "wiki": "https://en.wikipedia.org/wiki/Orca"
+    },
+    {
+      "id": "blue-whale",
+      "description": "A baleen whale and the largest marine mammal in the rorqual family Balaenopteridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Blue_whale"
+    },
+    {
+      "id": "humpback-whale",
+      "description": "A baleen whale.",
+      "wiki": "https://en.wikipedia.org/wiki/Humpback_whale"
+    },
+    {
+      "id": "vaquita",
+      "description": "A porpoise endemic to the northern end of the Gulf of California in Baja California.",
+      "wiki": "https://en.wikipedia.org/wiki/Vaquita"
+    },
+    {
+      "id": "bottlenose-dolphin",
+      "description": "A toothed whale in the genus Tursiops.",
+      "wiki": "https://en.wikipedia.org/wiki/Bottlenose_dolphin"
+    },
+    {
+      "id": "great-white-shark",
+      "description": "A large shark.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_white_shark"
+    },
+    {
+      "id": "whale-shark",
+      "description": "A slow-moving, filter-feeding carpet shark and the largest known extant fish species.",
+      "wiki": "https://en.wikipedia.org/wiki/Whale_shark"
+    },
+    {
+      "id": "great-hammerhead",
+      "description": "The largest hammerhead shark, belonging to the family Sphyrnidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_hammerhead"
+    },
+    {
+      "id": "hawksbill-turtle",
+      "description": "A critically endangered sea turtle belonging to the family Cheloniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Hawksbill_sea_turtle"
+    },
+    {
+      "id": "leatherback-turtle",
+      "description": "A large sea turtle.",
+      "wiki": "https://en.wikipedia.org/wiki/Leatherback_sea_turtle"
+    },
+    {
+      "id": "common-octopus",
+      "description": "A mollusk belonging to the class Cephalopoda.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_octopus"
+    },
+    {
+      "id": "dugong",
+      "description": "A marine mammal.",
+      "wiki": "https://en.wikipedia.org/wiki/Dugong"
+    },
+    {
+      "id": "west-indian-manatee",
+      "description": "A large, aquatic mammal native to warm coastal areas of the Caribbean.",
+      "wiki": "https://en.wikipedia.org/wiki/West_Indian_manatee"
+    },
+    {
+      "id": "sea-otter",
+      "description": "A marine mammal native to the coasts of the northern and eastern North Pacific Ocean.",
+      "wiki": "https://en.wikipedia.org/wiki/Sea_otter"
+    },
+    {
+      "id": "harbour-seal",
+      "description": "A true seal found along temperate and Arctic marine coastlines of the Northern Hemisphere.",
+      "wiki": "https://en.wikipedia.org/wiki/Harbor_seal"
+    },
+    {
+      "id": "emperor-penguin",
+      "description": "The tallest and heaviest of all living penguin species and is endemic to Antarctica.",
+      "wiki": "https://en.wikipedia.org/wiki/Emperor_penguin"
+    },
+    {
+      "id": "african-penguin",
+      "description": "A penguin confined to southern African waters.",
+      "wiki": "https://en.wikipedia.org/wiki/African_penguin"
+    },
+    {
+      "id": "penguin",
+      "description": "Flightless semi-aquatic sea birds which live almost exclusively in the Southern Hemisphere.",
+      "wiki": "https://en.wikipedia.org/wiki/Penguin"
+    },
+    {
+      "id": "bear",
+      "description": "Carnivoran mammals of the family Ursidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Bear"
+    },
+    {
+      "id": "big-cat",
+      "description": "Sometimes used to mean any of the five living members of the genus Panthera.",
+      "wiki": "https://en.wikipedia.org/wiki/Big_cat"
+    },
+    {
+      "id": "sea-turtle",
+      "description": "Reptiles of the order Testudines and of the suborder Cryptodira.",
+      "wiki": "https://en.wikipedia.org/wiki/Sea_turtle"
+    },
+    {
+      "id": "crocodile",
+      "description": "A large, semiaquatic reptile that lives throughout the tropics in Africa, Asia, the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Crocodile"
+    },
+    {
+      "id": "seal",
+      "description": "One of the three main groups of mammals within the seal lineage, Pinnipedia.",
+      "wiki": "https://en.wikipedia.org/wiki/Earless_seal"
+    },
+    {
+      "id": "elephant",
+      "description": "The largest living land animals.",
+      "wiki": "https://en.wikipedia.org/wiki/Elephant"
+    },
+    {
+      "id": "rhinoceros",
+      "description": "A member of any of the five extant odd-toed ungulates in the family Rhinocerotidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Rhinoceros"
+    },
+    {
+      "id": "orangutan",
+      "description": "Great apes native to the rainforests of Indonesia and Malaysia.",
+      "wiki": "https://en.wikipedia.org/wiki/Orangutan"
+    },
+    {
+      "id": "whale",
+      "description": "Widely distributed and diverse fully aquatic placental marine mammals.",
+      "wiki": "https://en.wikipedia.org/wiki/Whale"
+    },
+    {
+      "id": "dolphin",
+      "description": "Any one of the 40 extant aquatic mammal from the cetacean families Delphinidae, Platanistidae, Iniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Dolphin"
+    },
+    {
+      "id": "shark",
+      "description": "Elasmobranch cartilaginous fishes characterized by a ribless endoskeleton, dermal denticles.",
+      "wiki": "https://en.wikipedia.org/wiki/Shark"
+    },
+    {
+      "id": "eagle",
+      "description": "The common name for certain large predatory birds of prey within the Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Eagle"
+    },
+    {
+      "id": "owl",
+      "description": "Birds from the order Strigiformes, which includes over 200 mostly solitary.",
+      "wiki": "https://en.wikipedia.org/wiki/Owl"
+    },
+    {
+      "id": "parrot",
+      "description": "Birds with a strong curved beak, upright stance, and clawed feet.",
+      "wiki": "https://en.wikipedia.org/wiki/Parrot"
+    },
+    {
+      "id": "salamander",
+      "description": "Amphibians typically characterized by their lizard-like appearance, with slender bodies, blunt snouts.",
+      "wiki": "https://en.wikipedia.org/wiki/Salamander"
+    },
+    {
+      "id": "wolf",
+      "description": "A Caninae which includes multiple extant species, such as wolves, dogs, coyotes, and golden jackals.",
+      "wiki": "https://en.wikipedia.org/wiki/Canis"
+    },
+    {
+      "id": "fox",
+      "description": "Small-to-medium-sized omnivorous mammals belonging to several genera of the family Canidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Fox"
+    },
+    {
+      "id": "kangaroo",
+      "description": "Marsupials from the subfamily Macropodinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Kangaroo"
+    },
+    {
+      "id": "echidna",
+      "description": "Quill-covered monotremes belonging to the family Tachyglossidae, living in Australia and New Guinea.",
+      "wiki": "https://en.wikipedia.org/wiki/Echidna"
+    },
+    {
+      "id": "hedgehog",
+      "description": "A spiny mammal of the subfamily Erinaceinae, in the eulipotyphlan family Erinaceidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Hedgehog"
+    },
+    {
+      "id": "rabbit",
+      "description": "Small mammals in the family Leporidae, which is in the order Lagomorpha.",
+      "wiki": "https://en.wikipedia.org/wiki/Rabbit"
+    },
+    {
+      "id": "mouse",
+      "description": "A small rodent, characteristically known to have a pointed snout, small rounded ears.",
+      "wiki": "https://en.wikipedia.org/wiki/Mouse"
+    },
+    {
+      "id": "gorilla",
+      "description": "Large, primarily herbivorous, great apes that live in the tropical forests of equatorial Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Gorilla"
+    },
+    {
+      "id": "lemur",
+      "description": "Wet-nosed primates of the superfamily Lemuroidea, divided into eight families and consisting of 15 genera.",
+      "wiki": "https://en.wikipedia.org/wiki/Lemur"
+    },
+    {
+      "id": "zebra",
+      "description": "African equines with distinctive black-and-white striped coats.",
+      "wiki": "https://en.wikipedia.org/wiki/Zebra"
+    },
+    {
+      "id": "tapir",
+      "description": "Large herbivorous mammals belonging to the family Tapiridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Tapir"
+    },
+    {
+      "id": "pangolin",
+      "description": "Mammals of the order Pholidota.",
+      "wiki": "https://en.wikipedia.org/wiki/Pangolin"
+    },
+    {
+      "id": "kiwi",
+      "description": "Flightless birds endemic to New Zealand of the order Apterygiformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Kiwi_(bird)"
+    },
+    {
+      "id": "ostrich",
+      "description": "Large flightless birds.",
+      "wiki": "https://en.wikipedia.org/wiki/Ostrich"
+    },
+    {
+      "id": "peafowl",
+      "description": "A common name for two bird genus Pavo.",
+      "wiki": "https://en.wikipedia.org/wiki/Peafowl"
+    },
+    {
+      "id": "giant-salamander",
+      "description": "Large salamanders that are fully aquatic.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_salamander"
+    },
+    {
+      "id": "falcon",
+      "description": "Birds of prey in the genus Falco, which includes about 40 species.",
+      "wiki": "https://en.wikipedia.org/wiki/Falcon"
+    },
+    {
+      "id": "condor",
+      "description": "The common name for two genera of New World vultures, each with one extant species.",
+      "wiki": "https://en.wikipedia.org/wiki/Condor"
+    },
+    {
+      "id": "flamingo",
+      "description": "Wading bird in the family Phoenicopteridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Flamingo"
+    },
+    {
+      "id": "crane",
+      "description": "Large bird with long legs.",
+      "wiki": "https://en.wikipedia.org/wiki/Crane_(bird)"
+    },
+    {
+      "id": "stork",
+      "description": "Large, long-legged, long-necked wading birds with long, stout bills.",
+      "wiki": "https://en.wikipedia.org/wiki/Stork"
+    },
+    {
+      "id": "lapwing",
+      "description": "Any of various ground-nesting birds akin to plovers and dotterels.",
+      "wiki": "https://en.wikipedia.org/wiki/Lapwing"
+    },
+    {
+      "id": "hummingbird",
+      "description": "Birds native to the Americas and comprise the biological family Trochilidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Hummingbird"
+    },
+    {
+      "id": "kingfisher",
+      "description": "Family, the Alcedinidae, of small to medium-sized, brightly coloured birds in the order Coraciiformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Kingfisher"
+    },
+    {
+      "id": "magpie",
+      "description": "Birds of various family Corvidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Magpie"
+    },
+    {
+      "id": "duck",
+      "description": "The common name for numerous waterfowl in the family Anatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Duck"
+    },
+    {
+      "id": "puffin",
+      "description": "Any of three small alcids in the bird genus Fratercula.",
+      "wiki": "https://en.wikipedia.org/wiki/Puffin"
+    },
+    {
+      "id": "albatross",
+      "description": "Large seabirds related to the procellariids, storm petrels, and diving petrels in the order Procellariiformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Albatross"
+    },
+    {
+      "id": "flying-fox",
+      "description": "A megabats which are among the largest bats in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Pteropus"
+    },
+    {
+      "id": "hammerhead-shark",
+      "description": "Sharks that form the family Sphyrnidae, named for the unusual.",
+      "wiki": "https://en.wikipedia.org/wiki/Hammerhead_shark"
+    },
+    {
+      "id": "octopus",
+      "description": "A soft-bodied, eight-limbed mollusc of the order Octopoda.",
+      "wiki": "https://en.wikipedia.org/wiki/Octopus"
+    },
+    {
+      "id": "sea-cow",
+      "description": "Fully aquatic, herbivorous mammals that inhabit swamps, rivers, estuaries, marine wetlands, and coastal marine waters.",
+      "wiki": "https://en.wikipedia.org/wiki/Sirenia"
+    },
+    {
+      "id": "manatee",
+      "description": "Large, fully aquatic, mostly herbivorous marine mammals sometimes known as sea cows.",
+      "wiki": "https://en.wikipedia.org/wiki/Manatee"
+    },
+    {
+      "id": "frog",
+      "description": "Any member of a diverse and largely semiaquatic short-bodied.",
+      "wiki": "https://en.wikipedia.org/wiki/Frog"
+    },
+    {
+      "id": "snake",
+      "description": "Limbless reptiles of the squamate suborder Serpentes.",
+      "wiki": "https://en.wikipedia.org/wiki/Snake"
+    },
+    {
+      "id": "lizard",
+      "description": "The common name used for all squamate reptiles that are not snakes, encompassing over 7.",
+      "wiki": "https://en.wikipedia.org/wiki/Lizard"
+    },
+    {
+      "id": "tortoise",
+      "description": "Reptiles of the family Testudinidae of the order Testudines.",
+      "wiki": "https://en.wikipedia.org/wiki/Tortoise"
+    },
+    {
+      "id": "deer",
+      "description": "A hoofed ruminant ungulate of the family Cervidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Deer"
+    },
+    {
+      "id": "antelope",
+      "description": "Any of the extant or recently extinct ruminant artiodactyl family Bovidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Antelope"
+    },
+    {
+      "id": "monkey",
+      "description": "A common name that may refer to most mammals of the infraorder Simiiformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Monkey"
+    },
+    {
+      "id": "squirrel",
+      "description": "Members of the family Sciuridae, a family that includes small or medium-sized rodents.",
+      "wiki": "https://en.wikipedia.org/wiki/Squirrel"
+    },
+    {
+      "id": "hawk",
+      "description": "Birds of prey of the family Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Hawk"
+    },
+    {
+      "id": "gull",
+      "description": "Seabirds of the subfamily Larinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Gull"
+    },
+    {
+      "id": "heron",
+      "description": "Long-legged, long-necked, freshwater and coastal birds in the family Ardeidae, with 75 recognised species.",
+      "wiki": "https://en.wikipedia.org/wiki/Heron"
+    },
+    {
+      "id": "swan",
+      "description": "Birds of the genus Cygnus within the family Anatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Swan"
+    },
+    {
+      "id": "goose",
+      "description": "A bird of any of several waterfowl species in the family Anatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Goose"
+    },
+    {
+      "id": "woodpecker",
+      "description": "Part of the bird family Picidae, which also includes the piculets, wrynecks, and sapsuckers.",
+      "wiki": "https://en.wikipedia.org/wiki/Woodpecker"
+    },
+    {
+      "id": "hornbill",
+      "description": "Birds found in tropical and subtropical Africa, Asia and Melanesia of the family Bucerotidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Hornbill"
+    },
+    {
+      "id": "toucan",
+      "description": "Neotropical birds in the family Ramphastidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Toucan"
+    },
+    {
+      "id": "ray",
+      "description": "A division of cartilaginous fishes, commonly known as rays.",
+      "wiki": "https://en.wikipedia.org/wiki/Batomorphi"
+    },
+    {
+      "id": "jellyfish",
+      "description": "The medusa-phase of certain gelatinous members of the subphylum Medusozoa.",
+      "wiki": "https://en.wikipedia.org/wiki/Jellyfish"
+    },
+    {
+      "id": "crab",
+      "description": "Decapod crustaceans, either the Brachyura or various groups within the closely related Anomura.",
+      "wiki": "https://en.wikipedia.org/wiki/Crab"
+    },
+    {
+      "id": "butterfly",
+      "description": "Winged insects from the lepidopteran superfamily Papilionoidea, characterised by large, often brightly coloured wings.",
+      "wiki": "https://en.wikipedia.org/wiki/Butterfly"
+    },
+    {
+      "id": "bee",
+      "description": "Winged insects that form a monophyletic clade Anthophila within the superfamily Apoidea of the order.",
+      "wiki": "https://en.wikipedia.org/wiki/Bee"
+    },
+    {
+      "id": "beetle",
+      "description": "Insects that form the order Coleoptera, in the superorder Holometabola.",
+      "wiki": "https://en.wikipedia.org/wiki/Beetle"
+    },
+    {
+      "id": "ant",
+      "description": "Eusocial insects of the family Formicidae and, along with the related wasps and bees.",
+      "wiki": "https://en.wikipedia.org/wiki/Ant"
+    },
+    {
+      "id": "spider",
+      "description": "Air-breathing arthropods that have eight limbs, chelicerae with fangs generally able to inject venom.",
+      "wiki": "https://en.wikipedia.org/wiki/Spider"
+    },
+    {
+      "id": "scorpion",
+      "description": "Predatory arachnids with eight legs, a pair of grasping pincers and a narrow, segmented tail.",
+      "wiki": "https://en.wikipedia.org/wiki/Scorpion"
+    },
+    {
+      "id": "otter",
+      "description": "Carnivorous mammals in the subfamily Lutrinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Otter"
+    },
+    {
+      "id": "camel",
+      "description": "An even-toed ungulate in the genus Camelus.",
+      "wiki": "https://en.wikipedia.org/wiki/Camel"
+    },
+    {
+      "id": "bat",
+      "description": "Winged mammals, the only mammals capable of true and sustained flight.",
+      "wiki": "https://en.wikipedia.org/wiki/Bat"
+    },
+    {
+      "id": "hare",
+      "description": "Mammals belonging to the genus Lepus.",
+      "wiki": "https://en.wikipedia.org/wiki/Hare"
+    },
+    {
+      "id": "gibbon",
+      "description": "Apes in the family Hylobatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Gibbon"
+    },
+    {
+      "id": "pelican",
+      "description": "Large water birds that make up the family Pelecanidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Pelican"
+    },
+    {
+      "id": "vulture",
+      "description": "A bird of prey that scavenges on carrion.",
+      "wiki": "https://en.wikipedia.org/wiki/Vulture"
+    },
+    {
+      "id": "king-penguin",
+      "description": "The second largest penguin, smaller than but somewhat similar in appearance to the emperor penguin.",
+      "wiki": "https://en.wikipedia.org/wiki/King_penguin"
+    },
+    {
+      "id": "adelie-penguin",
+      "description": "A penguin common along the entire coast of the Antarctic continent.",
+      "wiki": "https://en.wikipedia.org/wiki/Ad%C3%A9lie_penguin"
+    },
+    {
+      "id": "gentoo-penguin",
+      "description": "A penguin species in the genus Pygoscelis, most closely related to the Adélie penguin.",
+      "wiki": "https://en.wikipedia.org/wiki/Gentoo_penguin"
+    },
+    {
+      "id": "chinstrap-penguin",
+      "description": "A penguin species that inhabits various islands and shores in the Southern Pacific.",
+      "wiki": "https://en.wikipedia.org/wiki/Chinstrap_penguin"
+    },
+    {
+      "id": "little-penguin",
+      "description": "The smallest penguin in the world, and originates from New Zealand and Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Little_penguin"
+    },
+    {
+      "id": "macaroni-penguin",
+      "description": "A penguin found from the Subantarctic to the Antarctic Peninsula.",
+      "wiki": "https://en.wikipedia.org/wiki/Macaroni_penguin"
+    },
+    {
+      "id": "humboldt-penguin",
+      "description": "A medium-sized penguin.",
+      "wiki": "https://en.wikipedia.org/wiki/Humboldt_penguin"
+    },
+    {
+      "id": "southern-rockhopper-penguin",
+      "description": "A rockhopper penguin.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_rockhopper_penguin"
+    },
+    {
+      "id": "yellow-eyed-penguin",
+      "description": "A penguin endemic to New Zealand.",
+      "wiki": "https://en.wikipedia.org/wiki/Yellow-eyed_penguin"
+    },
+    {
+      "id": "galapagos-penguin",
+      "description": "A penguin endemic to the Galápagos Islands of Ecuador.",
+      "wiki": "https://en.wikipedia.org/wiki/Galapagos_penguin"
+    },
+    {
+      "id": "sun-bear",
+      "description": "A bear species in the family Ursidae found in the tropical forests of Southeast Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Sun_bear"
+    },
+    {
+      "id": "sloth-bear",
+      "description": "A myrmecophagous bear species native to the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Sloth_bear"
+    },
+    {
+      "id": "american-black-bear",
+      "description": "A medium-sized bear which is endemic to North America.",
+      "wiki": "https://en.wikipedia.org/wiki/American_black_bear"
+    },
+    {
+      "id": "asian-black-bear",
+      "description": "A medium-sized bear species native to Asia that is largely adapted to an arboreal lifestyle.",
+      "wiki": "https://en.wikipedia.org/wiki/Asian_black_bear"
+    },
+    {
+      "id": "spectacled-bear",
+      "description": "A bear native to the Andes Mountains in northern and western South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Spectacled_bear"
+    },
+    {
+      "id": "leopard",
+      "description": "One of the five extant cat species in the genus Panthera.",
+      "wiki": "https://en.wikipedia.org/wiki/Leopard"
+    },
+    {
+      "id": "jaguar",
+      "description": "A large cat species and the only living member of the genus Panthera.",
+      "wiki": "https://en.wikipedia.org/wiki/Jaguar"
+    },
+    {
+      "id": "clouded-leopard",
+      "description": "A wild cat that has large dusky-grey blotches and irregular spots.",
+      "wiki": "https://en.wikipedia.org/wiki/Clouded_leopard"
+    },
+    {
+      "id": "green-sea-turtle",
+      "description": "A large sea turtle of the family Cheloniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Green_sea_turtle"
+    },
+    {
+      "id": "loggerhead-sea-turtle",
+      "description": "A sea turtle distributed throughout the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Loggerhead_sea_turtle"
+    },
+    {
+      "id": "olive-ridley-sea-turtle",
+      "description": "A turtle in the family Cheloniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Olive_ridley_sea_turtle"
+    },
+    {
+      "id": "kemps-ridley-sea-turtle",
+      "description": "A turtle in the family Cheloniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Kemp's_ridley_sea_turtle"
+    },
+    {
+      "id": "nile-crocodile",
+      "description": "A large crocodilian native to freshwater habitats in Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Nile_crocodile"
+    },
+    {
+      "id": "american-crocodile",
+      "description": "A crocodilian found in the Neotropics.",
+      "wiki": "https://en.wikipedia.org/wiki/American_crocodile"
+    },
+    {
+      "id": "mugger-crocodile",
+      "description": "A medium-sized broad-snouted crocodile, also known as mugger and marsh crocodile.",
+      "wiki": "https://en.wikipedia.org/wiki/Mugger_crocodile"
+    },
+    {
+      "id": "grey-seal",
+      "description": "A large seal of the family Phocidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Grey_seal"
+    },
+    {
+      "id": "leopard-seal",
+      "description": "A long and muscular seal native to the Southern Ocean of Antarctica and southern Patagonia.",
+      "wiki": "https://en.wikipedia.org/wiki/Leopard_seal"
+    },
+    {
+      "id": "weddell-seal",
+      "description": "A relatively large and abundant true seal with a circumpolar distribution surrounding Antarctica.",
+      "wiki": "https://en.wikipedia.org/wiki/Weddell_seal"
+    },
+    {
+      "id": "harp-seal",
+      "description": "An earless seal, or true seal, native to the northernmost Atlantic Ocean and Arctic Ocean.",
+      "wiki": "https://en.wikipedia.org/wiki/Harp_seal"
+    },
+    {
+      "id": "southern-elephant-seal",
+      "description": "One of two elephant seals.",
+      "wiki": "https://en.wikipedia.org/wiki/Southern_elephant_seal"
+    },
+    {
+      "id": "hawaiian-monk-seal",
+      "description": "A vulnerable earless seal in the family Phocidae that is endemic to the Hawaiian Islands.",
+      "wiki": "https://en.wikipedia.org/wiki/Hawaiian_monk_seal"
+    },
+    {
+      "id": "african-forest-elephant",
+      "description": "An elephant species native to humid tropical forests in West Africa and the Congo Basin.",
+      "wiki": "https://en.wikipedia.org/wiki/African_forest_elephant"
+    },
+    {
+      "id": "indian-rhinoceros",
+      "description": "A rhinoceros species native to the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Indian_rhinoceros"
+    },
+    {
+      "id": "sumatran-rhinoceros",
+      "description": "A rare member of the family Rhinocerotidae and one of five extant rhinoceros.",
+      "wiki": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros"
+    },
+    {
+      "id": "javan-rhinoceros",
+      "description": "A critically endangered member of the genus Rhinoceros of the family Rhinocerotidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Javan_rhinoceros"
+    },
+    {
+      "id": "tapanuli-orangutan",
+      "description": "An orangutan restricted to South Tapanuli in the island of Sumatra in Indonesia.",
+      "wiki": "https://en.wikipedia.org/wiki/Tapanuli_orangutan"
+    },
+    {
+      "id": "fin-whale",
+      "description": "A baleen whale and the second-longest cetacean after the blue whale.",
+      "wiki": "https://en.wikipedia.org/wiki/Fin_whale"
+    },
+    {
+      "id": "sperm-whale",
+      "description": "The largest of the toothed whales and the largest toothed predator.",
+      "wiki": "https://en.wikipedia.org/wiki/Sperm_whale"
+    },
+    {
+      "id": "common-minke-whale",
+      "description": "A minke whale within the suborder of baleen whales.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_minke_whale"
+    },
+    {
+      "id": "bowhead-whale",
+      "description": "A baleen whale belonging to the family Balaenidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Bowhead_whale"
+    },
+    {
+      "id": "north-atlantic-right-whale",
+      "description": "A baleen whale, one of three right whale species belonging to the genus Eubalaena.",
+      "wiki": "https://en.wikipedia.org/wiki/North_Atlantic_right_whale"
+    },
+    {
+      "id": "gray-whale",
+      "description": "A baleen whale that migrates between feeding and breeding grounds yearly.",
+      "wiki": "https://en.wikipedia.org/wiki/Gray_whale"
+    },
+    {
+      "id": "beluga-whale",
+      "description": "An Arctic and sub-Arctic cetacean.",
+      "wiki": "https://en.wikipedia.org/wiki/Beluga_whale"
+    },
+    {
+      "id": "narwhal",
+      "description": "A toothed whale native to the Arctic.",
+      "wiki": "https://en.wikipedia.org/wiki/Narwhal"
+    },
+    {
+      "id": "short-beaked-common-dolphin",
+      "description": "The most abundant cetacean in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_dolphin"
+    },
+    {
+      "id": "amazon-river-dolphin",
+      "description": "A toothed whale endemic to South America and is classified in the family Iniidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Amazon_river_dolphin"
+    },
+    {
+      "id": "rissos-dolphin",
+      "description": "The only genus Grampus in the family Delphinidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Risso's_dolphin"
+    },
+    {
+      "id": "hectors-dolphin",
+      "description": "One of six dolphin species belonging to the genus Cephalorhynchus.",
+      "wiki": "https://en.wikipedia.org/wiki/Hector's_dolphin"
+    },
+    {
+      "id": "spinner-dolphin",
+      "description": "A small dolphin found in off-shore tropical waters around the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Spinner_dolphin"
+    },
+    {
+      "id": "tiger-shark",
+      "description": "A ground shark, and the only extant member of the genus Galeocerdo and family Galeocerdonidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Tiger_shark"
+    },
+    {
+      "id": "bull-shark",
+      "description": "A requiem shark commonly found worldwide in warm, shallow waters along coasts and in rivers.",
+      "wiki": "https://en.wikipedia.org/wiki/Bull_shark"
+    },
+    {
+      "id": "shortfin-mako-shark",
+      "description": "A large mackerel shark.",
+      "wiki": "https://en.wikipedia.org/wiki/Shortfin_mako_shark"
+    },
+    {
+      "id": "basking-shark",
+      "description": "The second-largest living shark and fish, after the whale shark.",
+      "wiki": "https://en.wikipedia.org/wiki/Basking_shark"
+    },
+    {
+      "id": "blue-shark",
+      "description": "A requiem shark in the family Carcharhinidae which inhabits deep waters in the world's temperate.",
+      "wiki": "https://en.wikipedia.org/wiki/Blue_shark"
+    },
+    {
+      "id": "nurse-shark",
+      "description": "An elasmobranch fish in the family Ginglymostomatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Nurse_shark"
+    },
+    {
+      "id": "greenland-shark",
+      "description": "A large shark of the family Somniosidae, closely related to the Pacific.",
+      "wiki": "https://en.wikipedia.org/wiki/Greenland_shark"
+    },
+    {
+      "id": "scalloped-hammerhead",
+      "description": "A hammerhead shark in the family Sphyrnidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Scalloped_hammerhead"
+    },
+    {
+      "id": "golden-eagle",
+      "description": "A bird of prey living in the Northern Hemisphere.",
+      "wiki": "https://en.wikipedia.org/wiki/Golden_eagle"
+    },
+    {
+      "id": "harpy-eagle",
+      "description": "A large neotropical eagle.",
+      "wiki": "https://en.wikipedia.org/wiki/Harpy_eagle"
+    },
+    {
+      "id": "white-tailed-eagle",
+      "description": "A large bird of prey, widely distributed across temperate Eurasia.",
+      "wiki": "https://en.wikipedia.org/wiki/White-tailed_eagle"
+    },
+    {
+      "id": "stellers-sea-eagle",
+      "description": "A very large diurnal bird of prey in the family Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Steller's_sea_eagle"
+    },
+    {
+      "id": "martial-eagle",
+      "description": "A large eagle native to sub-Saharan Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Martial_eagle"
+    },
+    {
+      "id": "great-horned-owl",
+      "description": "A large owl native to the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_horned_owl"
+    },
+    {
+      "id": "eurasian-eagle-owl",
+      "description": "An eagle-owl, a bird that resides much over Eurasia.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_eagle-owl"
+    },
+    {
+      "id": "tawny-owl",
+      "description": "A stocky, medium-sized owl in the family Strigidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Tawny_owl"
+    },
+    {
+      "id": "burrowing-owl",
+      "description": "A small, long-legged, primarily terrestrial—though not flightless—owl native to the open landscapes of North.",
+      "wiki": "https://en.wikipedia.org/wiki/Burrowing_owl"
+    },
+    {
+      "id": "little-owl",
+      "description": "A bird that inhabits much of the temperate and warmer parts of Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Little_owl"
+    },
+    {
+      "id": "scarlet-macaw",
+      "description": "A large yellow, green, red.",
+      "wiki": "https://en.wikipedia.org/wiki/Scarlet_macaw"
+    },
+    {
+      "id": "hyacinth-macaw",
+      "description": "A large parrot native to central and eastern South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Hyacinth_macaw"
+    },
+    {
+      "id": "budgerigar",
+      "description": "A small, long-tailed, seed-eating parrot native to Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Budgerigar"
+    },
+    {
+      "id": "cockatiel",
+      "description": "A small- to medium-sized parrot belonging to the cockatoo family.",
+      "wiki": "https://en.wikipedia.org/wiki/Cockatiel"
+    },
+    {
+      "id": "sulphur-crested-cockatoo",
+      "description": "A relatively large white cockatoo found in wooded habitats in Australia, New Guinea.",
+      "wiki": "https://en.wikipedia.org/wiki/Sulphur-crested_cockatoo"
+    },
+    {
+      "id": "kea",
+      "description": "A large parrot in the family Strigopidae that is endemic to the forested.",
+      "wiki": "https://en.wikipedia.org/wiki/Kea"
+    },
+    {
+      "id": "rainbow-lorikeet",
+      "description": "A parrot found in Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Rainbow_lorikeet"
+    },
+    {
+      "id": "fire-salamander",
+      "description": "A common salamander found in Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Fire_salamander"
+    },
+    {
+      "id": "japanese-giant-salamander",
+      "description": "A fully aquatic giant salamander endemic to Japan.",
+      "wiki": "https://en.wikipedia.org/wiki/Japanese_giant_salamander"
+    },
+    {
+      "id": "hellbender",
+      "description": "An aquatic giant salamander endemic to the eastern and central United States.",
+      "wiki": "https://en.wikipedia.org/wiki/Hellbender"
+    },
+    {
+      "id": "olm",
+      "description": "The nine species in the genus Proteus.",
+      "wiki": "https://en.wikipedia.org/wiki/Olm"
+    },
+    {
+      "id": "great-crested-newt",
+      "description": "A newt species native to Great Britain, northern and central continental Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Northern_crested_newt"
+    },
+    {
+      "id": "ethiopian-wolf",
+      "description": "A canine native to the Ethiopian Highlands, including the Simien Mountains.",
+      "wiki": "https://en.wikipedia.org/wiki/Ethiopian_wolf"
+    },
+    {
+      "id": "red-wolf",
+      "description": "A canine native to the southeastern United States.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_wolf"
+    },
+    {
+      "id": "arctic-fox",
+      "description": "A small fox native to the Arctic regions of the Northern Hemisphere.",
+      "wiki": "https://en.wikipedia.org/wiki/Arctic_fox"
+    },
+    {
+      "id": "fennec-fox",
+      "description": "A small fox native to the deserts of North Africa, ranging from Western Sahara.",
+      "wiki": "https://en.wikipedia.org/wiki/Fennec_fox"
+    },
+    {
+      "id": "kit-fox",
+      "description": "A fox species that inhabits arid and semi-arid regions of the Southwestern United States.",
+      "wiki": "https://en.wikipedia.org/wiki/Kit_fox"
+    },
+    {
+      "id": "gray-fox",
+      "description": "An omnivorous mammal of the family Canidae, widespread throughout North America and Central America.",
+      "wiki": "https://en.wikipedia.org/wiki/Gray_fox"
+    },
+    {
+      "id": "eastern-grey-kangaroo",
+      "description": "A marsupial found in the eastern third of Australia, with a population of several million.",
+      "wiki": "https://en.wikipedia.org/wiki/Eastern_grey_kangaroo"
+    },
+    {
+      "id": "western-grey-kangaroo",
+      "description": "A large and very common kangaroo found across almost the entire southern part of Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_grey_kangaroo"
+    },
+    {
+      "id": "western-long-beaked-echidna",
+      "description": "One of the four extant echidnas and one of three Zaglossus.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_long-beaked_echidna"
+    },
+    {
+      "id": "four-toed-hedgehog",
+      "description": "A hedgehog found throughout much of central and eastern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Four-toed_hedgehog"
+    },
+    {
+      "id": "pygmy-rabbit",
+      "description": "A rabbit species native to the United States.",
+      "wiki": "https://en.wikipedia.org/wiki/Pygmy_rabbit"
+    },
+    {
+      "id": "wood-mouse",
+      "description": "A murid rodent native to Europe and northwestern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Wood_mouse"
+    },
+    {
+      "id": "western-gorilla",
+      "description": "A great ape found in Africa, one of two hominine genus Gorilla.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_gorilla"
+    },
+    {
+      "id": "ring-tailed-lemur",
+      "description": "A medium- to larger-sized strepsirrhine primate and the most internationally recognized lemur species.",
+      "wiki": "https://en.wikipedia.org/wiki/Ring-tailed_lemur"
+    },
+    {
+      "id": "red-ruffed-lemur",
+      "description": "One of two species in the genus Varecia, the ruffed lemurs.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_ruffed_lemur"
+    },
+    {
+      "id": "gray-mouse-lemur",
+      "description": "A small lemur, a strepsirrhine primate, found only on the island of Madagascar.",
+      "wiki": "https://en.wikipedia.org/wiki/Gray_mouse_lemur"
+    },
+    {
+      "id": "aye-aye",
+      "description": "A long-fingered lemur, a strepsirrhine primate native to Madagascar with rodent-like teeth that grow perpetually.",
+      "wiki": "https://en.wikipedia.org/wiki/Aye-aye"
+    },
+    {
+      "id": "grevys-zebra",
+      "description": "The largest living wild equid and the most threatened of the three zebras.",
+      "wiki": "https://en.wikipedia.org/wiki/Gr%C3%A9vy's_zebra"
+    },
+    {
+      "id": "mountain-zebra",
+      "description": "A zebra species in the family Equidae, native to southwestern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Mountain_zebra"
+    },
+    {
+      "id": "bairds-tapir",
+      "description": "A tapir native to Mexico, Central America, and northwestern South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Baird's_tapir"
+    },
+    {
+      "id": "south-american-tapir",
+      "description": "One of the four recognized species in the tapir family.",
+      "wiki": "https://en.wikipedia.org/wiki/South_American_tapir"
+    },
+    {
+      "id": "mountain-tapir",
+      "description": "The smallest of the four widely recognized tapir.",
+      "wiki": "https://en.wikipedia.org/wiki/Mountain_tapir"
+    },
+    {
+      "id": "chinese-pangolin",
+      "description": "A pangolin native to the northern Indian subcontinent, northern parts of Southeast Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Chinese_pangolin"
+    },
+    {
+      "id": "giant-pangolin",
+      "description": "A pangolin from genus Smutsia of subfamily Smutsiinae within the family Manidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_pangolin"
+    },
+    {
+      "id": "ground-pangolin",
+      "description": "A pangolin from genus Smutsia of subfamily Smutsiinae the within family Manidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Ground_pangolin"
+    },
+    {
+      "id": "great-spotted-kiwi",
+      "description": "A kiwi endemic to the South Island of New Zealand.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_spotted_kiwi"
+    },
+    {
+      "id": "little-spotted-kiwi",
+      "description": "A small flightless bird in the kiwi family, Apterygidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Little_spotted_kiwi"
+    },
+    {
+      "id": "somali-ostrich",
+      "description": "A large flightless bird native to the Horn of Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Somali_ostrich"
+    },
+    {
+      "id": "green-peafowl",
+      "description": "A peafowl species native to the tropical forests of Southeast Asia and Southern China.",
+      "wiki": "https://en.wikipedia.org/wiki/Green_peafowl"
+    },
+    {
+      "id": "congo-peafowl",
+      "description": "A species native to the Congo Basin.",
+      "wiki": "https://en.wikipedia.org/wiki/Congo_peafowl"
+    },
+    {
+      "id": "gyrfalcon",
+      "description": "A bird of prey and the largest species in the falcon family, Falconidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Gyrfalcon"
+    },
+    {
+      "id": "common-kestrel",
+      "description": "A predatory bird belonging to the kestrel falcon family Falconidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_kestrel"
+    },
+    {
+      "id": "merlin",
+      "description": "A small falcon from the Northern Hemisphere, with numerous subspecies throughout North America and Eurasia.",
+      "wiki": "https://en.wikipedia.org/wiki/Merlin_(bird)"
+    },
+    {
+      "id": "andean-condor",
+      "description": "A South American New World vulture.",
+      "wiki": "https://en.wikipedia.org/wiki/Andean_condor"
+    },
+    {
+      "id": "american-flamingo",
+      "description": "A large flamingo native to the West Indies, northern South America and the Yucatán Peninsula.",
+      "wiki": "https://en.wikipedia.org/wiki/American_flamingo"
+    },
+    {
+      "id": "lesser-flamingo",
+      "description": "A flamingo occurring in sub-Saharan Africa and western India.",
+      "wiki": "https://en.wikipedia.org/wiki/Lesser_flamingo"
+    },
+    {
+      "id": "chilean-flamingo",
+      "description": "A large flamingo at a height of 110–130 cm closely related to the American flamingo.",
+      "wiki": "https://en.wikipedia.org/wiki/Chilean_flamingo"
+    },
+    {
+      "id": "whooping-crane",
+      "description": "An endangered crane species, native to North America, named for its \"whooping\" calls.",
+      "wiki": "https://en.wikipedia.org/wiki/Whooping_crane"
+    },
+    {
+      "id": "sarus-crane",
+      "description": "A large nonmigratory crane found in parts of the Indian subcontinent, Southeast Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Sarus_crane"
+    },
+    {
+      "id": "grey-crowned-crane",
+      "description": "A large crane species native to Sub-Saharan Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Grey_crowned_crane"
+    },
+    {
+      "id": "common-crane",
+      "description": "A bird of the family Gruidae, the cranes.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_crane"
+    },
+    {
+      "id": "marabou-stork",
+      "description": "A large wading bird in the stork family Ciconiidae native to sub-Saharan Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Marabou_stork"
+    },
+    {
+      "id": "black-stork",
+      "description": "A large bird in the stork family Ciconiidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Black_stork"
+    },
+    {
+      "id": "saddle-billed-stork",
+      "description": "A large wading bird in the stork family, Ciconiidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Saddle-billed_stork"
+    },
+    {
+      "id": "southern-lapwing",
+      "description": "A wader in the order Charadriiformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Southern_lapwing"
+    },
+    {
+      "id": "masked-lapwing",
+      "description": "A large, common and conspicuous bird native to Australia, New Zealand and New Guinea.",
+      "wiki": "https://en.wikipedia.org/wiki/Masked_lapwing"
+    },
+    {
+      "id": "annas-hummingbird",
+      "description": "A North American hummingbird named after Anna Masséna, Duchess of Rivoli.",
+      "wiki": "https://en.wikipedia.org/wiki/Anna's_hummingbird"
+    },
+    {
+      "id": "bee-hummingbird",
+      "description": "A hummingbird, native to the island of Cuba in the Caribbean.",
+      "wiki": "https://en.wikipedia.org/wiki/Bee_hummingbird"
+    },
+    {
+      "id": "sword-billed-hummingbird",
+      "description": "A neotropical hummingbird from the Andean regions of South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Sword-billed_hummingbird"
+    },
+    {
+      "id": "laughing-kookaburra",
+      "description": "A bird in the kingfisher subfamily Halcyoninae.",
+      "wiki": "https://en.wikipedia.org/wiki/Laughing_kookaburra"
+    },
+    {
+      "id": "belted-kingfisher",
+      "description": "A large, conspicuous water kingfisher, native to North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Belted_kingfisher"
+    },
+    {
+      "id": "sacred-kingfisher",
+      "description": "A medium-sized woodland kingfisher that inhabits mangroves, woodlands, forests and river valleys in Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Sacred_kingfisher"
+    },
+    {
+      "id": "black-billed-magpie",
+      "description": "A bird in the corvid family found in the western half of North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-billed_magpie"
+    },
+    {
+      "id": "red-billed-blue-magpie",
+      "description": "A bird in the crow family, Corvidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Red-billed_blue_magpie"
+    },
+    {
+      "id": "mandarin-duck",
+      "description": "A perching duck species native to East and Northeast Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Mandarin_duck"
+    },
+    {
+      "id": "wood-duck",
+      "description": "A partially migratory perching duck found in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Wood_duck"
+    },
+    {
+      "id": "common-eider",
+      "description": "A large sea-duck that is distributed over the northern coasts of Europe, North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_eider"
+    },
+    {
+      "id": "northern-pintail",
+      "description": "A duck species with wide geographic distribution that breeds in the northern areas of Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Northern_pintail"
+    },
+    {
+      "id": "muscovy-duck",
+      "description": "A duck native to the Americas, from the Lower Rio Grande Valley of Texas.",
+      "wiki": "https://en.wikipedia.org/wiki/Muscovy_duck"
+    },
+    {
+      "id": "horned-puffin",
+      "description": "An auk found in the North Pacific Ocean, including the coasts of Alaska, Siberia.",
+      "wiki": "https://en.wikipedia.org/wiki/Horned_puffin"
+    },
+    {
+      "id": "tufted-puffin",
+      "description": "A relatively abundant medium-sized pelagic seabird in the auk family found throughout the North Pacific.",
+      "wiki": "https://en.wikipedia.org/wiki/Tufted_puffin"
+    },
+    {
+      "id": "black-browed-albatross",
+      "description": "A large seabird of the albatross family Diomedeidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-browed_albatross"
+    },
+    {
+      "id": "laysan-albatross",
+      "description": "A large seabird that ranges across the North Pacific.",
+      "wiki": "https://en.wikipedia.org/wiki/Laysan_albatross"
+    },
+    {
+      "id": "southern-royal-albatross",
+      "description": "A large seabird in the albatross family.",
+      "wiki": "https://en.wikipedia.org/wiki/Southern_royal_albatross"
+    },
+    {
+      "id": "indian-flying-fox",
+      "description": "A flying fox native to the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Indian_flying_fox"
+    },
+    {
+      "id": "large-flying-fox",
+      "description": "A southeast Asian megabat in the family Pteropodidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Large_flying_fox"
+    },
+    {
+      "id": "giant-pacific-octopus",
+      "description": "A large marine cephalopod belonging to the genus Enteroctopus and Enteroctopodidae family.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_Pacific_octopus"
+    },
+    {
+      "id": "greater-blue-ringed-octopus",
+      "description": "One of four extremely venomous blue-ringed octopuses belonging to the family Octopodidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Greater_blue-ringed_octopus"
+    },
+    {
+      "id": "mimic-octopus",
+      "description": "An octopus from the Indo-Pacific region.",
+      "wiki": "https://en.wikipedia.org/wiki/Mimic_octopus"
+    },
+    {
+      "id": "amazonian-manatee",
+      "description": "A manatee that lives in the Amazon Basin in Brazil, Peru, Colombia and Ecuador.",
+      "wiki": "https://en.wikipedia.org/wiki/Amazonian_manatee"
+    },
+    {
+      "id": "west-african-manatee",
+      "description": "A manatee that inhabits much of Western Africa – from Senegal to Angola.",
+      "wiki": "https://en.wikipedia.org/wiki/African_manatee"
+    },
+    {
+      "id": "stellers-sea-cow",
+      "description": "An extinct sirenian described by Georg Wilhelm Steller in 1741.",
+      "wiki": "https://en.wikipedia.org/wiki/Steller's_sea_cow"
+    },
+    {
+      "id": "american-bullfrog",
+      "description": "A large frog in the family Ranidae.",
+      "wiki": "https://en.wikipedia.org/wiki/American_bullfrog"
+    },
+    {
+      "id": "strawberry-poison-dart-frog",
+      "description": "A small poison dart frog found in Central America.",
+      "wiki": "https://en.wikipedia.org/wiki/Strawberry_poison_dart_frog"
+    },
+    {
+      "id": "red-eyed-tree-frog",
+      "description": "A tree frog in the subfamily Phyllomedusinae native to forests of Central America.",
+      "wiki": "https://en.wikipedia.org/wiki/Agalychnis_callidryas"
+    },
+    {
+      "id": "common-frog",
+      "description": "The common frog or grass frog, also known as the European common frog.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_frog"
+    },
+    {
+      "id": "african-clawed-frog",
+      "description": "An African aquatic frog of the family Pipidae.",
+      "wiki": "https://en.wikipedia.org/wiki/African_clawed_frog"
+    },
+    {
+      "id": "goliath-frog",
+      "description": "A frog in the family Conrauidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Goliath_frog"
+    },
+    {
+      "id": "cane-toad",
+      "description": "A large, terrestrial true toad native to South and mainland Central America, but.",
+      "wiki": "https://en.wikipedia.org/wiki/Cane_toad"
+    },
+    {
+      "id": "common-toad",
+      "description": "A toad found throughout most of Europe, western North Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_toad"
+    },
+    {
+      "id": "king-cobra",
+      "description": "A species complex of snakes endemic to Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/King_cobra"
+    },
+    {
+      "id": "black-mamba",
+      "description": "A highly venomous snake belonging to the family Elapidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Black_mamba"
+    },
+    {
+      "id": "reticulated-python",
+      "description": "A python species native to South and Southeast Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Reticulated_python"
+    },
+    {
+      "id": "green-anaconda",
+      "description": "A snake in the family Boidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Green_anaconda"
+    },
+    {
+      "id": "inland-taipan",
+      "description": "An extremely venomous snake in the family Elapidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Inland_taipan"
+    },
+    {
+      "id": "eastern-diamondback-rattlesnake",
+      "description": "A pit viper in the family Viperidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Eastern_diamondback_rattlesnake"
+    },
+    {
+      "id": "boa-constrictor",
+      "description": "A large, non-venomous, heavy-bodied snake that is frequently kept and bred in captivity.",
+      "wiki": "https://en.wikipedia.org/wiki/Boa_constrictor"
+    },
+    {
+      "id": "grass-snake",
+      "description": "An Eurasian semi-aquatic non-venomous colubrid snake.",
+      "wiki": "https://en.wikipedia.org/wiki/Grass_snake"
+    },
+    {
+      "id": "green-iguana",
+      "description": "A large, arboreal, mostly herbivorous lizard of the genus Iguana.",
+      "wiki": "https://en.wikipedia.org/wiki/Green_iguana"
+    },
+    {
+      "id": "marine-iguana",
+      "description": "An iguana found only on the Galápagos Islands.",
+      "wiki": "https://en.wikipedia.org/wiki/Marine_iguana"
+    },
+    {
+      "id": "gila-monster",
+      "description": "A venomous lizard native to the Southwestern United States.",
+      "wiki": "https://en.wikipedia.org/wiki/Gila_monster"
+    },
+    {
+      "id": "frilled-lizard",
+      "description": "A lizard in the family Agamidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Frilled_lizard"
+    },
+    {
+      "id": "thorny-devil",
+      "description": "A lizard in the family Agamidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Thorny_devil"
+    },
+    {
+      "id": "veiled-chameleon",
+      "description": "A chameleon native to the Arabian Peninsula in Yemen and Saudi Arabia.",
+      "wiki": "https://en.wikipedia.org/wiki/Veiled_chameleon"
+    },
+    {
+      "id": "panther-chameleon",
+      "description": "A chameleon found in the eastern.",
+      "wiki": "https://en.wikipedia.org/wiki/Panther_chameleon"
+    },
+    {
+      "id": "leopard-gecko",
+      "description": "A ground-dwelling gecko native primarily to the rocky dry grassland and desert regions of Afghanistan.",
+      "wiki": "https://en.wikipedia.org/wiki/Leopard_gecko"
+    },
+    {
+      "id": "tokay-gecko",
+      "description": "A nocturnal arboreal gecko in the genus Gekko, the true geckos.",
+      "wiki": "https://en.wikipedia.org/wiki/Tokay_gecko"
+    },
+    {
+      "id": "galapagos-tortoise",
+      "description": "A very large tortoise in the genus Chelonoidis.",
+      "wiki": "https://en.wikipedia.org/wiki/Gal%C3%A1pagos_tortoise"
+    },
+    {
+      "id": "aldabra-giant-tortoise",
+      "description": "A tortoise in the family Testudinidae and genus Aldabrachelys.",
+      "wiki": "https://en.wikipedia.org/wiki/Aldabra_giant_tortoise"
+    },
+    {
+      "id": "african-spurred-tortoise",
+      "description": "An endangered tortoise inhabiting the southern edge of the Sahara Desert and the Sahel.",
+      "wiki": "https://en.wikipedia.org/wiki/African_spurred_tortoise"
+    },
+    {
+      "id": "hermanns-tortoise",
+      "description": "A tortoise native to Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Hermann's_tortoise"
+    },
+    {
+      "id": "gopher-tortoise",
+      "description": "A tortoise in the family Testudinidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Gopher_tortoise"
+    },
+    {
+      "id": "red-deer",
+      "description": "A deer in the genus Cervus.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_deer"
+    },
+    {
+      "id": "moose",
+      "description": "The world's tallest, largest and heaviest extant deer.",
+      "wiki": "https://en.wikipedia.org/wiki/Moose"
+    },
+    {
+      "id": "reindeer",
+      "description": "A deer with circumpolar distribution, native to the Arctic, subarctic, tundra, boreal.",
+      "wiki": "https://en.wikipedia.org/wiki/Reindeer"
+    },
+    {
+      "id": "white-tailed-deer",
+      "description": "A medium-sized deer native to North and South America.",
+      "wiki": "https://en.wikipedia.org/wiki/White-tailed_deer"
+    },
+    {
+      "id": "roe-deer",
+      "description": "A deer.",
+      "wiki": "https://en.wikipedia.org/wiki/Roe_deer"
+    },
+    {
+      "id": "fallow-deer",
+      "description": "A deer native to Eurasia.",
+      "wiki": "https://en.wikipedia.org/wiki/European_fallow_deer"
+    },
+    {
+      "id": "chital",
+      "description": "A deer species native to the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Chital"
+    },
+    {
+      "id": "springbok",
+      "description": "An antelope found mainly in south and southwest Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Springbok"
+    },
+    {
+      "id": "impala",
+      "description": "A medium-sized antelope found in eastern and southern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Impala"
+    },
+    {
+      "id": "blue-wildebeest",
+      "description": "A large antelope and one of the two wildebeest.",
+      "wiki": "https://en.wikipedia.org/wiki/Blue_wildebeest"
+    },
+    {
+      "id": "greater-kudu",
+      "description": "A large woodland antelope, found throughout eastern and southern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Greater_kudu"
+    },
+    {
+      "id": "gemsbok",
+      "description": "A large antelope in the genus Oryx.",
+      "wiki": "https://en.wikipedia.org/wiki/Gemsbok"
+    },
+    {
+      "id": "saiga-antelope",
+      "description": "An antelope which during antiquity inhabited a vast area of the Eurasian steppe.",
+      "wiki": "https://en.wikipedia.org/wiki/Saiga_antelope"
+    },
+    {
+      "id": "sable-antelope",
+      "description": "A large antelope which inhabits wooded savanna in East and Southern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Sable_antelope"
+    },
+    {
+      "id": "addax",
+      "description": "An antelope native to the Sahara.",
+      "wiki": "https://en.wikipedia.org/wiki/Addax"
+    },
+    {
+      "id": "japanese-macaque",
+      "description": "A terrestrial Old World monkey species that is native to Japan.",
+      "wiki": "https://en.wikipedia.org/wiki/Japanese_macaque"
+    },
+    {
+      "id": "proboscis-monkey",
+      "description": "An arboreal Old World monkey with an unusually large nose, a reddish-brown skin color.",
+      "wiki": "https://en.wikipedia.org/wiki/Proboscis_monkey"
+    },
+    {
+      "id": "mandrill",
+      "description": "A large Old World monkey native to west central Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Mandrill"
+    },
+    {
+      "id": "golden-snub-nosed-monkey",
+      "description": "An Old World monkey in the subfamily Colobinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Golden_snub-nosed_monkey"
+    },
+    {
+      "id": "mantled-howler",
+      "description": "A howler monkey, a New World monkey, from Central and South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Mantled_howler"
+    },
+    {
+      "id": "common-squirrel-monkey",
+      "description": "The traditional common name for several small squirrel monkey species native to the tropical areas.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_squirrel_monkey"
+    },
+    {
+      "id": "golden-lion-tamarin",
+      "description": "A small New World monkey of the family Callitrichidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Golden_lion_tamarin"
+    },
+    {
+      "id": "rhesus-macaque",
+      "description": "An Old World monkey in the Macaca genus.",
+      "wiki": "https://en.wikipedia.org/wiki/Rhesus_macaque"
+    },
+    {
+      "id": "red-squirrel",
+      "description": "A tree squirrel in the genus Sciurus.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_squirrel"
+    },
+    {
+      "id": "eastern-gray-squirrel",
+      "description": "A tree squirrel in the genus Sciurus.",
+      "wiki": "https://en.wikipedia.org/wiki/Eastern_gray_squirrel"
+    },
+    {
+      "id": "siberian-flying-squirrel",
+      "description": "An Old World flying squirrel ranging from the Baltic Sea in the west.",
+      "wiki": "https://en.wikipedia.org/wiki/Siberian_flying_squirrel"
+    },
+    {
+      "id": "black-tailed-prairie-dog",
+      "description": "A rodent of the family Sciuridae found in the Great Plains of North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-tailed_prairie_dog"
+    },
+    {
+      "id": "alpine-marmot",
+      "description": "A large ground-dwelling squirrel, from the marmots.",
+      "wiki": "https://en.wikipedia.org/wiki/Alpine_marmot"
+    },
+    {
+      "id": "red-tailed-hawk",
+      "description": "A bird of prey and one of the most common hawks in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Red-tailed_hawk"
+    },
+    {
+      "id": "coopers-hawk",
+      "description": "A medium-sized hawk native to the North American continent.",
+      "wiki": "https://en.wikipedia.org/wiki/Cooper's_hawk"
+    },
+    {
+      "id": "eurasian-goshawk",
+      "description": "A medium-large bird of prey in the family Accipitridae, a family.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_goshawk"
+    },
+    {
+      "id": "harriss-hawk",
+      "description": "A medium-large bird of prey that breeds from the southwestern United States south to Chile.",
+      "wiki": "https://en.wikipedia.org/wiki/Harris's_hawk"
+    },
+    {
+      "id": "european-herring-gull",
+      "description": "A large gull, up to 66 cm long.",
+      "wiki": "https://en.wikipedia.org/wiki/European_herring_gull"
+    },
+    {
+      "id": "black-headed-gull",
+      "description": "A small gull that breeds in much of the Palearctic in Europe and Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-headed_gull"
+    },
+    {
+      "id": "black-legged-kittiwake",
+      "description": "A seabird species in the gull family Laridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-legged_kittiwake"
+    },
+    {
+      "id": "laughing-gull",
+      "description": "A medium-sized gull of North and South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Laughing_gull"
+    },
+    {
+      "id": "grey-heron",
+      "description": "A long-legged wading bird of the heron family, Ardeidae, native throughout Europe, Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Grey_heron"
+    },
+    {
+      "id": "great-blue-heron",
+      "description": "A large wading bird in the heron family, common near shores of open water.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_blue_heron"
+    },
+    {
+      "id": "great-egret",
+      "description": "A large, widely distributed egret.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_egret"
+    },
+    {
+      "id": "little-egret",
+      "description": "A small heron in the family Ardeidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Little_egret"
+    },
+    {
+      "id": "black-crowned-night-heron",
+      "description": "A medium-sized heron found throughout a large part of the world, including parts of Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Black-crowned_night_heron"
+    },
+    {
+      "id": "mute-swan",
+      "description": "A swan and a member of the family Anatidae within the waterfowl order.",
+      "wiki": "https://en.wikipedia.org/wiki/Mute_swan"
+    },
+    {
+      "id": "black-swan",
+      "description": "A large waterbird, a swan which breeds mainly in the southeast.",
+      "wiki": "https://en.wikipedia.org/wiki/Black_swan"
+    },
+    {
+      "id": "trumpeter-swan",
+      "description": "A swan found in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Trumpeter_swan"
+    },
+    {
+      "id": "whooper-swan",
+      "description": "A large northern hemisphere swan.",
+      "wiki": "https://en.wikipedia.org/wiki/Whooper_swan"
+    },
+    {
+      "id": "canada-goose",
+      "description": "A large goose with a black head and neck, white cheeks, white under its chin.",
+      "wiki": "https://en.wikipedia.org/wiki/Canada_goose"
+    },
+    {
+      "id": "greylag-goose",
+      "description": "A large goose in the waterfowl family Anatidae and the type genus Anser.",
+      "wiki": "https://en.wikipedia.org/wiki/Greylag_goose"
+    },
+    {
+      "id": "bar-headed-goose",
+      "description": "A goose that breeds in Central Asia in colonies of thousands near mountain lakes.",
+      "wiki": "https://en.wikipedia.org/wiki/Bar-headed_goose"
+    },
+    {
+      "id": "nene",
+      "description": "A bird endemic to the Hawaiian Islands.",
+      "wiki": "https://en.wikipedia.org/wiki/Nene_(bird)"
+    },
+    {
+      "id": "great-spotted-woodpecker",
+      "description": "A medium-sized woodpecker with pied black and white plumage.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_spotted_woodpecker"
+    },
+    {
+      "id": "pileated-woodpecker",
+      "description": "A large, crow-sized woodpecker with a prominent red crest, white neck stripe.",
+      "wiki": "https://en.wikipedia.org/wiki/Pileated_woodpecker"
+    },
+    {
+      "id": "european-green-woodpecker",
+      "description": "A large green woodpecker with a bright red crown and a black moustache.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_green_woodpecker"
+    },
+    {
+      "id": "acorn-woodpecker",
+      "description": "A medium-sized woodpecker with a length of around 20 cm.",
+      "wiki": "https://en.wikipedia.org/wiki/Acorn_woodpecker"
+    },
+    {
+      "id": "great-hornbill",
+      "description": "One of the larger members of the hornbill family.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_hornbill"
+    },
+    {
+      "id": "southern-ground-hornbill",
+      "description": "One of two ground hornbill, both of which are found solely within Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Southern_ground_hornbill"
+    },
+    {
+      "id": "rhinoceros-hornbill",
+      "description": "A large forest hornbill.",
+      "wiki": "https://en.wikipedia.org/wiki/Rhinoceros_hornbill"
+    },
+    {
+      "id": "toco-toucan",
+      "description": "A bird in the family Ramphastidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Toco_toucan"
+    },
+    {
+      "id": "keel-billed-toucan",
+      "description": "A toucan native to southern Mexico, Central America and the far northwest of South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Keel-billed_toucan"
+    },
+    {
+      "id": "giant-oceanic-manta-ray",
+      "description": "A ray in the family Mobulidae and the largest ray in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_oceanic_manta_ray"
+    },
+    {
+      "id": "spotted-eagle-ray",
+      "description": "A cartilaginous fish of the eagle ray family, Aetobatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Spotted_eagle_ray"
+    },
+    {
+      "id": "common-stingray",
+      "description": "A stingray in the family Dasyatidae, found in the northeastern Atlantic Ocean and the Mediterranean.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_stingray"
+    },
+    {
+      "id": "smalltooth-sawfish",
+      "description": "A sawfish in the family Pristidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Smalltooth_sawfish"
+    },
+    {
+      "id": "moon-jellyfish",
+      "description": "A true jellyfish in the family Ulmaridae and the type its genus, Aurelia.",
+      "wiki": "https://en.wikipedia.org/wiki/Aurelia_aurita"
+    },
+    {
+      "id": "lions-mane-jellyfish",
+      "description": "One of the largest known jellyfish.",
+      "wiki": "https://en.wikipedia.org/wiki/Lion's_mane_jellyfish"
+    },
+    {
+      "id": "box-jellyfish",
+      "description": "An extremely venomous box jellyfish found in coastal waters from northern Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Chironex_fleckeri"
+    },
+    {
+      "id": "red-king-crab",
+      "description": "A king crab native to cold waters in the North Pacific Ocean and adjacent seas.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_king_crab"
+    },
+    {
+      "id": "japanese-spider-crab",
+      "description": "A marine crab and is the largest crab found in the waters around Japan.",
+      "wiki": "https://en.wikipedia.org/wiki/Japanese_spider_crab"
+    },
+    {
+      "id": "coconut-crab",
+      "description": "A terrestrial giant hermit crab.",
+      "wiki": "https://en.wikipedia.org/wiki/Coconut_crab"
+    },
+    {
+      "id": "blue-crab",
+      "description": "A crab native to the waters of the western Atlantic Ocean.",
+      "wiki": "https://en.wikipedia.org/wiki/Callinectes_sapidus"
+    },
+    {
+      "id": "monarch-butterfly",
+      "description": "A milkweed butterfly in the family Nymphalidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Monarch_butterfly"
+    },
+    {
+      "id": "queen-alexandras-birdwing",
+      "description": "The largest butterfly in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Queen_Alexandra's_birdwing"
+    },
+    {
+      "id": "menelaus-blue-morpho",
+      "description": "One of 30 butterfly in the subfamily Morphinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Morpho_menelaus"
+    },
+    {
+      "id": "painted-lady",
+      "description": "The most widespread of all butterfly species.",
+      "wiki": "https://en.wikipedia.org/wiki/Vanessa_cardui"
+    },
+    {
+      "id": "western-honey-bee",
+      "description": "The most common of the 7–12 honey bees worldwide.",
+      "wiki": "https://en.wikipedia.org/wiki/Western_honey_bee"
+    },
+    {
+      "id": "buff-tailed-bumblebee",
+      "description": "One of the most numerous bumblebee species in Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Bombus_terrestris"
+    },
+    {
+      "id": "hercules-beetle",
+      "description": "A rhinoceros beetle native to the tropical forests of southern Mexico, Central America, South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Hercules_beetle"
+    },
+    {
+      "id": "european-stag-beetle",
+      "description": "One of the best-known stag beetle in Western Europe.",
+      "wiki": "https://en.wikipedia.org/wiki/Lucanus_cervus"
+    },
+    {
+      "id": "seven-spot-ladybird",
+      "description": "A carnivorous beetle native to Europe, most of Asia, and North Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Coccinella_septempunctata"
+    },
+    {
+      "id": "sacred-scarab",
+      "description": "The type genus Scarabaeus and the family Scarabaeidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Scarabaeus_sacer"
+    },
+    {
+      "id": "bullet-ant",
+      "description": "An ant known for its extremely painful sting.",
+      "wiki": "https://en.wikipedia.org/wiki/Paraponera_clavata"
+    },
+    {
+      "id": "red-wood-ant",
+      "description": "A boreal member of the Formica rufa ants, and is the type species.",
+      "wiki": "https://en.wikipedia.org/wiki/Formica_rufa"
+    },
+    {
+      "id": "goliath-birdeater",
+      "description": "A large spider that belongs to the tarantula family Theraphosidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Goliath_birdeater"
+    },
+    {
+      "id": "southern-black-widow",
+      "description": "A venomous spider in the genus Latrodectus.",
+      "wiki": "https://en.wikipedia.org/wiki/Latrodectus_mactans"
+    },
+    {
+      "id": "peacock-spider",
+      "description": "A species in the jumping spider family, belonging to the genus Maratus.",
+      "wiki": "https://en.wikipedia.org/wiki/Maratus_volans"
+    },
+    {
+      "id": "european-garden-spider",
+      "description": "Commonly called the European garden spider, cross orbweaver, diadem spider, orangie, cross spider.",
+      "wiki": "https://en.wikipedia.org/wiki/Araneus_diadematus"
+    },
+    {
+      "id": "emperor-scorpion",
+      "description": "A scorpion native to rainforests and savannas in West Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Emperor_scorpion"
+    },
+    {
+      "id": "deathstalker",
+      "description": "A scorpion, a member of the family Buthidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Deathstalker"
+    },
+    {
+      "id": "eurasian-otter",
+      "description": "A semiaquatic mammal native to Eurasia and the Maghreb.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_otter"
+    },
+    {
+      "id": "giant-otter",
+      "description": "A South American carnivorous mammal.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_otter"
+    },
+    {
+      "id": "north-american-river-otter",
+      "description": "A semiaquatic mammal that is endemic to the North American continent throughout most of Canada.",
+      "wiki": "https://en.wikipedia.org/wiki/North_American_river_otter"
+    },
+    {
+      "id": "dromedary",
+      "description": "A large camel of the genus Camelus with one hump on its back.",
+      "wiki": "https://en.wikipedia.org/wiki/Dromedary"
+    },
+    {
+      "id": "bactrian-camel",
+      "description": "A camel native to the steppes of Central Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Bactrian_camel"
+    },
+    {
+      "id": "common-vampire-bat",
+      "description": "A small, leaf-nosed bat native to the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_vampire_bat"
+    },
+    {
+      "id": "little-brown-bat",
+      "description": "An endangered mouse-eared microbat found in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Little_brown_bat"
+    },
+    {
+      "id": "mexican-free-tailed-bat",
+      "description": "A medium-sized bat native to North, Central, and South America and the Caribbean.",
+      "wiki": "https://en.wikipedia.org/wiki/Mexican_free-tailed_bat"
+    },
+    {
+      "id": "european-hare",
+      "description": "A hare native to Europe and parts of Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/European_hare"
+    },
+    {
+      "id": "arctic-hare",
+      "description": "A hare highly adapted to living in the Arctic tundra and other icy biomes.",
+      "wiki": "https://en.wikipedia.org/wiki/Arctic_hare"
+    },
+    {
+      "id": "snowshoe-hare",
+      "description": "A hare found in North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Snowshoe_hare"
+    },
+    {
+      "id": "lar-gibbon",
+      "description": "An endangered primate in the gibbon family, Hylobatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Lar_gibbon"
+    },
+    {
+      "id": "siamang",
+      "description": "An endangered arboreal, black-furred gibbon native to the tropical rainforests of Indonesia, Malaysia, and Thailand.",
+      "wiki": "https://en.wikipedia.org/wiki/Siamang"
+    },
+    {
+      "id": "australian-pelican",
+      "description": "A large waterbird in the family Pelecanidae, widespread on the inland.",
+      "wiki": "https://en.wikipedia.org/wiki/Australian_pelican"
+    },
+    {
+      "id": "brown-pelican",
+      "description": "A bird of the pelican family, Pelecanidae, one of three species found in the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Brown_pelican"
+    },
+    {
+      "id": "great-white-pelican",
+      "description": "A bird in the pelican family.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_white_pelican"
+    },
+    {
+      "id": "bearded-vulture",
+      "description": "A very large bird of prey in the monotypic genus Gypaetus.",
+      "wiki": "https://en.wikipedia.org/wiki/Bearded_vulture"
+    },
+    {
+      "id": "turkey-vulture",
+      "description": "The most widespread of the New World vultures.",
+      "wiki": "https://en.wikipedia.org/wiki/Turkey_vulture"
+    },
+    {
+      "id": "griffon-vulture",
+      "description": "A large Old World vulture in the bird of prey family Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_griffon_vulture"
+    },
+    {
+      "id": "cougar",
+      "description": "A large feline species native to the Americas.",
+      "wiki": "https://en.wikipedia.org/wiki/Cougar"
+    },
+    {
+      "id": "eurasian-lynx",
+      "description": "One of the four extant species within the medium-sized wild cat genus Lynx.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_lynx"
+    },
+    {
+      "id": "serval",
+      "description": "A wild small cat native to Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Serval"
+    },
+    {
+      "id": "caracal",
+      "description": "A wild cat native to Africa, the Middle East, Central Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Caracal"
+    },
+    {
+      "id": "ocelot",
+      "description": "A medium-sized spotted wild cat that reaches 40–50 cm at the shoulders.",
+      "wiki": "https://en.wikipedia.org/wiki/Ocelot"
+    },
+    {
+      "id": "sand-cat",
+      "description": "A small wild cat that inhabits sandy and stony deserts far from water sources.",
+      "wiki": "https://en.wikipedia.org/wiki/Sand_cat"
+    },
+    {
+      "id": "gharial",
+      "description": "A crocodilian in the family Gavialidae and among the longest of all living crocodilians.",
+      "wiki": "https://en.wikipedia.org/wiki/Gharial"
+    },
+    {
+      "id": "american-alligator",
+      "description": "A large crocodilian reptile native to the Southeastern United States.",
+      "wiki": "https://en.wikipedia.org/wiki/American_alligator"
+    },
+    {
+      "id": "spectacled-caiman",
+      "description": "A crocodilian in the family Alligatoridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Spectacled_caiman"
+    },
+    {
+      "id": "tuatara",
+      "description": "A reptile endemic to New Zealand.",
+      "wiki": "https://en.wikipedia.org/wiki/Tuatara"
+    },
+    {
+      "id": "walrus",
+      "description": "A large pinniped marine mammal.",
+      "wiki": "https://en.wikipedia.org/wiki/Walrus"
+    },
+    {
+      "id": "california-sea-lion",
+      "description": "A coastal eared seal native to western North America.",
+      "wiki": "https://en.wikipedia.org/wiki/California_sea_lion"
+    },
+    {
+      "id": "bonobo",
+      "description": "The smallest great ape and one of the two making up the genus Pan.",
+      "wiki": "https://en.wikipedia.org/wiki/Bonobo"
+    },
+    {
+      "id": "sunda-slow-loris",
+      "description": "A strepsirrhine primate and a slow loris native to Indonesia, West Malaysia, southern Thailand.",
+      "wiki": "https://en.wikipedia.org/wiki/Sunda_slow_loris"
+    },
+    {
+      "id": "philippine-tarsier",
+      "description": "A tarsier endemic to the Philippines.",
+      "wiki": "https://en.wikipedia.org/wiki/Philippine_tarsier"
+    },
+    {
+      "id": "capybara",
+      "description": "The largest living rodent, native to all countries in South America except Chile.",
+      "wiki": "https://en.wikipedia.org/wiki/Capybara"
+    },
+    {
+      "id": "north-american-beaver",
+      "description": "One of two extant beaver species, along with the Eurasian beaver.",
+      "wiki": "https://en.wikipedia.org/wiki/North_American_beaver"
+    },
+    {
+      "id": "naked-mole-rat",
+      "description": "A burrowing rodent native to the Horn of Africa and parts of Kenya.",
+      "wiki": "https://en.wikipedia.org/wiki/Naked_mole-rat"
+    },
+    {
+      "id": "long-tailed-chinchilla",
+      "description": "One of two rodent from the genus Chinchilla: the other species being C. chinchilla.",
+      "wiki": "https://en.wikipedia.org/wiki/Long-tailed_chinchilla"
+    },
+    {
+      "id": "north-american-porcupine",
+      "description": "A large quill-covered rodent in the New World porcupine family.",
+      "wiki": "https://en.wikipedia.org/wiki/North_American_porcupine"
+    },
+    {
+      "id": "guinea-pig",
+      "description": "A rodent.",
+      "wiki": "https://en.wikipedia.org/wiki/Guinea_pig"
+    },
+    {
+      "id": "brown-rat",
+      "description": "A widespread, common rat.",
+      "wiki": "https://en.wikipedia.org/wiki/Brown_rat"
+    },
+    {
+      "id": "golden-hamster",
+      "description": "A rodent belonging to the hamster subfamily, Cricetinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Golden_hamster"
+    },
+    {
+      "id": "giant-anteater",
+      "description": "A large insectivorous mammal native to Central and South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_anteater"
+    },
+    {
+      "id": "nine-banded-armadillo",
+      "description": "An armadillo native to South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Nine-banded_armadillo"
+    },
+    {
+      "id": "brown-throated-sloth",
+      "description": "A three-toed sloth found in the Neotropical realm of Central and South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Brown-throated_sloth"
+    },
+    {
+      "id": "aardvark",
+      "description": "A medium-sized, burrowing, nocturnal mammal native to Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Aardvark"
+    },
+    {
+      "id": "okapi",
+      "description": "An artiodactyl mammal that is endemic to the northeast Democratic Republic of the Congo.",
+      "wiki": "https://en.wikipedia.org/wiki/Okapi"
+    },
+    {
+      "id": "meerkat",
+      "description": "A small mongoose found in southern Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Meerkat"
+    },
+    {
+      "id": "spotted-hyena",
+      "description": "A hyena species, currently classed as the sole extant member of the genus Crocuta.",
+      "wiki": "https://en.wikipedia.org/wiki/Spotted_hyena"
+    },
+    {
+      "id": "african-wild-dog",
+      "description": "A wild canine native to sub-Saharan Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/African_wild_dog"
+    },
+    {
+      "id": "raccoon",
+      "description": "A mammal native to North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Raccoon"
+    },
+    {
+      "id": "wolverine",
+      "description": "The largest land-dwelling member of the family Mustelidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Wolverine"
+    },
+    {
+      "id": "honey-badger",
+      "description": "A mammal widely distributed across Africa, Southwest Asia, and the Indian subcontinent.",
+      "wiki": "https://en.wikipedia.org/wiki/Honey_badger"
+    },
+    {
+      "id": "european-badger",
+      "description": "A badger in the family Mustelidae native to Europe and West Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/European_badger"
+    },
+    {
+      "id": "american-bison",
+      "description": "A bison that is endemic to North America.",
+      "wiki": "https://en.wikipedia.org/wiki/American_bison"
+    },
+    {
+      "id": "wild-yak",
+      "description": "A large, wild bovine native to the Himalayas.",
+      "wiki": "https://en.wikipedia.org/wiki/Wild_yak"
+    },
+    {
+      "id": "muskox",
+      "description": "A hoofed mammal of the family Bovidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Muskox"
+    },
+    {
+      "id": "wild-boar",
+      "description": "A suid native to much of Eurasia and North Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Wild_boar"
+    },
+    {
+      "id": "common-warthog",
+      "description": "A wild member of the pig family found in grassland, savanna.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_warthog"
+    },
+    {
+      "id": "pygmy-hippopotamus",
+      "description": "A small hippopotamid which is native to the forests and swamps of West Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus"
+    },
+    {
+      "id": "dingo",
+      "description": "A lineage of dog found in Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Dingo"
+    },
+    {
+      "id": "common-wombat",
+      "description": "A marsupial, one of three extant wombats.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_wombat"
+    },
+    {
+      "id": "sugar-glider",
+      "description": "A small, omnivorous, arboreal, and nocturnal gliding possum.",
+      "wiki": "https://en.wikipedia.org/wiki/Sugar_glider"
+    },
+    {
+      "id": "quokka",
+      "description": "A macropod native to Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Quokka"
+    },
+    {
+      "id": "numbat",
+      "description": "An insectivorous marsupial.",
+      "wiki": "https://en.wikipedia.org/wiki/Numbat"
+    },
+    {
+      "id": "llama",
+      "description": "A domesticated South American camelid, widely used as a meat.",
+      "wiki": "https://en.wikipedia.org/wiki/Llama"
+    },
+    {
+      "id": "alpaca",
+      "description": "A domesticated South American camelid.",
+      "wiki": "https://en.wikipedia.org/wiki/Alpaca"
+    },
+    {
+      "id": "vicuna",
+      "description": "A wild South American camelid which lives in high alpine areas of the Andes.",
+      "wiki": "https://en.wikipedia.org/wiki/Vicu%C3%B1a"
+    },
+    {
+      "id": "pronghorn",
+      "description": "An artiodactyl mammal indigenous to interior western and central North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Pronghorn"
+    },
+    {
+      "id": "thylacine",
+      "description": "An extinct carnivorous marsupial formerly native to the Australian mainland, Tasmania and New Guinea.",
+      "wiki": "https://en.wikipedia.org/wiki/Thylacine"
+    },
+    {
+      "id": "woolly-mammoth",
+      "description": "An extinct mammoth that lived from the Middle Pleistocene until its extinction in the Holocene.",
+      "wiki": "https://en.wikipedia.org/wiki/Woolly_mammoth"
+    },
+    {
+      "id": "osprey",
+      "description": "A diurnal, fish-eating bird of prey with a cosmopolitan range.",
+      "wiki": "https://en.wikipedia.org/wiki/Osprey"
+    },
+    {
+      "id": "secretarybird",
+      "description": "A large bird of prey that is endemic to Africa.",
+      "wiki": "https://en.wikipedia.org/wiki/Secretarybird"
+    },
+    {
+      "id": "red-kite",
+      "description": "A bird of prey in the family Accipitridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_kite"
+    },
+    {
+      "id": "southern-cassowary",
+      "description": "A large, flightless, mostly black bird, found in Indonesia, Papua New Guinea, and northeastern Australia.",
+      "wiki": "https://en.wikipedia.org/wiki/Southern_cassowary"
+    },
+    {
+      "id": "greater-rhea",
+      "description": "A flightless bird native to eastern South America.",
+      "wiki": "https://en.wikipedia.org/wiki/Greater_rhea"
+    },
+    {
+      "id": "greater-roadrunner",
+      "description": "A long-legged bird in the cuckoo family, Cuculidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Greater_roadrunner"
+    },
+    {
+      "id": "superb-lyrebird",
+      "description": "An Australian passerine songbird, one of two species from the family Menuridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Superb_lyrebird"
+    },
+    {
+      "id": "resplendent-quetzal",
+      "description": "A small bird found in Central America and southern Mexico that lives in tropical forests.",
+      "wiki": "https://en.wikipedia.org/wiki/Resplendent_quetzal"
+    },
+    {
+      "id": "victoria-crowned-pigeon",
+      "description": "A large, bluish-grey pigeon with elegant blue lace-like crests, maroon breast and red irises.",
+      "wiki": "https://en.wikipedia.org/wiki/Victoria_crowned_pigeon"
+    },
+    {
+      "id": "dodo",
+      "description": "An extinct flightless bird that was endemic to Mauritius.",
+      "wiki": "https://en.wikipedia.org/wiki/Dodo"
+    },
+    {
+      "id": "passenger-pigeon",
+      "description": "An extinct pigeon that was endemic to North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Passenger_pigeon"
+    },
+    {
+      "id": "great-auk",
+      "description": "An extinct flightless alcid that first appeared around 400,000 years ago.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_auk"
+    },
+    {
+      "id": "barn-swallow",
+      "description": "The most widespread swallow in the world, occurring on all continents.",
+      "wiki": "https://en.wikipedia.org/wiki/Barn_swallow"
+    },
+    {
+      "id": "european-robin",
+      "description": "A small insectivorous passerine bird belonging to the Old World flycatcher family Muscicapidae.",
+      "wiki": "https://en.wikipedia.org/wiki/European_robin"
+    },
+    {
+      "id": "american-robin",
+      "description": "A migratory bird of the true thrush genus and Turdidae, the wider thrush family.",
+      "wiki": "https://en.wikipedia.org/wiki/American_robin"
+    },
+    {
+      "id": "house-sparrow",
+      "description": "A bird of the sparrow family Passeridae, found in most parts of the world.",
+      "wiki": "https://en.wikipedia.org/wiki/House_sparrow"
+    },
+    {
+      "id": "common-starling",
+      "description": "A medium-sized passerine bird in the starling family, Sturnidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_starling"
+    },
+    {
+      "id": "blue-jay",
+      "description": "A passerine bird in the family Corvidae, native to eastern North America.",
+      "wiki": "https://en.wikipedia.org/wiki/Blue_jay"
+    },
+    {
+      "id": "northern-cardinal",
+      "description": "A bird in the genus Cardinalis.",
+      "wiki": "https://en.wikipedia.org/wiki/Northern_cardinal"
+    },
+    {
+      "id": "common-raven",
+      "description": "A large all-black passerine bird.",
+      "wiki": "https://en.wikipedia.org/wiki/Common_raven"
+    },
+    {
+      "id": "eurasian-blue-tit",
+      "description": "A small passerine bird in the tit family, Paridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Eurasian_blue_tit"
+    },
+    {
+      "id": "arctic-tern",
+      "description": "A tern in the family Laridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Arctic_tern"
+    },
+    {
+      "id": "blue-footed-booby",
+      "description": "A marine bird in the family Sulidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Blue-footed_booby"
+    },
+    {
+      "id": "magnificent-frigatebird",
+      "description": "A seabird of the frigatebird family Fregatidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Magnificent_frigatebird"
+    },
+    {
+      "id": "shoebill",
+      "description": "A large long-legged wading bird.",
+      "wiki": "https://en.wikipedia.org/wiki/Shoebill"
+    },
+    {
+      "id": "hoatzin",
+      "description": "A tropical bird found in swamps, riparian forests, and mangroves of the Amazon.",
+      "wiki": "https://en.wikipedia.org/wiki/Hoatzin"
+    },
+    {
+      "id": "wild-turkey",
+      "description": "An upland game bird native to North America, one of two extant turkey.",
+      "wiki": "https://en.wikipedia.org/wiki/Wild_turkey"
+    },
+    {
+      "id": "ocellaris-clownfish",
+      "description": "A marine fish belonging to the family Pomacentridae, which includes clownfishes and damselfishes.",
+      "wiki": "https://en.wikipedia.org/wiki/Ocellaris_clownfish"
+    },
+    {
+      "id": "great-barracuda",
+      "description": "A barracuda, a 27 large ray-finned fish found in subtropical oceans worldwide.",
+      "wiki": "https://en.wikipedia.org/wiki/Great_barracuda"
+    },
+    {
+      "id": "atlantic-salmon",
+      "description": "A ray-finned fish in the family Salmonidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Atlantic_salmon"
+    },
+    {
+      "id": "west-indian-ocean-coelacanth",
+      "description": "A crossopterygian, one of two extant coelacanth, a rare vertebrates more closely related to lungfish.",
+      "wiki": "https://en.wikipedia.org/wiki/West_Indian_Ocean_coelacanth"
+    },
+    {
+      "id": "ocean-sunfish",
+      "description": "One of the largest ray-finned fish in the world.",
+      "wiki": "https://en.wikipedia.org/wiki/Ocean_sunfish"
+    },
+    {
+      "id": "atlantic-bluefin-tuna",
+      "description": "A tuna in the family Scombridae.",
+      "wiki": "https://en.wikipedia.org/wiki/Atlantic_bluefin_tuna"
+    },
+    {
+      "id": "red-bellied-piranha",
+      "description": "A freshwater ray-finned fish belonging to the family Serrasalmidae, which includes the pacus, piranhas.",
+      "wiki": "https://en.wikipedia.org/wiki/Red-bellied_piranha"
+    },
+    {
+      "id": "electric-eel",
+      "description": "Genus, Electrophorus, of neotropical freshwater fish from South America in the family Gymnotidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Electric_eel"
+    },
+    {
+      "id": "red-lionfish",
+      "description": "A venomous coral reef fish in the family Scorpaenidae, order Scorpaeniformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Red_lionfish"
+    },
+    {
+      "id": "atlantic-cod",
+      "description": "A fish of the family Gadidae, widely consumed by humans.",
+      "wiki": "https://en.wikipedia.org/wiki/Atlantic_cod"
+    },
+    {
+      "id": "goldfish",
+      "description": "A freshwater fish in the family Cyprinidae of the order Cypriniformes.",
+      "wiki": "https://en.wikipedia.org/wiki/Goldfish"
+    },
+    {
+      "id": "swordfish",
+      "description": "Large, highly migratory predatory fish characterized by a long, flat, sword-like, pointed bill.",
+      "wiki": "https://en.wikipedia.org/wiki/Swordfish"
+    },
+    {
+      "id": "leafy-seadragon",
+      "description": "A marine fish.",
+      "wiki": "https://en.wikipedia.org/wiki/Leafy_seadragon"
+    },
+    {
+      "id": "humpback-anglerfish",
+      "description": "A black seadevil in the Melanocetidae, which means \"black sea monster\".",
+      "wiki": "https://en.wikipedia.org/wiki/Humpback_anglerfish"
+    },
+    {
+      "id": "blobfish",
+      "description": "A deep-sea fish of the family Psychrolutidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Psychrolutes_marcidus"
+    },
+    {
+      "id": "portuguese-man-o-war",
+      "description": "A marine hydrozoan found in the Atlantic, Indian, and Pacific oceans.",
+      "wiki": "https://en.wikipedia.org/wiki/Portuguese_man_o'_war"
+    },
+    {
+      "id": "american-lobster",
+      "description": "A lobster found on the Atlantic coast of North America.",
+      "wiki": "https://en.wikipedia.org/wiki/American_lobster"
+    },
+    {
+      "id": "antarctic-krill",
+      "description": "A krill found in the Antarctic waters of the Southern Ocean.",
+      "wiki": "https://en.wikipedia.org/wiki/Antarctic_krill"
+    },
+    {
+      "id": "peacock-mantis-shrimp",
+      "description": "A large odontodactylid stomatopod native to the epipelagic seabed across the Indo-Pacific.",
+      "wiki": "https://en.wikipedia.org/wiki/Odontodactylus_scyllarus"
+    },
+    {
+      "id": "atlas-moth",
+      "description": "A large saturniid moth endemic to the forests of Asia.",
+      "wiki": "https://en.wikipedia.org/wiki/Attacus_atlas"
+    },
+    {
+      "id": "luna-moth",
+      "description": "A Nearctic moth in the family Saturniidae, subfamily Saturniinae.",
+      "wiki": "https://en.wikipedia.org/wiki/Luna_moth"
+    },
+    {
+      "id": "european-mantis",
+      "description": "A large hemimetabolic insect in the family Mantidae, which is the largest order Mantodea.",
+      "wiki": "https://en.wikipedia.org/wiki/European_mantis"
+    },
+    {
+      "id": "desert-locust",
+      "description": "A locust in the grasshopper family, Acrididae.",
+      "wiki": "https://en.wikipedia.org/wiki/Desert_locust"
+    },
+    {
+      "id": "emperor-dragonfly",
+      "description": "A large hawker dragonfly of the family Aeshnidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Emperor_dragonfly"
+    },
+    {
+      "id": "giant-squid",
+      "description": "A deep-ocean dwelling squid in the family Architeuthidae.",
+      "wiki": "https://en.wikipedia.org/wiki/Giant_squid"
+    },
+    {
+      "id": "chambered-nautilus",
+      "description": "The best-known nautilus.",
+      "wiki": "https://en.wikipedia.org/wiki/Chambered_nautilus"
+    },
+    {
+      "id": "crown-of-thorns-starfish",
+      "description": "A large starfish that preys upon hard coral polyps.",
+      "wiki": "https://en.wikipedia.org/wiki/Crown-of-thorns_starfish"
+    }
+  ]
+}

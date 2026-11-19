@@ -41,9 +41,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Records first, then reports. Other data problems still exit non-zero; the
-      # check job reports those, so here they must not stop the day being recorded.
-      - run: npm run validate-data -- --record || true
+      # In --record mode, data problems are printed but do not fail (the check job
+      # reports them). It fails if it crashes, or if today's puzzle is not in
+      # scripts/released-puzzles.json afterwards, so a green run means it recorded.
+      - run: npm run validate-data -- --record
       - name: Commit the record
         run: |
           git add scripts/released-puzzles.json

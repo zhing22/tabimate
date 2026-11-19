@@ -1,6 +1,6 @@
 // Dev only: drives the scene with a scripted run so it can be watched (and
 // screenshotted) without playing. See dev/scene.html.
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 import { createBus, type GameEvents } from '@/core/events';
 import type { Animal, RoundResult, RunState } from '@/core/types';
 import { createScene } from '@/scene/sceneManager';

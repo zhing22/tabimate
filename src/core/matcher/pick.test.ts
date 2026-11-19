@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 import { breakTie, compareTies, pickBest } from './pick';
 import { candidate, groupCandidate } from './testFixtures';
 import type { Candidate, NormalizedInput, TieReason } from './types';

@@ -1,10 +1,10 @@
 import type { Portraits } from '@/core/portrait';
-import { isShiny, type LevelId } from '@/config/tiers';
+import { isShiny, type LevelId } from '@/config/levels';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
 import { h } from '../dom';
 import type { Component } from './component';
 import { portrait } from './portrait';
-import { tierBadge } from './tierBadge';
+import { levelBadge } from './levelBadge';
 
 /** One answer to a prompt, as the results list it. */
 export interface AnswerLine {
@@ -54,7 +54,7 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): C
     ...rounds.map(({ prompt, result, animal, answers }) =>
       h(
         'li',
-        { 'data-tier': result.match.level },
+        { 'data-level': result.match.level },
         h(
           'details',
           { class: 'team-card__member' },
@@ -70,7 +70,7 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): C
               h('span', { class: 'team-card__name' }, animal?.display ?? 'No match'),
               h('span', { class: 'team-card__prompt' }, prompt.text),
             ),
-            tierBadge(result.match.level, { compact: true }).el,
+            levelBadge(result.match.level, { compact: true }).el,
           ),
           h('p', { class: 'team-card__answers-title' }, `All ${answers.length} answers · points`),
           answerList(answers),

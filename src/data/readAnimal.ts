@@ -82,6 +82,9 @@ const TRAIT_READERS: { readonly [K in keyof AnimalTraits]-?: Reader<AnimalTraits
   size: one(BODY_SIZES),
 };
 
+/** Every trait key, in table order: for reports over the data. */
+export const TRAIT_KEYS = Object.keys(TRAIT_READERS) as readonly (keyof AnimalTraits)[];
+
 const isTrait = (key: string): key is keyof AnimalTraits => Object.hasOwn(TRAIT_READERS, key);
 
 function readTraits(r: JsonReader, value: unknown, path: string): AnimalTraits {
@@ -104,14 +107,23 @@ function description(r: JsonReader, value: unknown, path: string): string {
   return text;
 }
 
+/** Descriptions are drafted from English Wikipedia, so the link shown beside them goes there. */
+const WIKI = /^https:\/\/en\.wikipedia\.org\/wiki\/[^\s/?#]+$/;
+
 function wiki(r: JsonReader, value: unknown, path: string): string {
   const url = r.string(value, path);
-  return url.startsWith('https://') ? url : r.fail(path, `must be an https:// link (got "${url}")`);
+  return WIKI.test(url)
+    ? url
+    : r.fail(path, `must be an https://en.wikipedia.org/wiki/ article link (got "${url}")`);
 }
 
 /** One animals.json entry. Hierarchy links are checked once all are read (checkHierarchy). */
 export function readAnimal(r: JsonReader, value: unknown, path: string): Animal {
   const o = r.object(value, path);
+  // A reviewed description must exist: "reviewed" with nothing to review is a mistake.
+  if (o.descriptionReviewed === true && o.description === undefined) {
+    r.fail(field(path, 'description'), 'is missing, but descriptionReviewed is true');
+  }
   return {
     id: slug(r, o.id, field(path, 'id')),
     display: r.string(o.display, field(path, 'display')),

@@ -94,8 +94,8 @@
 }
 
 /*
- * Tier effects, keyed by TIERS[].effectId rather than tier number, so moving an
- * effect to another tier is a config change. Each looks different on the badge:
+ * Level effects, keyed by LEVELS[].effectId rather than level number, so moving an
+ * effect to another level is a config change. Each looks different on the badge:
  * glint a shine sweeping across, sparkle a pulsing halo, shiny a glow on it all.
  */
 .reveal[data-effect='glint'] .level-badge,
@@ -164,7 +164,7 @@
   }
 }
 
-/* The button continues the game; it takes no part in the tier's effect. */
+/* The button continues the game; it takes no part in the level's effect. */
 .reveal__next {
   margin-top: var(--space-2);
   text-shadow: none;

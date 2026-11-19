@@ -1,4 +1,4 @@
-import type { LevelId } from '@/config/tiers';
+import type { LevelId } from '@/config/levels';
 import { shiftKey } from './date';
 import { dayTotal } from './scoring';
 import type { DateKey, RunState } from './types';

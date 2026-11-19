@@ -1,6 +1,6 @@
 import type { KAPLAYCtx } from 'kaplay';
 import { describe, expect, it, vi } from 'vitest';
-import { LEVELS, type LevelId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/levels';
 import { createEffectsLayer, type Decorated } from './effectsLayer';
 import { createParticles, createTwinkle } from './particles';
 import { EFFECTS } from './registry';

@@ -1,0 +1,563 @@
+# Tabimate animal list: the input for npm run seed-traits (see scripts/lib/animalList.ts).
+#   kind | Display name | key=value ...   keys: id wiki parent rep emoji move
+
+# --- Animals already in animals.json ---
+group | Penguin | rep=emperor-penguin
+group | Bear | rep=brown-bear
+group | Big cat | rep=lion
+group | Sea turtle | rep=leatherback-turtle
+group | Crocodile | rep=saltwater-crocodile
+group | Seal | wiki=Earless seal | rep=harbour-seal
+group | Elephant | rep=african-elephant
+group | Rhinoceros | rep=white-rhino
+group | Orangutan | rep=bornean-orangutan
+group | Whale | rep=humpback-whale
+group | Dolphin | rep=bottlenose-dolphin
+group | Shark | rep=great-white-shark
+group | Eagle | rep=bald-eagle
+group | Owl | rep=barn-owl
+group | Parrot | rep=african-grey-parrot
+group | Salamander | rep=chinese-giant-salamander
+group | Wolf | wiki=Canis | rep=grey-wolf
+group | Fox | rep=red-fox
+group | Kangaroo | rep=red-kangaroo
+group | Echidna | rep=short-beaked-echidna
+group | Hedgehog | rep=european-hedgehog
+group | Rabbit | rep=european-rabbit
+group | Mouse | rep=house-mouse
+group | Gorilla | rep=eastern-gorilla
+group | Lemur | rep=ruffed-lemur
+group | Zebra | rep=plains-zebra
+group | Tapir | rep=malayan-tapir
+group | Pangolin | rep=sunda-pangolin
+group | Kiwi | wiki=Kiwi (bird) | rep=brown-kiwi
+group | Ostrich | rep=common-ostrich
+group | Peafowl | rep=indian-peafowl
+group | Giant salamander | wiki=Cryptobranchidae | parent=salamander | rep=chinese-giant-salamander
+group | Falcon | rep=peregrine-falcon
+group | Condor | wiki=Condor | rep=california-condor
+group | Flamingo | rep=greater-flamingo
+group | Crane | wiki=Crane (bird) | rep=red-crowned-crane
+group | Stork | rep=white-stork
+group | Lapwing | rep=northern-lapwing
+group | Hummingbird | rep=ruby-throated-hummingbird
+group | Kingfisher | rep=common-kingfisher
+group | Magpie | rep=eurasian-magpie
+group | Duck | rep=mallard
+group | Puffin | rep=atlantic-puffin
+group | Albatross | rep=wandering-albatross
+group | Flying fox | wiki=Pteropus | parent=bat | rep=grey-headed-flying-fox
+group | Hammerhead shark | parent=shark | rep=great-hammerhead
+group | Octopus | rep=common-octopus
+group | Sea cow | wiki=Sirenia | rep=dugong
+group | Manatee | parent=sea-cow | rep=west-indian-manatee
+
+species | Lion | parent=big-cat
+species | Tiger | parent=big-cat
+species | Snow leopard | parent=big-cat
+species | Cheetah | parent=big-cat
+species | African elephant | parent=elephant
+species | Asian elephant | parent=elephant
+species | Giant panda | parent=bear
+species | Red panda
+species | Polar bear | parent=bear
+species | Brown bear | parent=bear
+species | Grey wolf | wiki=Wolf | parent=wolf
+species | Red fox | parent=fox
+species | Koala
+species | Red kangaroo | parent=kangaroo
+species | Tasmanian devil
+species | Platypus
+species | Short-beaked echidna | parent=echidna
+species | European hedgehog | parent=hedgehog
+species | European rabbit | parent=rabbit
+species | House mouse | parent=mouse
+species | Sumatran orangutan | parent=orangutan
+species | Bornean orangutan | parent=orangutan
+species | Eastern gorilla | parent=gorilla
+species | Chimpanzee
+species | Black-and-white ruffed lemur | id=ruffed-lemur | parent=lemur
+species | Black rhinoceros | id=black-rhino | parent=rhinoceros
+species | White rhinoceros | id=white-rhino | parent=rhinoceros
+species | Giraffe
+species | Plains zebra | parent=zebra
+species | Hippopotamus | id=hippo
+species | Malayan tapir | parent=tapir
+species | Sunda pangolin | parent=pangolin
+species | Komodo dragon | parent=lizard
+species | Saltwater crocodile | parent=crocodile
+species | Emu
+species | Common ostrich | parent=ostrich
+species | North Island brown kiwi | id=brown-kiwi | parent=kiwi
+species | Kākāpō | parent=parrot
+species | Indian peafowl | parent=peafowl
+species | Axolotl | parent=salamander
+species | Chinese giant salamander | parent=giant-salamander
+species | Bald eagle | parent=eagle
+species | Peregrine falcon | parent=falcon
+species | Philippine eagle | parent=eagle
+species | California condor | parent=condor
+species | Barn owl | wiki=Western barn owl | parent=owl
+species | Snowy owl | parent=owl
+species | African grey parrot | parent=parrot
+species | Greater flamingo | parent=flamingo
+species | Red-crowned crane | parent=crane
+species | White stork | parent=stork
+species | Northern lapwing | parent=lapwing
+species | Ruby-throated hummingbird | parent=hummingbird
+species | Common kingfisher | parent=kingfisher
+species | Eurasian magpie | parent=magpie
+species | Mallard | parent=duck
+species | Atlantic puffin | parent=puffin
+species | Wandering albatross | parent=albatross
+species | Grey-headed flying fox | parent=flying-fox
+species | Killer whale | parent=dolphin
+species | Blue whale | parent=whale
+species | Humpback whale | parent=whale
+species | Vaquita
+species | Bottlenose dolphin | parent=dolphin
+species | Great white shark | parent=shark
+species | Whale shark | parent=shark
+species | Great hammerhead | parent=hammerhead-shark
+species | Hawksbill turtle | parent=sea-turtle
+species | Leatherback turtle | parent=sea-turtle
+species | Common octopus | parent=octopus
+species | Dugong | parent=sea-cow
+species | West Indian manatee | parent=manatee
+species | Sea otter | parent=otter
+species | Harbour seal | parent=seal
+species | Emperor penguin | parent=penguin
+species | African penguin | parent=penguin
+
+# --- New groups (v2 Step 3) ---
+group | Frog | rep=american-bullfrog | emoji=🐸 | move=land
+group | Snake | rep=king-cobra | emoji=🐍 | move=land
+group | Lizard | rep=green-iguana | emoji=🦎 | move=land
+group | Tortoise | rep=galapagos-tortoise | emoji=🐢 | move=land
+group | Deer | rep=red-deer | emoji=🦌 | move=land
+group | Antelope | rep=springbok | emoji=🦌 | move=land
+group | Monkey | rep=japanese-macaque | emoji=🐒 | move=land
+group | Squirrel | rep=red-squirrel | emoji=🐿️ | move=land
+group | Hawk | rep=red-tailed-hawk | emoji=🦅 | move=sky
+group | Gull | rep=european-herring-gull | emoji=🐦 | move=sky
+group | Heron | rep=grey-heron | emoji=🐦 | move=sky
+group | Swan | rep=mute-swan | emoji=🦢 | move=water
+group | Goose | rep=canada-goose | emoji=🐦 | move=water
+group | Woodpecker | rep=great-spotted-woodpecker | emoji=🐦 | move=sky
+group | Hornbill | rep=great-hornbill | emoji=🐦 | move=sky
+group | Toucan | rep=toco-toucan | emoji=🐦 | move=sky
+group | Ray | wiki=Batoidea | rep=giant-oceanic-manta-ray | emoji=🐟 | move=water
+group | Jellyfish | rep=moon-jellyfish | emoji=🪼 | move=water
+group | Crab | rep=red-king-crab | emoji=🦀 | move=land
+group | Butterfly | rep=monarch-butterfly | emoji=🦋 | move=sky
+group | Bee | rep=western-honey-bee | emoji=🐝 | move=sky
+group | Beetle | rep=hercules-beetle | emoji=🪲 | move=land
+group | Ant | rep=bullet-ant | emoji=🐜 | move=land
+group | Spider | rep=goliath-birdeater | emoji=🕷️ | move=land
+group | Scorpion | rep=emperor-scorpion | emoji=🦂 | move=land
+group | Otter | rep=eurasian-otter | emoji=🦦 | move=water
+group | Camel | rep=dromedary | emoji=🐫 | move=land
+group | Bat | rep=common-vampire-bat | emoji=🦇 | move=sky
+group | Hare | rep=european-hare | emoji=🐇 | move=land
+group | Gibbon | rep=lar-gibbon | emoji=🐒 | move=land
+group | Pelican | rep=australian-pelican | emoji=🐦 | move=water
+group | Vulture | rep=bearded-vulture | emoji=🦅 | move=sky
+
+# --- New species in existing groups ---
+species | King penguin | parent=penguin
+species | Adélie penguin | parent=penguin
+species | Gentoo penguin | parent=penguin
+species | Chinstrap penguin | parent=penguin
+species | Little penguin | parent=penguin
+species | Macaroni penguin | parent=penguin
+species | Humboldt penguin | parent=penguin
+species | Southern rockhopper penguin | parent=penguin
+species | Yellow-eyed penguin | parent=penguin
+species | Galápagos penguin | parent=penguin
+species | Sun bear | parent=bear
+species | Sloth bear | parent=bear
+species | American black bear | parent=bear
+species | Asian black bear | parent=bear
+species | Spectacled bear | parent=bear
+species | Leopard | parent=big-cat
+species | Jaguar | parent=big-cat
+species | Clouded leopard | parent=big-cat
+species | Green sea turtle | parent=sea-turtle
+species | Loggerhead sea turtle | parent=sea-turtle
+species | Olive ridley sea turtle | parent=sea-turtle
+species | Kemp's ridley sea turtle | parent=sea-turtle
+species | Nile crocodile | parent=crocodile
+species | American crocodile | parent=crocodile
+species | Mugger crocodile | parent=crocodile
+species | Grey seal | parent=seal
+species | Leopard seal | parent=seal
+species | Weddell seal | parent=seal
+species | Harp seal | parent=seal
+species | Southern elephant seal | parent=seal
+species | Hawaiian monk seal | parent=seal
+species | African forest elephant | parent=elephant
+species | Indian rhinoceros | parent=rhinoceros
+species | Sumatran rhinoceros | parent=rhinoceros
+species | Javan rhinoceros | parent=rhinoceros
+species | Tapanuli orangutan | parent=orangutan
+species | Fin whale | parent=whale
+species | Sperm whale | parent=whale
+species | Common minke whale | parent=whale
+species | Bowhead whale | parent=whale
+species | North Atlantic right whale | parent=whale
+species | Gray whale | parent=whale
+species | Beluga whale | parent=whale
+species | Narwhal | parent=whale
+species | Short-beaked common dolphin | parent=dolphin
+species | Amazon river dolphin | parent=dolphin
+species | Risso's dolphin | parent=dolphin
+species | Hector's dolphin | parent=dolphin
+species | Spinner dolphin | parent=dolphin
+species | Tiger shark | parent=shark
+species | Bull shark | parent=shark
+species | Shortfin mako shark | parent=shark
+species | Basking shark | parent=shark
+species | Blue shark | parent=shark
+species | Nurse shark | parent=shark
+species | Greenland shark | parent=shark
+species | Scalloped hammerhead | parent=hammerhead-shark
+species | Golden eagle | parent=eagle
+species | Harpy eagle | parent=eagle
+species | White-tailed eagle | parent=eagle
+species | Steller's sea eagle | parent=eagle
+species | Martial eagle | parent=eagle
+species | Great horned owl | parent=owl
+species | Eurasian eagle-owl | parent=owl
+species | Tawny owl | parent=owl
+species | Burrowing owl | parent=owl
+species | Little owl | parent=owl
+species | Scarlet macaw | parent=parrot
+species | Hyacinth macaw | parent=parrot
+species | Budgerigar | parent=parrot
+species | Cockatiel | parent=parrot
+species | Sulphur-crested cockatoo | parent=parrot
+species | Kea | parent=parrot
+species | Rainbow lorikeet | parent=parrot
+species | Fire salamander | parent=salamander
+species | Japanese giant salamander | parent=giant-salamander
+species | Hellbender | parent=giant-salamander
+species | Olm | parent=salamander
+species | Great crested newt | parent=salamander
+species | Ethiopian wolf | parent=wolf
+species | Red wolf | parent=wolf
+species | Arctic fox | parent=fox
+species | Fennec fox | parent=fox
+species | Kit fox | parent=fox
+species | Gray fox | parent=fox
+species | Eastern grey kangaroo | parent=kangaroo
+species | Western grey kangaroo | parent=kangaroo
+species | Western long-beaked echidna | parent=echidna
+species | Four-toed hedgehog | parent=hedgehog
+species | Pygmy rabbit | parent=rabbit
+species | Wood mouse | parent=mouse
+species | Western gorilla | parent=gorilla
+species | Ring-tailed lemur | parent=lemur
+species | Red ruffed lemur | parent=lemur
+species | Gray mouse lemur | parent=lemur
+species | Aye-aye | parent=lemur
+species | Grévy's zebra | parent=zebra
+species | Mountain zebra | parent=zebra
+species | Baird's tapir | parent=tapir
+species | South American tapir | parent=tapir
+species | Mountain tapir | parent=tapir
+species | Chinese pangolin | parent=pangolin
+species | Giant pangolin | parent=pangolin
+species | Ground pangolin | parent=pangolin
+species | Great spotted kiwi | parent=kiwi
+species | Little spotted kiwi | parent=kiwi
+species | Somali ostrich | parent=ostrich
+species | Green peafowl | parent=peafowl
+species | Congo peafowl | parent=peafowl
+species | Gyrfalcon | parent=falcon
+species | Common kestrel | parent=falcon
+species | Merlin | wiki=Merlin (bird) | parent=falcon
+species | Andean condor | parent=condor
+species | American flamingo | parent=flamingo
+species | Lesser flamingo | parent=flamingo
+species | Chilean flamingo | parent=flamingo
+species | Whooping crane | parent=crane
+species | Sarus crane | parent=crane
+species | Grey crowned crane | parent=crane
+species | Common crane | parent=crane
+species | Marabou stork | parent=stork
+species | Black stork | parent=stork
+species | Saddle-billed stork | parent=stork
+species | Southern lapwing | parent=lapwing
+species | Masked lapwing | parent=lapwing
+species | Anna's hummingbird | parent=hummingbird
+species | Bee hummingbird | parent=hummingbird
+species | Sword-billed hummingbird | parent=hummingbird
+species | Laughing kookaburra | parent=kingfisher
+species | Belted kingfisher | parent=kingfisher
+species | Sacred kingfisher | parent=kingfisher
+species | Black-billed magpie | parent=magpie
+species | Red-billed blue magpie | parent=magpie
+species | Mandarin duck | parent=duck
+species | Wood duck | parent=duck
+species | Common eider | parent=duck
+species | Northern pintail | parent=duck
+species | Muscovy duck | parent=duck
+species | Horned puffin | parent=puffin
+species | Tufted puffin | parent=puffin
+species | Black-browed albatross | parent=albatross
+species | Laysan albatross | parent=albatross
+species | Southern royal albatross | parent=albatross
+species | Indian flying fox | parent=flying-fox
+species | Large flying fox | parent=flying-fox
+species | Giant Pacific octopus | parent=octopus
+species | Greater blue-ringed octopus | parent=octopus
+species | Mimic octopus | parent=octopus
+species | Amazonian manatee | parent=manatee
+species | West African manatee | parent=manatee
+species | Steller's sea cow | parent=sea-cow
+
+# --- New species in new groups ---
+species | American bullfrog | parent=frog
+species | Strawberry poison-dart frog | parent=frog
+species | Red-eyed tree frog | wiki=Agalychnis callidryas | parent=frog
+species | Common frog | parent=frog
+species | African clawed frog | parent=frog
+species | Goliath frog | parent=frog
+species | Cane toad | parent=frog
+species | Common toad | parent=frog
+species | King cobra | parent=snake
+species | Black mamba | parent=snake
+species | Reticulated python | parent=snake
+species | Green anaconda | parent=snake
+species | Inland taipan | parent=snake
+species | Eastern diamondback rattlesnake | parent=snake
+species | Boa constrictor | parent=snake
+species | Grass snake | parent=snake
+species | Green iguana | parent=lizard
+species | Marine iguana | parent=lizard
+species | Gila monster | parent=lizard
+species | Frilled lizard | parent=lizard
+species | Thorny devil | parent=lizard
+species | Veiled chameleon | parent=lizard
+species | Panther chameleon | parent=lizard
+species | Leopard gecko | wiki=Common leopard gecko | parent=lizard
+species | Tokay gecko | parent=lizard
+species | Galápagos tortoise | parent=tortoise
+species | Aldabra giant tortoise | parent=tortoise
+species | African spurred tortoise | parent=tortoise
+species | Hermann's tortoise | parent=tortoise
+species | Gopher tortoise | parent=tortoise
+species | Red deer | parent=deer
+species | Moose | parent=deer
+species | Reindeer | parent=deer
+species | White-tailed deer | parent=deer
+species | Roe deer | wiki=European roe deer | parent=deer
+species | Fallow deer | wiki=European fallow deer | parent=deer
+species | Chital | parent=deer
+species | Springbok | parent=antelope
+species | Impala | parent=antelope
+species | Blue wildebeest | parent=antelope
+species | Greater kudu | parent=antelope
+species | Gemsbok | parent=antelope
+species | Saiga antelope | parent=antelope
+species | Sable antelope | parent=antelope
+species | Addax | parent=antelope
+species | Japanese macaque | parent=monkey
+species | Proboscis monkey | parent=monkey
+species | Mandrill | parent=monkey
+species | Golden snub-nosed monkey | parent=monkey
+species | Mantled howler | parent=monkey
+species | Common squirrel monkey | parent=monkey
+species | Golden lion tamarin | parent=monkey
+species | Rhesus macaque | parent=monkey
+species | Red squirrel | parent=squirrel
+species | Eastern gray squirrel | parent=squirrel
+species | Siberian flying squirrel | parent=squirrel
+species | Black-tailed prairie dog | parent=squirrel
+species | Alpine marmot | parent=squirrel
+species | Red-tailed hawk | parent=hawk
+species | Cooper's hawk | parent=hawk
+species | Eurasian goshawk | parent=hawk
+species | Harris's hawk | parent=hawk
+species | European herring gull | parent=gull
+species | Black-headed gull | parent=gull
+species | Black-legged kittiwake | parent=gull
+species | Laughing gull | parent=gull
+species | Grey heron | parent=heron
+species | Great blue heron | parent=heron
+species | Great egret | parent=heron
+species | Little egret | parent=heron
+species | Black-crowned night heron | parent=heron
+species | Mute swan | parent=swan
+species | Black swan | parent=swan
+species | Trumpeter swan | parent=swan
+species | Whooper swan | parent=swan
+species | Canada goose | parent=goose
+species | Greylag goose | parent=goose
+species | Bar-headed goose | parent=goose
+species | Nēnē | parent=goose
+species | Great spotted woodpecker | parent=woodpecker
+species | Pileated woodpecker | parent=woodpecker
+species | European green woodpecker | parent=woodpecker
+species | Acorn woodpecker | parent=woodpecker
+species | Great hornbill | parent=hornbill
+species | Southern ground hornbill | parent=hornbill
+species | Rhinoceros hornbill | parent=hornbill
+species | Toco toucan | parent=toucan
+species | Keel-billed toucan | parent=toucan
+species | Giant oceanic manta ray | parent=ray
+species | Spotted eagle ray | parent=ray
+species | Common stingray | parent=ray
+species | Smalltooth sawfish | parent=ray
+species | Moon jellyfish | wiki=Aurelia aurita | parent=jellyfish
+species | Lion's mane jellyfish | parent=jellyfish
+species | Box jellyfish | wiki=Chironex fleckeri | parent=jellyfish
+species | Red king crab | parent=crab
+species | Japanese spider crab | parent=crab
+species | Coconut crab | parent=crab
+species | Blue crab | wiki=Callinectes sapidus | parent=crab
+species | Monarch butterfly | parent=butterfly
+species | Queen Alexandra's birdwing | parent=butterfly
+species | Menelaus blue morpho | wiki=Morpho menelaus | parent=butterfly
+species | Painted lady | wiki=Vanessa cardui | parent=butterfly
+species | Western honey bee | parent=bee
+species | Buff-tailed bumblebee | parent=bee
+species | Hercules beetle | parent=beetle
+species | European stag beetle | wiki=Lucanus cervus | parent=beetle
+species | Seven-spot ladybird | wiki=Coccinella septempunctata | parent=beetle
+species | Sacred scarab | wiki=Scarabaeus sacer | parent=beetle
+species | Bullet ant | parent=ant
+species | Red wood ant | wiki=Formica rufa | parent=ant
+species | Goliath birdeater | parent=spider
+species | Southern black widow | wiki=Latrodectus mactans | parent=spider
+species | Peacock spider | wiki=Maratus volans | parent=spider
+species | European garden spider | wiki=Araneus diadematus | parent=spider
+species | Emperor scorpion | parent=scorpion
+species | Deathstalker | parent=scorpion
+species | Eurasian otter | parent=otter
+species | Giant otter | parent=otter
+species | North American river otter | parent=otter
+species | Dromedary | parent=camel
+species | Bactrian camel | parent=camel
+species | Common vampire bat | parent=bat
+species | Little brown bat | parent=bat
+species | Mexican free-tailed bat | parent=bat
+species | European hare | parent=hare
+species | Arctic hare | parent=hare
+species | Snowshoe hare | parent=hare
+species | Lar gibbon | parent=gibbon
+species | Siamang | parent=gibbon
+species | Australian pelican | parent=pelican
+species | Brown pelican | parent=pelican
+species | Great white pelican | parent=pelican
+species | Bearded vulture | parent=vulture
+species | Turkey vulture | parent=vulture
+species | Griffon vulture | parent=vulture
+
+# --- New species without a group ---
+species | Cougar
+species | Eurasian lynx
+species | Serval
+species | Caracal
+species | Ocelot
+species | Sand cat
+species | Gharial
+species | American alligator
+species | Spectacled caiman
+species | Tuatara
+species | Walrus
+species | California sea lion
+species | Bonobo
+species | Sunda slow loris
+species | Philippine tarsier
+species | Capybara
+species | North American beaver
+species | Naked mole-rat
+species | Long-tailed chinchilla
+species | North American porcupine
+species | Guinea pig
+species | Brown rat
+species | Golden hamster
+species | Giant anteater
+species | Nine-banded armadillo
+species | Brown-throated sloth
+species | Aardvark
+species | Okapi
+species | Meerkat
+species | Spotted hyena
+species | African wild dog
+species | Raccoon
+species | Wolverine
+species | Honey badger
+species | European badger
+species | American bison
+species | Wild yak
+species | Muskox
+species | Wild boar
+species | Common warthog
+species | Pygmy hippopotamus
+species | Dingo
+species | Common wombat
+species | Sugar glider
+species | Quokka
+species | Numbat
+species | Llama
+species | Alpaca
+species | Vicuña
+species | Pronghorn
+species | Thylacine
+species | Woolly mammoth
+species | Osprey
+species | Secretarybird
+species | Red kite
+species | Southern cassowary
+species | Greater rhea
+species | Greater roadrunner
+species | Superb lyrebird
+species | Resplendent quetzal
+species | Victoria crowned pigeon
+species | Dodo
+species | Passenger pigeon
+species | Great auk
+species | Barn swallow
+species | European robin
+species | American robin
+species | House sparrow
+species | Common starling
+species | Blue jay
+species | Northern cardinal
+species | Common raven
+species | Eurasian blue tit
+species | Arctic tern
+species | Blue-footed booby
+species | Magnificent frigatebird
+species | Shoebill
+species | Hoatzin
+species | Wild turkey
+species | Ocellaris clownfish
+species | Great barracuda
+species | Atlantic salmon
+species | West Indian Ocean coelacanth
+species | Ocean sunfish
+species | Atlantic bluefin tuna
+species | Red-bellied piranha
+species | Electric eel
+species | Red lionfish
+species | Atlantic cod
+species | Goldfish
+species | Swordfish
+species | Leafy seadragon
+species | Humpback anglerfish
+species | Blobfish | wiki=Psychrolutes marcidus
+species | Portuguese man o' war
+species | American lobster
+species | Antarctic krill
+species | Peacock mantis shrimp
+species | Atlas moth
+species | Luna moth
+species | European mantis
+species | Desert locust
+species | Emperor dragonfly
+species | Giant squid
+species | Chambered nautilus
+species | Crown-of-thorns starfish

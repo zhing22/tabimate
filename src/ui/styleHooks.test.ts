@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { LEVELS } from '@/config/tiers';
-import { tierBadge } from './components/tierBadge';
+import { LEVELS } from '@/config/levels';
+import { levelBadge } from './components/levelBadge';
 
 // Class names and custom properties are plain strings, so renaming one side
 // (TypeScript or CSS) leaves the other silently unstyled. These tests tie them.
@@ -23,7 +23,7 @@ describe('style hooks', () => {
     for (const { id } of LEVELS) {
       for (const size of ['sm', 'lg'] as const) {
         for (const compact of [false, true]) {
-          tierBadge(id, { size, compact }).el.classList.forEach((c) => classes.add(c));
+          levelBadge(id, { size, compact }).el.classList.forEach((c) => classes.add(c));
         }
       }
     }

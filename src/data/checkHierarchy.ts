@@ -1,5 +1,5 @@
-import { type AnswerLevel, LEVELS, TOP_LEVEL } from '@/config/tiers';
-import { ancestorsOf } from '@/core/hierarchy';
+import { type AnswerLevel, LEVELS, TOP_LEVEL } from '@/config/levels';
+import { ancestorsOf, isMoreSpecific } from '@/core/hierarchy';
 import type { Animal, AnimalLookup, AnimalId, PuzzleAnswer } from '@/core/types';
 import { DataError } from './dataError';
 import { field, item, type JsonReader } from './jsonReader';
@@ -36,7 +36,7 @@ function checkRepresentative(r: JsonReader, animal: Animal, path: string, animal
   if (id === undefined) return r.fail(at, 'must be set for a group (its sprite comes from it)');
   const rep = animals.get(id);
   if (!rep) return r.fail(at, `"${id}" is not in the animal registry`);
-  const below = rep.kind === 'species' && ancestorsOf(rep, animals).some((g) => g.id === animal.id);
+  const below = rep.kind === 'species' && isMoreSpecific(rep, animal, animals);
   if (!below) r.fail(at, `"${id}" must be a species under "${animal.id}"`);
 }
 

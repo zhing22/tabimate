@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FOLLOWER_SPACING, MISS_WALK } from '@/config/render';
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
 import { type Point } from './entities/followerTrail';

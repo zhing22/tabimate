@@ -20,7 +20,7 @@ export interface LevelDef {
   /** Badge code: LC NT VU EN CR. */
   readonly shortName: string;
   /** CSS custom property defined in ui/styles/tokens.css. */
-  readonly colour: `--tier-${LevelId}`;
+  readonly colour: `--level-${LevelId}`;
   /** Square emoji used in share text. */
   readonly emoji: string;
   /** Fixed per level; read through core/scoring.ts, not from here. */
@@ -35,7 +35,7 @@ export const LEVELS = [
     id: 0,
     name: 'No match',
     shortName: '—',
-    colour: '--tier-0',
+    colour: '--level-0',
     emoji: '⬛',
     points: 0,
     effectId: 'none',
@@ -45,7 +45,7 @@ export const LEVELS = [
     id: 1,
     name: 'Least Concern',
     shortName: 'LC',
-    colour: '--tier-1',
+    colour: '--level-1',
     emoji: '⬜',
     points: 10,
     effectId: 'none',
@@ -55,7 +55,7 @@ export const LEVELS = [
     id: 2,
     name: 'Near Threatened',
     shortName: 'NT',
-    colour: '--tier-2',
+    colour: '--level-2',
     emoji: '🟦',
     points: 25,
     effectId: 'glint',
@@ -65,7 +65,7 @@ export const LEVELS = [
     id: 3,
     name: 'Vulnerable',
     shortName: 'VU',
-    colour: '--tier-3',
+    colour: '--level-3',
     emoji: '🟥',
     points: 50,
     effectId: 'glint',
@@ -75,7 +75,7 @@ export const LEVELS = [
     id: 4,
     name: 'Endangered',
     shortName: 'EN',
-    colour: '--tier-4',
+    colour: '--level-4',
     emoji: '🟪',
     points: 85,
     effectId: 'sparkle',
@@ -85,7 +85,7 @@ export const LEVELS = [
     id: 5,
     name: 'Critically Endangered',
     shortName: 'CR',
-    colour: '--tier-5',
+    colour: '--level-5',
     emoji: '🟨',
     points: 100,
     effectId: 'shiny',

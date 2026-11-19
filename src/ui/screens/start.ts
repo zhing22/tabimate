@@ -1,4 +1,4 @@
-import { ANSWER_LEVELS, LEVELS, TOP_LEVEL } from '@/config/tiers';
+import { ANSWER_LEVELS, LEVELS, TOP_LEVEL } from '@/config/levels';
 import { h, focus } from '../dom';
 import type { Screen } from '../host';
 

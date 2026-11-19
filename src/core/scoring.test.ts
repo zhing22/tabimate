@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { LevelId } from '@/config/tiers';
+import type { LevelId } from '@/config/levels';
 import type { RoundResult } from './types';
 import { dayTotal, pointsFor } from './scoring';
 

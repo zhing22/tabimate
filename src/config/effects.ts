@@ -1,7 +1,7 @@
 // Tuning for the level effects (scene/effects/). One entry per effect id in
-// config/tiers.ts. Distances are native pixels, speeds px/s, times seconds.
+// config/levels.ts. Distances are native pixels, speeds px/s, times seconds.
 import type { HexColour } from './colour';
-import type { EffectId } from './tiers';
+import type { EffectId } from './levels';
 
 /** A range to pick from at random: [min, max]. */
 export type Range = readonly [min: number, max: number];

@@ -41,7 +41,7 @@ Aim for at least one tester on each:
 **Prompt clarity**
 
 - Prompts people found vague or argued about ("fast", "colourful", "near water").
-- Prompts where nobody found a rare (high-tier) answer, or everyone did.
+- Prompts where nobody found a rare (high-level) answer, or everyone did.
 
 **Timer length**
 
@@ -78,6 +78,6 @@ Aim for at least one tester on each:
 
 - [ ] Write every reported prompt or answer problem in a list (date, prompt, guess,
       what should have happened).
-- [ ] Fix data in `public/data` (animals' aliases, answer lists, tiers), run
+- [ ] Fix data in `public/data` (animals' aliases, answer lists, levels), run
       `npm run check`, push. The live site updates on the next deploy.
 - [ ] Count the resets that passed without problems: three in a row means this step is done.

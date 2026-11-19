@@ -216,7 +216,30 @@ describe('validateAnimals: groups and extra fields', () => {
       '[0].description',
       /has 16 words \(at most 15\)/,
     ],
-    ['plain-http wiki', (l) => ((l[0]!.wiki = 'http://x.org'), l), '[0].wiki', /https:\/\//],
+    [
+      'plain-http wiki',
+      (l) => ((l[0]!.wiki = 'http://en.wikipedia.org/wiki/Fox'), l),
+      '[0].wiki',
+      /en\.wikipedia\.org\/wiki\/ article link/,
+    ],
+    [
+      'non-Wikipedia wiki',
+      (l) => ((l[0]!.wiki = 'https://example.org/fox'), l),
+      '[0].wiki',
+      /article link/,
+    ],
+    [
+      'other-language wiki',
+      (l) => ((l[0]!.wiki = 'https://de.wikipedia.org/wiki/Rotfuchs'), l),
+      '[0].wiki',
+      /article link/,
+    ],
+    [
+      'reviewed without a description',
+      (l) => ((l[0]!.descriptionReviewed = true), l),
+      '[0].description',
+      /missing, but descriptionReviewed is true/,
+    ],
     [
       'range of the wrong length',
       (l) => ((l[0]!.traits = { altitudeM: [100] }), l),

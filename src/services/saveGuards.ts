@@ -1,7 +1,7 @@
 // Shape checks for data read back from storage, which may be old, corrupt or
 // edited by hand. Deeper consistency (does a run fit its puzzle?) is checked
 // later by core's canRestore.
-import { isLevelId } from '@/config/tiers';
+import { isLevelId } from '@/config/levels';
 import { isDateKey } from '@/core/date';
 import { emptyStats, type HistoryEntry, type Stats } from '@/core/streak';
 import type {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LEVELS } from '@/config/tiers';
+import { LEVELS } from '@/config/levels';
 import tokens from './styles/tokens.css?raw';
 
 const token = (name: string): string | undefined =>
@@ -63,7 +63,7 @@ describe('style sheets', () => {
   // Effects are chosen by LEVELS[].effectId; a selector on the level number would bypass it.
   it('no selector styles a level by its number', () => {
     for (const [path, css] of Object.entries(sheets)) {
-      expect(css, path).not.toMatch(/\[data-tier=/);
+      expect(css, path).not.toMatch(/\[data-level=/);
     }
   });
 });

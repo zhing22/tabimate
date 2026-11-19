@@ -1,4 +1,4 @@
-/* Design tokens. Tier colours must match config/tiers.ts (checked by ui/styles.test.ts). */
+/* Design tokens. Level colours must match config/levels.ts (checked by ui/styles.test.ts). */
 :root {
   /* Journal palette */
   --ink: #2b2134;
@@ -13,19 +13,19 @@
   --accent-ink: #fff6e6;
   --focus: #3fa7ff;
 
-  /* Tiers: background, and text that reads on it (contrast >= 4.5:1). */
-  --tier-0: #4a4458;
-  --tier-0-ink: #f3eefb;
-  --tier-1: #e9e4d8;
-  --tier-1-ink: #2b2134;
-  --tier-2: #3270c8;
-  --tier-2-ink: #ffffff;
-  --tier-3: #c8333f;
-  --tier-3-ink: #ffffff;
-  --tier-4: #7b3fbf;
-  --tier-4-ink: #ffffff;
-  --tier-5: #f2c230;
-  --tier-5-ink: #2b2134;
+  /* Levels: background, and text that reads on it (contrast >= 4.5:1). */
+  --level-0: #4a4458;
+  --level-0-ink: #f3eefb;
+  --level-1: #e9e4d8;
+  --level-1-ink: #2b2134;
+  --level-2: #3270c8;
+  --level-2-ink: #ffffff;
+  --level-3: #c8333f;
+  --level-3-ink: #ffffff;
+  --level-4: #7b3fbf;
+  --level-4-ink: #ffffff;
+  --level-5: #f2c230;
+  --level-5-ink: #2b2134;
 
   /* Spacing (4 px grid) */
   --space-1: 4px;

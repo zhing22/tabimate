@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Content drafting: drafts are committed for review; the HTTP cache is not.
+data-drafts/cache/

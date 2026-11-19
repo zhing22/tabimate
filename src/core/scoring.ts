@@ -1,4 +1,4 @@
-import { LEVELS, type LevelId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/levels';
 import type { RoundResult } from './types';
 
 /** Points for an answer level: fixed per level in config (0 for a miss). */

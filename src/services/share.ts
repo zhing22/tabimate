@@ -1,5 +1,5 @@
 import type { BiomeDef } from '@/config/biomes';
-import { LEVELS, type LevelId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/levels';
 import { dayTotal } from '@/core/scoring';
 import type { ShareOutcome } from '@/core/share';
 import type { Animal, AnimalId, RoundResult } from '@/core/types';

@@ -1,5 +1,5 @@
 import { BLINK_MS, FOLLOWER_STEP_OFFSET_S, POP_IN_MS, SIZE_PX } from '@/config/render';
-import { isShiny, type LevelId } from '@/config/tiers';
+import { isShiny, type LevelId } from '@/config/levels';
 import type { Animal } from '@/core/types';
 import type { EffectTarget } from './effects/types';
 import { createIdleMotion, type IdleMotion, type Pose } from './entities/idleMotion';

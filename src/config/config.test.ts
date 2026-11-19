@@ -11,7 +11,7 @@ import {
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
-import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL } from './tiers';
+import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL } from './levels';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
@@ -32,7 +32,7 @@ describe('config invariants', () => {
     expect(LEVELS).toHaveLength(6);
     LEVELS.forEach((level, index) => {
       expect(level.id).toBe(index);
-      expect(level.colour).toBe(`--tier-${index}`);
+      expect(level.colour).toBe(`--level-${index}`);
     });
   });
 

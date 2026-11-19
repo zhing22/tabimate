@@ -1,8 +1,8 @@
 import { isDateKey } from '@/core/date';
-import type { DateKey } from '@/core/types';
+import type { AnimalLookup, DateKey } from '@/core/types';
 import type { PuzzleSource } from '@/core/puzzleSource';
 import { createJsonLoader, loadRequired, MISSING, type JsonLoader } from './jsonLoader';
-import { validateAnimals, validatePuzzle, type AnimalRegistry } from './validate';
+import { validateAnimals, validatePuzzle } from './validate';
 
 export type LocalPuzzleSourceOptions =
   | { readonly baseUrl: string; readonly fetch?: typeof fetch }
@@ -17,9 +17,9 @@ export function createLocalPuzzleSource(options: LocalPuzzleSourceOptions): Puzz
   const loader = 'loader' in options ? options.loader : createJsonLoader(options);
   const load = (file: string) => loader.load(file);
 
-  let animals: Promise<AnimalRegistry> | null = null;
+  let animals: Promise<AnimalLookup> | null = null;
 
-  function getAnimals(): Promise<AnimalRegistry> {
+  function getAnimals(): Promise<AnimalLookup> {
     animals ??= loadRequired(loader, ANIMALS_FILE)
       .then((json) => validateAnimals(json, ANIMALS_FILE))
       .catch((error: unknown) => {

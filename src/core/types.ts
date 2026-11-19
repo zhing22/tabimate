@@ -12,9 +12,22 @@ import type {
   Habitat,
   Social,
 } from '@/config/traits';
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 
-export type { AnimalKind, Movement, SizeClass };
+// Trait value types, re-exported for consumers of core. The allowed values themselves
+// (ANIMAL_CLASSES, DIETS, ...) live in config/traits.ts; these types are derived from them.
+export type {
+  ActiveTime,
+  AnimalClass,
+  AnimalKind,
+  BodySize,
+  Continent,
+  Diet,
+  Habitat,
+  Movement,
+  SizeClass,
+  Social,
+};
 
 export type AnimalId = string;
 export type PromptId = string;

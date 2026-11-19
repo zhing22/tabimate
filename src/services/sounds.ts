@@ -1,7 +1,7 @@
 // Every sound in the game, synthesised: a few oscillator notes each, so there
 // are no audio files to load. Data only; services/audio.ts plays them.
 
-import { LEVELS, type LevelId, type LevelSoundId } from '@/config/tiers';
+import { LEVELS, type LevelId, type LevelSoundId } from '@/config/levels';
 
 export interface Note {
   /** Hz. */
@@ -86,5 +86,5 @@ export const SOUNDS: Readonly<Record<SoundName, readonly Note[]>> = {
   tick: [note(1200, 0, 0.03, 0.1, 'square')],
 };
 
-/** The sound a level's reveal plays: its soundId in config/tiers.ts. */
+/** The sound a level's reveal plays: its soundId in config/levels.ts. */
 export const levelSound = (level: LevelId): SoundName => LEVELS[level].soundId;

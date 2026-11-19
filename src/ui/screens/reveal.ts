@@ -1,7 +1,7 @@
 import { revealBuildUpMs, type RevealTiming } from '@/config/game';
-import { LEVELS } from '@/config/tiers';
+import { LEVELS } from '@/config/levels';
 import type { Animal, RoundResult } from '@/core/types';
-import { tierBadge } from '../components/tierBadge';
+import { levelBadge } from '../components/levelBadge';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
 
@@ -70,7 +70,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
     'section',
     {
       class: 'card reveal reveal--pending',
-      'data-tier': level,
+      'data-level': level,
       // Styled by effect, not level number, so LEVELS decides which level is shiny.
       'data-effect': LEVELS[level].effectId,
       style: `--reveal-level: var(${LEVELS[level].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
@@ -86,7 +86,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
         animal?.emoji ?? (level ? '🐾' : '💨'),
       ),
       h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
-      h('div', { class: 'reveal__badge' }, tierBadge(level, { size: 'lg' }).el),
+      h('div', { class: 'reveal__badge' }, levelBadge(level, { size: 'lg' }).el),
       h('p', { class: 'reveal__points' }, level ? `+${points}` : '+0'),
       next,
     ),

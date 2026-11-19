@@ -1,5 +1,5 @@
 import { BIOMES } from '@/config/biomes';
-import { isShiny } from '@/config/tiers';
+import { isShiny } from '@/config/levels';
 import { BACKDROP, GROUND_Y, NATIVE_HEIGHT } from '@/config/render';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';

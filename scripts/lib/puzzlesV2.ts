@@ -1,7 +1,7 @@
 // Pure steps of the v2 data migration (scripts/migrate-puzzles-v2.ts), kept
 // apart from the file handling so they can be tested.
 
-import { TOP_LEVEL as TOP } from '../../src/config/tiers.ts';
+import { TOP_LEVEL as TOP } from '../../src/config/levels.ts';
 
 type Json = Record<string, unknown>;
 
@@ -80,6 +80,8 @@ export interface CrFix {
  * A placeholder pick for review, not a judgement: keeps as CR the candidate
  * that answers the fewest prompts overall (the least obvious name), ties by
  * id. Others at 5 drop to 4; a prompt with no 5 promotes its best answer.
+ * Edits `puzzle` in place (the migration script saves it afterwards) and
+ * returns what it changed, for the report.
  */
 export function fixCr(puzzle: PuzzleJson, counts: ReadonlyMap<string, number>): CrFix[] {
   const fixes: CrFix[] = [];

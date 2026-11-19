@@ -136,7 +136,20 @@ if (warnings.length > 0) {
 if (problems.length > 0) {
   console.error(`Data check failed (${problems.length}):`);
   for (const problem of problems) console.error(`  - ${problem}`);
-  process.exit(1);
+  // --record still has to record: the check job reports data problems, and a
+  // record job that stopped here would leave the new live day unfrozen.
+  if (!values.record) process.exit(1);
+}
+if (values.record) {
+  // The record job's own result: today's live puzzle must now be in the file on
+  // disk. A crash before this point (bad JSON, a script error) also fails.
+  const saved = readJson(RELEASED) as ReleasedRecord;
+  if (saved[today] === undefined) {
+    console.error(`Record failed: today's puzzle ${today} is not in ${RELEASED}.`);
+    process.exit(2);
+  }
+  console.log(`Record OK: ${today} is in ${RELEASED}.`);
+  process.exit(0);
 }
 const last = [...keys].sort().at(-1);
 console.log(

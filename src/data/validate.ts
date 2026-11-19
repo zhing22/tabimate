@@ -1,5 +1,5 @@
 import { LEVEL_RULES_FROM, MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
-import { ANSWER_LEVELS } from '@/config/tiers';
+import { ANSWER_LEVELS } from '@/config/levels';
 import { puzzleNumber } from '@/core/date';
 import type {
   Animal,
@@ -13,8 +13,6 @@ import type {
 import { checkHierarchy, checkPromptLevels, type PromptLevelRules } from './checkHierarchy';
 import { createJsonReader, field, item, type JsonReader } from './jsonReader';
 import { readAnimal, slug } from './readAnimal';
-
-export type AnimalRegistry = AnimalLookup;
 
 /**
  * Two animals sharing a name or alias would make matching ambiguous, so every
@@ -42,7 +40,7 @@ function checkNamesUnique(r: JsonReader, animals: readonly Animal[]): void {
 }
 
 /** Validates animals.json (an array of animals) into a registry keyed by id. */
-export function validateAnimals(json: unknown, file: string): AnimalRegistry {
+export function validateAnimals(json: unknown, file: string): AnimalLookup {
   const r = createJsonReader(file);
   const list = r.array(json, '');
   if (list.length === 0) r.fail('', 'must contain at least one animal');
@@ -59,7 +57,7 @@ export function validateAnimals(json: unknown, file: string): AnimalRegistry {
   return registry;
 }
 
-function readAnswer(r: JsonReader, value: unknown, path: string, animals: AnimalRegistry) {
+function readAnswer(r: JsonReader, value: unknown, path: string, animals: AnimalLookup) {
   const o = r.object(value, path);
   const animalId = r.string(o.animalId, field(path, 'animalId'));
   if (!animals.has(animalId)) {
@@ -97,7 +95,7 @@ export interface PuzzleContext {
   readonly file: string;
   /** The key the file was requested for; the puzzle's date must match it. */
   readonly key: DateKey;
-  readonly animals: AnimalRegistry;
+  readonly animals: AnimalLookup;
   /** Non-fatal problems (full messages); validation still passes. */
   readonly warn?: ((message: string) => void) | undefined;
 }

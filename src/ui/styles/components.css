@@ -118,7 +118,7 @@
 }
 
 .timer-ring__arc {
-  stroke: var(--tier-2);
+  stroke: var(--level-2);
   stroke-linecap: butt;
 }
 
@@ -135,7 +135,7 @@
   font-size: var(--text-lg);
 }
 
-/* Tier badge */
+/* Level badge */
 .level-badge {
   display: inline-block;
   justify-self: center;
@@ -171,7 +171,7 @@
   border-radius: var(--radius-1);
 }
 
-/* The row itself: sprite, name and prompt, tier, and a chevron to open it. */
+/* The row itself: sprite, name and prompt, level, and a chevron to open it. */
 .team-card__summary {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;

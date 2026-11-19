@@ -1,5 +1,5 @@
 import type { MatcherConfig } from '@/config/game';
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 import type { AnimalId, PromptId, StrategyId } from '../types';
 
 /** A guess after normalize(), with the prompt it answers. */

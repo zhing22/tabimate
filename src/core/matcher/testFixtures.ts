@@ -1,5 +1,5 @@
 // Test-only data shared by the matcher tests. Not imported by the app.
-import type { AnswerLevel } from '@/config/tiers';
+import type { AnswerLevel } from '@/config/levels';
 import type { Animal, AnimalId, Prompt } from '../types';
 import { normalize } from './normalize';
 import { trigrams } from './similarity';

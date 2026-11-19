@@ -1,5 +1,5 @@
 import type { KAPLAYCtx } from 'kaplay';
-import { LEVELS, type LevelId } from '@/config/tiers';
+import { LEVELS, type LevelId } from '@/config/levels';
 import { EFFECTS } from './registry';
 import type { EffectTarget } from './types';
 

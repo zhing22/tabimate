@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
-import { LEVELS } from '@/config/tiers';
+import { LEVELS } from '@/config/levels';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import { countdown } from './components/countdown';
 import { partyLineup } from './components/partyLineup';
 import { portrait } from './components/portrait';
 import { teamCard, type TeamRound } from './components/teamCard';
 import { answerLines } from './resultsProps';
-import { tierBadge } from './components/tierBadge';
+import { levelBadge } from './components/levelBadge';
 import { timerRing } from './components/timerRing';
 import { formatCountdown, secondsLeft } from './format';
 import { revealScreen } from './screens/reveal';
@@ -140,16 +140,16 @@ describe('countdown', () => {
   });
 });
 
-describe('tierBadge and teamCard', () => {
+describe('levelBadge and teamCard', () => {
   it('labels the level and colours it from the tokens', () => {
-    const { el } = tierBadge(3);
+    const { el } = levelBadge(3);
     expect(el.textContent).toBe('VU · Vulnerable');
-    expect(el.getAttribute('style')).toContain('var(--tier-3)');
-    expect(tierBadge(0).el.textContent).toBe('No match');
+    expect(el.getAttribute('style')).toContain('var(--level-3)');
+    expect(levelBadge(0).el.textContent).toBe('No match');
   });
 
   it('compact badges show the code but keep the full name for screen readers', () => {
-    const { el } = tierBadge(5, { compact: true });
+    const { el } = levelBadge(5, { compact: true });
     expect(el.textContent).toBe('CR');
     expect(el.getAttribute('aria-label')).toBe('Critically Endangered');
   });
@@ -198,7 +198,7 @@ describe('revealScreen', () => {
       );
       const card = root.querySelector<HTMLElement>('.reveal')!;
       expect(card.dataset['effect']).toBe(effect);
-      expect(card.getAttribute('style')).toContain(`var(--tier-${level})`);
+      expect(card.getAttribute('style')).toContain(`var(--level-${level})`);
     },
   );
 });
