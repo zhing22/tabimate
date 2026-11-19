@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { BIOMES } from './biomes';
 import {
   LAUNCH_DATE_KEY,
@@ -12,7 +12,7 @@ import {
   TIMER_WARN_MS,
 } from './game';
 import { DEFAULT_MAX_CR, maxCRFor, themeFor, weekdayOf } from './themes';
-import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL } from './levels';
+import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL, type TopLevel } from './levels';
 
 // Later steps index and search these arrays; these invariants keep that safe.
 describe('config invariants', () => {
@@ -84,6 +84,8 @@ describe('level helpers', () => {
   it('ANSWER_LEVELS is every level but the miss, lowest first; TOP_LEVEL is the last', () => {
     expect(ANSWER_LEVELS).toEqual([1, 2, 3, 4, 5]);
     expect(TOP_LEVEL).toBe(5);
+    // A literal type, so Exclude<AnswerLevel, TopLevel> is LC..EN rather than nothing.
+    expectTypeOf<TopLevel>().toEqualTypeOf<5>();
     expect(TOP_LEVEL).toBe(LEVELS[LEVELS.length - 1]!.id);
   });
 

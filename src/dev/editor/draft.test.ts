@@ -1,23 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { Animal, AnimalLookup, AnimalTraits, Puzzle } from '@/core/types';
 import { checkPuzzle } from './check';
-import {
-  addAnimal,
-  answerUsage,
-  draftRows,
-  emptyDraft,
-  fromPuzzle,
-  levelCounts,
-  recentUses,
-  redraftSlot,
-  SLOT_COUNT,
-  slotAnswers,
-  suggestLevel,
-  toggleCR,
-  toPuzzleJson,
-  type EditorDraft,
-  type SlotDraft,
-} from './model';
+import { emptyDraft, fromPuzzle, SLOT_COUNT, slotAnswers, toPuzzleJson } from './puzzleFile';
+import { addAnimal, draftRows, redraftSlot, suggestLevel, toggleCR } from './rows';
+import { answerUsage, levelCounts, recentUses } from './stats';
+import type { EditorDraft, SlotDraft } from './types';
 
 const make = (
   id: string,

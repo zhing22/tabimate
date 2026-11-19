@@ -100,8 +100,12 @@ export const ANSWER_LEVELS: readonly AnswerLevel[] = LEVELS.map((l) => l.id).fil
   (id): id is AnswerLevel => id !== 0,
 );
 
+type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer L] ? L : never;
+/** The highest level's id as a type (the last entry of LEVELS). */
+export type TopLevel = Last<typeof LEVELS> extends { readonly id: infer I } ? I : never;
+
 /** The highest level: exactly one answer per prompt has it. */
-export const TOP_LEVEL: AnswerLevel = ANSWER_LEVELS[ANSWER_LEVELS.length - 1]!;
+export const TOP_LEVEL = ANSWER_LEVELS[ANSWER_LEVELS.length - 1] as TopLevel;
 
 /** True for any level id, including 0 (a miss). For reading untrusted data. */
 export const isLevelId = (value: unknown): value is LevelId => LEVELS.some((l) => l.id === value);

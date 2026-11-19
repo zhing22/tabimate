@@ -2,121 +2,24 @@
 // chosen values into prompt text and a trait filter (core/traits.ts), which
 // drafts the answer list. Adding a template means adding an entry to TEMPLATES.
 import { ANIMAL_CLASSES, CONTINENTS, DIETS, HABITATS, SOCIAL } from '@/config/traits';
-import type { AnimalFilter } from '@/core/traits';
+import {
+  BODY_PARTS,
+  CONTINENT,
+  CONTRADICTIONS,
+  FOOD,
+  LETTERS,
+  PLACE,
+  SOCIAL_LIFE,
+  fixed,
+  numbers,
+  opts,
+  withArticle,
+  type BodyPart,
+} from './templateWords';
+import type { BlankValues, PromptTemplate } from './templateText';
 
-export interface BlankOption {
-  readonly value: string;
-  /** How the value reads in the prompt text. */
-  readonly label: string;
-}
-
-export interface Blank {
-  readonly name: string;
-  readonly label: string;
-  /** The allowed values; absent means free text (typed in). */
-  readonly options?: readonly BlankOption[];
-}
-
-export type BlankValues = Readonly<Record<string, string>>;
-
-export interface PromptTemplate {
-  readonly id: string;
-  /** Shown in the template picker. */
-  readonly label: string;
-  /** Prompt text with {blank} placeholders. */
-  readonly text: string;
-  readonly blanks: readonly Blank[];
-  /** The filter that drafts answers; null when answers are added by hand. */
-  readonly toFilter: (values: BlankValues) => AnimalFilter | null;
-}
-
-const opts = <T extends string>(values: readonly T[], label: (v: T) => string): BlankOption[] =>
-  values.map((value) => ({ value, label: label(value) }));
-const fixed = (pairs: Readonly<Record<string, string>>): BlankOption[] =>
-  Object.entries(pairs).map(([value, label]) => ({ value, label }));
-const numbers = (list: readonly number[]): BlankOption[] =>
-  list.map((n) => ({ value: String(n), label: n.toLocaleString('en') }));
-const LETTERS = opts([...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'], (l) => l);
-
-const FOOD: Readonly<Record<(typeof DIETS)[number], string>> = {
-  carnivore: 'meat',
-  herbivore: 'plants',
-  omnivore: 'both plants and meat',
-  insectivore: 'insects',
-  piscivore: 'fish',
-  frugivore: 'fruit',
-  nectarivore: 'nectar',
-  'filter-feeder': 'plankton',
-  scavenger: 'dead animals',
-};
-const PLACE: Readonly<Record<(typeof HABITATS)[number], string>> = {
-  forest: 'a forest',
-  rainforest: 'a rainforest',
-  grassland: 'grassland',
-  desert: 'the desert',
-  mountain: 'the mountains',
-  polar: 'the polar regions',
-  tundra: 'the tundra',
-  wetland: 'wetlands',
-  freshwater: 'fresh water',
-  ocean: 'the ocean',
-  coast: 'coastal waters',
-  reef: 'a coral reef',
-  'deep-sea': 'the deep sea',
-  cave: 'caves',
-  urban: 'towns and cities',
-  farmland: 'farmland',
-};
-const CONTINENT: Readonly<Record<(typeof CONTINENTS)[number], string>> = {
-  africa: 'Africa',
-  asia: 'Asia',
-  europe: 'Europe',
-  'north-america': 'North America',
-  'south-america': 'South America',
-  oceania: 'Australia or Oceania',
-  antarctica: 'Antarctica',
-};
-const withArticle = (word: string) => `${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}`;
-const SOCIAL_LIFE: Readonly<Record<(typeof SOCIAL)[number], string>> = {
-  solitary: 'alone',
-  pair: 'in pairs',
-  group: 'in a group',
-};
-
-/** Body parts with a boolean trait, as they read after "with". */
-const BODY_PARTS = fixed({
-  tail: 'a tail',
-  gills: 'gills',
-  shell: 'a shell',
-  horns: 'horns',
-  feathers: 'feathers',
-  pouch: 'a pouch',
-});
-type BodyPart = 'tail' | 'gills' | 'shell' | 'horns' | 'feathers' | 'pouch';
-
-/** Filters for prompts that play on a surprise. */
-const CONTRADICTIONS: Readonly<Record<string, { label: string; filter: AnimalFilter }>> = {
-  'flightless-bird': {
-    label: "a bird that can't fly",
-    filter: {
-      op: 'and',
-      filters: [
-        { op: 'equals', trait: 'class', value: 'bird' },
-        { op: 'equals', trait: 'flies', value: false },
-      ],
-    },
-  },
-  'egg-laying-mammal': {
-    label: 'a mammal that lays eggs',
-    filter: {
-      op: 'and',
-      filters: [
-        { op: 'equals', trait: 'class', value: 'mammal' },
-        { op: 'equals', trait: 'eggs', value: true },
-      ],
-    },
-  },
-};
+// The template types and text helpers, re-exported so callers need one import.
+export * from './templateText';
 
 const v = (values: BlankValues, name: string) => values[name] ?? '';
 
@@ -244,33 +147,3 @@ export const TEMPLATES: readonly PromptTemplate[] = [
 
 export const templateById = (id: string): PromptTemplate | undefined =>
   TEMPLATES.find((t) => t.id === id);
-
-/** The first option of every blank: what a newly picked template starts with. */
-export const defaultValues = (template: PromptTemplate): BlankValues =>
-  Object.fromEntries(template.blanks.map((b) => [b.name, b.options?.[0]?.value ?? '']));
-
-/** Prompt text with each blank replaced by its value's label (free text as typed). */
-export function fillText(template: PromptTemplate, values: BlankValues): string {
-  return template.text.replace(/\{(\w+)\}/g, (_, name: string) => {
-    const blank = template.blanks.find((b) => b.name === name);
-    const value = values[name] ?? '';
-    return blank?.options?.find((o) => o.value === value)?.label ?? value;
-  });
-}
-
-/** A prompt id from the template and values: "eats-carnivore", "name-starts-q". */
-export function promptIdFor(template: PromptTemplate, values: BlankValues): string {
-  const parts =
-    template.id === 'free'
-      ? [values.text ?? '']
-      : [template.id, ...template.blanks.map((b) => values[b.name] ?? '')];
-  return parts
-    .join('-')
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 60)
-    .replace(/-$/, '');
-}

@@ -3,7 +3,7 @@
 import type { AnimalLookup } from '@/core/types';
 import { nameCollisions } from '@/data/checkNames';
 import { validatePuzzle } from '@/data/validate';
-import type { PuzzleJson } from './model';
+import type { PuzzleJson } from './types';
 
 export interface CheckResult {
   /** The validator's first error (it stops there), or null when the file is valid. */
