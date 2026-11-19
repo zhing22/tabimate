@@ -18,13 +18,18 @@ export const LAUNCH_DATE_KEY = '2026-11-06';
 export const LEVEL_RULES_FROM = '2026-11-19';
 
 /**
- * How many prompts new puzzles are written with. MVP value; planned to become 7.
- * The game plays however many prompts a puzzle file has, so raising this does
- * not invalidate puzzles already shipped.
+ * How many prompts a day has. The game plays however many prompts a puzzle
+ * file has, so older 3-prompt days still play as written.
  */
-export const PROMPTS_PER_DAY = 3;
+export const PROMPTS_PER_DAY = 7;
 
-/** Most prompts a puzzle file may have. Validation accepts 1 up to this. */
+/**
+ * First day that must have exactly PROMPTS_PER_DAY prompts. Earlier files
+ * (the 3-prompt MVP days) are only held to 1..MAX_PROMPTS_PER_PUZZLE.
+ */
+export const FULL_LENGTH_FROM = '2026-11-25';
+
+/** Most prompts a puzzle file may have. */
 export const MAX_PROMPTS_PER_PUZZLE = 7;
 
 export const ROUND_TIME_MS = 25_000;

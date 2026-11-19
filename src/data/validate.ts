@@ -1,4 +1,11 @@
-import { LEVEL_RULES_FROM, MAX_INPUT_LENGTH, MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
+import {
+  FULL_LENGTH_FROM,
+  LEVEL_RULES_FROM,
+  MAX_INPUT_LENGTH,
+  MAX_PROMPTS_PER_PUZZLE,
+  PROMPTS_PER_DAY,
+} from '@/config/game';
+import { maxCRFor } from '@/config/themes';
 import { ANSWER_LEVELS } from '@/config/levels';
 import { puzzleNumber } from '@/core/date';
 import type {
@@ -113,14 +120,20 @@ export function validatePuzzle(json: unknown, context: PuzzleContext): Puzzle {
   if (number !== expected) r.fail('number', `is ${number} but ${key} is puzzle ${expected}`);
 
   const list = r.array(o.prompts, 'prompts');
-  // A range, not an exact count: older files keep their prompt count when
-  // PROMPTS_PER_DAY grows, and the game plays however many a puzzle has.
-  if (list.length < 1 || list.length > MAX_PROMPTS_PER_PUZZLE) {
+  // Full-length days have exactly PROMPTS_PER_DAY; older files keep the count
+  // they were written with, and the game plays however many a puzzle has.
+  if (key >= FULL_LENGTH_FROM) {
+    if (list.length !== PROMPTS_PER_DAY) {
+      r.fail('prompts', `must have exactly ${PROMPTS_PER_DAY} prompts (got ${list.length})`);
+    }
+  } else if (list.length < 1 || list.length > MAX_PROMPTS_PER_PUZZLE) {
     r.fail('prompts', `must have 1 to ${MAX_PROMPTS_PER_PUZZLE} prompts (got ${list.length})`);
   }
   // Released puzzles are never rewritten, so ones from before the v2 rules keep
   // their original levels (several CRs, or none) and are only checked for shape.
-  const rules = { file, animals: context.animals, oneCR: key >= LEVEL_RULES_FROM };
+  // From then on, the day's theme says how many CRs a prompt may have.
+  const maxCR = key >= LEVEL_RULES_FROM ? maxCRFor(key) : null;
+  const rules = { file, animals: context.animals, maxCR };
   const prompts = list.map((value, i) =>
     readPrompt(r, value, item('prompts', i), { ...rules, warn: context.warn }),
   );

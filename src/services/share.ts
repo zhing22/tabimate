@@ -19,6 +19,8 @@ export const MISS_EMOJI = '💨';
  */
 export interface ShareCard {
   readonly puzzleNumber: number;
+  /** The day's theme name ("Fishy Friday"), or null on a plain day. */
+  readonly theme: string | null;
   readonly biome: { readonly name: string; readonly emoji: string };
   /** One per prompt, in order. */
   readonly levels: readonly LevelId[];
@@ -27,9 +29,15 @@ export interface ShareCard {
   readonly score: number;
 }
 
-export function shareCard(run: ShareRun, puzzleNumber: number, biome: BiomeDef): ShareCard {
+export function shareCard(
+  run: ShareRun,
+  puzzleNumber: number,
+  biome: BiomeDef,
+  theme: string | null = null,
+): ShareCard {
   return {
     puzzleNumber,
+    theme,
     biome: { name: biome.name, emoji: biome.emoji },
     levels: run.results.map((r) => r.match.level),
     animalEmoji: run.results.map((r) =>
@@ -42,7 +50,7 @@ export function shareCard(run: ShareRun, puzzleNumber: number, biome: BiomeDef):
 /**
  * The text players paste into chats:
  *
- *   Tabimate #12 🌲 Forest
+ *   Tabimate #12 🌲 Forest            (a themed day: Tabimate #31 · Fishy Friday 🌲 Forest)
  *   🟦🟪🟨  185 pts
  *   🦊🦉🐸
  *   https://…
@@ -57,10 +65,14 @@ export function buildShareText(
   puzzleNumber: number,
   biomeReached: BiomeDef,
   url: string,
+  theme: string | null = null,
 ): string {
-  const card = shareCard(run, puzzleNumber, biomeReached);
+  const card = shareCard(run, puzzleNumber, biomeReached, theme);
+  const title = card.theme
+    ? `Tabimate #${card.puzzleNumber} · ${card.theme}`
+    : `Tabimate #${card.puzzleNumber}`;
   return [
-    `Tabimate #${card.puzzleNumber} ${card.biome.emoji} ${card.biome.name}`,
+    `${title} ${card.biome.emoji} ${card.biome.name}`,
     `${card.levels.map((level) => LEVELS[level].emoji).join('')}  ${card.score} pts`,
     card.animalEmoji.join(''),
     url,

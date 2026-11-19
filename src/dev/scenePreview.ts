@@ -12,13 +12,16 @@ import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
 
 const loader = createJsonLoader({ baseUrl: '/' });
 
+// A full 7-prompt day that passes every biome threshold (see config/biomes.ts),
+// so each step shows the next biome's art: 85, 135, 160, 260, 360, 460, 560.
 const SCRIPT: readonly (readonly [string | null, AnswerLevel | 0])[] = [
-  ['tiger', 4],
-  ['snow-leopard', 3], // two big cats, one sheet
+  ['tiger', 4], // Grassland
+  ['snow-leopard', 3], // Forest; two big cats, one sheet
   ['platypus', 2], // no sheet yet: emoji
-  [null, 0],
-  ['tiger', 5], // shiny: white tiger
-  ['snow-leopard', 5], // shiny: golden
+  ['tiger', 5], // Rocky hills; shiny: white tiger
+  ['snow-leopard', 5], // Rainforest; shiny: golden
+  ['lion', 5], // Wetland
+  ['cheetah', 5], // Snowy peak
 ];
 const STEP_MS = 2_500;
 

@@ -7,6 +7,8 @@ export interface StartProps {
   readonly promptCount: number;
   /** Current streak; 0 hides the line. */
   readonly streak: number;
+  /** The day's theme (config/themes.ts), or null on a plain day. */
+  readonly theme: { readonly name: string; readonly tagline: string } | null;
 }
 
 /** "Rarer answers score more, from LC (10) up to CR (100).", read from LEVELS. */
@@ -31,6 +33,14 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
       h('h1', { id: 'start-title', class: 'title' }, 'Tabimate'),
       h('p', { class: 'subtitle' }, 'A daily journey with animal friends'),
       h('p', { class: 'meta' }, `Puzzle #${props.puzzleNumber} · ${props.promptCount} prompts`),
+      props.theme
+        ? h(
+            'p',
+            { class: 'theme' },
+            h('strong', { class: 'theme__name' }, props.theme.name),
+            h('span', { class: 'theme__tagline' }, props.theme.tagline),
+          )
+        : null,
       props.streak > 0 ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak`) : null,
       play,
       h(

@@ -4,6 +4,7 @@
 // check the export passes the validator.
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { themeFor } from '@/config/themes';
 import { validateAnimals, validatePuzzle } from '@/data/validate';
 
 const read = (path: string) => readFileSync(path, 'utf8');
@@ -51,9 +52,15 @@ beforeAll(async () => {
 });
 
 describe('puzzle editor', () => {
-  it('shows the date, its weekday and that there is no theme yet', () => {
-    expect($('#day').textContent).toMatch(
-      /^Puzzle #\d+, \w+day: no theme yet \(one CR per prompt\)/,
+  it("shows the date, its weekday and that day's theme (or that it has none)", () => {
+    // The page opens on tomorrow, so the theme depends on the real date.
+    const date = $<HTMLInputElement>('#date').value;
+    const theme = themeFor(date);
+    expect($('#day').textContent).toMatch(/^Puzzle #\d+, \w+day: /);
+    expect($('#day').textContent).toContain(
+      theme
+        ? `${theme.name} (up to ${theme.maxCR} CR per prompt)`
+        : 'no theme yet (one CR per prompt)',
     );
   });
 
@@ -74,7 +81,8 @@ describe('puzzle editor', () => {
     const kakapo = [...slot(0).querySelectorAll('tbody tr')].find((r) =>
       r.textContent.includes('Kākāpō'),
     )!;
-    change(kakapo.querySelector<HTMLInputElement>('input[type=radio]')!, true);
+    // A radio on most days, a checkbox where the theme allows several CRs (Sunday).
+    change(kakapo.querySelector<HTMLInputElement>('input[name^="cr-"]')!, true);
     // Bump one answer to EN by hand.
     const emu = [...slot(0).querySelectorAll('tbody tr')].find((r) =>
       r.textContent.includes('Emu'),

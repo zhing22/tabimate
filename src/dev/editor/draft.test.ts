@@ -120,7 +120,7 @@ const slot = (
 
 describe('toPuzzleJson and fromPuzzle', () => {
   const draft: EditorDraft = {
-    ...emptyDraft('2026-11-25'),
+    ...emptyDraft('2026-11-24'),
     slots: [
       slot(
         [
@@ -136,8 +136,8 @@ describe('toPuzzleJson and fromPuzzle', () => {
 
   it('writes included rows, the CR pick at level 5, and leaves empty slots out', () => {
     expect(toPuzzleJson(draft)).toEqual({
-      date: '2026-11-25',
-      number: 20,
+      date: '2026-11-24',
+      number: 19,
       prompts: [
         {
           id: 'eats-carnivore',
@@ -191,12 +191,12 @@ describe('levelCounts and recentUses', () => {
 describe('checkPuzzle', () => {
   it('passes a valid draft and reports the real validator error otherwise', () => {
     const good = toPuzzleJson({
-      date: '2026-11-25',
+      date: '2026-11-24',
       slots: [slot([{ animalId: 'red-fox', level: 2, include: true }], ['red-fox'])],
     });
     expect(checkPuzzle(good, animals)).toEqual({ error: null, warnings: [], collisions: [] });
     const noCR = toPuzzleJson({
-      date: '2026-11-25',
+      date: '2026-11-24',
       slots: [slot([{ animalId: 'red-fox', level: 2, include: true }], [])],
     });
     expect(checkPuzzle(noCR, animals).error).toMatch(/exactly one level-5 \(CR\) answer \(got 0\)/);
@@ -204,7 +204,7 @@ describe('checkPuzzle', () => {
 
   it('passes on the validator warnings', () => {
     const groupAbove = toPuzzleJson({
-      date: '2026-11-25',
+      date: '2026-11-24',
       slots: [
         slot(
           [

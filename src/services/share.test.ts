@@ -42,6 +42,17 @@ describe('buildShareText', () => {
     );
   });
 
+  it("names the day's theme in the title on a themed day", () => {
+    const text = buildShareText(
+      { results: [hit('tiger', 4)], animals },
+      31,
+      forest,
+      'https://tabimate.example/',
+      'Fishy Friday',
+    );
+    expect(text.split('\n')[0]).toBe('Tabimate #31 · Fishy Friday 🌲 Forest');
+  });
+
   it('never names the animals or the prompts', () => {
     const text = buildShareText(
       { results: [hit('red-fox', 1), hit('tiger', 4)], animals },
@@ -66,6 +77,7 @@ describe('shareCard', () => {
   it('holds the same facts as data, for an image card later', () => {
     expect(shareCard({ results: [hit('tiger', 5), timeUp], animals }, 7, forest)).toEqual({
       puzzleNumber: 7,
+      theme: null,
       biome: { name: 'Forest', emoji: '🌲' },
       levels: [5, 0],
       animalEmoji: ['🐅', MISS_EMOJI],

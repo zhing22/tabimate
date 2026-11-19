@@ -53,8 +53,12 @@ export function checkHierarchy(r: JsonReader, list: readonly Animal[], animals: 
 export interface PromptLevelRules {
   readonly file: string;
   readonly animals: AnimalLookup;
-  /** False for puzzles released before the rule (see LEVEL_RULES_FROM): they stay as played. */
-  readonly oneCR: boolean;
+  /**
+   * Most CR answers a prompt may have (the day's theme, usually 1); at least one
+   * is always needed. Null for puzzles released before the rule (LEVEL_RULES_FROM):
+   * they stay as played.
+   */
+  readonly maxCR: number | null;
   /** Gets each non-fatal problem as a full message. Unset: warnings are dropped. */
   readonly warn?: ((message: string) => void) | undefined;
 }
@@ -62,19 +66,25 @@ export interface PromptLevelRules {
 const levelName = (level: AnswerLevel) => `level ${level} (${LEVELS[level].shortName})`;
 
 /**
- * The top level is the one prize per prompt: exactly one CR answer. A species
- * ranked below its own group is allowed but odd (the specific answer should be
- * at least as rare), so it only warns.
+ * The top level is the prize of a prompt: exactly one CR answer, or 1 to maxCR
+ * on a themed day (Sunday Deep Dive). A species ranked below its own group is
+ * allowed but odd (the specific answer should be at least as rare), so it only
+ * warns.
  */
 export function checkPromptLevels(
   r: JsonReader,
   answers: readonly PuzzleAnswer[],
   path: string,
-  { file, animals, oneCR, warn }: PromptLevelRules,
+  { file, animals, maxCR, warn }: PromptLevelRules,
 ) {
   const top = answers.filter((a) => a.level === TOP_LEVEL).length;
-  if (oneCR && top !== 1) {
-    r.fail(path, `must have exactly one level-${TOP_LEVEL} (CR) answer (got ${top})`);
+  if (maxCR !== null && (top < 1 || top > maxCR)) {
+    r.fail(
+      path,
+      maxCR === 1
+        ? `must have exactly one level-${TOP_LEVEL} (CR) answer (got ${top})`
+        : `must have 1 to ${maxCR} level-${TOP_LEVEL} (CR) answers (got ${top})`,
+    );
   }
   if (!warn) return;
   const levelOf = new Map(answers.map((a) => [a.animalId, a.level]));

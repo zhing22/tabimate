@@ -2,6 +2,7 @@
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
 import { SPRITE_SOURCE } from '@/config/render';
+import { themeFor } from '@/config/themes';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
@@ -42,8 +43,16 @@ const reload = () => location.reload();
 const debug = readDebugParams(location.search);
 const shareUrl = () => new URL(import.meta.env.BASE_URL, location.origin).href;
 
+/** The day's theme is known from the date alone, so the loading line can name it at once. */
+function showThemeWhileLoading(key: string) {
+  const theme = themeFor(key);
+  const line = document.querySelector('.loading');
+  if (theme && line) line.textContent = `Packing your bag for ${theme.name}…`;
+}
+
 async function load() {
   const key = debug.date ?? dailyKey(clock.now());
+  showThemeWhileLoading(key);
   const [puzzle, animals] = await Promise.all([source.getPuzzle(key), source.getAnimals()]);
   return { key, puzzle, animals };
 }
@@ -131,7 +140,15 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): GameBus {
     reload,
     // The link is this site, whatever host serves it (dev, preview or the real domain).
     share: ({ results, score }) =>
-      share(buildShareText({ results, animals }, puzzle.number, biomeFor(score), shareUrl())),
+      share(
+        buildShareText(
+          { results, animals },
+          puzzle.number,
+          biomeFor(score),
+          shareUrl(),
+          themeFor(puzzle.date)?.name ?? null,
+        ),
+      ),
   });
   // One listener, in this order: record the run, then show results with its streak.
   bus.on('runFinished', ({ results, score }) => {

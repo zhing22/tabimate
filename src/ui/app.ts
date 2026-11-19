@@ -1,4 +1,5 @@
 import { REVEAL_TIMING, ROUND_TIME_MS, type RevealTiming } from '@/config/game';
+import { themeFor } from '@/config/themes';
 import type { Clock } from '@/core/clock';
 import { msUntilNextReset } from '@/core/date';
 import type { GameBus } from '@/core/events';
@@ -147,6 +148,7 @@ export function createApp(deps: AppDeps): App {
           puzzleNumber: puzzle.number,
           promptCount: puzzle.prompts.length,
           streak: deps.getStats().streak,
+          theme: themeFor(puzzle.date),
         },
         { play: () => controller.start() },
       );

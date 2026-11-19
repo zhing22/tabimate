@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { FULL_LENGTH_FROM, PROMPTS_PER_DAY } from '@/config/game';
+import { weekdayOf } from '@/config/themes';
+import { puzzleNumber, shiftKey } from '@/core/date';
 import { DataError } from './dataError';
 import { FIXTURE_KEY, fixtureAnimals, fixturePuzzle } from './testFixtures';
 import { validateAnimals, validatePuzzle } from './validate';
@@ -345,5 +348,55 @@ describe('validatePuzzle: levels', () => {
     ]);
     check(json, { warn: (m) => warnings.push(m) });
     expect(warnings).toEqual([]);
+  });
+});
+
+describe('validatePuzzle: full-length days and themes', () => {
+  const at = (key: string, prompts: ReturnType<typeof fixturePuzzle>['prompts']) =>
+    validatePuzzle(
+      { date: key, number: puzzleNumber(key), prompts },
+      { file: `data/puzzles/${key}.json`, key, animals: registry() },
+    );
+  const prompt = (id: string, levels: number[]) => ({
+    id,
+    text: id,
+    answers: ['red-fox', 'killer-whale', 'platypus']
+      .slice(0, levels.length)
+      .map((animalId, i) => ({ animalId, level: levels[i]! })),
+  });
+  const seven = (levels: number[]) =>
+    Array.from({ length: PROMPTS_PER_DAY }, (_, i) => prompt(`p${i}`, levels));
+
+  it(`requires exactly ${PROMPTS_PER_DAY} prompts from FULL_LENGTH_FROM, and fewer before`, () => {
+    expect(at(FULL_LENGTH_FROM, seven([5])).prompts).toHaveLength(PROMPTS_PER_DAY);
+    expectDataError(
+      () => at(FULL_LENGTH_FROM, seven([5]).slice(0, 3)),
+      `data/puzzles/${FULL_LENGTH_FROM}.json`,
+      'prompts',
+      new RegExp(String.raw`must have exactly ${PROMPTS_PER_DAY} prompts \(got 3\)`),
+    );
+    // The day before keeps the old rule: any count from 1 up.
+    const before = shiftKey(FULL_LENGTH_FROM, -1);
+    expect(at(before, seven([5]).slice(0, 3)).prompts).toHaveLength(3);
+  });
+
+  it("allows up to the theme's maxCR on Sunday Deep Dive, and still needs one", () => {
+    const sunday = '2026-11-29';
+    expect(weekdayOf(sunday)).toBe(0);
+    expect(at(sunday, seven([5, 5, 5])).prompts[0]!.answers).toHaveLength(3);
+    expectDataError(
+      () => at(sunday, seven([4, 3])),
+      `data/puzzles/${sunday}.json`,
+      'prompts[0].answers',
+      /must have 1 to 3 level-5 \(CR\) answers \(got 0\)/,
+    );
+    // A plain weekday still allows exactly one.
+    const wednesday = '2026-11-25';
+    expectDataError(
+      () => at(wednesday, seven([5, 5])),
+      `data/puzzles/${wednesday}.json`,
+      'prompts[0].answers',
+      /exactly one level-5 \(CR\) answer \(got 2\)/,
+    );
   });
 });

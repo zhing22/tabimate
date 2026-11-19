@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
 import { LEVELS } from '@/config/levels';
+import { THEMES } from '@/config/themes';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import { countdown } from './components/countdown';
 import { partyLineup } from './components/partyLineup';
@@ -423,9 +424,27 @@ describe('party line-up frame', () => {
 describe('startScreen', () => {
   it('explains scoring from LEVELS, without claiming real conservation status', () => {
     const root = document.createElement('div');
-    startScreen(root, { puzzleNumber: 1, promptCount: 3, streak: 0 }, { play: () => {} });
+    startScreen(
+      root,
+      { puzzleNumber: 1, promptCount: 7, streak: 0, theme: null },
+      { play: () => {} },
+    );
     const text = root.textContent ?? '';
     expect(text).toContain('from LC (10) up to CR (100)');
     expect(text).not.toMatch(/IUCN|Red List/);
+    expect(root.querySelector('.theme')).toBeNull(); // a plain day shows no theme
+  });
+
+  it("shows the day's theme and its tagline", () => {
+    const root = document.createElement('div');
+    const fishy = THEMES.find((t) => t.id === 'fishy-friday')!;
+    startScreen(
+      root,
+      { puzzleNumber: 31, promptCount: 7, streak: 0, theme: fishy },
+      { play: () => {} },
+    );
+    expect(root.querySelector('.theme__name')?.textContent).toBe('Fishy Friday');
+    expect(root.querySelector('.theme__tagline')?.textContent).toBe(fishy.tagline);
+    expect(root.textContent).toContain('Puzzle #31 · 7 prompts');
   });
 });

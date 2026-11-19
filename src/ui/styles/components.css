@@ -63,6 +63,24 @@
   color: var(--ink-soft);
 }
 
+/* The day's theme on the start screen: a name, and one line under it. */
+.theme {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-2);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.theme__name {
+  font-size: var(--text-lg);
+}
+.theme__tagline {
+  font-size: var(--text-sm);
+}
+
 /* Buttons: chunky, pixel-bordered, at least 44 px tall. */
 .button {
   min-height: var(--tap);

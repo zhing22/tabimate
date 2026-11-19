@@ -11,7 +11,7 @@ import {
   ROUND_TIME_MS,
   TIMER_WARN_MS,
 } from './game';
-import { DEFAULT_MAX_CR, maxCRFor, themeFor, weekdayOf } from './themes';
+import { DEFAULT_MAX_CR, maxCRFor, themeFor, THEMES, WEEKDAY_NAMES, weekdayOf } from './themes';
 import { ANSWER_LEVELS, isLevelId, isShiny, LEVELS, TOP_LEVEL, type TopLevel } from './levels';
 
 // Later steps index and search these arrays; these invariants keep that safe.
@@ -50,6 +50,11 @@ describe('config invariants', () => {
       expect(BIOMES[i]?.minScore).toBeGreaterThan(BIOMES[i - 1]?.minScore ?? Infinity);
     }
     expect(new Set(BIOMES.map((b) => b.id)).size).toBe(BIOMES.length);
+  });
+
+  it('every biome is reachable in a full day of top answers', () => {
+    const max = PROMPTS_PER_DAY * LEVELS[TOP_LEVEL].points;
+    expect(BIOMES.at(-1)!.minScore).toBeLessThanOrEqual(max);
   });
 
   it('biome palette colours are 6-digit hex', () => {
@@ -105,7 +110,14 @@ describe('level helpers', () => {
 });
 
 describe('themes', () => {
-  const sunday = { id: 'deep-dive', name: 'Deep Dive', weekday: 0 as const, maxCR: 3 };
+  const sunday = {
+    id: 'deep-dive',
+    name: 'Deep Dive',
+    tagline: 'x',
+    weekday: 0 as const,
+    maxCR: 3,
+    bonusQuiz: true,
+  };
   it('reads the weekday from the key, not the clock', () => {
     expect(weekdayOf('2026-11-22')).toBe(0); // a Sunday
     expect(weekdayOf('2026-11-19')).toBe(4); // a Thursday
@@ -116,6 +128,17 @@ describe('themes', () => {
     expect(maxCRFor('2026-11-22', [sunday])).toBe(3);
     expect(themeFor('2026-11-19', [sunday])).toBeNull();
     expect(maxCRFor('2026-11-19', [sunday])).toBe(DEFAULT_MAX_CR);
-    expect(maxCRFor('2026-11-22', [{ ...sunday, maxCR: undefined } as never])).toBe(1);
+  });
+
+  it('has the shipped themes: Myth-busting Monday, Fishy Friday, Sunday Deep Dive', () => {
+    expect(THEMES.map((t) => [WEEKDAY_NAMES[t.weekday], t.name, t.maxCR, t.bonusQuiz])).toEqual([
+      ['Monday', 'Myth-busting Monday', 1, false],
+      ['Friday', 'Fishy Friday', 1, false],
+      ['Sunday', 'Sunday Deep Dive', 3, true],
+    ]);
+    expect(new Set(THEMES.map((t) => t.weekday)).size).toBe(THEMES.length); // one per weekday
+    expect(themeFor('2026-11-27')?.id).toBe('fishy-friday');
+    expect(maxCRFor('2026-11-29')).toBe(3); // a Sunday
+    expect(themeFor('2026-11-25')).toBeNull(); // a plain Wednesday
   });
 });
