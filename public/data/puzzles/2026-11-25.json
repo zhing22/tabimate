@@ -1,0 +1,468 @@
+{
+  "date": "2026-11-25",
+  "number": 20,
+  "prompts": [
+    {
+      "id": "seabird",
+      "text": "Name a seabird",
+      "answers": [
+        {
+          "animalId": "penguin",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
+          "level": 1
+        },
+        {
+          "animalId": "gull",
+          "level": 1
+        },
+        {
+          "animalId": "pelican",
+          "level": 1
+        },
+        {
+          "animalId": "emperor-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 2
+        },
+        {
+          "animalId": "european-herring-gull",
+          "level": 2
+        },
+        {
+          "animalId": "brown-pelican",
+          "level": 2
+        },
+        {
+          "animalId": "wandering-albatross",
+          "level": 3
+        },
+        {
+          "animalId": "black-legged-kittiwake",
+          "level": 3
+        },
+        {
+          "animalId": "blue-footed-booby",
+          "level": 3
+        },
+        {
+          "animalId": "magnificent-frigatebird",
+          "level": 3
+        },
+        {
+          "animalId": "arctic-tern",
+          "level": 3
+        },
+        {
+          "animalId": "laysan-albatross",
+          "level": 4
+        },
+        {
+          "animalId": "horned-puffin",
+          "level": 4
+        },
+        {
+          "animalId": "tufted-puffin",
+          "level": 4
+        },
+        {
+          "animalId": "southern-royal-albatross",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "stripes",
+      "text": "Name an animal with stripes",
+      "answers": [
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 1
+        },
+        {
+          "animalId": "plains-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "mountain-zebra",
+          "level": 3
+        },
+        {
+          "animalId": "okapi",
+          "level": 3
+        },
+        {
+          "animalId": "ring-tailed-lemur",
+          "level": 3
+        },
+        {
+          "animalId": "european-badger",
+          "level": 3
+        },
+        {
+          "animalId": "grevys-zebra",
+          "level": 4
+        },
+        {
+          "animalId": "thylacine",
+          "level": 4
+        },
+        {
+          "animalId": "numbat",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "hops",
+      "text": "Name an animal that hops",
+      "answers": [
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "hare",
+          "level": 1
+        },
+        {
+          "animalId": "frog",
+          "level": 1
+        },
+        {
+          "animalId": "red-kangaroo",
+          "level": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "level": 2
+        },
+        {
+          "animalId": "european-hare",
+          "level": 2
+        },
+        {
+          "animalId": "common-frog",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-grey-kangaroo",
+          "level": 3
+        },
+        {
+          "animalId": "arctic-hare",
+          "level": 3
+        },
+        {
+          "animalId": "snowshoe-hare",
+          "level": 3
+        },
+        {
+          "animalId": "cane-toad",
+          "level": 3
+        },
+        {
+          "animalId": "western-grey-kangaroo",
+          "level": 4
+        },
+        {
+          "animalId": "pygmy-rabbit",
+          "level": 4
+        },
+        {
+          "animalId": "springbok",
+          "level": 4
+        },
+        {
+          "animalId": "quokka",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "desert",
+      "text": "Name an animal that lives in the desert",
+      "answers": [
+        {
+          "animalId": "camel",
+          "level": 1
+        },
+        {
+          "animalId": "scorpion",
+          "level": 1
+        },
+        {
+          "animalId": "dromedary",
+          "level": 2
+        },
+        {
+          "animalId": "bactrian-camel",
+          "level": 3
+        },
+        {
+          "animalId": "fennec-fox",
+          "level": 3
+        },
+        {
+          "animalId": "meerkat",
+          "level": 3
+        },
+        {
+          "animalId": "gemsbok",
+          "level": 3
+        },
+        {
+          "animalId": "desert-locust",
+          "level": 3
+        },
+        {
+          "animalId": "thorny-devil",
+          "level": 4
+        },
+        {
+          "animalId": "gila-monster",
+          "level": 4
+        },
+        {
+          "animalId": "deathstalker",
+          "level": 4
+        },
+        {
+          "animalId": "kit-fox",
+          "level": 4
+        },
+        {
+          "animalId": "sand-cat",
+          "level": 4
+        },
+        {
+          "animalId": "addax",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "mostly-white",
+      "text": "Name an animal that is mostly white",
+      "answers": [
+        {
+          "animalId": "polar-bear",
+          "level": 1
+        },
+        {
+          "animalId": "swan",
+          "level": 1
+        },
+        {
+          "animalId": "arctic-fox",
+          "level": 2
+        },
+        {
+          "animalId": "snowy-owl",
+          "level": 2
+        },
+        {
+          "animalId": "mute-swan",
+          "level": 2
+        },
+        {
+          "animalId": "white-stork",
+          "level": 2
+        },
+        {
+          "animalId": "beluga-whale",
+          "level": 3
+        },
+        {
+          "animalId": "arctic-hare",
+          "level": 3
+        },
+        {
+          "animalId": "great-egret",
+          "level": 3
+        },
+        {
+          "animalId": "little-egret",
+          "level": 3
+        },
+        {
+          "animalId": "harp-seal",
+          "level": 3
+        },
+        {
+          "animalId": "great-white-pelican",
+          "level": 3
+        },
+        {
+          "animalId": "snowshoe-hare",
+          "level": 4
+        },
+        {
+          "animalId": "olm",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "rodent",
+      "text": "Name a rodent",
+      "answers": [
+        {
+          "animalId": "mouse",
+          "level": 1
+        },
+        {
+          "animalId": "squirrel",
+          "level": 1
+        },
+        {
+          "animalId": "house-mouse",
+          "level": 2
+        },
+        {
+          "animalId": "brown-rat",
+          "level": 2
+        },
+        {
+          "animalId": "red-squirrel",
+          "level": 2
+        },
+        {
+          "animalId": "capybara",
+          "level": 2
+        },
+        {
+          "animalId": "north-american-beaver",
+          "level": 2
+        },
+        {
+          "animalId": "guinea-pig",
+          "level": 2
+        },
+        {
+          "animalId": "golden-hamster",
+          "level": 2
+        },
+        {
+          "animalId": "long-tailed-chinchilla",
+          "level": 3
+        },
+        {
+          "animalId": "north-american-porcupine",
+          "level": 3
+        },
+        {
+          "animalId": "eastern-gray-squirrel",
+          "level": 3
+        },
+        {
+          "animalId": "black-tailed-prairie-dog",
+          "level": 3
+        },
+        {
+          "animalId": "alpine-marmot",
+          "level": 3
+        },
+        {
+          "animalId": "wood-mouse",
+          "level": 3
+        },
+        {
+          "animalId": "naked-mole-rat",
+          "level": 4
+        },
+        {
+          "animalId": "siberian-flying-squirrel",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "coral-reef",
+      "text": "Name an animal that lives on a coral reef",
+      "answers": [
+        {
+          "animalId": "shark",
+          "level": 1
+        },
+        {
+          "animalId": "octopus",
+          "level": 1
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "ray",
+          "level": 1
+        },
+        {
+          "animalId": "ocellaris-clownfish",
+          "level": 2
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "red-lionfish",
+          "level": 3
+        },
+        {
+          "animalId": "giant-oceanic-manta-ray",
+          "level": 3
+        },
+        {
+          "animalId": "nurse-shark",
+          "level": 3
+        },
+        {
+          "animalId": "great-barracuda",
+          "level": 3
+        },
+        {
+          "animalId": "dugong",
+          "level": 3
+        },
+        {
+          "animalId": "crown-of-thorns-starfish",
+          "level": 4
+        },
+        {
+          "animalId": "mimic-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "peacock-mantis-shrimp",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}
