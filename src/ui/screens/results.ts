@@ -112,10 +112,14 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
         ' points',
       ),
       party.el,
-      h('p', { class: 'meta' }, `Reached the ${props.biomeName}`),
-      props.streak > 0
-        ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
-        : null,
+      h(
+        'div',
+        { class: 'results__stats' },
+        h('p', { class: 'meta' }, `Reached the ${props.biomeName}`),
+        props.streak > 0
+          ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
+          : null,
+      ),
       shareIt.el,
       h('h2', { class: 'section-title' }, 'Your team'),
       team.el,

@@ -2,7 +2,7 @@ import { biomeFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
 import { pointsFor } from '@/core/scoring';
 import type { Animal, AnimalId, Prompt, Puzzle, RoundResult } from '@/core/types';
-import type { AnswerLine } from './components/teamCard';
+import type { AnswerLine } from './components/answerRow';
 import type { ResultsProps } from './screens/results';
 
 export interface FinishedRun {
@@ -17,7 +17,8 @@ export type AnimalOf = (result: RoundResult) => Animal | null;
 /** What the results screen shows for a finished run (everything but the delay). */
 /**
  * Every answer a prompt accepted, rarest (most points) first, then by name;
- * the player's own marked. Names only: the list shows no pictures.
+ * the player's own marked, with what the list shows when a row opens
+ * (description, Wikipedia link). Names only: the list shows no pictures.
  */
 export function answerLines(
   prompt: Prompt,
@@ -25,12 +26,19 @@ export function answerLines(
   picked: AnimalId | null,
 ): AnswerLine[] {
   return prompt.answers
-    .map(({ animalId, level }) => ({
-      name: animals.get(animalId)?.display ?? animalId.replace(/-/g, ' '),
-      level,
-      points: pointsFor(level),
-      picked: animalId === picked,
-    }))
+    .map(({ animalId, level }): AnswerLine => {
+      const animal = animals.get(animalId);
+      return {
+        animalId,
+        name: animal?.display ?? animalId.replace(/-/g, ' '),
+        kind: animal?.kind ?? 'species',
+        level,
+        points: pointsFor(level),
+        picked: animalId === picked,
+        description: animal?.description,
+        wiki: animal?.wiki,
+      };
+    })
     .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
 }
 

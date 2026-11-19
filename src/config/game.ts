@@ -120,3 +120,11 @@ export const MATCHER_CONFIG = {
   partialMinLength: 3,
   partialMinCoverage: 0.4,
 } as const satisfies MatcherConfig;
+
+/** The results screen's answer lists (ui/components/answerList.ts). */
+export const RESULTS_LIST = {
+  /** A search box appears when a prompt has more answers than this. */
+  searchFrom: 20,
+  /** Rows rendered at a time; more are added as the box scrolls. */
+  renderWindow: 300,
+} as const;

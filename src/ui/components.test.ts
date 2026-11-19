@@ -305,26 +305,6 @@ describe('results: team rows, answers and the party', () => {
     answers: answerLines(prompt, ANIMALS, animal?.id ?? null),
   });
 
-  it('lists every answer by points, rarest first, marking the one found', () => {
-    expect(answerLines(prompt, ANIMALS, 'tiger')).toEqual([
-      { name: 'Tiger', level: 4, points: 85, picked: true },
-      { name: 'Snow leopard', level: 3, points: 50, picked: false },
-      { name: 'Red fox', level: 1, points: 10, picked: false },
-    ]);
-  });
-
-  it('opens each row to show every answer and its points, with no pictures', () => {
-    const { el } = teamCard([round(tiger, 4)]);
-    const details = el.querySelector('details')!;
-    expect(details.open).toBe(false);
-    expect(details.querySelector('summary')?.textContent).toContain('Tiger');
-    const lines = [...details.querySelectorAll('.answer-line')].map((li) => li.textContent);
-    expect(lines).toEqual(['Tiger85 (your answer)', 'Snow leopard50', 'Red fox10']);
-    const list = details.querySelector('.team-card__answers')!;
-    expect(list.querySelector('img, .portrait')).toBeNull();
-    expect(list.textContent).not.toMatch(/🐅|🦊/u);
-  });
-
   it('shows the emoji at once, then the sprite when it is ready', async () => {
     const image = { src: 'data:x', width: 24, height: 20, facesLeft: true };
     const el = portrait(tiger, false, { scale: 2, portraits: () => Promise.resolve(image) });

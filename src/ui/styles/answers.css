@@ -1,0 +1,110 @@
+/* Results: an opened team row's answers (ui/components/answerList.ts, answerRow.ts). */
+.answer-list {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.answer-list__summary {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.answer-list__search {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  background: var(--paper);
+  border: 2px solid var(--paper-edge);
+  border-radius: var(--radius-2);
+}
+
+/* position: relative makes rows' offsetTop relative to the box (answerList reveal()). */
+.answer-list__box {
+  position: relative;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgb(255 255 255 / 0.5);
+  border: 2px solid var(--paper-edge);
+  border-radius: var(--radius-2);
+}
+
+.answer-list__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answer + .answer {
+  border-top: 1px solid rgb(143 106 63 / 0.25);
+}
+
+.answer__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.answer__row:focus-visible {
+  outline-offset: -3px;
+}
+
+.answer__name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.answer__level {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The rarest answer: the gold row, always at the top. */
+.answer--top {
+  color: var(--level-5-ink);
+  background: var(--level-5);
+}
+
+/* The player's own answer: bold, with a bar in the accent colour. */
+.answer--picked > .answer__row {
+  font-weight: 700;
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.answer__details {
+  padding: 0 var(--space-2) var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.answer__description {
+  margin: 0 0 var(--space-1);
+}
+
+.answer__wiki {
+  color: var(--hint);
+}
+
+.answer--top .answer__wiki {
+  color: inherit;
+}
+
+.answer-list__empty {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}

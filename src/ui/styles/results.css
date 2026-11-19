@@ -1,4 +1,29 @@
-/* Results */
+/*
+ * Results card: room above the title, spacing tokens between score, scene,
+ * stats and share. A tall card starts at the top and #ui scrolls it within the
+ * viewport; the auto margins centre a short one without ever cutting off its
+ * top (plain centring would push a tall card's top out of reach).
+ */
+.results {
+  gap: var(--space-4);
+  padding-top: calc(var(--space-6) + var(--space-2));
+  align-self: start;
+  margin-block: auto;
+}
+
+.results__score {
+  margin: 0;
+}
+
+.results__stats {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.results .section-title {
+  margin-top: var(--space-3);
+}
+
 .results__number {
   font-size: var(--text-2xl);
 }

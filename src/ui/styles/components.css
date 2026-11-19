@@ -175,94 +175,6 @@
   text-wrap: balance;
 }
 
-/* Team card: one row per prompt on the results screen. */
-.team-card {
-  display: grid;
-  gap: var(--space-2);
-  padding: 0;
-  list-style: none;
-  text-align: left;
-}
-
-.team-card__member {
-  background: rgb(255 255 255 / 0.4);
-  border-radius: var(--radius-1);
-}
-
-/* The row itself: sprite, name and prompt, level, and a chevron to open it. */
-.team-card__summary {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: var(--tap);
-  padding: var(--space-2);
-  cursor: pointer;
-  list-style: none;
-}
-
-.team-card__summary::-webkit-details-marker {
-  display: none;
-}
-
-.team-card__summary::after {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid var(--ink-soft);
-  border-bottom: 2px solid var(--ink-soft);
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform var(--dur-fast);
-}
-
-.team-card__member[open] > .team-card__summary::after {
-  transform: rotate(-135deg) translateY(-2px);
-}
-
-/* Every answer to the prompt: small type in two columns, so many fit. */
-.team-card__answers-title {
-  padding: 0 var(--space-2);
-  font-size: var(--text-xs);
-  color: var(--ink-soft);
-}
-
-.team-card__answers {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-  column-gap: var(--space-3);
-  margin: 0;
-  padding: var(--space-1) var(--space-2) var(--space-2);
-  list-style: none;
-  font-size: var(--text-xs);
-  line-height: 1.6;
-}
-
-.answer-line {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.answer-line__name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.answer-line__points {
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-soft);
-}
-
-.answer-line--picked {
-  font-weight: 700;
-}
-
-.answer-line--picked .answer-line__points {
-  color: var(--ink);
-}
-
 /* A character's picture: the emoji, or its sprite once loaded, kept crisp. */
 .portrait {
   display: inline-grid;
@@ -279,23 +191,6 @@
 
 .portrait__sprite--flip {
   transform: scaleX(-1);
-}
-
-.team-card__text {
-  display: grid;
-  min-width: 0;
-}
-
-.team-card__name {
-  font-weight: 700;
-}
-
-.team-card__prompt {
-  font-size: var(--text-xs);
-  color: var(--ink-soft);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .countdown {
