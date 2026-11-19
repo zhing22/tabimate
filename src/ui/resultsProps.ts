@@ -31,7 +31,6 @@ export function answerLines(
       return {
         animalId,
         name: animal?.display ?? animalId.replace(/-/g, ' '),
-        kind: animal?.kind ?? 'species',
         level,
         points: pointsFor(level),
         picked: animalId === picked,

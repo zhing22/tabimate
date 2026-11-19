@@ -1,7 +1,7 @@
 /* Results: "Your team", one row per prompt, each opening to every answer. */
 .team-card {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -24,9 +24,9 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   min-height: var(--tap);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-2);
   cursor: pointer;
   list-style: none;
@@ -59,6 +59,23 @@
   transform: rotate(-135deg) translateY(-2px);
 }
 
+/*
+ * Every row's picture sits in the same 48 px square: the largest sprite
+ * (24 px frames at scale 2 in teamCard.ts). Smaller sprites and emoji stand at
+ * its bottom centre, so the text beside them lines up across all the rows.
+ */
+.team-card__picture {
+  display: grid;
+  place-items: end center;
+  width: 48px;
+  height: 48px;
+}
+
+.team-card__picture .portrait {
+  min-width: 0;
+  font-size: var(--text-lg);
+}
+
 .team-card__text {
   display: grid;
   gap: 2px;
@@ -67,16 +84,22 @@
 
 /* The full question, wrapping onto as many lines as it needs. */
 .team-card__prompt {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--ink-soft);
   overflow-wrap: anywhere;
 }
 
-.team-card__name {
+/* The answer, with its rarity and points on the same line at the right. */
+.team-card__answer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-1) var(--space-2);
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.team-card__name {
+  flex: 1;
+  min-width: 0;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
@@ -84,16 +107,12 @@
 .team-card__score {
   display: flex;
   align-items: center;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
-/* "group": a group answer ("Penguin") rather than one species. */
-.tag {
+/* A slimmer badge, to keep the answer line one row high. */
+.team-card__score .level-badge {
   padding: 0 var(--space-1);
-  font-size: var(--text-xs);
-  font-weight: 400;
-  color: var(--ink);
-  background: var(--paper-deep);
-  border-radius: var(--radius-1);
 }

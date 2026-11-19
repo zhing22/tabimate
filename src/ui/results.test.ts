@@ -13,7 +13,6 @@ import { answerLines } from './resultsProps';
 const line = (i: number, extra: Partial<AnswerLine> = {}): AnswerLine => ({
   animalId: `a${i}`,
   name: `Animal ${i}`,
-  kind: 'species',
   level: 2,
   points: 25,
   picked: false,
@@ -51,7 +50,6 @@ describe('answerLines', () => {
       {
         animalId: 'tiger',
         name: 'Tiger',
-        kind: 'species',
         level: 4,
         points: 85,
         picked: true,
@@ -61,7 +59,6 @@ describe('answerLines', () => {
       {
         animalId: 'penguin',
         name: 'Penguin',
-        kind: 'group',
         level: 1,
         points: 10,
         picked: false,
@@ -73,30 +70,30 @@ describe('answerLines', () => {
 });
 
 describe('answerList', () => {
-  it('is a labelled region that says how many you found and the best possible', () => {
+  it('is a labelled region that says how many answers there are', () => {
     const { el } = answerList(answers(3, 1), { question: 'Q3' });
     expect(el.getAttribute('role')).toBe('region');
     expect(el.getAttribute('aria-label')).toBe('All answers to Q3');
-    expect(el.textContent).toContain('You found 1 of 3 · best possible 100');
-    expect(answerList(answers(2), { question: 'Q1' }).el.textContent).toContain('You found 0 of 2');
+    expect(el.querySelector('.answer-list__summary')?.textContent).toBe('3 possible answers');
+    expect(answerList(answers(1), { question: 'Q1' }).el.textContent).toContain(
+      '1 possible answer',
+    );
   });
 
-  it('shows the CR answer as the gold row on top, and marks yours', () => {
+  it("tints each row with its level's colour, the CR on top, and marks yours", () => {
     const { el } = answerList(answers(3, 2), { question: 'Q1' });
     const [top, , mine] = rows(el);
-    expect(top!.classList.contains('answer--top')).toBe(true);
+    expect(top!.getAttribute('style')).toBe('--answer-tint: var(--level-5)');
     expect(top!.textContent).toContain('CR · 100');
+    expect(mine!.getAttribute('style')).toBe('--answer-tint: var(--level-2)');
     expect(mine!.classList.contains('answer--picked')).toBe(true);
     expect(mine!.textContent).toContain('(your answer)');
-    expect(rows(el).filter((r) => r.classList.contains('answer--top'))).toHaveLength(1);
   });
 
-  it('tags group answers', () => {
-    const { el } = answerList([line(0, { kind: 'group' }), line(1)], { question: 'Q1' });
-    expect(rows(el).map((r) => r.querySelector('.tag')?.textContent ?? null)).toEqual([
-      'group',
-      null,
-    ]);
+  it('shows just the name, level and points: no group tag', () => {
+    const { el } = answerList([line(0), line(1)], { question: 'Q1' });
+    expect(el.querySelector('.tag')).toBeNull();
+    expect(rows(el)[0]!.querySelector('button')!.textContent).toBe('Animal 0NT · 25');
   });
 
   it('opens a row to its description and Wikipedia link, in a new tab', () => {
@@ -208,17 +205,28 @@ describe('teamCard', () => {
     },
   });
 
-  it('shows the full question, the animal, its level and points, and a group tag', () => {
+  it('shows the full question, then the animal with its level and points on the same line', () => {
     const { el } = teamCard([round(tiger, 4, []), round(null, 0, []), round(penguin, 1, [])]);
     const summaries = [...el.querySelectorAll('summary')];
     expect(summaries[0]!.querySelector('.team-card__prompt')!.textContent).toBe(
       `Q1 · ${prompt.text}`,
     );
-    expect(summaries[0]!.querySelector('.team-card__name')!.textContent).toBe('Tiger');
-    expect(summaries[0]!.querySelector('.team-card__score')!.textContent).toBe('EN · 85');
-    expect(summaries[1]!.textContent).toContain('No match');
-    expect(summaries[1]!.querySelector('.team-card__score')!.textContent).toBe('No match · 0');
-    expect(summaries[2]!.querySelector('.team-card__name')!.textContent).toBe('Penguingroup');
+    const answer = summaries[0]!.querySelector('.team-card__answer')!;
+    expect(answer.querySelector('.team-card__name')!.textContent).toBe('Tiger');
+    expect(answer.querySelector('.team-card__score')!.textContent).toBe('EN · 85');
+    expect(summaries[1]!.querySelector('.team-card__answer')!.textContent).toBe(
+      'No matchNo match · 0',
+    );
+    // A group answer is just its name: no tag.
+    expect(summaries[2]!.querySelector('.team-card__name')!.textContent).toBe('Penguin');
+    expect(el.querySelector('.tag')).toBeNull();
+  });
+
+  it('puts every picture, sprite or emoji, in the same fixed slot', () => {
+    const { el } = teamCard([round(tiger, 4, []), round(null, 0, []), round(penguin, 1, [])]);
+    const slots = [...el.querySelectorAll('summary')].map((s) => s.firstElementChild!);
+    expect(slots.every((s) => s.classList.contains('team-card__picture'))).toBe(true);
+    expect(slots.every((s) => s.querySelector('.portrait'))).toBe(true);
   });
 
   it('builds the answer list on first open, then scrolls to your answer each time', () => {

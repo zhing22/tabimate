@@ -1,4 +1,4 @@
-import { LEVELS, TOP_LEVEL, type AnswerLevel } from '@/config/levels';
+import { LEVELS, type AnswerLevel } from '@/config/levels';
 import type { AnimalId } from '@/core/types';
 import { h } from '../dom';
 
@@ -6,7 +6,6 @@ import { h } from '../dom';
 export interface AnswerLine {
   readonly animalId: AnimalId;
   readonly name: string;
-  readonly kind: 'group' | 'species';
   readonly level: AnswerLevel;
   readonly points: number;
   /** The one the player found. */
@@ -20,9 +19,6 @@ export interface AnswerLine {
 /** "CR · 100": the level's short name and its points. */
 export const levelPoints = (level: AnswerLevel | 0, points: number): string =>
   `${LEVELS[level].shortName} · ${points}`;
-
-/** A small "group" label beside group answers ("Penguin" covers every penguin). */
-export const groupTag = () => h('span', { class: 'tag' }, 'group');
 
 function details(answer: AnswerLine, id: string) {
   const link = answer.wiki
@@ -42,8 +38,9 @@ function details(answer: AnswerLine, id: string) {
 
 /**
  * One answer: a button with its name, level and points that opens to its
- * description and Wikipedia link. The rarest (top-level) answer is the gold
- * row; the player's own is marked for sight and for screen readers.
+ * description and Wikipedia link. Each row is tinted with its level's colour
+ * (answers.css lightens it), so rarity reads at a glance; the player's own is
+ * marked for sight and for screen readers.
  */
 export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
   const panel = details(answer, `${id}-details`);
@@ -56,7 +53,6 @@ export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
       'aria-controls': panel.id,
     },
     h('span', { class: 'answer__name' }, answer.name),
-    answer.kind === 'group' ? groupTag() : null,
     h('span', { class: 'answer__level' }, levelPoints(answer.level, answer.points)),
     answer.picked ? h('span', { class: 'sr-only' }, ' (your answer)') : null,
   );
@@ -65,10 +61,13 @@ export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
     button.setAttribute('aria-expanded', String(open));
     panel.hidden = !open;
   });
-  const classes = [
-    'answer',
-    answer.level === TOP_LEVEL ? 'answer--top' : '',
-    answer.picked ? 'answer--picked' : '',
-  ];
-  return h('li', { class: classes.filter(Boolean).join(' ') }, button, panel);
+  return h(
+    'li',
+    {
+      class: answer.picked ? 'answer answer--picked' : 'answer',
+      style: `--answer-tint: var(${LEVELS[answer.level].colour})`,
+    },
+    button,
+    panel,
+  );
 }

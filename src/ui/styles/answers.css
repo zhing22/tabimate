@@ -7,16 +7,17 @@
 
 .answer-list__summary {
   margin: 0;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--ink-soft);
 }
 
 .answer-list__search {
   width: 100%;
-  min-height: var(--tap);
-  padding: 0 var(--space-2);
+  /* Small rows, so a long list shows many answers at once. */
+  min-height: 28px;
+  padding: 2px var(--space-2);
   font: inherit;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   background: var(--paper);
   border: 2px solid var(--paper-edge);
   border-radius: var(--radius-2);
@@ -37,6 +38,15 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/*
+ * Each row is tinted with its level's colour (--answer-tint, set from LEVELS in
+ * answerRow.ts), mixed mostly with white: white, blue, red, purple, gold, light
+ * enough to read rarity at a glance without shouting.
+ */
+.answer {
+  background: color-mix(in srgb, var(--answer-tint) 30%, #fff);
 }
 
 .answer + .answer {
@@ -74,12 +84,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The rarest answer: the gold row, always at the top. */
-.answer--top {
-  color: var(--level-5-ink);
-  background: var(--level-5);
-}
-
 /* The player's own answer: bold, with a bar in the accent colour. */
 .answer--picked > .answer__row {
   font-weight: 700;
@@ -97,10 +101,6 @@
 
 .answer__wiki {
   color: var(--hint);
-}
-
-.answer--top .answer__wiki {
-  color: inherit;
 }
 
 .answer-list__empty {

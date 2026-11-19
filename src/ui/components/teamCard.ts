@@ -4,7 +4,7 @@ import { pointsFor } from '@/core/scoring';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
 import { h } from '../dom';
 import { answerList, type AnswerList } from './answerList';
-import { groupTag, type AnswerLine } from './answerRow';
+import type { AnswerLine } from './answerRow';
 import type { Component } from './component';
 import { levelBadge } from './levelBadge';
 import { portrait } from './portrait';
@@ -22,31 +22,36 @@ export interface TeamRound {
 
 const SCALE = 2;
 
-/** The row: "Q3 · the full prompt", then the animal (and a group tag), then "VU · 50". */
+/** The row: "Q3 · the full prompt", then the animal with "VU · 50" at the right. */
 function summary(round: TeamRound, index: number, portraits: Portraits | undefined) {
   const { prompt, result, animal } = round;
   const level = result.match.level;
   return h(
     'summary',
     { class: 'team-card__summary' },
-    animal
-      ? portrait(animal, isShiny(level), { scale: SCALE, portraits })
-      : h('span', { class: 'portrait', 'aria-hidden': 'true' }, '·'),
+    // A fixed-size slot (team.css), so every row's text starts at the same place
+    // whether its picture is a small sprite, a large one or an emoji.
+    h(
+      'span',
+      { class: 'team-card__picture' },
+      animal
+        ? portrait(animal, isShiny(level), { scale: SCALE, portraits })
+        : h('span', { class: 'portrait', 'aria-hidden': 'true' }, '·'),
+    ),
     h(
       'span',
       { class: 'team-card__text' },
       h('span', { class: 'team-card__prompt' }, `Q${index + 1} · ${prompt.text}`),
       h(
         'span',
-        { class: 'team-card__name' },
-        animal?.display ?? 'No match',
-        animal?.kind === 'group' ? groupTag() : null,
-      ),
-      h(
-        'span',
-        { class: 'team-card__score' },
-        levelBadge(level, { compact: true }).el,
-        h('span', { class: 'team-card__points' }, ` · ${pointsFor(level)}`),
+        { class: 'team-card__answer' },
+        h('span', { class: 'team-card__name' }, animal?.display ?? 'No match'),
+        h(
+          'span',
+          { class: 'team-card__score' },
+          levelBadge(level, { compact: true }).el,
+          ` · ${pointsFor(level)}`,
+        ),
       ),
     ),
   );

@@ -35,12 +35,10 @@ function moveFocus(list: HTMLElement, event: KeyboardEvent) {
 
 /**
  * Every answer a prompt accepted, rarest first, in a small scroll box: how
- * many the player found, a search box for long lists, and rows that open to a
+ * many there are, a search box for long lists, and rows that open to a
  * description. Rows are rendered RESULTS_LIST.renderWindow at a time.
  */
 export function answerList(answers: readonly AnswerLine[], options: AnswerListOptions): AnswerList {
-  const best = Math.max(0, ...answers.map((a) => a.points));
-  const found = answers.filter((a) => a.picked).length;
   const list = h('ul', { class: 'answer-list__rows' });
   const box = h('div', { class: 'answer-list__box' }, list);
   const ids = new Map(answers.map((a, i) => [a, `${options.question.toLowerCase()}-answer-${i}`]));
@@ -92,7 +90,7 @@ export function answerList(answers: readonly AnswerLine[], options: AnswerListOp
     h(
       'p',
       { class: 'answer-list__summary' },
-      `You found ${found} of ${answers.length} · best possible ${best}`,
+      `${answers.length} possible ${answers.length === 1 ? 'answer' : 'answers'}`,
     ),
     search,
     box,
