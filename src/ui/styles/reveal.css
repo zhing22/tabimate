@@ -39,7 +39,11 @@
   animation: rise var(--dur-med) ease-out both;
 }
 
+/* The sprite (or emoji): a fixed slot, so the swap from emoji doesn't move the card. */
 .reveal__emoji {
+  display: grid;
+  place-items: center;
+  min-height: 72px;
   font-size: 3.5rem;
   line-height: 1;
 }

@@ -1,22 +1,24 @@
-/* On a phone the Field Journal is its own page: it covers the whole screen
-   (scene included; html.is-journal while it shows), and the grid scrolls with
-   the page instead of in a box of its own. */
+/* On a phone the Field Journal is a card over the full-window scene (like the
+   results; html.is-journal, see base.css), as wide as the results card and
+   90% of the screen tall. Only its panel scrolls, so the title, tabs and Back
+   stay in place. */
 @media (max-width: 767px), (max-height: 520px) {
-  :root.is-journal:not(.is-results) #ui {
-    top: var(--vv-top, 0px);
-    height: var(--vv-height, 100dvh);
-    padding: 0;
+  :root.is-journal .journal {
+    height: calc(var(--vv-height, 100dvh) * 0.9);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    align-self: center;
   }
 
-  :root.is-journal .journal {
-    align-self: stretch;
-    align-content: start;
-    max-width: none;
-    min-height: var(--vv-height, 100dvh);
-    padding: max(var(--space-4), env(safe-area-inset-top)) var(--space-4)
-      max(var(--space-4), env(safe-area-inset-bottom));
-    border-radius: 0;
-    box-shadow: none;
+  /* Block, not grid: in a grid shorter than its content, the popup (which
+     scrolls itself) would be squeezed to nothing. */
+  :root.is-journal .journal__panel {
+    display: block;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  :root.is-journal .journal__panel > * + * {
+    margin-top: var(--space-3);
   }
 
   :root.is-journal .journal-grid {

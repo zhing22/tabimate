@@ -1,8 +1,11 @@
 import { revealBuildUpMs, revealNameMs, type RevealTiming } from '@/config/game';
-import { LEVELS, TOP_LEVEL } from '@/config/levels';
+import { isShiny, LEVELS, TOP_LEVEL } from '@/config/levels';
+import { UI_SPRITE_SCALE } from '@/config/ui';
+import type { Portraits } from '@/core/portrait';
 import type { Animal, RoundResult } from '@/core/types';
 import { countUp } from '../components/countUp';
 import { levelBadge } from '../components/levelBadge';
+import { portrait } from '../components/portrait';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
 
@@ -23,6 +26,8 @@ export interface RevealProps {
   readonly focusNext: boolean;
   /** Lines under the name (ui/reveal/extras.ts): jackpot banner, fact, near-miss hint. */
   readonly extras?: readonly HTMLElement[];
+  /** The animal's sprite (walking; shiny at the shiny level), else its emoji. */
+  readonly portraits?: Portraits | undefined;
 }
 
 export interface RevealActions {
@@ -89,9 +94,17 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
       'div',
       { class: 'reveal__body' },
       h(
-        'p',
+        'div',
         { class: 'reveal__emoji', 'aria-hidden': 'true' },
-        animal?.emoji ?? (level ? '🐾' : '💨'),
+        animal
+          ? portrait(animal, isShiny(level), {
+              scale: UI_SPRITE_SCALE.reveal,
+              portraits: props.portraits,
+              walking: true,
+            })
+          : level
+            ? '🐾'
+            : '💨',
       ),
       h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
       props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,

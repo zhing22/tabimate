@@ -1,5 +1,6 @@
 import { REVEAL_TIMING, type RevealTiming } from '@/config/game';
 import { pointsFor } from '@/core/scoring';
+import type { Portraits } from '@/core/portrait';
 import type { Animal, AnimalLookup, Puzzle, RoundResult } from '@/core/types';
 import type { ScreenHost } from './host';
 import { revealExtras } from './reveal/extras';
@@ -13,6 +14,8 @@ export interface RevealDeps {
   /** Whether this answer is a first-ever find (see collectionUi). */
   readonly isNew: (result: RoundResult, index: number) => boolean;
   readonly timing?: RevealTiming | undefined;
+  /** The found animal's sprite on the card; without them, its emoji. */
+  readonly portraits?: Portraits | undefined;
 }
 
 export interface RevealOptions {
@@ -48,6 +51,7 @@ export function showRevealCard(
       isLast: index === deps.puzzle.prompts.length - 1,
       ...(deps.puzzle.bonus?.length ? { lastLabel: 'Bonus quiz' } : {}),
       focusNext: opts.focusNext,
+      portraits: deps.portraits,
     },
     { revealed: opts.revealed, next: opts.next },
   );

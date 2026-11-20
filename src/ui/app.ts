@@ -48,6 +48,7 @@ export function createApp(deps: AppDeps): App {
     animals,
     animalOf,
     timing: deps.revealTiming,
+    portraits: deps.journalPortraits ?? deps.portraits,
     isNew: (result: RoundResult, index: number) =>
       result.match.animalId !== null &&
       collection.isNewToJournal(
