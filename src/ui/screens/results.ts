@@ -17,8 +17,6 @@ export interface ResultsProps {
   readonly delay?: Delay;
   /** Sprite pictures for the line-up and team list; emoji without. */
   readonly portraits?: Portraits;
-  /** The biome reached, its scenery behind the line-up. */
-  readonly biomeId: string;
   readonly backdrops?: Backdrops;
 }
 
@@ -80,7 +78,6 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   const party = partyLineup(props.rounds, {
     portraits: props.portraits,
     backdrops: props.backdrops,
-    biomeId: props.biomeId,
     score: props.score,
   });
   const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);

@@ -1,5 +1,4 @@
-import type { BiomeId } from '@/config/biomes';
-import { FOLLOWER_SPACING, GROUND_Y, TITLE_CARD } from '@/config/render';
+import { FOLLOWER_SPACING, FOOTPRINT_STEP, GROUND_Y } from '@/config/render';
 import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import { distanceFor } from '@/core/journey';
 import { pointsFor } from '@/core/scoring';
@@ -8,17 +7,11 @@ import { createTrail, type Trail } from './entities/followerTrail';
 import { createIdleMotion, type Pose } from './entities/idleMotion';
 import { createPlayer, type Player } from './entities/player';
 import { createFollower, stepPose, updateFollower, type Follower } from './follower';
-import { BIOME_STOPS, createWorldState, gatewayX, worldStateAt, type WorldState } from './strip';
+import { createWorldState, worldStateAt, type WorldState } from './strip';
+import { createTitleCards, type TitleCard } from './titleCards';
 
 export type { Follower } from './follower';
-
-/** A biome's name card, shown as the player passes its gateway (the border's middle). */
-export interface TitleCard {
-  /** The biome being entered, or null when no card is up. */
-  biome: BiomeId | null;
-  /** Seconds since it appeared. */
-  age: number;
-}
+export type { TitleCard } from './titleCards';
 
 /** Footprints left by misses; a fixed pool, oldest reused first. */
 export const MAX_FOOTPRINTS = 16;
@@ -68,8 +61,9 @@ export function createWorld(options: WorldOptions): World {
   const followers: Follower[] = [];
   const footprints = new Float32Array(MAX_FOOTPRINTS).fill(Number.NaN);
   let nextPrint = 0;
+  let missesSinceHit = 0;
   const state = createWorldState();
-  const titleCard: TitleCard = { biome: null, age: 0 };
+  const titles = createTitleCards();
   let lastX = 0;
 
   const locate = () => {
@@ -82,10 +76,13 @@ export function createWorld(options: WorldOptions): World {
     const animal =
       result.match.animalId === null ? undefined : options.animals.get(result.match.animalId);
     if (!animal) {
-      footprints[nextPrint] = player.targetX;
+      // The party stays put on a miss: each one since the last hit steps a little further on.
+      footprints[nextPrint] = player.targetX + missesSinceHit * FOOTPRINT_STEP;
+      missesSinceHit++;
       nextPrint = (nextPrint + 1) % MAX_FOOTPRINTS;
       return;
     }
+    missesSinceHit = 0;
     const { level } = result.match;
     followers.push(
       createFollower({ animal, level, index: followers.length, animate, reducedMotion }),
@@ -97,17 +94,6 @@ export function createWorld(options: WorldOptions): World {
     else player.placeAt(player.x + distance);
   }
 
-  /** A title card when the player walks past a biome's gateway (never going back). */
-  function checkGateways(from: number, to: number) {
-    for (let i = 1; i < BIOME_STOPS.length; i++) {
-      const gate = gatewayX(i);
-      if (from < gate && gate <= to) {
-        titleCard.biome = BIOME_STOPS[i]!.id;
-        titleCard.age = 0;
-      }
-    }
-  }
-
   return {
     player,
     playerPose,
@@ -115,16 +101,17 @@ export function createWorld(options: WorldOptions): World {
     followers,
     footprints,
     state,
-    titleCard,
+    titleCard: titles.card,
 
     restore(results) {
       followers.length = 0;
       footprints.fill(Number.NaN);
       nextPrint = 0;
+      missesSinceHit = 0;
       player.placeAt(0);
       for (const result of results) addToJourney(result, false);
       trail.reset(player.x, GROUND_Y);
-      titleCard.biome = null;
+      titles.clear();
       lastX = player.x;
       locate();
     },
@@ -139,13 +126,10 @@ export function createWorld(options: WorldOptions): World {
       if (player.walking) stepPose(player.stepTime, playerPose);
       else playerIdle.update(dtS, playerPose);
       for (let i = 0; i < followers.length; i++) updateFollower(followers[i]!, i, player, dtS);
-      checkGateways(lastX, player.x);
+      titles.pass(lastX, player.x);
       lastX = player.x;
       locate();
-      if (titleCard.biome !== null) {
-        titleCard.age += dtS;
-        if (titleCard.age * 1000 >= TITLE_CARD.totalMs) titleCard.biome = null;
-      }
+      titles.update(dtS);
     },
   };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { tile } from './layers';
-import { PROP_SEGMENT, propsInSegment, segmentsInView } from './props';
+import { createPropCache, PROP_SEGMENT, propsInSegment, segmentsInView } from './props';
 import { seededRandom } from './random';
 
 describe('tile', () => {
@@ -67,5 +67,34 @@ describe('props', () => {
   it('finds every segment a prop on screen could come from', () => {
     expect(segmentsInView(0, 195, 48)).toEqual({ first: -1, last: 0 });
     expect(segmentsInView(300, 320, 48)).toEqual({ first: 0, last: 2 });
+  });
+});
+
+describe('per-frame scratch and the prop cache', () => {
+  it('writes tile and segmentsInView into the object it is given', () => {
+    const tiling = { firstX: 0, copies: 0 };
+    expect(tile(100, 0.5, 320, 200, tiling)).toBe(tiling);
+    expect(tiling.firstX).toBe(-50);
+    const range = { first: 0, last: 0 };
+    expect(segmentsInView(300, 320, 48, range)).toBe(range);
+    expect(range).toEqual({ first: 0, last: 2 });
+  });
+
+  it('places a segment once, keyed by biome, and drops the oldest entry when full', () => {
+    const rules = [{ width: 10, minGap: 20, maxGap: 40 }];
+    let placements = 0;
+    const propsFor = createPropCache<string>('seed', () => {
+      placements++;
+      return rules;
+    });
+    const first = propsFor(0, 'town', 0);
+    expect(propsFor(0, 'town', 0)).toBe(first);
+    expect(propsFor(1, 'grassland', 0)).not.toBe(first);
+    expect(placements).toBe(2);
+    for (let s = 1; s <= 64; s++) propsFor(2, 'forest', s); // fills past the limit
+    const before = placements;
+    propsFor(0, 'town', 0); // the oldest: dropped, placed again (same props)
+    expect(placements).toBe(before + 1);
+    expect(propsFor(0, 'town', 0)).toEqual(first);
   });
 });

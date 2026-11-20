@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BIOME_BORDER, FOLLOWER_SPACING, TITLE_CARD } from '@/config/render';
+import { BIOME_BORDER, FOLLOWER_SPACING, FOOTPRINT_STEP, TITLE_CARD } from '@/config/render';
 import type { AnswerLevel } from '@/config/levels';
 import { distanceFor } from '@/core/journey';
 import { ANIMALS } from '@/core/matcher/testFixtures';
@@ -42,13 +42,18 @@ describe('world: a run', () => {
     expect(w.followers[0]?.shiny).toBe(true);
   });
 
-  it('leaves footprints where the party stands on a miss, and stays put', () => {
+  it('leaves footprints on a miss and stays put, each miss a step past the last', () => {
     const w = world();
+    const prints = () => [...w.footprints].filter((x) => !Number.isNaN(x));
+    w.join(miss);
     w.join(miss);
     settle(w);
     expect(w.followers).toHaveLength(0);
     expect(w.player.x).toBe(0);
-    expect([...w.footprints].filter((x) => !Number.isNaN(x))).toEqual([0]);
+    expect(prints()).toEqual([0, FOOTPRINT_STEP]);
+    w.join(hit('platypus', 2)); // a hit starts the count again
+    w.join(miss);
+    expect(prints().at(-1)).toBe(distanceFor(25));
   });
 
   it('walks into the next biome through its border', () => {

@@ -43,7 +43,9 @@ export function createRenderer(k: KAPLAYCtx, world: World, deps: RendererDeps) {
   };
 
   function drawFootprints(cameraX: number) {
-    for (const x of world.footprints) {
+    const prints = world.footprints;
+    for (let i = 0; i < prints.length; i++) {
+      const x = prints[i]!;
       if (Number.isNaN(x)) continue;
       printPos.x = Math.round(x) - cameraX;
       printPos.y = GROUND_Y - 1;

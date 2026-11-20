@@ -74,9 +74,12 @@ export const PLAYER_SIZE = { width: 16, height: 24 } as const;
 /**
  * The walk after an answer: at least WALK.speed px/s, sped up so no walk takes
  * longer than maxS (a CR answer walks 800 px), and never shorter than minS.
- * With reduced motion every walk is a short scroll of reducedS.
+ * With reduced motion there is no walk: the party is placed at once (a cut).
  */
-export const WALK = { speed: 160, minS: 0.5, maxS: 4.5, reducedS: 0.6 } as const;
+export const WALK = { speed: 160, minS: 0.5, maxS: 4.5 } as const;
+
+/** Each miss since the last hit leaves its footprints this far past the last. */
+export const FOOTPRINT_STEP = 6;
 
 /**
  * The blended stretch before each biome's start: the scenery shifts from one
@@ -84,8 +87,20 @@ export const WALK = { speed: 160, minS: 0.5, maxS: 4.5, reducedS: 0.6 } as const
  */
 export const BIOME_BORDER = 320;
 
-/** The biome's title card, shown as the player passes the middle of its border. */
-export const TITLE_CARD = { fadeMs: 300, totalMs: 2_000 } as const;
+/**
+ * The biome's title card, shown as the player passes the middle of its border:
+ * fades in and out over totalMs, a paper card `top` px from the scene's top,
+ * text at textSize with `pad` px around it.
+ */
+export const TITLE_CARD = {
+  fadeMs: 300,
+  totalMs: 2_000,
+  top: 10,
+  pad: 4,
+  textSize: 10,
+  ink: '#2b2134',
+  paper: '#f6e8c8',
+} as const;
 
 /** A new follower pops in over this long. */
 export const POP_IN_MS = 350;

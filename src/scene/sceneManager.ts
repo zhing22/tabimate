@@ -1,18 +1,14 @@
 import kaplay, { type KAPLAYCtx } from 'kaplay';
-import type { BiomeId } from '@/config/biomes';
 import { revealNameMs } from '@/config/game';
-import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS } from '@/config/render';
+import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT } from '@/config/render';
 import type { GameBus } from '@/core/events';
 import type { Backdrops, Portraits } from '@/core/portrait';
-import { createBackdrops } from './backdrop';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
-import { loadBiomeArt } from './biomes/load';
-import { loadBorderArt } from './borders/load';
+import { watchCanvasLayout } from './canvasLayout';
 import { createEffectsLayer } from './effects/effectsLayer';
 import { createRenderer } from './renderer';
+import { setupScenery } from './setupScenery';
 import type { SpriteProvider } from './sprites/spriteProvider';
-import { computeViewport, type Viewport } from './viewport';
-import { dominantBiome } from './strip';
 import { createWorld } from './world';
 
 export interface SceneDeps {
@@ -73,36 +69,19 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
   const reducedMotion =
     deps.reducedMotion ?? window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const world = createWorld({ animals: deps.animals, reducedMotion });
-  const art = loadBiomeArt(k);
   const sprites = deps.createSprites(k);
   let loaded = false;
   const ready = sprites.load(deps.animals.values()).then(() => {
     loaded = true;
   });
   const effects = createEffectsLayer(k, { reducedMotion });
-  const scenery = { art, borders: loadBorderArt(k), seed: deps.puzzleDate, reducedMotion };
-  const backdrop = createBackdrops(scenery);
+  const { scenery, backdrop, syncSky } = setupScenery(k, {
+    puzzleDate: deps.puzzleDate,
+    reducedMotion,
+  });
   const draw = createRenderer(k, world, { ...scenery, sprites, effects });
 
-  let view: Viewport = computeViewport(1, 1, 1);
-  let skyShown: BiomeId | null = null;
-  function layout() {
-    const dpr = window.devicePixelRatio || 1;
-    const { width, height } = container.getBoundingClientRect();
-    view = computeViewport(width, height, dpr);
-    canvas.style.width = `${(MAX_VISIBLE_WIDTH * view.scale) / dpr}px`;
-    canvas.style.height = `${(NATIVE_HEIGHT * view.scale) / dpr}px`;
-    canvas.style.top = `${view.offsetY / dpr}px`;
-  }
-  layout();
-  let resizeTimer: ReturnType<typeof setTimeout> | undefined;
-  const relayout = () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(layout, RESIZE_DEBOUNCE_MS);
-  };
-  const observer = new ResizeObserver(relayout);
-  observer.observe(container);
-  window.addEventListener('orientationchange', relayout);
+  const layout = watchCanvasLayout(container, canvas);
 
   const onVisibility = () => {
     k.debug.paused = document.hidden;
@@ -111,13 +90,8 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
 
   k.onUpdate(() => world.update(Math.min(k.dt(), MAX_STEP_S)));
   k.onDraw(() => {
-    // Rows above the scene show the sky's top colour; set only when it changes.
-    const sky = dominantBiome(world.state);
-    if (sky !== skyShown) {
-      skyShown = sky;
-      container.style.backgroundColor = art[sky].sky[0];
-    }
-    draw(view, loaded);
+    syncSky(container, world.state);
+    draw(layout.view, loaded);
   });
 
   // An answer joins the party while its reveal is still up, the moment the
@@ -158,9 +132,7 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
     dispose() {
       for (const stop of stops) stop();
       cancelJoins();
-      observer.disconnect();
-      clearTimeout(resizeTimer);
-      window.removeEventListener('orientationchange', relayout);
+      layout.dispose();
       document.removeEventListener('visibilitychange', onVisibility);
       effects.dispose();
       k.quit();

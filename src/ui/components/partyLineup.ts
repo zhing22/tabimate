@@ -1,6 +1,6 @@
-import { BIOMES } from '@/config/biomes';
 import { isShiny } from '@/config/levels';
 import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
+import { biomeFor } from '@/core/journey';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import type { Component } from './component';
@@ -15,9 +15,10 @@ const FALLBACK = { height: BACKDROP_HEIGHT, groundY: BACKDROP_GROUND_Y };
 export interface PartyLineupOptions {
   readonly portraits?: Portraits | undefined;
   readonly backdrops?: Backdrops | undefined;
-  /** The biome reached: its colours fill the frame until the backdrop arrives. */
-  readonly biomeId?: string | undefined;
-  /** The run's final score: the backdrop is the scenery where the walk ended. */
+  /**
+   * The run's final score: the frame takes the colours of the biome it reached,
+   * then the backdrop of the scenery where the walk ended.
+   */
   readonly score?: number | undefined;
 }
 
@@ -68,8 +69,8 @@ export function partyLineup(
     },
     row,
   );
-  const biome = BIOMES.find((b) => b.id === opts.biomeId);
-  if (biome) {
+  if (opts.score !== undefined) {
+    const biome = biomeFor(opts.score);
     el.style.setProperty('--party-sky-top', biome.palette.skyTop);
     el.style.setProperty('--party-sky-bottom', biome.palette.skyBottom);
     el.style.setProperty('--party-ground', biome.palette.ground);

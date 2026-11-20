@@ -130,13 +130,17 @@ describe('createPlayer', () => {
     expect(player.walking).toBe(false);
   });
 
-  it('caps a long walk at WALK.maxS, and keeps every walk short with reduced motion', () => {
+  it('caps a long walk at WALK.maxS', () => {
     expect(walkSeconds(WALK.speed)).toBe(1);
     expect(walkSeconds(100_000)).toBe(WALK.maxS);
-    expect(walkSeconds(100_000, true)).toBe(WALK.reducedS);
+  });
+
+  it('places the player at the end at once with reduced motion: no pan', () => {
     const player = createPlayer({ reducedMotion: true });
-    player.walkBy(2_000);
-    player.update(WALK.reducedS);
-    expect(player.x).toBe(2_000);
+    player.walkBy(800);
+    expect(player.x).toBe(800);
+    expect(player.walking).toBe(false);
+    player.walkBy(50);
+    expect(player.x).toBe(850);
   });
 });

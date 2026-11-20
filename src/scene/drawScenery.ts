@@ -3,8 +3,8 @@ import { BIOME_BORDER, LAYERS, PROP_BASE_Y } from '@/config/render';
 import type { BiomeArtSprites } from './biomes/load';
 import type { BorderSprites } from './borders/load';
 import { borderKey, type BorderKey } from './borders/registry';
-import { tile } from './layers';
-import { propsInSegment, segmentsInView, type PlacedProp } from './props';
+import { tile, type Tiling } from './layers';
+import { createPropCache, segmentsInView, type SegmentRange } from './props';
 import { createSkyMix, type Rgb } from './skyMix';
 import {
   BIOME_STOPS,
@@ -14,8 +14,6 @@ import {
   worldStateAt,
   type WorldState,
 } from './strip';
-
-const PROP_CACHE_LIMIT = 64;
 
 export type { Rgb } from './skyMix';
 
@@ -55,21 +53,11 @@ export interface SceneryDeps {
 export function createSceneryRenderer(backend: SceneryBackend, deps: SceneryDeps) {
   const { art, borders, seed, reducedMotion } = deps;
   const skyAt = createSkyMix(art);
-  const propCache = new Map<string, readonly PlacedProp[]>();
+  const propsFor = createPropCache<BiomeId>(seed, (id) => art[id].props);
   const scratch = createWorldState();
   const edge = createWorldState();
-
-  function propsFor(id: BiomeId, segment: number) {
-    const key = `${id}|${segment}`;
-    let list = propCache.get(key);
-    if (!list) {
-      // Only when a new stretch of world comes into view.
-      if (propCache.size > PROP_CACHE_LIMIT) propCache.clear();
-      list = propsInSegment(`${seed}|${id}`, art[id].props, segment);
-      propCache.set(key, list);
-    }
-    return list;
-  }
+  const tiling: Tiling = { firstX: 0, copies: 0 };
+  const segments: SegmentRange = { first: 0, last: 0 };
 
   function drawLayer(
     layer: BiomeArtSprites['layers'][number] | undefined,
@@ -78,7 +66,7 @@ export function createSceneryRenderer(backend: SceneryBackend, deps: SceneryDeps
     width: number,
   ) {
     if (!layer || opacity <= 0) return;
-    const { firstX, copies } = tile(cameraX, layer.parallax, layer.width, width);
+    const { firstX, copies } = tile(cameraX, layer.parallax, layer.width, width, tiling);
     for (let c = 0; c < copies; c++) {
       backend.image(layer, firstX + c * layer.width, layer.y, opacity);
     }
@@ -121,9 +109,11 @@ export function createSceneryRenderer(backend: SceneryBackend, deps: SceneryDeps
     for (let i = first; i <= last; i++) {
       const id = BIOME_STOPS[i]!.id;
       const a = art[id];
-      const segments = segmentsInView(cameraX, width, a.maxPropWidth);
+      segmentsInView(cameraX, width, a.maxPropWidth, segments);
       for (let s = segments.first; s <= segments.last; s++) {
-        for (const p of propsFor(id, s)) {
+        const list = propsFor(i, id, s);
+        for (let n = 0; n < list.length; n++) {
+          const p = list[n]!;
           const prop = a.props[p.kind]!;
           const x = p.x - cameraX;
           if (x > width || x + prop.width < 0) continue;

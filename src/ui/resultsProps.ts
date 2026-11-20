@@ -57,7 +57,6 @@ export function resultsProps(
     }),
     score,
     biomeName: biomeFor(score).name,
-    biomeId: biomeFor(score).id,
     streak: stats.streak,
     bestStreak: stats.bestStreak,
     msUntilNext,

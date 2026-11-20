@@ -47,14 +47,49 @@ export function propsInSegment(
   return placed.sort((a, b) => a.x - b.x);
 }
 
-/** Segments that can have a prop on screen, for props up to maxWidth wide. */
+export interface SegmentRange {
+  first: number;
+  last: number;
+}
+
+/**
+ * Segments that can have a prop on screen, for props up to maxWidth wide.
+ * Writes into `out` (a frame passes one scratch object, so it allocates nothing).
+ */
 export function segmentsInView(
   cameraX: number,
   drawWidth: number,
   maxWidth: number,
-): { readonly first: number; readonly last: number } {
-  return {
-    first: Math.floor((cameraX - maxWidth) / PROP_SEGMENT),
-    last: Math.floor((cameraX + drawWidth) / PROP_SEGMENT),
+  out: SegmentRange = { first: 0, last: 0 },
+): SegmentRange {
+  out.first = Math.floor((cameraX - maxWidth) / PROP_SEGMENT);
+  out.last = Math.floor((cameraX + drawWidth) / PROP_SEGMENT);
+  return out;
+}
+
+const PROP_CACHE_LIMIT = 64;
+// Cache key: biome stop index x stride + segment. A walk spans a few dozen
+// segments, far below the stride, so keys never collide (and no string is built).
+const KEY_STRIDE = 1_000_000;
+
+/**
+ * Props per (biome, segment), placed once when a stretch first comes into view.
+ * At the limit the oldest entry goes (a Map keeps insertion order), so a long
+ * walk refills it a little at a time instead of all at once.
+ */
+export function createPropCache<Id extends string>(
+  seed: string,
+  rulesFor: (id: Id) => readonly PropRule[],
+) {
+  const cache = new Map<number, readonly PlacedProp[]>();
+  return (index: number, id: Id, segment: number): readonly PlacedProp[] => {
+    const key = index * KEY_STRIDE + segment;
+    let list = cache.get(key);
+    if (!list) {
+      if (cache.size >= PROP_CACHE_LIMIT) cache.delete(cache.keys().next().value!);
+      list = propsInSegment(`${seed}|${id}`, rulesFor(id), segment);
+      cache.set(key, list);
+    }
+    return list;
   };
 }

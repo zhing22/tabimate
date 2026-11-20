@@ -26,19 +26,22 @@ export interface BorderArt {
 
 export const borderKey = (from: BiomeId, to: BiomeId): BorderKey => `${from}>${to}`;
 
+// Colours come from the biome palettes (config/biomes.ts), so retuning a biome retunes its border.
 const town = paletteOf('town');
 const grassland = paletteOf('grassland');
+const dirt = paletteOf('rocky-hills').accent;
+const stone = paletteOf('snowy-peak').accent;
+const wood = paletteOf('forest').accent;
 
 /** Cobbles giving way to a dirt path: town's edge. */
 const cobblesToDirt: Painter = (ctx, width, height) => {
   rect(ctx, mix(town.ground, grassland.ground, 0.5), 0, 0, width, height);
-  rect(ctx, mix(town.ground, '#d9a066', 0.4), 0, 6, width, 8);
+  rect(ctx, mix(town.ground, dirt, 0.4), 0, 6, width, 8);
   for (let x = 1; x < width; x += 6) rect(ctx, darken(town.ground, 0.25), x, 7, 4, 3);
 };
 
 /** A stone arch over the path out of town. */
 const townGate: Painter = (ctx, width, height) => {
-  const stone = lighten('#8a8a99', 0.1);
   rect(ctx, stone, 0, 4, 5, height - 4);
   rect(ctx, stone, width - 5, 4, 5, height - 4);
   rect(ctx, stone, 0, 0, width, 5);
@@ -48,7 +51,6 @@ const townGate: Painter = (ctx, width, height) => {
 
 /** A wooden signpost at the forest's edge. */
 const signpost: Painter = (ctx, width, height) => {
-  const wood = '#8f563b';
   rect(ctx, darken(wood, 0.2), Math.floor(width / 2) - 1, 3, 2, height - 3);
   rect(ctx, wood, 0, 2, width, 4);
   rect(ctx, lighten(wood, 0.3), 1, 3, width - 3, 1);
@@ -56,10 +58,10 @@ const signpost: Painter = (ctx, width, height) => {
 
 /** A rope bridge post: the hills dropping into the rainforest. */
 const ropePost: Painter = (ctx, width, height) => {
-  const wood = '#663931';
-  rect(ctx, wood, 0, 2, 3, height - 2);
-  rect(ctx, wood, width - 3, 2, 3, height - 2);
-  for (let x = 3; x < width - 3; x += 3) rect(ctx, '#d9a066', x, 5 + (x % 2), 2, 1);
+  const post = darken(wood, 0.3);
+  rect(ctx, post, 0, 2, 3, height - 2);
+  rect(ctx, post, width - 3, 2, 3, height - 2);
+  for (let x = 3; x < width - 3; x += 3) rect(ctx, dirt, x, 5 + (x % 2), 2, 1);
 };
 
 export const BORDERS: Readonly<Partial<Record<BorderKey, BorderArt>>> = {

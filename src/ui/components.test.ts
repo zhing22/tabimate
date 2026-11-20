@@ -440,7 +440,7 @@ describe('party line-up frame', () => {
   ];
 
   it("shows the biome's colours at once, cropped like the painted scenery", () => {
-    const { el } = partyLineup(rounds, { biomeId: 'forest' });
+    const { el } = partyLineup(rounds, { score: 160 });
     expect(el.style.getPropertyValue('--party-ground')).toBe('#37946e');
     // A high camera: the snapshot ends BACKDROP.groundBelow rows under the walk line.
     expect(el.style.height).toBe(`${BACKDROP_HEIGHT * 2}px`);
@@ -451,7 +451,7 @@ describe('party line-up frame', () => {
   it('then stands the party in the painted scenery, feet on its walk line', async () => {
     const image = { src: 'data:forest', width: 220, height: 90, groundY: 60 };
     const backdrops = vi.fn(() => Promise.resolve(image));
-    const { el } = partyLineup(rounds, { biomeId: 'forest', score: 160, backdrops });
+    const { el } = partyLineup(rounds, { score: 160, backdrops });
     await Promise.resolve();
     await Promise.resolve();
     expect(backdrops).toHaveBeenCalledWith(160);
