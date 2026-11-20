@@ -1,4 +1,4 @@
-import { UI_SPRITE_SCALE } from '@/config/render';
+import { UI_SPRITE_SCALE } from '@/config/ui';
 import type { Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import type { JournalCell } from '../journalView';

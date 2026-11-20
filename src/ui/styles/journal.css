@@ -190,10 +190,3 @@
   font-size: var(--text-xs);
   color: var(--ink-soft);
 }
-
-.results__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-3);
-}

@@ -1,5 +1,6 @@
 import { isShiny } from '@/config/levels';
-import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT, UI_SPRITE_SCALE } from '@/config/render';
+import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
+import { UI_SPRITE_SCALE } from '@/config/ui';
 import { biomeFor } from '@/core/journey';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';

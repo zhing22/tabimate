@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { SCORE_BANDS } from '@/config/history';
 import { LEVELS } from '@/config/levels';
 import tokens from './styles/tokens.css?raw';
 
@@ -19,6 +20,16 @@ const contrast = (a: string, b: string): number => {
 };
 
 describe('tokens.css', () => {
+  it.each(SCORE_BANDS.map((b) => [b.label, b.colour] as const))(
+    'defines the %s band colour %s and readable text on it',
+    (_label, name) => {
+      const bg = token(name);
+      const ink = token(`${name}-ink`);
+      expect(bg, `${name} missing`).toBeDefined();
+      expect(contrast(bg!, ink!)).toBeGreaterThanOrEqual(4.5);
+    },
+  );
+
   it.each(LEVELS.map((t) => [t.id, t.colour] as const))(
     'defines level %i colour %s and readable text on it',
     (_id, name) => {

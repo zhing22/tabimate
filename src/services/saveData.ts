@@ -21,7 +21,7 @@ export const BACKUP_KEY = 'tabimate.save.bak';
  * them; without one, old finds drop out of every set. (validate-data already
  * fails if an id used by any puzzle file, released ones included, disappears.)
  */
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export interface SaveData {
   readonly version: number;

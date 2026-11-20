@@ -1,0 +1,175 @@
+/* History: a month calendar of past days, and the start/results extras. */
+.calendar-nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.calendar-nav__title {
+  font-size: var(--text-md);
+  text-align: center;
+}
+
+.calendar-nav__step {
+  padding: 0 var(--space-3);
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+
+.calendar__weekday {
+  font-size: var(--text-2xs);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.calendar__day,
+.calendar__blank {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-height: 36px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-2);
+}
+
+.calendar__day {
+  color: var(--ink-soft);
+  background: rgb(255 255 255 / 0.35);
+}
+
+.calendar__day--played {
+  border: 0;
+  font-weight: 700;
+  color: var(--day-ink);
+  background: var(--day);
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.15);
+  cursor: pointer;
+}
+
+.calendar__day--frozen {
+  color: var(--hint);
+  background: #dceaf7;
+}
+
+.calendar__day--today {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-2xs);
+  list-style: none;
+}
+
+.calendar-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.calendar-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--day);
+}
+
+.day-detail {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  text-align: left;
+  background: var(--paper-deep);
+  border-radius: var(--radius-2);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.day-detail__team {
+  display: grid;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.day-detail__row {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+/* Start and results: shared rows of buttons, the streak, tomorrow, installing. */
+.results__actions,
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.button--small {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-md);
+}
+
+.streak {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-3);
+}
+
+.streak__freeze {
+  color: var(--hint);
+  font-weight: 700;
+}
+
+.tomorrow strong {
+  color: var(--ink);
+}
+
+.install-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  background: rgb(255 255 255 / 0.5);
+  border-radius: var(--radius-2);
+  box-shadow: inset 0 0 0 2px var(--paper-edge);
+}
+
+.install-hint__icon {
+  font-size: var(--text-xl);
+}
+
+.install-hint__body {
+  display: grid;
+  flex: 1 1 12rem;
+  font-size: var(--text-sm);
+}
+
+.install-hint__text {
+  color: var(--ink-soft);
+}
+
+.install-hint__dismiss {
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}

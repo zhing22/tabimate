@@ -168,6 +168,8 @@ describe('progress: storage', () => {
       bestStreak: 0,
       lastPlayedKey: null,
       history: [],
+      freezes: 0,
+      frozenKeys: [],
     });
   });
 });
@@ -284,5 +286,27 @@ describe('progress: the Field Journal and achievements', () => {
     const progress = createProgressService(createMemoryStorageAdapter(), createFakeTime().clock);
     expect(progress.completeRun(playingRun('2026-11-07'), ANIMALS)).toBeNull();
     expect(progress.getCollection().journal).toEqual({});
+  });
+});
+
+describe('progress: streak freezes across SGT days', () => {
+  // Noon SGT is 04:00 UTC: 05:00Z plays that date's puzzle, 03:00Z still the day before.
+  const at = (day: number, hourUtc = 5) =>
+    `2026-11-${String(day).padStart(2, '0')}T0${hourUtc}:00:00Z`;
+
+  it('a week of play earns a freeze that covers one missed SGT day', () => {
+    const storage = createMemoryStorageAdapter();
+    for (let day = 1; day <= 7; day++) finish(openPage(storage, at(day)));
+    // 8 Nov's puzzle is missed. On 9 Nov at 03:00Z (11:00 SGT) it is still 8 Nov's puzzle.
+    expect(openPage(storage, at(9, 3)).progress.streakStatus()).toEqual({
+      streak: 7,
+      savedByFreeze: false,
+    });
+    // After noon SGT on 9 Nov: one day missed, the freeze holds the streak.
+    const page = openPage(storage, at(9));
+    expect(page.progress.streakStatus()).toEqual({ streak: 7, savedByFreeze: true });
+    finish(page);
+    expect(page.progress.getStats()).toMatchObject({ streak: 8, freezes: 0 });
+    expect(page.progress.getStats().frozenKeys).toEqual(['2026-11-08']);
   });
 });

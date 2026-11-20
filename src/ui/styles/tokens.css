@@ -27,6 +27,18 @@
   --level-5: #f2c230;
   --level-5-ink: #2b2134;
 
+  /* History score bands (config/history.ts), low to high, and text that reads on each. */
+  --band-1: #d9cba8;
+  --band-1-ink: #2b2134;
+  --band-2: #9fd18b;
+  --band-2-ink: #2b2134;
+  --band-3: #4fa36b;
+  --band-3-ink: #2b2134;
+  --band-4: #2f7a8c;
+  --band-4-ink: #ffffff;
+  --band-5: #f2c230;
+  --band-5-ink: #2b2134;
+
   /* Spacing (4 px grid) */
   --space-1: 4px;
   --space-2: 8px;

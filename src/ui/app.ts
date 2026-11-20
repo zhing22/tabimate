@@ -76,25 +76,31 @@ export function createApp(deps: AppDeps): App {
         ...(deps.delay ? { delay: deps.delay } : {}),
         ...(deps.portraits ? { portraits: deps.portraits } : {}),
         ...(deps.backdrops ? { backdrops: deps.backdrops } : {}),
+        install: deps.install,
       },
       {
         next: deps.reload,
         share: () => deps.share(run),
-        journal: () => collection.openJournal(() => renderResults(run)),
+        saveImage: deps.saveImage && (() => deps.saveImage?.(run)),
+        ...collection.links(() => renderResults(run)),
       },
     );
   }
 
   function showStart() {
+    const status = deps.getStreakStatus();
     host.show(
       startScreen,
       {
         puzzleNumber: puzzle.number,
         promptCount: puzzle.prompts.length,
-        streak: deps.getStats().streak,
+        streak: status.streak,
+        savedByFreeze: status.savedByFreeze,
+        freezeReady: deps.getStats().freezes > 0,
         theme: themeFor(puzzle.date),
+        install: deps.install,
       },
-      { play: () => controller.start(), journal: () => collection.openJournal(showStart) },
+      { play: () => controller.start(), ...collection.links(showStart) },
     );
   }
 

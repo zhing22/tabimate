@@ -15,3 +15,13 @@ export const TOAST = {
   /** Each toast stays up this long; several queue one after another. */
   showMs: 3_500,
 } as const;
+
+/**
+ * Streak freezes: one is earned each time the streak reaches a multiple of
+ * earnEvery days, holding at most maxHeld. A single missed day spends one
+ * automatically when the player comes back (core/streak.ts).
+ */
+export const STREAK_FREEZE = { earnEvery: 7, maxHeld: 1 } as const;
+
+/** "Install Tabimate" shows once this many days are finished, until dismissed or installed. */
+export const INSTALL_HINT = { afterDays: 3 } as const;

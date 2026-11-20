@@ -1,6 +1,7 @@
 // Shape checks for data read back from storage, which may be old, corrupt or
 // edited by hand. Deeper consistency (does a run fit its puzzle?) is checked
 // later by core's canRestore.
+import { STREAK_FREEZE } from '@/config/collection';
 import { isLevelId } from '@/config/levels';
 import { isDateKey } from '@/core/date';
 import { emptyStats, type HistoryEntry, type Stats } from '@/core/streak';
@@ -72,13 +73,21 @@ const isHistoryEntry = (value: unknown): value is HistoryEntry =>
   isKey(value.key) &&
   isTime(value.score) &&
   Array.isArray(value.levels) &&
-  value.levels.every(isLevelId);
+  value.levels.every(isLevelId) &&
+  (value.animalIds === undefined || isAnimalList(value.animalIds, value.levels.length));
+
+/** One animal id or null per prompt, as many as the day's levels. */
+const isAnimalList = (value: unknown, length: number): boolean =>
+  Array.isArray(value) &&
+  value.length === length &&
+  value.every((id) => id === null || typeof id === 'string');
 
 /**
  * Salvages what it can from stored stats. Each history entry stands alone
  * (a bad one is dropped, the rest kept, one entry per day). streak and
  * lastPlayedKey only mean something together, so they are kept or reset as a
- * pair; bestStreak stands alone. `lossy` says whether anything was dropped.
+ * pair; bestStreak, freezes and frozenKeys each stand alone. `lossy` says
+ * whether anything was dropped.
  */
 export function readStats(value: unknown): { stats: Stats; lossy: boolean } {
   if (value === undefined) return { stats: emptyStats(), lossy: false };
@@ -101,8 +110,30 @@ export function readStats(value: unknown): { stats: Stats; lossy: boolean } {
   if (!isCount(value.bestStreak)) lossy = true;
   const bestStreak = Math.max(isCount(value.bestStreak) ? value.bestStreak : 0, streak);
 
+  const freezes = readFreezes(value);
   return {
-    stats: { streak, bestStreak, lastPlayedKey: streakOk ? lastPlayedKey : null, history },
-    lossy,
+    stats: {
+      streak,
+      bestStreak,
+      lastPlayedKey: streakOk ? lastPlayedKey : null,
+      history,
+      ...freezes.value,
+    },
+    lossy: lossy || freezes.lossy,
+  };
+}
+
+/** Freezes held (capped) and the days they covered; absent (pre-v4) means none. */
+function readFreezes(value: Record<string, unknown>) {
+  const held = value.freezes === undefined ? 0 : value.freezes;
+  const keys = value.frozenKeys === undefined ? [] : value.frozenKeys;
+  const heldOk = isCount(held);
+  const keysOk = Array.isArray(keys) && keys.every(isKey);
+  return {
+    value: {
+      freezes: heldOk ? Math.min(Number(held), STREAK_FREEZE.maxHeld) : 0,
+      frozenKeys: keysOk ? [...new Set(keys)].sort() : [],
+    },
+    lossy: !heldOk || !keysOk,
   };
 }

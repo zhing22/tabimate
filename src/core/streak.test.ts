@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { STREAK_FREEZE } from '@/config/collection';
+import { shiftKey } from './date';
 import { createRunState, gameReducer, type GameAction } from './game';
 import {
   currentStreak,
   emptyStats,
   historyEntry,
   recordRun,
+  streakStatus,
   type HistoryEntry,
   type Stats,
 } from './streak';
@@ -82,6 +85,53 @@ describe('historyEntry', () => {
       { type: 'revealDone', nextRoundEndsAt: 3 },
     ];
     const finished = actions.reduce(gameReducer, createRunState(puzzle));
-    expect(historyEntry(finished)).toEqual({ key: '2026-11-07', score: 50, levels: [3, 0] });
+    expect(historyEntry(finished)).toEqual({
+      key: '2026-11-07',
+      score: 50,
+      levels: [3, 0],
+      animalIds: ['x', null],
+    });
+  });
+});
+
+describe('streak freezes', () => {
+  // 2026-11-01 .. 2026-11-07: a 7-day streak, which earns one freeze.
+  const week = Array.from({ length: 7 }, (_, i) => `2026-11-0${i + 1}`);
+  const { earnEvery, maxHeld } = STREAK_FREEZE;
+
+  it(`earns one freeze per ${earnEvery}-day streak, holding at most ${maxHeld}`, () => {
+    expect(play(...week.slice(0, -1)).freezes).toBe(0);
+    expect(play(...week).freezes).toBe(1);
+    const fortnight = Array.from({ length: 2 * earnEvery }, (_, i) => shiftKey('2026-11-01', i));
+    expect(play(...fortnight).freezes).toBe(maxHeld); // a second week earns no second one
+  });
+
+  it('spends the freeze on a single missed day and keeps the streak going', () => {
+    const stats = play(...week, '2026-11-09'); // 8 Nov missed
+    expect(stats).toMatchObject({ streak: 8, freezes: 0, frozenKeys: ['2026-11-08'] });
+  });
+
+  it('cannot cover two missed days, and keeps the freeze for later', () => {
+    const stats = play(...week, '2026-11-10');
+    expect(stats).toMatchObject({ streak: 1, freezes: 1, frozenKeys: [] });
+  });
+
+  it('without a freeze, one missed day still resets the streak', () => {
+    expect(play('2026-11-01', '2026-11-03')).toMatchObject({ streak: 1, frozenKeys: [] });
+  });
+});
+
+describe('streakStatus', () => {
+  const held = { ...emptyStats(), streak: 7, lastPlayedKey: '2026-11-07', freezes: 1 };
+
+  it('keeps the streak alive today and the day after', () => {
+    expect(streakStatus(held, '2026-11-07')).toEqual({ streak: 7, savedByFreeze: false });
+    expect(streakStatus(held, '2026-11-08')).toEqual({ streak: 7, savedByFreeze: false });
+  });
+
+  it('says a freeze is saving it after one missed day, and loses it after two', () => {
+    expect(streakStatus(held, '2026-11-09')).toEqual({ streak: 7, savedByFreeze: true });
+    expect(streakStatus(held, '2026-11-10')).toEqual({ streak: 0, savedByFreeze: false });
+    expect(streakStatus({ ...held, freezes: 0 }, '2026-11-09').streak).toBe(0);
   });
 });

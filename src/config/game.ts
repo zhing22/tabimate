@@ -164,3 +164,6 @@ export const LOADING = {
   /** One of these walks behind the traveller, picked at random. */
   animalEmoji: ['🦊', '🐧', '🐢', '🦉', '🐘', '🦔', '🐼', '🦒'],
 } as const;
+
+/** Shown for a prompt that ended with no animal (time ran out): share text, history. */
+export const MISS_EMOJI = '💨';

@@ -1,3 +1,5 @@
+import { themeFor } from '@/config/themes';
+import { shiftKey } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
 import { pointsFor } from '@/core/scoring';
@@ -60,5 +62,7 @@ export function resultsProps(
     streak: stats.streak,
     bestStreak: stats.bestStreak,
     msUntilNext,
+    // Only the theme's name: tomorrow's prompts stay unknown until tomorrow.
+    tomorrowTheme: themeFor(shiftKey(puzzle.date, 1))?.name ?? null,
   };
 }

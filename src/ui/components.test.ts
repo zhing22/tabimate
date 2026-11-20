@@ -467,8 +467,15 @@ describe('startScreen', () => {
     const root = document.createElement('div');
     startScreen(
       root,
-      { puzzleNumber: 1, promptCount: 7, streak: 0, theme: null },
-      { play: () => {}, journal: () => {} },
+      {
+        puzzleNumber: 1,
+        promptCount: 7,
+        streak: 0,
+        savedByFreeze: false,
+        freezeReady: false,
+        theme: null,
+      },
+      { play: () => {}, journal: () => {}, history: () => {} },
     );
     const text = root.textContent ?? '';
     expect(text).toContain('from LC (10) up to CR (100)');
@@ -481,8 +488,15 @@ describe('startScreen', () => {
     const fishy = THEMES.find((t) => t.id === 'fishy-friday')!;
     startScreen(
       root,
-      { puzzleNumber: 31, promptCount: 7, streak: 0, theme: fishy },
-      { play: () => {}, journal: () => {} },
+      {
+        puzzleNumber: 31,
+        promptCount: 7,
+        streak: 0,
+        savedByFreeze: false,
+        freezeReady: false,
+        theme: fishy,
+      },
+      { play: () => {}, journal: () => {}, history: () => {} },
     );
     expect(root.querySelector('.theme__name')?.textContent).toBe('Fishy Friday');
     expect(root.querySelector('.theme__tagline')?.textContent).toBe(fishy.tagline);

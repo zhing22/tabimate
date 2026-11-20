@@ -2,7 +2,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { BIOMES } from '@/config/biomes';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
-import { buildShareText, MISS_EMOJI, share, shareCard, type ShareEnvironment } from './share';
+import {
+  buildShareText,
+  MISS_EMOJI,
+  share,
+  SHARE_IMAGE_NAME,
+  shareCard,
+  type ShareEnvironment,
+} from './share';
 
 const hit = (animalId: string, level: 1 | 2 | 3 | 4 | 5): RoundResult => ({
   promptId: 'p',
@@ -154,5 +161,35 @@ describe('share: no clipboard API', () => {
 
   it('fails cleanly with neither', async () => {
     expect(await share('hi', { navigator: {}, preferSheet: false })).toBe('failed');
+  });
+});
+
+describe('share with the team image', () => {
+  const png = new Blob(['png'], { type: 'image/png' });
+  const sheet = (canShare: boolean) => {
+    const shareFn = vi.fn((data?: ShareData) => Promise.resolve(void data));
+    const env: ShareEnvironment = {
+      navigator: { share: shareFn, canShare: () => canShare },
+      preferSheet: true,
+    };
+    return { env, shareFn };
+  };
+
+  it('attaches the image as a PNG file where the sheet takes files', async () => {
+    const { env, shareFn } = sheet(true);
+    expect(await share('hi', env, () => Promise.resolve(png))).toBe('shared');
+    const data = shareFn.mock.calls[0]?.[0];
+    expect(data?.text).toBe('hi');
+    expect(data?.files?.[0]?.name).toBe(SHARE_IMAGE_NAME);
+    expect(data?.files?.[0]?.type).toBe('image/png');
+  });
+
+  it('shares the text alone where files are not supported, or there is no image', async () => {
+    const noFiles = sheet(false);
+    await share('hi', noFiles.env, () => Promise.resolve(png));
+    expect(noFiles.shareFn).toHaveBeenCalledWith({ text: 'hi' });
+    const noImage = sheet(true);
+    await share('hi', noImage.env, () => Promise.resolve(null));
+    expect(noImage.shareFn).toHaveBeenCalledWith({ text: 'hi' });
   });
 });

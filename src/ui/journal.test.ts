@@ -51,6 +51,7 @@ function setup(collection: Collection = { journal: {}, achievements: [] }) {
     clock: time.clock,
     getStats: emptyStats,
     getCollection: () => collection,
+    getStreakStatus: () => ({ streak: 0, savedByFreeze: false }),
     reload: () => {},
     share: () => Promise.resolve('copied'),
     revealTiming: INSTANT_REVEAL,
@@ -74,6 +75,16 @@ describe('Field Journal screen', () => {
     button(t, 'Field Journal').click();
     expect(t.$('h1')?.textContent).toBe('Field Journal');
     expect(t.$('.meta')?.textContent).toBe(`0 of ${ANIMALS.size} animals found`);
+    button(t, 'Back').click();
+    expect(t.$('h1')?.textContent).toBe('Tabimate');
+  });
+
+  it('opens History from the start screen too, and goes back', () => {
+    const t = setup();
+    t.app.showStart();
+    button(t, 'History').click();
+    expect(t.$('h1')?.textContent).toBe('History');
+    expect(t.$('.calendar')).not.toBeNull();
     button(t, 'Back').click();
     expect(t.$('h1')?.textContent).toBe('Tabimate');
   });

@@ -1,84 +1,7 @@
-import type { BiomeDef } from '@/config/biomes';
-import { LEVELS, type LevelId } from '@/config/levels';
-import { dayTotal } from '@/core/scoring';
 import type { ShareOutcome } from '@/core/share';
-import type { Animal, AnimalId, RoundResult } from '@/core/types';
 
-/** A finished run, as the share text and (later) a share image need it. */
-export interface ShareRun {
-  readonly results: readonly RoundResult[];
-  readonly animals: ReadonlyMap<AnimalId, Animal>;
-}
-
-/** Shown for a prompt that ended with no animal (time ran out). */
-export const MISS_EMOJI = '💨';
-
-/**
- * What a share shows, as data: no text layout, no URL. The text below uses it,
- * and an image share card can use the same thing later.
- */
-export interface ShareCard {
-  readonly puzzleNumber: number;
-  /** The day's theme name ("Fishy Friday"), or null on a plain day. */
-  readonly theme: string | null;
-  readonly biome: { readonly name: string; readonly emoji: string };
-  /** One per prompt, in order. */
-  readonly levels: readonly LevelId[];
-  /** Each prompt's animal as an emoji (MISS_EMOJI for none), in order. */
-  readonly animalEmoji: readonly string[];
-  readonly score: number;
-}
-
-export function shareCard(
-  run: ShareRun,
-  puzzleNumber: number,
-  biome: BiomeDef,
-  theme: string | null = null,
-): ShareCard {
-  return {
-    puzzleNumber,
-    theme,
-    biome: { name: biome.name, emoji: biome.emoji },
-    levels: run.results.map((r) => r.match.level),
-    animalEmoji: run.results.map((r) =>
-      r.match.animalId === null ? MISS_EMOJI : (run.animals.get(r.match.animalId)?.emoji ?? '🐾'),
-    ),
-    score: dayTotal(run.results),
-  };
-}
-
-/**
- * The text players paste into chats:
- *
- *   Tabimate #12 🌲 Forest            (a themed day: Tabimate #31 · Fishy Friday 🌲 Forest)
- *   🟦🟪🟨  185 pts
- *   🦊🦉🐸
- *   https://…
- *
- * Levels come from config (LEVELS[].emoji), animals as emoji only: the prompts
- * and the animals' names stay unspoiled. Plain lines joined by \n, the link on
- * its own last line, so WhatsApp, Telegram and X all show it as written and
- * turn the link into a preview.
- */
-export function buildShareText(
-  run: ShareRun,
-  puzzleNumber: number,
-  biomeReached: BiomeDef,
-  url: string,
-  theme: string | null = null,
-): string {
-  const card = shareCard(run, puzzleNumber, biomeReached, theme);
-  const title = card.theme
-    ? `Tabimate #${card.puzzleNumber} · ${card.theme}`
-    : `Tabimate #${card.puzzleNumber}`;
-  return [
-    `${title} ${card.biome.emoji} ${card.biome.name}`,
-    `${card.levels.map((level) => LEVELS[level].emoji).join('')}  ${card.score} pts`,
-    card.animalEmoji.join(''),
-    url,
-  ].join('\n');
-}
-
+export { MISS_EMOJI } from '@/config/game';
+export { buildShareText, shareCard, type ShareCard, type ShareRun } from './shareText';
 export type { ShareOutcome } from '@/core/share';
 
 export interface ShareEnvironment {
@@ -86,6 +9,8 @@ export interface ShareEnvironment {
     /** Missing on plain-HTTP pages (e.g. a phone testing over the LAN). */
     readonly clipboard?: Pick<Clipboard, 'writeText'> | undefined;
     readonly share?: Navigator['share'];
+    /** Whether the sheet takes files (an image); missing on older browsers. */
+    readonly canShare?: Navigator['canShare'];
   };
   /** Touch devices get the system share sheet; desktops copy (their sheets are clumsy). */
   readonly preferSheet: boolean;
@@ -114,19 +39,37 @@ export const browserEnvironment = (): ShareEnvironment => ({
   },
 });
 
+/** The share data: the text, with the image as a file when the sheet takes one. */
+async function shareData(
+  text: string,
+  nav: ShareEnvironment['navigator'],
+  image?: () => Promise<Blob | null>,
+): Promise<ShareData> {
+  const blob = image && typeof nav.canShare === 'function' ? await image() : null;
+  if (!blob) return { text };
+  const files = [new File([blob], SHARE_IMAGE_NAME, { type: 'image/png' })];
+  return nav.canShare?.({ files }) ? { text, files } : { text };
+}
+
+/** The share image's file name. */
+export const SHARE_IMAGE_NAME = 'tabimate.png';
+
 /**
- * Shares with the system sheet on phones (navigator.share), otherwise copies
- * to the clipboard. A dismissed sheet is 'cancelled'; a sheet that fails falls
- * back to copying.
+ * Shares with the system sheet on phones (navigator.share), with the team
+ * image attached where the sheet takes files; otherwise copies the text to the
+ * clipboard. A dismissed sheet is 'cancelled'; a sheet that fails falls back
+ * to copying. `image` should be ready (made when the results opened): browsers
+ * only allow a share soon after the tap.
  */
 export async function share(
   text: string,
   env: ShareEnvironment = browserEnvironment(),
+  image?: () => Promise<Blob | null>,
 ): Promise<ShareOutcome> {
   const nav = env.navigator;
   if (env.preferSheet && typeof nav.share === 'function') {
     try {
-      await nav.share({ text });
+      await nav.share(await shareData(text, nav, image));
       return 'shared';
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return 'cancelled';

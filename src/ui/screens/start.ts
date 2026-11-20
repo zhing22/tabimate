@@ -1,4 +1,7 @@
 import { ANSWER_LEVELS, LEVELS, TOP_LEVEL } from '@/config/levels';
+import type { InstallOffer } from '@/core/install';
+import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
+import { installHint } from '../components/installHint';
 import { h, focus } from '../dom';
 import type { Screen } from '../host';
 
@@ -7,6 +10,11 @@ export interface StartProps {
   readonly promptCount: number;
   /** Current streak; 0 hides the line. */
   readonly streak: number;
+  /** A day was missed and a streak freeze is keeping the streak. */
+  readonly savedByFreeze: boolean;
+  /** A freeze is held, ready for a missed day. */
+  readonly freezeReady: boolean;
+  readonly install?: InstallOffer | undefined;
   /** The day's theme (config/themes.ts), or null on a plain day. */
   readonly theme: { readonly name: string; readonly tagline: string } | null;
 }
@@ -18,17 +26,24 @@ function scoringLine(): string {
   return `Rarer answers score more, from ${low.shortName} (${low.points}) up to ${high.shortName} (${high.points}).`;
 }
 
-export interface StartActions {
+export interface StartActions extends CollectionLinks {
   play(): void;
-  /** Opens the Field Journal. */
-  journal(): void;
+}
+
+/** "🔥 5-day streak", with the freeze that saved it or the one held ready. */
+function streakLine(props: StartProps): HTMLElement | null {
+  if (props.streak <= 0) return null;
+  const freeze = props.savedByFreeze
+    ? h('span', { class: 'streak__freeze' }, '❄ Streak saved by a freeze')
+    : props.freezeReady
+      ? h('span', { class: 'streak__freeze' }, '❄ Freeze ready')
+      : null;
+  return h('p', { class: 'meta streak' }, `🔥 ${props.streak}-day streak`, freeze);
 }
 
 export const startScreen: Screen<StartProps, StartActions> = (root, props, actions) => {
   const play = h('button', { class: 'button button--primary', type: 'button' }, 'Play');
   play.addEventListener('click', () => actions.play());
-  const journal = h('button', { class: 'button', type: 'button' }, 'Field Journal');
-  journal.addEventListener('click', () => actions.journal());
 
   root.append(
     h(
@@ -45,9 +60,10 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
             h('span', { class: 'theme__tagline' }, props.theme.tagline),
           )
         : null,
-      props.streak > 0 ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak`) : null,
+      streakLine(props),
       play,
-      journal,
+      collectionLinks(actions),
+      installHint(props.install),
       h(
         'details',
         { class: 'how-to' },

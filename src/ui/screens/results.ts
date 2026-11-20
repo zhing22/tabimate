@@ -1,7 +1,11 @@
+import type { InstallOffer } from '@/core/install';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
+import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { countdown } from '../components/countdown';
+import { installHint } from '../components/installHint';
 import { partyLineup } from '../components/partyLineup';
+import { shareButton } from '../components/shareButton';
 import { teamCard, type TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
 import { browserDelay, type Delay } from '../frames';
@@ -18,62 +22,24 @@ export interface ResultsProps {
   /** Sprite pictures for the line-up and team list; emoji without. */
   readonly portraits?: Portraits;
   readonly backdrops?: Backdrops;
+  /** Tomorrow's theme name (config/themes.ts), or null on a plain day. Never its prompts. */
+  readonly tomorrowTheme: string | null;
+  readonly install?: InstallOffer | undefined;
 }
 
-export interface ResultsActions {
+export interface ResultsActions extends CollectionLinks {
   /** The next puzzle is out: load it. */
   next(): void;
-  /** Shares (or copies) the run's share text. */
+  /** Shares (or copies) the run's share text, with the team image where it can. */
   share(): Promise<ShareOutcome>;
-  /** Opens the Field Journal. */
-  journal(): void;
+  /** Saves the team image as a file; absent where no image can be made. */
+  saveImage?: (() => void) | undefined;
 }
 
-const SHARE_LABEL = 'Share';
-const SAID: Readonly<Record<ShareOutcome, string>> = {
-  shared: 'Shared!',
-  copied: 'Copied!',
-  cancelled: SHARE_LABEL,
-  failed: "Couldn't copy",
-};
 /** On <html> while the results show (base.css: no phone split-screen). */
 export const RESULTS_CLASS = 'is-results';
 
-/** How long the button says "Copied!" before it reads "Share" again. */
-export const SAID_MS = 2_000;
-
-/**
- * The Share button: says how it went for a moment, and tells screen readers.
- * Taps while a share is still going are ignored: a second navigator.share()
- * with the sheet open fails, falls back to copying, and would say "Copied!"
- * while the sheet is still up.
- */
-function shareButton(onShare: () => Promise<ShareOutcome>, delay: Delay) {
-  const button = h('button', { class: 'button button--primary', type: 'button' }, SHARE_LABEL);
-  const status = h('p', { class: 'sr-only', role: 'status' });
-  let busy = false;
-  let cancelReset = () => {};
-  button.addEventListener('click', () => {
-    if (busy) return;
-    busy = true;
-    button.setAttribute('aria-busy', 'true');
-    void onShare().then((result) => {
-      busy = false;
-      button.removeAttribute('aria-busy');
-      button.textContent = SAID[result];
-      // Cleared, then set on a microtask: the same "Copied!" twice is still a
-      // change, so a screen reader reads it out again.
-      status.textContent = '';
-      if (result !== 'cancelled') queueMicrotask(() => (status.textContent = SAID[result]));
-      cancelReset();
-      cancelReset = delay(() => (button.textContent = SHARE_LABEL), SAID_MS);
-    });
-  });
-  return {
-    el: h('div', { class: 'results__share' }, button, status),
-    destroy: () => cancelReset(),
-  };
-}
+export { SAID_MS } from '../components/shareButton';
 
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
   const team = teamCard(props.rounds, props.portraits);
@@ -89,8 +55,11 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     "Play today's puzzle",
   );
   nextButton.addEventListener('click', () => actions.next());
-  const journalButton = h('button', { class: 'button', type: 'button' }, 'Field Journal');
-  journalButton.addEventListener('click', () => actions.journal());
+  const saveButton = actions.saveImage
+    ? h('button', { class: 'button', type: 'button' }, 'Save image')
+    : null;
+  const save = actions.saveImage;
+  if (saveButton && save) saveButton.addEventListener('click', () => save());
   const timer = countdown({
     msLeft: props.msUntilNext,
     onDone: () => (nextButton.hidden = false),
@@ -122,10 +91,15 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
           ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
           : null,
       ),
-      h('div', { class: 'results__actions' }, shareIt.el, journalButton),
+      h('div', { class: 'results__actions' }, shareIt.el, saveButton),
+      collectionLinks(actions),
+      installHint(props.install),
       h('h2', { class: 'section-title' }, 'Your team'),
       team.el,
       h('p', { class: 'meta next-puzzle' }, 'Next puzzle in ', timer.el),
+      props.tomorrowTheme
+        ? h('p', { class: 'meta tomorrow' }, 'Tomorrow: ', h('strong', {}, props.tomorrowTheme))
+        : null,
       nextButton,
     ),
   );

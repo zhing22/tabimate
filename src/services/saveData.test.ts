@@ -54,7 +54,11 @@ describe('parseSaveData', () => {
         streak: 1,
         bestStreak: 1,
         lastPlayedKey: '2026-11-07',
-        history: [{ key: '2026-11-07', score: 25, levels: [2, 0, 0] }],
+        history: [
+          { key: '2026-11-07', score: 25, levels: [2, 0, 0], animalIds: ['platypus', null, null] },
+        ],
+        freezes: 1,
+        frozenKeys: ['2026-11-05'],
       },
     };
     expect(parseSaveData(JSON.parse(JSON.stringify(data)))).toEqual(data);
@@ -103,6 +107,8 @@ describe('parseSaveData', () => {
       bestStreak: 5,
       lastPlayedKey: '2026-11-09',
       history: [good('2026-11-08'), good('2026-11-09')],
+      freezes: 0,
+      frozenKeys: [],
     });
   });
 
@@ -118,6 +124,8 @@ describe('parseSaveData', () => {
       bestStreak: 4,
       lastPlayedKey: null,
       history: [entry],
+      freezes: 0,
+      frozenKeys: [],
     });
   });
 
@@ -152,6 +160,8 @@ describe('parseSaveData', () => {
       bestStreak: 6,
       lastPlayedKey: null,
       history: [],
+      freezes: 0,
+      frozenKeys: [],
     });
   });
 });
@@ -208,7 +218,15 @@ describe('the real migrations', () => {
       data: {
         version: SCHEMA_VERSION,
         runs: { '2026-11-07': run },
-        stats: { streak: 1, bestStreak: 1, lastPlayedKey: '2026-11-07', history },
+        stats: {
+          streak: 1,
+          bestStreak: 1,
+          lastPlayedKey: '2026-11-07',
+          // v4 names each day's animals, from the run still saved.
+          history: history.map((e) => ({ ...e, animalIds: ['platypus', null, null] })),
+          freezes: 0,
+          frozenKeys: [],
+        },
         journal: { platypus: PLATYPUS_FOUND },
         achievements: [],
       },
@@ -252,3 +270,49 @@ const PLATYPUS_FOUND = {
   timesFound: 1,
   bestLevel: 2,
 };
+
+describe('the v4 migration', () => {
+  it('names the animals of days whose finished run is still saved, and starts with no freezes', () => {
+    const v3 = {
+      version: 3,
+      runs: { '2026-11-07': finishedRun('2026-11-07') },
+      stats: {
+        streak: 2,
+        bestStreak: 2,
+        lastPlayedKey: '2026-11-07',
+        history: [
+          { key: '2026-11-01', score: 10, levels: [1] },
+          { key: '2026-11-07', score: 25, levels: [2, 0, 0] },
+        ],
+      },
+      journal: {},
+      achievements: [],
+    };
+    const { data, lossy } = readSaveData(JSON.parse(JSON.stringify(v3)));
+    expect(lossy).toBe(false);
+    expect(data.stats.history).toEqual([
+      { key: '2026-11-01', score: 10, levels: [1] }, // its run is gone: levels only
+      { key: '2026-11-07', score: 25, levels: [2, 0, 0], animalIds: ['platypus', null, null] },
+    ]);
+    expect(data.stats).toMatchObject({ freezes: 0, frozenKeys: [] });
+  });
+
+  it('drops a history entry whose animals do not match its levels (lossy)', () => {
+    const raw = {
+      version: SCHEMA_VERSION,
+      runs: {},
+      stats: {
+        streak: 0,
+        bestStreak: 0,
+        lastPlayedKey: null,
+        history: [{ key: '2026-11-01', score: 10, levels: [1], animalIds: ['a', 'b'] }],
+        freezes: 5,
+        frozenKeys: [],
+      },
+    };
+    const { data, lossy } = readSaveData(raw);
+    expect(lossy).toBe(true);
+    expect(data.stats.history).toEqual([]);
+    expect(data.stats.freezes).toBe(1); // capped at STREAK_FREEZE.maxHeld
+  });
+});

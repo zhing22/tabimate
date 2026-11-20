@@ -17,3 +17,22 @@ export function formatDateKey(key: string): string {
   const name = MONTHS[(month ?? 1) - 1];
   return name && year && day ? `${day} ${name} ${year}` : key;
 }
+
+const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+/** { year: 2026, month: 11 } -> "November 2026". */
+export const formatMonth = ({ year, month }: { year: number; month: number }): string =>
+  `${MONTH_NAMES[month - 1] ?? ''} ${year}`;

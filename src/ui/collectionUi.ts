@@ -2,14 +2,18 @@
 // achievements and new journal animals. Driven by bus events; reads the
 // saved collection through an injected getter (main.ts passes progress).
 import type { Collection } from '@/core/collection';
+import { dailyKey } from '@/core/date';
 import type { GameBus } from '@/core/events';
 import { isInJournal, journalSize } from '@/core/journal/journal';
 import type { Portraits } from '@/core/portrait';
+import type { Stats } from '@/core/streak';
+import type { Clock } from '@/core/clock';
 import type { AnimalId, AnimalLookup, RoundResult } from '@/core/types';
 import { createToaster } from './components/toaster';
 import type { Delay } from './frames';
 import type { ScreenHost } from './host';
 import { badgeLines, journalTabs } from './journalView';
+import { historyScreen } from './screens/history';
 import { journalScreen } from './screens/journal';
 
 export interface CollectionUiDeps {
@@ -17,6 +21,8 @@ export interface CollectionUiDeps {
   readonly bus: GameBus;
   readonly animals: AnimalLookup;
   readonly getCollection: () => Collection;
+  readonly getStats: () => Stats;
+  readonly clock: Clock;
   readonly portraits?: Portraits | undefined;
   readonly delay?: Delay | undefined;
 }
@@ -59,6 +65,18 @@ export function createCollectionUi(deps: CollectionUiDeps) {
         },
         { close: back },
       );
+    },
+    /** Opens the history calendar; `back` as for the journal. */
+    openHistory(back: () => void) {
+      host.show(
+        historyScreen,
+        { stats: deps.getStats(), animals, todayKey: dailyKey(deps.clock.now()) },
+        { close: back },
+      );
+    },
+    /** The start and results screens' journal and history buttons. */
+    links(back: () => void) {
+      return { journal: () => this.openJournal(back), history: () => this.openHistory(back) };
     },
     /** A first-ever find: not in the saved journal, nor answered earlier today. */
     isNewToJournal(id: AnimalId, earlier: readonly RoundResult[]): boolean {

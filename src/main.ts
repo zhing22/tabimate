@@ -1,9 +1,7 @@
 // Composition root: the only place that picks real implementations and wires
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
-import { themeFor } from '@/config/themes';
 import { dailyKey, msUntilNextReset } from '@/core/date';
-import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { emitCollected } from '@/core/collectionEvents';
 import { createGameController } from '@/core/gameController';
@@ -12,8 +10,8 @@ import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import { readDebugParams } from '@/debug/debugPanel';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
-import { buildShareText, share } from '@/services/share';
 import { browserScheduler } from '@/services/browserScheduler';
+import { createInstallOffer } from '@/services/install';
 import { createProgressService } from '@/services/progress';
 import { createLocalStorageAdapter } from '@/services/storage';
 import { systemClock } from '@/services/systemClock';
@@ -25,6 +23,7 @@ import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { startDebug } from '@/wiring/startDebug';
 import { startScene } from '@/wiring/startScene';
+import { startShare } from '@/wiring/startShare';
 
 const root = document.querySelector<HTMLElement>('#ui');
 if (!root) throw new Error('index.html is missing #ui');
@@ -37,6 +36,8 @@ const loader = createJsonLoader({ baseUrl: import.meta.env.BASE_URL });
 const source = createLocalPuzzleSource({ loader });
 const storage = createLocalStorageAdapter();
 const progress = createProgressService(storage, clock);
+// Made at load: the browser's install prompt can fire before the game starts.
+const install = createInstallOffer(storage, () => progress.getStats().history.length);
 const reload = () => location.reload();
 // ?debug=1 shows the debug panel; with it, ?date=YYYY-MM-DD plays that day's puzzle.
 const debug = readDebugParams(location.search);
@@ -79,6 +80,15 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
   startAudio(bus, storage, clock);
   startHaptics(bus, storage);
 
+  // The link is this site, whatever host serves it (dev, preview or the real domain).
+  const sharing = startShare({
+    puzzle,
+    animals,
+    portraits: scene?.portraits,
+    backdrops: scene?.backdrops,
+    url: shareUrl,
+  });
+
   // Subscribe the UI before restoring, so it hears the restored run's events.
   const app = createApp({
     host,
@@ -90,24 +100,19 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     getStats: () => progress.getStats(),
     getCollection: () => progress.getCollection(),
     ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
+    getStreakStatus: () => progress.streakStatus(),
+    install,
     reload,
-    // The link is this site, whatever host serves it (dev, preview or the real domain).
-    share: ({ results, score }) =>
-      share(
-        buildShareText(
-          { results, animals },
-          puzzle.number,
-          biomeFor(score),
-          shareUrl(),
-          themeFor(puzzle.date)?.name ?? null,
-        ),
-      ),
+    share: sharing.share,
+    saveImage: sharing.saveImage,
   });
   // One listener, in this order: record the run (streak, journal, achievements),
   // show results with its streak, then announce what it added to the collection.
   bus.on('runFinished', ({ results, score }) => {
     const collected = progress.completeRun(controller.getState(), animals);
-    app.showResults({ results, score, stats: progress.getStats() });
+    const run = { results, score, stats: progress.getStats() };
+    app.showResults(run);
+    sharing.prepare(run);
     if (collected) emitCollected(bus, collected, puzzle.date);
   });
   return {

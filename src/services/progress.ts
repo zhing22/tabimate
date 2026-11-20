@@ -4,7 +4,13 @@ import { collectRun, type CollectedRun, type Collection } from '@/core/collectio
 import { dailyKey, shiftKey } from '@/core/date';
 import { canOverwrite } from '@/core/game';
 import type { StorageAdapter } from '@/core/storage';
-import { currentStreak, historyEntry, recordRun, type Stats } from '@/core/streak';
+import {
+  historyEntry,
+  recordRun,
+  streakStatus,
+  type Stats,
+  type StreakStatus,
+} from '@/core/streak';
 import type { AnimalLookup, DateKey, RunState } from '@/core/types';
 import {
   BACKUP_KEY,
@@ -31,6 +37,8 @@ export interface ProgressService {
   getCollection(): Collection;
   /** Stats as of now: the streak reads 0 once a day has been missed. */
   getStats(): Stats;
+  /** Today's streak, and whether a freeze is holding it after a missed day. */
+  streakStatus(): StreakStatus;
 }
 
 /** Drops full run state older than RUNS_KEPT_DAYS before `latest`. */
@@ -95,7 +103,9 @@ export function createProgressService(storage: StorageAdapter, clock: Clock): Pr
 
     getStats() {
       const stats = read().stats;
-      return { ...stats, streak: currentStreak(stats, dailyKey(clock.now())) };
+      return { ...stats, streak: streakStatus(stats, dailyKey(clock.now())).streak };
     },
+
+    streakStatus: () => streakStatus(read().stats, dailyKey(clock.now())),
   };
 }

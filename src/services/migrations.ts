@@ -52,7 +52,27 @@ function addCollection(data: Json): Json {
   return { ...data, journal: journalFromRuns(runs), achievements: [] };
 }
 
+/**
+ * v3 to v4: history entries name each prompt's animal (for the history
+ * screen's team), back-filled from the finished runs still saved; older days
+ * keep levels only. Stats gain streak freezes: none held, none used yet.
+ */
+function addHistoryAnimals(data: Json): Json {
+  if (!isObject(data.stats)) return data;
+  const runs = isObject(data.runs) ? data.runs : {};
+  const history = Array.isArray(data.stats.history)
+    ? data.stats.history.map((entry: unknown) => {
+        if (!isObject(entry) || typeof entry.key !== 'string') return entry;
+        const run = runs[entry.key];
+        if (!isRunState(run) || run.status !== 'finished') return entry;
+        return { ...entry, animalIds: run.results.map((r) => r.match.animalId) };
+      })
+    : data.stats.history;
+  return { ...data, stats: { ...data.stats, history, freezes: 0, frozenKeys: [] } };
+}
+
 export const MIGRATIONS: Readonly<Record<number, Migration>> = {
   1: tiersToLevels,
   2: addCollection,
+  3: addHistoryAnimals,
 };

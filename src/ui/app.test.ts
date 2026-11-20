@@ -48,6 +48,7 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     clock: time.clock,
     getStats,
     getCollection: () => emptyCollection(),
+    getStreakStatus: () => ({ streak: stats.streak, savedByFreeze: false }),
     reload,
     share,
     revealTiming,

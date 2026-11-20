@@ -1,5 +1,5 @@
 import { isShiny } from '@/config/levels';
-import { UI_SPRITE_SCALE } from '@/config/render';
+import { UI_SPRITE_SCALE } from '@/config/ui';
 import type { Portraits } from '@/core/portrait';
 import { pointsFor } from '@/core/scoring';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
