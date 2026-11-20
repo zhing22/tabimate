@@ -8,6 +8,7 @@ import {
   SCHEMA_VERSION,
   type Migration,
 } from './saveData';
+import { emptyStats } from '@/core/streak';
 import { finishedRun, playingRun } from './testRuns';
 
 // A made-up history of shapes, to test the migration chain itself:
@@ -55,7 +56,13 @@ describe('parseSaveData', () => {
         bestStreak: 1,
         lastPlayedKey: '2026-11-07',
         history: [
-          { key: '2026-11-07', score: 25, levels: [2, 0, 0], animalIds: ['platypus', null, null] },
+          {
+            key: '2026-11-07',
+            score: 25,
+            base: 25,
+            levels: [2, 0, 0],
+            animalIds: ['platypus', null, null],
+          },
         ],
         freezes: 1,
         frozenKeys: ['2026-11-05'],
@@ -89,7 +96,7 @@ describe('parseSaveData', () => {
   });
 
   it('keeps the good history entries when one is bad', () => {
-    const good = (key: string) => ({ key, score: 25, levels: [2, 0, 0] });
+    const good = (key: string) => ({ key, score: 25, base: 25, levels: [2, 0, 0] });
     const raw = {
       version: SCHEMA_VERSION,
       runs: {},
@@ -113,7 +120,7 @@ describe('parseSaveData', () => {
   });
 
   it('keeps history and best streak when the streak fields are broken', () => {
-    const entry = { key: '2026-11-07', score: 10, levels: [1] };
+    const entry = { key: '2026-11-07', score: 10, base: 10, levels: [1] };
     const raw = {
       version: SCHEMA_VERSION,
       runs: {},
@@ -137,13 +144,13 @@ describe('parseSaveData', () => {
         bestStreak: 1,
         lastPlayedKey: '2026-11-07',
         history: [
-          { key: '2026-11-07', score: 10, levels: [1] },
-          { key: '2026-11-07', score: 99, levels: [5] },
+          { key: '2026-11-07', score: 10, base: 10, levels: [1] },
+          { key: '2026-11-07', score: 99, base: 99, levels: [5] },
         ],
       },
     };
     expect(parseSaveData(raw).stats.history).toEqual([
-      { key: '2026-11-07', score: 10, levels: [1] },
+      { key: '2026-11-07', score: 10, base: 10, levels: [1] },
     ]);
   });
 
@@ -223,7 +230,11 @@ describe('the real migrations', () => {
           bestStreak: 1,
           lastPlayedKey: '2026-11-07',
           // v4 names each day's animals, from the run still saved.
-          history: history.map((e) => ({ ...e, animalIds: ['platypus', null, null] })),
+          history: history.map((e) => ({
+            ...e,
+            base: e.score,
+            animalIds: ['platypus', null, null],
+          })),
           freezes: 0,
           frozenKeys: [],
         },
@@ -291,8 +302,14 @@ describe('the v4 migration', () => {
     const { data, lossy } = readSaveData(JSON.parse(JSON.stringify(v3)));
     expect(lossy).toBe(false);
     expect(data.stats.history).toEqual([
-      { key: '2026-11-01', score: 10, levels: [1] }, // its run is gone: levels only
-      { key: '2026-11-07', score: 25, levels: [2, 0, 0], animalIds: ['platypus', null, null] },
+      { key: '2026-11-01', score: 10, base: 10, levels: [1] }, // its run is gone: levels only
+      {
+        key: '2026-11-07',
+        score: 25,
+        base: 25,
+        levels: [2, 0, 0],
+        animalIds: ['platypus', null, null],
+      },
     ]);
     expect(data.stats).toMatchObject({ freezes: 0, frozenKeys: [] });
   });
@@ -305,7 +322,7 @@ describe('the v4 migration', () => {
         streak: 0,
         bestStreak: 0,
         lastPlayedKey: null,
-        history: [{ key: '2026-11-01', score: 10, levels: [1], animalIds: ['a', 'b'] }],
+        history: [{ key: '2026-11-01', score: 10, base: 10, levels: [1], animalIds: ['a', 'b'] }],
         freezes: 5,
         frozenKeys: [],
       },
@@ -314,5 +331,46 @@ describe('the v4 migration', () => {
     expect(lossy).toBe(true);
     expect(data.stats.history).toEqual([]);
     expect(data.stats.freezes).toBe(1); // capped at STREAK_FREEZE.maxHeld
+  });
+});
+
+/** A run as saved before v5: no bonus fields. */
+function withoutBonus(run: object): Record<string, unknown> {
+  const copy: Record<string, unknown> = { ...run };
+  for (const key of ['bonusCount', 'bonusResults', 'bonusEndsAt']) delete copy[key];
+  return copy;
+}
+
+describe('the v5 migration', () => {
+  it('gives runs an empty bonus and history entries a base equal to their score', () => {
+    const run = finishedRun('2026-11-07');
+    const v4Run = withoutBonus(run);
+    const v4 = {
+      version: 4,
+      runs: { '2026-11-07': v4Run },
+      stats: {
+        streak: 1,
+        bestStreak: 1,
+        lastPlayedKey: '2026-11-07',
+        history: [{ key: '2026-11-07', score: 25, levels: [2, 0, 0] }],
+        freezes: 0,
+        frozenKeys: [],
+      },
+      journal: {},
+      achievements: [],
+    };
+    const { data, lossy } = readSaveData(JSON.parse(JSON.stringify(v4)));
+    expect(lossy).toBe(false);
+    expect(data.runs['2026-11-07']).toEqual(run);
+    expect(data.stats.history[0]).toMatchObject({ score: 25, base: 25 });
+  });
+
+  it('keeps the runs a v2 save back-fills its journal from (they have no bonus fields yet)', () => {
+    const run = finishedRun('2026-11-07');
+    const old = withoutBonus(run);
+    const v2 = { version: 2, runs: { '2026-11-07': old }, stats: emptyStats() };
+    const { data } = readSaveData(JSON.parse(JSON.stringify(v2)));
+    expect(Object.keys(data.journal)).toEqual(['platypus']);
+    expect(data.runs['2026-11-07']).toEqual(run);
   });
 });

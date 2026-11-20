@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-29",
+  "items": [
+    {
+      "statement": "Koalas are a kind of bear.",
+      "answer": false,
+      "explanation": "Koalas are marsupials: they carry their babies in a pouch."
+    },
+    {
+      "statement": "A sloth can hold its breath longer than a dolphin.",
+      "answer": true,
+      "explanation": "Sloths slow their hearts and can hold their breath for about 40 minutes."
+    },
+    {
+      "statement": "A goldfish can only remember things for three seconds.",
+      "answer": false,
+      "explanation": "Goldfish remember things for months and can be trained to do tricks."
+    }
+  ]
+}

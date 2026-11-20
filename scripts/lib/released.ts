@@ -4,7 +4,7 @@
 // once it has gone live; validate-data warns when a recorded day changes.
 import { createHash } from 'node:crypto';
 
-/** date -> fingerprint of the puzzle as released. */
+/** date (or "date/bonus" for its bonus quiz) -> fingerprint of the file as released. */
 export type ReleasedRecord = Readonly<Record<string, string>>;
 
 /** Fingerprint of a puzzle's content: formatting and key order don't count. */
@@ -37,6 +37,9 @@ export interface ReleaseCheck {
   readonly updated: ReleasedRecord;
 }
 
+/** The day a record key belongs to: "2026-11-22/bonus" -> "2026-11-22". */
+const dayOf = (key: string): string => key.slice(0, 10);
+
 /** Compares puzzles that have gone live (date <= today) with the record. */
 export function checkReleased(
   puzzles: ReadonlyMap<string, unknown>,
@@ -47,7 +50,7 @@ export function checkReleased(
   const unrecorded: string[] = [];
   const updated: Record<string, string> = { ...record };
   for (const [date, json] of [...puzzles].sort(([a], [b]) => a.localeCompare(b))) {
-    if (date > today) continue;
+    if (dayOf(date) > today) continue;
     const print = fingerprint(json);
     const known = record[date];
     if (known === undefined) {
@@ -55,5 +58,5 @@ export function checkReleased(
       updated[date] = print;
     } else if (known !== print) changed.push(date);
   }
-  return { changed, unrecorded, overdue: unrecorded.filter((d) => d < today), updated };
+  return { changed, unrecorded, overdue: unrecorded.filter((d) => dayOf(d) < today), updated };
 }

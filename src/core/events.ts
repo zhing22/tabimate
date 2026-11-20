@@ -1,7 +1,16 @@
 import type { BiomeDef } from '@/config/biomes';
 import type { Achievement } from './achievements/registry';
 import type { Journal } from './journal/journal';
-import type { AnimalId, DateKey, GameMode, Prompt, RoundResult, RunState } from './types';
+import type {
+  AnimalId,
+  BonusItem,
+  BonusResult,
+  DateKey,
+  GameMode,
+  Prompt,
+  RoundResult,
+  RunState,
+} from './types';
 
 export type Listener<T> = (payload: T) => void;
 
@@ -74,7 +83,22 @@ export interface GameEvents {
   answerSuggested: { round: number; input: string; suggestion: string };
   revealFinished: { index: number };
   biomeEntered: { biome: BiomeDef };
-  runFinished: { results: readonly RoundResult[]; score: number };
+  /** A quiz day reached its bonus quiz, after the last prompt (or a reload before question 1). */
+  bonusIntro: { total: number };
+  /** endsAt is epoch ms from the injected clock. */
+  bonusQuestionStarted: { index: number; total: number; item: BonusItem; endsAt: number };
+  bonusAnswered: { index: number; total: number; item: BonusItem; result: BonusResult };
+  /**
+   * score is the day total, base times multiplier (the bonus quiz; 1 without
+   * one). base is the answers' points alone: how far the walk went.
+   */
+  runFinished: {
+    results: readonly RoundResult[];
+    bonusResults: readonly BonusResult[];
+    base: number;
+    multiplier: number;
+    score: number;
+  };
   /** A finished run was added to the Field Journal (main.ts, after recording it). */
   journalUpdated: { journal: Journal; newlyFound: readonly AnimalId[] };
   /** One per achievement a finished run unlocked, in registry order. */

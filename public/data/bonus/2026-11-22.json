@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-22",
+  "items": [
+    {
+      "statement": "A group of flamingos is called a flamboyance.",
+      "answer": true,
+      "explanation": "True: a flock of flamingos is also known as a flamboyance."
+    },
+    {
+      "statement": "Bats are blind.",
+      "answer": false,
+      "explanation": "Most bats see well; many also find their way by echolocation."
+    },
+    {
+      "statement": "An octopus has three hearts.",
+      "answer": true,
+      "explanation": "Two pump blood through the gills, and one pumps it around the body."
+    }
+  ]
+}

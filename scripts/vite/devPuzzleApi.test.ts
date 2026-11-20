@@ -4,6 +4,7 @@ import { decideSave, type SaveRequest } from './devPuzzleApi';
 import { MAX_BODY_BYTES, readBody } from './readBody';
 
 const base: SaveRequest = {
+  kind: 'puzzles',
   date: '2026-11-25',
   body: '{"date":"2026-11-25"}',
   contentType: 'application/json',
@@ -23,6 +24,15 @@ describe('decideSave', () => {
     });
     expect(decideSave({ ...base, contentType: 'application/json; charset=utf-8' }).status).toBe(
       200,
+    );
+  });
+
+  it('saves a bonus quiz into public/data/bonus with the same rules', () => {
+    const bonus = { ...base, kind: 'bonus' as const, date: '2026-11-29' };
+    expect(decideSave(bonus).message).toBe('saved public/data/bonus/2026-11-29.json');
+    expect(decideSave({ ...bonus, date: '2026-11-15' }).status).toBe(409); // gone live
+    expect(decideSave({ ...bonus, problems: () => ['2026-11-29 has no bonus quiz'] }).status).toBe(
+      422,
     );
   });
 

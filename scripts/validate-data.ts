@@ -17,7 +17,9 @@ import {
   validatePalettes,
 } from '../src/data/validateArt.ts';
 import { parseAsepriteSheet } from '../src/scene/sprites/sheet.ts';
-import { checkReleased, type ReleasedRecord } from './lib/released.ts';
+import { checkBonusFiles } from './lib/bonusFiles.ts';
+import type { ReleasedRecord } from './lib/released.ts';
+import { releaseReport } from './lib/releaseReport.ts';
 
 const { values } = parseArgs({
   options: { days: { type: 'string', default: '7' }, record: { type: 'boolean', default: false } },
@@ -91,6 +93,10 @@ const missing = needed.filter((key) => !keys.has(key));
 if (missing.length > 0) {
   problems.push(`missing puzzles for the next ${DAYS_AHEAD} SGT days: ${missing.join(', ')}`);
 }
+// Bonus quizzes: valid, and present for every upcoming quiz day (Sunday Deep Dive).
+const bonus = checkBonusFiles(`${DATA}/bonus`, needed);
+problems.push(...bonus.problems);
+warnings.push(...bonus.warnings);
 
 // Days that have gone live (today included) must not change; see scripts/lib/released.ts.
 const record = existsSync(RELEASED) ? (readJson(RELEASED) as ReleasedRecord) : {};
@@ -105,28 +111,14 @@ const live = new Map(
     )
     .filter(([, json]) => json !== undefined),
 );
-const released = checkReleased(live, today, record);
-// A changed live day fails: players who finished it keep levels the file no longer has.
-for (const date of released.changed) {
-  problems.push(
-    `puzzles/${date}.json changed after it went live; players' stored levels no longer match it ` +
-      `(restore it, and fix a future day instead)`,
-  );
-}
-if (values.record && released.unrecorded.length > 0) {
-  writeFileSync(RELEASED, `${JSON.stringify(released.updated, null, 2)}\n`);
-  console.log(`Recorded ${released.unrecorded.length} released day(s) in ${RELEASED}.`);
-} else if (released.overdue.length > 0) {
-  // The daily "record" job (.github/workflows/check.yml) should have added these.
-  problems.push(
-    `released days not recorded: ${released.overdue.join(', ')}; the daily record job fell ` +
-      `behind (run npm run validate-data -- --record and commit ${RELEASED})`,
-  );
-} else if (released.unrecorded.length > 0) {
-  warnings.push(
-    `today's puzzle ${released.unrecorded.join(', ')} is live but not recorded yet ` +
-      `(the daily record job adds it just after noon SGT)`,
-  );
+// A live day's quiz is frozen with it (players' saved runs count its questions).
+for (const [date, json] of bonus.files) live.set(`${date}/bonus`, json);
+const release = releaseReport(live, today, record, values.record, RELEASED);
+problems.push(...release.problems);
+warnings.push(...release.warnings);
+if (release.updated) {
+  writeFileSync(RELEASED, `${JSON.stringify(release.updated, null, 2)}\n`);
+  console.log(`Recorded ${release.recorded} released day(s) in ${RELEASED}.`);
 }
 
 if (warnings.length > 0) {

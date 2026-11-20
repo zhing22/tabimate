@@ -19,6 +19,8 @@ export interface HistoryDay {
 export interface DayDetail {
   readonly key: DateKey;
   readonly score: number;
+  /** The answers' points before a bonus; the same as score on a day without one. */
+  readonly base: number;
   readonly bandLabel: string;
   readonly biomeName: string;
   /** One per prompt; animal null for a miss, or for a day whose animals weren't kept. */
@@ -63,8 +65,9 @@ export function dayDetail(entry: HistoryEntry, animals: AnimalLookup): DayDetail
   return {
     key: entry.key,
     score: entry.score,
+    base: entry.base,
     bandLabel: scoreBand(entry.score).label,
-    biomeName: biomeFor(entry.score).name,
+    biomeName: biomeFor(entry.base).name,
     team: entry.levels.map((level, i) => {
       const id = ids?.[i];
       return { level, animal: id ? (animals.get(id) ?? null) : null };

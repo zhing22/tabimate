@@ -13,7 +13,7 @@ import {
 } from './streak';
 import type { MatchResult, Puzzle } from './types';
 
-const day = (key: string, score = 10): HistoryEntry => ({ key, score, levels: [1] });
+const day = (key: string, score = 10): HistoryEntry => ({ key, score, base: score, levels: [1] });
 const play = (...keys: string[]): Stats =>
   keys.reduce((s, k) => recordRun(s, day(k)), emptyStats());
 
@@ -88,6 +88,7 @@ describe('historyEntry', () => {
     expect(historyEntry(finished)).toEqual({
       key: '2026-11-07',
       score: 50,
+      base: 50,
       levels: [3, 0],
       animalIds: ['x', null],
     });

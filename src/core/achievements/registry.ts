@@ -12,8 +12,8 @@ import type { AnimalLookup } from '../types';
 export type AchievementId = string;
 
 export interface AchievementContext {
-  /** The run just finished. */
-  readonly run: JournalRun & { readonly score: number };
+  /** The run just finished: base is the answers' points, score the day total after the bonus. */
+  readonly run: JournalRun & { readonly base: number; readonly score: number };
   /** Every finished day, this one included. */
   readonly history: readonly HistoryEntry[];
   /** With this run's finds already added. */
@@ -106,7 +106,8 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     name: `Reached ${LAST_BIOME.name}`,
     description: `Score ${LAST_BIOME.minScore} in a day to reach the ${LAST_BIOME.name}.`,
     icon: LAST_BIOME.emoji,
-    check: ({ history }) => history.some((day) => day.score >= LAST_BIOME.minScore),
+    // The walk goes by the answers' points, so the base decides how far it went.
+    check: ({ history }) => history.some((day) => day.base >= LAST_BIOME.minScore),
   },
 ];
 

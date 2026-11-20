@@ -7,11 +7,19 @@ import type { Prompt } from '@/core/types';
 import { explainGuess } from '@/debug/explainGuess';
 import { h } from '@/ui/dom';
 import { createSlotActions } from './editor/actions';
-import { downloadPuzzle, savePuzzle } from './editor/exporting';
+import { fromBonus, hasBonusQuiz } from './editor/bonusDraft';
+import { downloadPuzzle, saveBonus, savePuzzle } from './editor/exporting';
 import { emptyDraft, fromPuzzle, slotAnswers, slotPrompt } from './editor/puzzleFile';
 import { renderEditor } from './editor/render';
 import { guessLine } from './editor/sidePanel';
-import { loadData, readDraft, withPuzzles, writeDraft, type EditorData } from './editor/store';
+import {
+  loadBonus,
+  loadData,
+  readDraft,
+  withPuzzles,
+  writeDraft,
+  type EditorData,
+} from './editor/store';
 import type { EditorDraft } from './editor/types';
 
 const $ = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
@@ -35,9 +43,10 @@ function wireToolbar(editor: Editor) {
   $('#import').addEventListener('click', () => {
     const existing = editor.data.puzzles.get(editor.draft.date);
     if (!existing) return alert(`No puzzle file for ${editor.draft.date}.`);
-    if (confirm(`Replace the draft with public/data/puzzles/${editor.draft.date}.json?`)) {
-      editor.update(fromPuzzle(existing));
-    }
+    if (!confirm(`Replace the draft with public/data/puzzles/${editor.draft.date}.json?`)) return;
+    void loadBonus(editor.draft.date).then((bonus) =>
+      editor.update({ ...fromPuzzle(existing), ...(bonus ? { bonus: fromBonus(bonus) } : {}) }),
+    );
   });
   $('#clear').addEventListener('click', () => {
     if (confirm('Start this day over? The draft is cleared.'))
@@ -45,8 +54,11 @@ function wireToolbar(editor: Editor) {
   });
   $('#download').addEventListener('click', () => downloadPuzzle(editor.draft));
   $('#save').addEventListener('click', () => {
-    void savePuzzle(editor.draft).then(async (result) => {
-      $('#save-result').textContent = result.text;
+    const draft = editor.draft;
+    void savePuzzle(draft).then(async (result) => {
+      // On a quiz day the bonus file is saved too, once the puzzle is.
+      const bonus = result.ok && hasBonusQuiz(draft.date) ? await saveBonus(draft) : null;
+      $('#save-result').textContent = [result.text, bonus?.text].filter(Boolean).join(' · ');
       if (!result.ok) return;
       editor.data = await withPuzzles(editor.data.animals);
       editor.render();
@@ -80,7 +92,10 @@ async function main() {
       writeDraft(next);
       editor.render();
     },
-    render: () => renderEditor(editor.draft, editor.data, actions),
+    render: () =>
+      renderEditor(editor.draft, editor.data, actions, (bonus) =>
+        editor.update({ ...editor.draft, bonus }),
+      ),
   };
   const actions = createSlotActions({
     draft: () => editor.draft,

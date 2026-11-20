@@ -1,12 +1,15 @@
 import { STREAK_FREEZE } from '@/config/collection';
 import type { LevelId } from '@/config/levels';
 import { shiftKey } from './date';
-import { dayTotal } from './scoring';
+import { baseTotal, dayTotal } from './scoring';
 import type { AnimalId, DateKey, RunState } from './types';
 
 export interface HistoryEntry {
   readonly key: DateKey;
+  /** The day total: base times the bonus multiplier (the same as base without a quiz). */
   readonly score: number;
+  /** The answers' points alone, before the bonus: how far the walk went. */
+  readonly base: number;
   readonly levels: readonly LevelId[];
   /**
    * Each prompt's animal (null for a miss), in order, for the history screen's
@@ -40,7 +43,8 @@ export const emptyStats = (): Stats => ({
 /** The history entry for a finished run. */
 export const historyEntry = (state: RunState): HistoryEntry => ({
   key: state.puzzleDate,
-  score: dayTotal(state.results),
+  score: dayTotal(state.results, state.bonusResults),
+  base: baseTotal(state.results),
   levels: state.results.map((result) => result.match.level),
   animalIds: state.results.map((result) => result.match.animalId),
 });

@@ -4,7 +4,8 @@ import { emptyStats, type Stats } from '@/core/streak';
 import type { DateKey, RunState } from '@/core/types';
 import { readCollection } from './collectionGuards';
 import { MIGRATIONS, type Migration } from './migrations';
-import { isObject, isRunState, readStats } from './saveGuards';
+import { isObject, isRunState } from './saveGuards';
+import { readStats } from './statsGuards';
 
 export { MIGRATIONS, type Migration } from './migrations';
 
@@ -21,7 +22,7 @@ export const BACKUP_KEY = 'tabimate.save.bak';
  * them; without one, old finds drop out of every set. (validate-data already
  * fails if an id used by any puzzle file, released ones included, disappears.)
  */
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 export interface SaveData {
   readonly version: number;

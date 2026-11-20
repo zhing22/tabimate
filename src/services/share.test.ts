@@ -83,6 +83,7 @@ describe('shareCard', () => {
       levels: [5, 0],
       animalEmoji: ['🐅', MISS_EMOJI],
       score: 100,
+      bonus: null,
     });
   });
 });
@@ -185,5 +186,26 @@ describe('share with the team image', () => {
     const notReady = sheet(true);
     await share('hi', notReady.env, () => null);
     expect(notReady.shareFn).toHaveBeenCalledWith({ text: 'hi' });
+  });
+});
+
+describe('share text on a bonus quiz day', () => {
+  it('adds a bonus line: each answer right or wrong, and how the total was reached', () => {
+    const bonusResults = [true, false, true].map((correct) => ({
+      answer: true,
+      correct,
+      timeMs: 1,
+    }));
+    const text = buildShareText(
+      { results: [hit('tiger', 4)], animals, bonusResults },
+      17,
+      forest,
+      'https://example.test/',
+      'Sunday Deep Dive',
+    );
+    const lines = text.split('\n');
+    expect(lines[1]).toContain('102 pts');
+    expect(lines[3]).toBe('Bonus ✅❌✅ · Base 85 ×1.2 = 102');
+    expect(lines.at(-1)).toBe('https://example.test/');
   });
 });

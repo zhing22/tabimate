@@ -64,6 +64,9 @@ async function main() {
       results,
       status: 'finished',
       roundEndsAt: null,
+      bonusCount: 0,
+      bonusResults: [],
+      bonusEndsAt: null,
     };
     bus.emit('runRestored', { state });
   } else {

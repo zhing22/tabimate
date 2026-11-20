@@ -13,6 +13,9 @@ const run: RunState = {
   promptCount: 3,
   status: 'finished',
   roundEndsAt: null,
+  bonusCount: 0,
+  bonusResults: [],
+  bonusEndsAt: null,
   results: [
     {
       promptId: 'a',

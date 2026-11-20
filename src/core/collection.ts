@@ -3,8 +3,8 @@
 import { evaluate, type AchievementId, type UnlockedAchievement } from './achievements/registry';
 import { addRun, type Journal } from './journal/journal';
 import type { Stats } from './streak';
-import type { AnimalId, AnimalLookup, RoundResult } from './types';
-import { dayTotal } from './scoring';
+import type { AnimalId, AnimalLookup, BonusResult, RoundResult } from './types';
+import { baseTotal, dayTotal } from './scoring';
 
 export interface Collection {
   readonly journal: Journal;
@@ -25,13 +25,17 @@ export interface CollectedRun {
  */
 export function collectRun(
   collection: Collection,
-  run: { readonly puzzleDate: string; readonly results: readonly RoundResult[] },
+  run: {
+    readonly puzzleDate: string;
+    readonly results: readonly RoundResult[];
+    readonly bonusResults?: readonly BonusResult[];
+  },
   stats: Stats,
   animals: AnimalLookup,
 ): CollectedRun {
   const { journal, newlyFound } = addRun(collection.journal, run);
   const ctx = {
-    run: { ...run, score: dayTotal(run.results) },
+    run: { ...run, base: baseTotal(run.results), score: dayTotal(run.results, run.bonusResults) },
     history: stats.history,
     journal,
     stats,

@@ -2,9 +2,10 @@
 // "common" levels and recent repeats), and the per-date drafts in localStorage.
 import { LAUNCH_DATE_KEY } from '@/config/game';
 import { shiftKey } from '@/core/date';
-import type { AnimalId, AnimalLookup, DateKey, Puzzle } from '@/core/types';
+import type { AnimalId, AnimalLookup, BonusItem, DateKey, Puzzle } from '@/core/types';
 import { createJsonLoader, MISSING } from '@/data/jsonLoader';
-import { ANIMALS_FILE, puzzleFile } from '@/data/localPuzzleSource';
+import { ANIMALS_FILE, bonusFile, puzzleFile } from '@/data/localPuzzleSource';
+import { validateBonus } from '@/data/validateBonus';
 import { validateAnimals, validatePuzzle } from '@/data/validate';
 import { answerUsage } from './stats';
 import type { EditorDraft } from './types';
@@ -49,6 +50,18 @@ export async function withPuzzles(animals: AnimalLookup): Promise<EditorData> {
 export async function loadData(): Promise<EditorData> {
   const loader = createJsonLoader({ baseUrl: '/' });
   return withPuzzles(validateAnimals(await loader.load(ANIMALS_FILE), ANIMALS_FILE));
+}
+
+/** A day's saved bonus quiz, or null when there is none (or it doesn't read). */
+export async function loadBonus(date: DateKey): Promise<readonly BonusItem[] | null> {
+  const json = await createJsonLoader({ baseUrl: '/' }).load(bonusFile(date));
+  if (json === MISSING) return null;
+  try {
+    return validateBonus(json, bonusFile(date), date);
+  } catch (error) {
+    console.warn(`Skipping the ${date} bonus quiz:`, error);
+    return null;
+  }
 }
 
 export function readDraft(date: DateKey): EditorDraft | null {

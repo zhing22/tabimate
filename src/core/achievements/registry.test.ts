@@ -8,14 +8,19 @@ import { ANIMALS } from '../matcher/testFixtures';
 import { emptyStats, type HistoryEntry } from '../streak';
 import { ACHIEVEMENTS, achievementById, evaluate, type AchievementContext } from './registry';
 
-const day = (levels: LevelId[], score = 0): HistoryEntry => ({ key: '2026-11-19', score, levels });
+const day = (levels: LevelId[], score = 0): HistoryEntry => ({
+  key: '2026-11-19',
+  score,
+  base: score,
+  levels,
+});
 const journalOf = (...ids: string[]): Journal =>
   Object.fromEntries(
     ids.map((id) => [id, { animalId: id, firstFoundKey: 'k', timesFound: 1, bestLevel: 1 }]),
   );
 
 const ctx = (over: Partial<AchievementContext> = {}): AchievementContext => ({
-  run: { puzzleDate: '2026-11-19', results: [], score: 0 },
+  run: { puzzleDate: '2026-11-19', results: [], base: 0, score: 0 },
   history: [],
   journal: {},
   stats: emptyStats(),

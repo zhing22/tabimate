@@ -2,13 +2,20 @@ import { themeFor } from '@/config/themes';
 import { shiftKey } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import type { Stats } from '@/core/streak';
-import { pointsFor } from '@/core/scoring';
-import type { Animal, AnimalId, Prompt, Puzzle, RoundResult } from '@/core/types';
+import { bonusLine, pointsFor } from '@/core/scoring';
+import type { Animal, AnimalId, BonusResult, Prompt, Puzzle, RoundResult } from '@/core/types';
 import type { AnswerLine } from './components/answerRow';
 import type { ResultsProps } from './screens/results';
 
+/** A finished run as runFinished reports it, with the stats after recording it. */
 export interface FinishedRun {
   readonly results: readonly RoundResult[];
+  /** The bonus quiz's answers; empty on a day without one. */
+  readonly bonusResults: readonly BonusResult[];
+  /** The answers' points alone: how far the walk went (biome, scenery). */
+  readonly base: number;
+  readonly multiplier: number;
+  /** The day total: base times the multiplier. */
   readonly score: number;
   /** Stats with this run already recorded. */
   readonly stats: Stats;
@@ -47,7 +54,7 @@ export function resultsProps(
   puzzle: Puzzle,
   animalOf: AnimalOf,
   animals: ReadonlyMap<AnimalId, Animal>,
-  { results, score, stats }: FinishedRun,
+  { results, bonusResults, base, multiplier, score, stats }: FinishedRun,
   msUntilNext: () => number,
 ): ResultsProps {
   return {
@@ -58,7 +65,9 @@ export function resultsProps(
       return [{ prompt, result, animal: animalOf(result), answers }];
     }),
     score,
-    biomeName: biomeFor(score).name,
+    base,
+    bonusLine: bonusResults.length > 0 ? bonusLine(base, multiplier, score) : null,
+    biomeName: biomeFor(base).name,
     streak: stats.streak,
     bestStreak: stats.bestStreak,
     msUntilNext,

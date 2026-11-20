@@ -108,9 +108,9 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
   });
   // One listener, in this order: record the run (streak, journal, achievements),
   // show results with its streak, then announce what it added to the collection.
-  bus.on('runFinished', ({ results, score }) => {
+  bus.on('runFinished', (totals) => {
     const collected = progress.completeRun(controller.getState(), animals);
-    const run = { results, score, stats: progress.getStats() };
+    const run = { ...totals, stats: progress.getStats() };
     app.showResults(run);
     sharing.prepare(run);
     if (collected) emitCollected(bus, collected, puzzle.date);

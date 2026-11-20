@@ -27,8 +27,10 @@ describe('dayTotal', () => {
     expect(dayTotal([])).toBe(0);
   });
 
-  it('applies a multiplier to the total only, rounded', () => {
-    expect(dayTotal([result(5), result(2)], 2)).toBe(250);
-    expect(dayTotal([result(1), result(2)], 1.5)).toBe(53); // 35 x 1.5 = 52.5
+  it('applies the bonus multiplier to the total only, rounded', () => {
+    const bonus = (...correct: boolean[]) =>
+      correct.map((c) => ({ answer: c, correct: c, timeMs: 1 }));
+    expect(dayTotal([result(5), result(2)], bonus(true, true, false))).toBe(150); // 125 x 1.2
+    expect(dayTotal([result(1), result(2)], bonus(true))).toBe(39); // 35 x 1.1 = 38.5
   });
 });

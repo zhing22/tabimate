@@ -5,6 +5,7 @@
     Open /dev/puzzles.html on the dev server (npm run dev). Drafts autosave in this
     browser per date. "Save to project" writes public/data/puzzles/<date>.json through
     the dev server (scripts/vite/devPuzzleApi.ts), after the real validator passes.
+    On Sundays a fourth panel drafts the bonus quiz, saved to public/data/bonus/<date>.json.
   -->
   <head>
     <meta charset="UTF-8" />
@@ -110,6 +111,13 @@
       .ok {
         color: #2c6e3f;
       }
+      .bonus-item {
+        display: grid;
+        gap: 4px;
+        margin: 0 0 8px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
       code {
         font-size: 12px;
         color: #777;
@@ -146,6 +154,10 @@
         <section>
           <h2>Checks (real validator)</h2>
           <div id="checks"></div>
+        </section>
+        <section id="bonus-section" hidden>
+          <h2>Bonus quiz (Sunday)</h2>
+          <div id="bonus"></div>
         </section>
       </aside>
     </div>

@@ -12,7 +12,7 @@ export interface GameControllerDeps {
   readonly scheduler: Scheduler;
   readonly matcherConfig?: MatcherConfig;
   readonly mode?: GameMode;
-  readonly timing?: { readonly roundTimeMs: number };
+  readonly timing?: { readonly roundTimeMs: number; readonly bonusQuestionMs?: number };
 }
 
 /** The UI talks to the game only through these; it never touches state. */
@@ -32,9 +32,12 @@ export interface GameController {
   setDraft(text: string): void;
   /**
    * Moves on from the reveal: to the next prompt, or to the results after the
-   * last one. The game waits on the reveal until this is called.
+   * last one (to the bonus quiz first, on a quiz day). In the quiz it moves on
+   * from the intro or an explanation. The game waits until this is called.
    */
   next(): void;
+  /** Answers the open bonus question: true or false. */
+  answerBonus(value: boolean): void;
   /** Loads a saved run into a fresh controller. False (and no change) if it doesn't fit. */
   restore(saved: RunState): boolean;
   getState(): RunState;

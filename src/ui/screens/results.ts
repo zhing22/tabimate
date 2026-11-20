@@ -13,7 +13,12 @@ import type { Screen } from '../host';
 
 export interface ResultsProps {
   readonly rounds: readonly TeamRound[];
+  /** The day total, after any bonus. */
   readonly score: number;
+  /** The answers' points alone: where the walk ended (the line-up's scenery). */
+  readonly base: number;
+  /** "Base 540 ×1.2 = 648" on a bonus quiz day, else null. */
+  readonly bonusLine: string | null;
   readonly biomeName: string;
   readonly streak: number;
   readonly bestStreak: number;
@@ -46,7 +51,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   const party = partyLineup(props.rounds, {
     portraits: props.portraits,
     backdrops: props.backdrops,
-    score: props.score,
+    score: props.base,
   });
   const shareIt = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const nextButton = h(
@@ -82,6 +87,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
         h('span', { class: 'results__number' }, props.score),
         ' points',
       ),
+      props.bonusLine ? h('p', { class: 'meta results__bonus' }, props.bonusLine) : null,
       party.el,
       h(
         'div',

@@ -32,7 +32,7 @@ const cssColour = (token: string) =>
 async function imageInput(deps: ShareDeps, run: FinishedRun): Promise<ShareImageInput> {
   const { puzzle, animals } = deps;
   const theme = themeFor(puzzle.date)?.name ?? null;
-  const biome = biomeFor(run.score);
+  const biome = biomeFor(run.base); // the walk's end: the answers' points
   const members = await Promise.all(
     run.results.map(async ({ match }) => {
       const animal = match.animalId === null ? null : (animals.get(match.animalId) ?? null);
@@ -57,7 +57,7 @@ async function imageInput(deps: ShareDeps, run: FinishedRun): Promise<ShareImage
     sky: [biome.palette.skyTop, biome.palette.skyBottom],
     ground: biome.palette.ground,
     ink: cssColour('--ink'),
-    backdrop: (await deps.backdrops?.(run.score)) ?? null,
+    backdrop: (await deps.backdrops?.(run.base)) ?? null,
     members,
     footer: deps
       .url()
@@ -88,9 +88,9 @@ export function startShare(deps: ShareDeps) {
       void teamImage(run); // in case it was never started
       return share(
         buildShareText(
-          { results: run.results, animals: deps.animals },
+          { results: run.results, animals: deps.animals, bonusResults: run.bonusResults },
           deps.puzzle.number,
-          biomeFor(run.score),
+          biomeFor(run.base),
           deps.url(),
           themeFor(deps.puzzle.date)?.name ?? null,
         ),

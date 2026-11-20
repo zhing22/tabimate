@@ -46,6 +46,7 @@ export function showRevealCard(
       points: pointsFor(result.match.level),
       timing: deps.timing ?? REVEAL_TIMING,
       isLast: index === deps.puzzle.prompts.length - 1,
+      ...(deps.puzzle.bonus?.length ? { lastLabel: 'Bonus quiz' } : {}),
       focusNext: opts.focusNext,
     },
     { revealed: opts.revealed, next: opts.next },

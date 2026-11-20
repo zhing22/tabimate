@@ -3,13 +3,15 @@
 import { maxCRFor, themeFor, WEEKDAY_NAMES, weekdayOf } from '@/config/themes';
 import { puzzleNumber, shiftKey } from '@/core/date';
 import { h } from '@/ui/dom';
+import { hasBonusQuiz } from './bonusDraft';
+import { bonusPanel } from './bonusPanel';
 import { checkPuzzle } from './check';
 import { slotPrompt, toPuzzleJson } from './puzzleFile';
 import { checkList, levelTable } from './sidePanel';
 import { slotCard, type SlotActions } from './slotCard';
 import { recentUses } from './stats';
 import type { EditorData } from './store';
-import type { EditorDraft } from './types';
+import type { BonusDraftItem, EditorDraft } from './types';
 
 const RECENT_DAYS = 30;
 
@@ -39,7 +41,12 @@ function testSlotOptions(draft: EditorDraft, select: HTMLSelectElement) {
   );
 }
 
-export function renderEditor(draft: EditorDraft, data: EditorData, actions: SlotActions): void {
+export function renderEditor(
+  draft: EditorDraft,
+  data: EditorData,
+  actions: SlotActions,
+  updateBonus: (items: readonly BonusDraftItem[]) => void,
+): void {
   const maxCR = maxCRFor(draft.date);
   const from = shiftKey(draft.date, -RECENT_DAYS);
   const recent = [...data.puzzles.values()].filter((p) => p.date < draft.date && p.date >= from);
@@ -57,4 +64,8 @@ export function renderEditor(draft: EditorDraft, data: EditorData, actions: Slot
   $('#counts').replaceChildren(levelTable(draft.slots));
   $('#checks').replaceChildren(checkList(checkPuzzle(toPuzzleJson(draft), data.animals)));
   testSlotOptions(draft, document.querySelector<HTMLSelectElement>('#test-slot')!);
+  // The fourth panel, on bonus quiz days (Sunday Deep Dive) only.
+  const quiz = hasBonusQuiz(draft.date);
+  $('#bonus-section').hidden = !quiz;
+  $('#bonus').replaceChildren(...(quiz ? [bonusPanel(draft, updateBonus)] : []));
 }

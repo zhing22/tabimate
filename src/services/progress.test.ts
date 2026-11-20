@@ -212,7 +212,7 @@ describe('progress: two tabs', () => {
 });
 
 describe('progress: damaged saves', () => {
-  const entry = (key: string) => ({ key, score: 25, levels: [2, 0, 0] });
+  const entry = (key: string) => ({ key, score: 25, base: 25, levels: [2, 0, 0] });
   const damaged = {
     version: SCHEMA_VERSION,
     runs: {},

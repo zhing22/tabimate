@@ -2,10 +2,21 @@
 // change the save's shape, bump SCHEMA_VERSION (saveData.ts) and add an entry;
 // old saves are upgraded on load. Each step works on raw JSON, defensively.
 import { journalFromRuns } from './collectionGuards';
+import type { RunState } from '@/core/types';
 import { isObject, isRunState } from './saveGuards';
 
 type Json = Record<string, unknown>;
 export type Migration = (data: Json) => Json;
+
+/**
+ * A run as the current guard expects it, for migrations that check runs:
+ * saves from before v5 have no bonus fields, and would otherwise all fail
+ * isRunState and be lost. Migration 4 writes these defaults for good.
+ */
+const withBonusDefaults = (run: unknown): unknown =>
+  isObject(run) ? { bonusCount: 0, bonusResults: [], bonusEndsAt: null, ...run } : run;
+
+const isOldRun = (run: unknown): run is RunState => isRunState(withBonusDefaults(run));
 
 /** Renames a key on a plain object, leaving anything else untouched. */
 function renameKey(value: unknown, from: string, to: string): unknown {
@@ -48,7 +59,9 @@ function tiersToLevels(data: Json): Json {
  * unlock on the next finished run, which checks the whole history.
  */
 function addCollection(data: Json): Json {
-  const runs = isObject(data.runs) ? Object.values(data.runs).filter(isRunState) : [];
+  const runs = isObject(data.runs)
+    ? Object.values(data.runs).map(withBonusDefaults).filter(isOldRun)
+    : [];
   return { ...data, journal: journalFromRuns(runs), achievements: [] };
 }
 
@@ -64,15 +77,36 @@ function addHistoryAnimals(data: Json): Json {
     ? data.stats.history.map((entry: unknown) => {
         if (!isObject(entry) || typeof entry.key !== 'string') return entry;
         const run = runs[entry.key];
-        if (!isRunState(run) || run.status !== 'finished') return entry;
+        if (!isOldRun(run) || run.status !== 'finished') return entry;
         return { ...entry, animalIds: run.results.map((r) => r.match.animalId) };
       })
     : data.stats.history;
   return { ...data, stats: { ...data.stats, history, freezes: 0, frozenKeys: [] } };
 }
 
+/**
+ * v4 to v5: the bonus quiz. Runs gain bonusCount 0 and no bonus results (no
+ * day had a quiz before); history entries gain base, equal to their score.
+ */
+function addBonus(data: Json): Json {
+  const runs = isObject(data.runs)
+    ? Object.fromEntries(Object.entries(data.runs).map(([k, run]) => [k, withBonusDefaults(run)]))
+    : data.runs;
+  const stats =
+    isObject(data.stats) && Array.isArray(data.stats.history)
+      ? {
+          ...data.stats,
+          history: data.stats.history.map((e: unknown) =>
+            isObject(e) && e.base === undefined ? { ...e, base: e.score } : e,
+          ),
+        }
+      : data.stats;
+  return { ...data, runs, stats };
+}
+
 export const MIGRATIONS: Readonly<Record<number, Migration>> = {
   1: tiersToLevels,
   2: addCollection,
   3: addHistoryAnimals,
+  4: addBonus,
 };

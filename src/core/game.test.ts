@@ -46,6 +46,9 @@ describe('createRunState', () => {
       results: [],
       status: 'idle',
       roundEndsAt: null,
+      bonusCount: 0,
+      bonusResults: [],
+      bonusEndsAt: null,
     });
   });
 });
@@ -104,6 +107,7 @@ describe('gameReducer: illegal transitions return the same state', () => {
     idle,
     playing: playing0,
     revealing: revealing0,
+    bonus: { ...finished, status: 'bonus', bonusCount: 3 },
     finished,
   };
   const actions: Record<string, GameAction> = {

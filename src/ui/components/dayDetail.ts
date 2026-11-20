@@ -5,6 +5,10 @@ import { formatDateKey } from '../format';
 import type { DayDetail } from '../historyView';
 import { levelBadge } from './levelBadge';
 
+/** "648 points (base 540 before the bonus)", or just "540 points". */
+const scoreText = ({ score, base }: DayDetail): string =>
+  score === base ? `${score} points` : `${score} points (base ${base} before the bonus)`;
+
 /** A past day: its score, how far it went, and the team that answered. */
 export function dayDetail(detail: DayDetail): HTMLElement {
   const title = h('h2', { class: 'section-title', tabindex: -1 }, formatDateKey(detail.key));
@@ -25,7 +29,7 @@ export function dayDetail(detail: DayDetail): HTMLElement {
     'section',
     { class: 'day-detail', 'aria-label': formatDateKey(detail.key) },
     title,
-    h('p', { class: 'meta' }, `${detail.score} points · ${detail.bandLabel} · ${detail.biomeName}`),
+    h('p', { class: 'meta' }, `${scoreText(detail)} · ${detail.bandLabel} · ${detail.biomeName}`),
     h('ul', { class: 'day-detail__team' }, ...rows),
     detail.hasAnimals ? null : h('p', { class: 'meta' }, 'Only the levels were kept for this day.'),
   );

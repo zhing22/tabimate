@@ -1,12 +1,5 @@
-import type {
-  GameMode,
-  MatchResult,
-  PromptId,
-  Puzzle,
-  RoundResult,
-  RunState,
-  RunStatus,
-} from './types';
+import { bonusReducer, type BonusAction } from './bonus';
+import type { GameMode, MatchResult, PromptId, Puzzle, RoundResult, RunState } from './types';
 
 // start and revealDone carry the next round's deadline, so a playing state is
 // never without one (a save taken at any moment can be resumed fairly).
@@ -20,7 +13,8 @@ export type GameAction =
     }
   | { readonly type: 'timeout'; readonly promptId: PromptId; readonly timeMs: number }
   | { readonly type: 'revealDone'; readonly nextRoundEndsAt: number }
-  | { readonly type: 'restore'; readonly state: RunState };
+  | { readonly type: 'restore'; readonly state: RunState }
+  | BonusAction;
 
 /** A fresh, not yet started run of `puzzle`. */
 export function createRunState(puzzle: Puzzle, mode: GameMode = 'daily'): RunState {
@@ -31,6 +25,9 @@ export function createRunState(puzzle: Puzzle, mode: GameMode = 'daily'): RunSta
     results: [],
     status: 'idle',
     roundEndsAt: null,
+    bonusCount: puzzle.bonus?.length ?? 0,
+    bonusResults: [],
+    bonusEndsAt: null,
   };
 }
 
@@ -72,79 +69,17 @@ export function gameReducer(state: RunState, action: GameAction): RunState {
       return answer(state, { promptId: action.promptId, match: timedOut(), timeMs: action.timeMs });
     case 'revealDone':
       if (state.status !== 'revealing') return state;
-      return state.results.length >= state.promptCount
-        ? { ...state, status: 'finished', roundEndsAt: null }
-        : { ...state, status: 'playing', roundEndsAt: action.nextRoundEndsAt };
+      if (state.results.length < state.promptCount) {
+        return { ...state, status: 'playing', roundEndsAt: action.nextRoundEndsAt };
+      }
+      // After the last prompt: the bonus quiz if the day has one, else the end.
+      return { ...state, status: state.bonusCount > 0 ? 'bonus' : 'finished', roundEndsAt: null };
     case 'restore':
       return state.status === 'idle' ? action.state : state;
+    case 'bonusNext':
+    case 'bonusAnswer':
+      return bonusReducer(state, action);
   }
 }
 
-// How many results each status allows, for a run of n prompts.
-const RESULTS_FIT: Readonly<Record<RunStatus, (done: number, n: number) => boolean>> = {
-  // Nothing to resume: restoring it would leave the page waiting for a start
-  // that never comes. The app never saves idle; only an old or edited save has it.
-  idle: () => false,
-  playing: (done, n) => done < n,
-  revealing: (done) => done >= 1,
-  finished: (done, n) => done === n,
-};
-
-/**
- * True if `saved` is a consistent run of this puzzle in this mode: same date
- * and prompt count, results in prompt order, and a status that fits them.
- * An idle run never is: there is nothing to pick up.
- * A playing run must have its round deadline; no other status may.
- */
-export function canRestore(saved: RunState, puzzle: Puzzle, mode: GameMode): boolean {
-  const n = puzzle.prompts.length;
-  if (saved.mode !== mode || saved.puzzleDate !== puzzle.date || saved.promptCount !== n) {
-    return false;
-  }
-  if (saved.results.length > n) return false;
-  const inOrder = saved.results.every((r, i) => r.promptId === puzzle.prompts[i]?.id);
-  const deadlineFits =
-    saved.status === 'playing'
-      ? typeof saved.roundEndsAt === 'number' && Number.isFinite(saved.roundEndsAt)
-      : saved.roundEndsAt === null;
-  return inOrder && deadlineFits && RESULTS_FIT[saved.status](saved.results.length, n);
-}
-
-// Order of statuses for the same number of results: a round is revealed, then
-// the next one is played (playing(n) comes after revealing(n)).
-const STATUS_RANK: Readonly<Record<RunStatus, number>> = {
-  idle: 0,
-  revealing: 1,
-  playing: 2,
-  finished: 3,
-};
-
-/** How far through a run a state is; grows with every transition. */
-export const runProgress = (state: RunState): number =>
-  state.results.length * 4 + STATUS_RANK[state.status];
-
-const sameMatch = (a: MatchResult, b: MatchResult): boolean =>
-  a.level === b.level &&
-  a.animalId === b.animalId &&
-  a.strategy === b.strategy &&
-  a.input === b.input;
-
-const sameResult = (a: RoundResult, b: RoundResult): boolean =>
-  a.promptId === b.promptId && a.timeMs === b.timeMs && sameMatch(a.match, b.match);
-
-/**
- * True if `next` may replace `saved` on disk. It must be the same run carried
- * further: same day, every saved answer unchanged and in place, and not behind.
- * At the same point it must be identical (deadline included). A finished run
- * is final. Without the answer check, a second tab could answer a round again
- * and replace the first answer: a free retry.
- */
-export function canOverwrite(saved: RunState, next: RunState): boolean {
-  if (saved.puzzleDate !== next.puzzleDate || saved.mode !== next.mode) return false;
-  if (saved.status === 'finished') return false;
-  if (next.results.length < saved.results.length) return false;
-  if (!saved.results.every((result, i) => sameResult(result, next.results[i]!))) return false;
-  const ahead = runProgress(next) - runProgress(saved);
-  if (ahead !== 0) return ahead > 0;
-  return next.status === saved.status && next.roundEndsAt === saved.roundEndsAt;
-}
+export { canOverwrite, canRestore, runProgress } from './runChecks';

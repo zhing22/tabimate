@@ -16,10 +16,11 @@ import { startScreen } from './screens/start';
 const stats: Stats = {
   ...emptyStats(),
   history: [
-    { key: '2026-10-30', score: 40, levels: [1] },
+    { key: '2026-10-30', score: 40, base: 40, levels: [1] },
     {
       key: '2026-11-07',
       score: SCORE_BANDS[2].min,
+      base: SCORE_BANDS[2].min,
       levels: [4, 0],
       animalIds: ['tiger', null],
     },
@@ -122,6 +123,9 @@ describe("tomorrow's theme", () => {
       ANIMALS,
       {
         results: [],
+        bonusResults: [],
+        base: 0,
+        multiplier: 1,
         score: 0,
         stats: emptyStats(),
       },

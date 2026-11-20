@@ -1,0 +1,56 @@
+/* The Sunday bonus quiz: a statement and two big answer buttons. */
+.bonus {
+  text-align: center;
+}
+
+.bonus__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.bonus__statement {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+/* Big enough to hit without looking: two thumbs' width on a phone. */
+.bonus__choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.bonus__choice {
+  min-height: 72px;
+  font-size: var(--text-xl);
+}
+
+.bonus__choice--true {
+  background: var(--band-3);
+  color: var(--band-3-ink);
+}
+
+.bonus__choice--false {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.bonus__verdict {
+  font-family: var(--font-pixel);
+  font-size: var(--text-xl);
+  color: var(--error);
+}
+
+.bonus__verdict--right {
+  color: var(--ink);
+}
+
+.bonus__explanation {
+  color: var(--ink-soft);
+}
+
+.results__bonus {
+  font-weight: 700;
+}

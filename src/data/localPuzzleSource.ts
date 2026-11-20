@@ -1,8 +1,10 @@
+import { themeFor } from '@/config/themes';
 import { isDateKey } from '@/core/date';
 import type { AnimalLookup, DateKey } from '@/core/types';
 import type { PuzzleSource } from '@/core/puzzleSource';
 import { createJsonLoader, loadRequired, MISSING, type JsonLoader } from './jsonLoader';
 import { validateAnimals, validatePuzzle } from './validate';
+import { validateBonus } from './validateBonus';
 
 export type LocalPuzzleSourceOptions =
   | { readonly baseUrl: string; readonly fetch?: typeof fetch }
@@ -11,6 +13,7 @@ export type LocalPuzzleSourceOptions =
 
 export const ANIMALS_FILE = 'data/animals.json';
 export const puzzleFile = (key: DateKey): string => `data/puzzles/${key}.json`;
+export const bonusFile = (key: DateKey): string => `data/bonus/${key}.json`;
 
 /** Reads puzzles and animals from the static files in public/data. */
 export function createLocalPuzzleSource(options: LocalPuzzleSourceOptions): PuzzleSource {
@@ -29,11 +32,24 @@ export function createLocalPuzzleSource(options: LocalPuzzleSourceOptions): Puzz
     return animals;
   }
 
+  /**
+   * The day's bonus quiz, on a day whose theme has one. A missing file means
+   * no quiz (validate-data makes sure upcoming quiz days have one).
+   */
+  async function getBonus(key: DateKey) {
+    if (!themeFor(key)?.bonusQuiz) return null;
+    const file = bonusFile(key);
+    const json = await load(file);
+    return json === MISSING ? null : validateBonus(json, file, key);
+  }
+
   async function getPuzzle(key: DateKey) {
     if (!isDateKey(key)) throw new RangeError(`Invalid puzzle key "${key}"`);
     const file = puzzleFile(key);
-    const [json, registry] = await Promise.all([load(file), getAnimals()]);
-    return json === MISSING ? null : validatePuzzle(json, { file, key, animals: registry });
+    const [json, registry, bonus] = await Promise.all([load(file), getAnimals(), getBonus(key)]);
+    if (json === MISSING) return null;
+    const puzzle = validatePuzzle(json, { file, key, animals: registry });
+    return bonus ? { ...puzzle, bonus } : puzzle;
   }
 
   return { getPuzzle, getAnimals };

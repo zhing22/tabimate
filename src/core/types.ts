@@ -109,6 +109,11 @@ export interface Puzzle {
   /** Day count since launch, starting at 1. */
   readonly number: number;
   readonly prompts: readonly Prompt[];
+  /**
+   * The bonus quiz after the last prompt, on a day whose theme has one
+   * (Sunday Deep Dive) and a quiz file. Absent on other days.
+   */
+  readonly bonus?: readonly BonusItem[];
 }
 
 /** Names of the matcher strategies; the matcher's registry is keyed by these. */
@@ -140,7 +145,11 @@ export interface RoundResult {
 // A union so 'unlimited' | 'archive' can be added without touching callers.
 export type GameMode = 'daily';
 
-export type RunStatus = 'idle' | 'playing' | 'revealing' | 'finished';
+import type { BonusItem, BonusResult } from './bonusTypes';
+export type { BonusItem, BonusResult } from './bonusTypes';
+
+/** 'bonus' only on a bonus quiz day, between the last reveal and 'finished'. */
+export type RunStatus = 'idle' | 'playing' | 'revealing' | 'bonus' | 'finished';
 
 /**
  * There is no stored round index: it is derived from results, so the two can
@@ -160,4 +169,12 @@ export interface RunState {
    * restart the timer.
    */
   readonly roundEndsAt: number | null;
+  /** Bonus questions this run has (0 on a day without a quiz). */
+  readonly bonusCount: number;
+  readonly bonusResults: readonly BonusResult[];
+  /**
+   * While 'bonus': when the current question's time runs out, or null between
+   * questions (before the first, and while an explanation shows).
+   */
+  readonly bonusEndsAt: number | null;
 }

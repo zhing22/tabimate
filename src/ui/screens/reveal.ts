@@ -14,6 +14,8 @@ export interface RevealProps {
   readonly timing: RevealTiming;
   /** The last prompt: the button leads to the results instead. */
   readonly isLast: boolean;
+  /** The last prompt's button text: "See results", or "Bonus quiz" on a quiz day. */
+  readonly lastLabel?: string;
   /**
    * Move focus to the button once shown. Only when no answer box is on screen
    * (a reload mid-reveal); otherwise the box keeps focus and Enter moves on.
@@ -47,11 +49,11 @@ export function describeResult(result: RoundResult, animal: Animal | null, point
  * must not take focus from the answer box: on a phone that would close the
  * keyboard, and the next prompt wants it open.
  */
-function nextButton(isLast: boolean, next: () => void): HTMLButtonElement {
+function nextButton(label: string, next: () => void): HTMLButtonElement {
   const button = h(
     'button',
     { class: 'button button--primary reveal__next', type: 'button' },
-    isLast ? 'See results' : 'Next prompt',
+    label,
   );
   button.addEventListener('mousedown', (event) => event.preventDefault());
   button.addEventListener('click', next);
@@ -68,7 +70,8 @@ function nextButton(isLast: boolean, next: () => void): HTMLButtonElement {
 export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, actions) => {
   const { result, animal, points } = props;
   const level = result.match.level;
-  const next = nextButton(props.isLast, () => actions.next());
+  const label = props.isLast ? (props.lastLabel ?? 'See results') : 'Next prompt';
+  const next = nextButton(label, () => actions.next());
   const pointsEl = h('p', { class: 'reveal__points' }, `+${level ? points : 0}`);
   let stopCount = () => {};
   const card = h(

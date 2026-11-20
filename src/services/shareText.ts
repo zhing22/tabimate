@@ -2,13 +2,18 @@
 import type { BiomeDef } from '@/config/biomes';
 import { MISS_EMOJI } from '@/config/game';
 import { LEVELS, type LevelId } from '@/config/levels';
-import { dayTotal } from '@/core/scoring';
-import type { Animal, AnimalId, RoundResult } from '@/core/types';
+import { baseTotal, bonusLine, bonusMultiplier, dayTotal } from '@/core/scoring';
+import type { Animal, AnimalId, BonusResult, RoundResult } from '@/core/types';
+
+/** A bonus answer in the share text: right, or wrong (or out of time). */
+const BONUS_MARK = { right: '✅', wrong: '❌' } as const;
 
 /** A finished run, as the share text and (later) a share image need it. */
 export interface ShareRun {
   readonly results: readonly RoundResult[];
   readonly animals: ReadonlyMap<AnimalId, Animal>;
+  /** The bonus quiz's answers; absent or empty without one. */
+  readonly bonusResults?: readonly BonusResult[];
 }
 
 /**
@@ -24,7 +29,10 @@ export interface ShareCard {
   readonly levels: readonly LevelId[];
   /** Each prompt's animal as an emoji (MISS_EMOJI for none), in order. */
   readonly animalEmoji: readonly string[];
+  /** The day total, after any bonus. */
   readonly score: number;
+  /** On a bonus quiz day: each answer right or not, and "Base 540 ×1.2 = 648". */
+  readonly bonus: { readonly correct: readonly boolean[]; readonly line: string } | null;
 }
 
 export function shareCard(
@@ -41,7 +49,17 @@ export function shareCard(
     animalEmoji: run.results.map((r) =>
       r.match.animalId === null ? MISS_EMOJI : (run.animals.get(r.match.animalId)?.emoji ?? '🐾'),
     ),
-    score: dayTotal(run.results),
+    score: dayTotal(run.results, run.bonusResults),
+    bonus: run.bonusResults?.length
+      ? {
+          correct: run.bonusResults.map((b) => b.correct),
+          line: bonusLine(
+            baseTotal(run.results),
+            bonusMultiplier(run.bonusResults),
+            dayTotal(run.results, run.bonusResults),
+          ),
+        }
+      : null,
   };
 }
 
@@ -51,6 +69,7 @@ export function shareCard(
  *   Tabimate #12 🌲 Forest            (a themed day: Tabimate #31 · Fishy Friday 🌲 Forest)
  *   🟦🟪🟨  185 pts
  *   🦊🦉🐸
+ *   Bonus ✅❌✅ · Base 165 ×1.2 = 198      (a bonus quiz day only)
  *   https://…
  *
  * Levels come from config (LEVELS[].emoji), animals as emoji only: the prompts
@@ -73,6 +92,12 @@ export function buildShareText(
     `${title} ${card.biome.emoji} ${card.biome.name}`,
     `${card.levels.map((level) => LEVELS[level].emoji).join('')}  ${card.score} pts`,
     card.animalEmoji.join(''),
+    ...(card.bonus ? [bonusShareLine(card.bonus)] : []),
     url,
   ].join('\n');
+}
+
+function bonusShareLine(bonus: NonNullable<ShareCard['bonus']>): string {
+  const marks = bonus.correct.map((c) => (c ? BONUS_MARK.right : BONUS_MARK.wrong)).join('');
+  return `Bonus ${marks} · ${bonus.line}`;
 }

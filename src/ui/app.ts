@@ -10,6 +10,7 @@ import { roundSlot } from './roundSlot';
 import { resultsScreen } from './screens/results';
 import { DID_YOU_MEAN, NOT_FOUND } from './screens/roundView';
 import { startScreen } from './screens/start';
+import { startBonusFlow } from './bonusFlow';
 
 export type { FinishedRun } from './resultsProps';
 export type { App, AppDeps } from './appTypes';
@@ -104,6 +105,7 @@ export function createApp(deps: AppDeps): App {
     );
   }
 
+  const stopBonus = startBonusFlow({ host, bus, controller, now, frames: deps.frames });
   const stops = [
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
@@ -134,6 +136,7 @@ export function createApp(deps: AppDeps): App {
     },
     destroy() {
       for (const stop of stops) stop();
+      stopBonus();
       collection.destroy();
       host.destroy();
     },

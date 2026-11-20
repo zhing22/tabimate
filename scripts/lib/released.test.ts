@@ -47,3 +47,21 @@ describe('checkReleased: falling behind', () => {
     expect(result.overdue).toEqual(['2026-11-17']);
   });
 });
+
+describe('checkReleased: bonus quizzes', () => {
+  it('freezes a quiz ("date/bonus") from the day it goes live, like its puzzle', () => {
+    const files = new Map<string, unknown>([
+      ['2026-11-22', day(5)],
+      ['2026-11-22/bonus', { items: [1] }],
+    ]);
+    expect(checkReleased(files, '2026-11-21', {}).unrecorded).toEqual([]);
+    const live = checkReleased(files, '2026-11-22', {});
+    expect(live.unrecorded).toEqual(['2026-11-22', '2026-11-22/bonus']);
+    const changed = checkReleased(
+      new Map([['2026-11-22/bonus', { items: [2] }]]),
+      '2026-11-23',
+      live.updated,
+    );
+    expect(changed.changed).toEqual(['2026-11-22/bonus']);
+  });
+});

@@ -46,7 +46,8 @@ const pwa = VitePWA({
     navigateFallback: 'index.html',
     runtimeCaching: [
       {
-        urlPattern: ({ url }) => /\/data\/puzzles\/[^/]+\.json$/.test(url.pathname),
+        // Each day's puzzle and (on quiz days) its bonus quiz.
+        urlPattern: ({ url }) => /\/data\/(puzzles|bonus)\/[^/]+\.json$/.test(url.pathname),
         handler: 'NetworkFirst',
         options: { cacheName: 'puzzles', expiration: { maxEntries: 30 } },
       },

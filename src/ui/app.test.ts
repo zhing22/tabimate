@@ -56,9 +56,9 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     delay: ui.delay,
   });
   // As main.ts does: record the run, then show results.
-  bus.on('runFinished', ({ results, score }) => {
+  bus.on('runFinished', (totals) => {
     stats = { ...stats, streak: 3 };
-    app.showResults({ results, score, stats: getStats() });
+    app.showResults({ ...totals, stats: getStats() });
   });
   const $ = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector);
   const input = () => $<HTMLInputElement>('#answer')!;

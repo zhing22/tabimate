@@ -26,6 +26,8 @@ export interface SlotDraft {
 export interface EditorDraft {
   readonly date: DateKey;
   readonly slots: readonly SlotDraft[];
+  /** The Sunday bonus quiz (only on a bonusQuiz day; absent until edited). */
+  readonly bonus?: readonly BonusDraftItem[];
 }
 
 /** A puzzle file as the editor writes it (the shape validatePuzzle reads). */
@@ -36,5 +38,22 @@ export interface PuzzleJson {
     readonly id: string;
     readonly text: string;
     readonly answers: readonly { readonly animalId: AnimalId; readonly level: AnswerLevel }[];
+  }[];
+}
+
+/** One bonus question as drafted: the answer may not be picked yet. */
+export interface BonusDraftItem {
+  readonly statement: string;
+  readonly answer: boolean | null;
+  readonly explanation: string;
+}
+
+/** A bonus quiz file as the editor writes it (the shape validateBonus reads). */
+export interface BonusJson {
+  readonly date: DateKey;
+  readonly items: readonly {
+    readonly statement: string;
+    readonly answer: boolean | null;
+    readonly explanation: string;
   }[];
 }
