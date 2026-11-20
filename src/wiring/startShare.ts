@@ -6,7 +6,13 @@ import { isShiny, LEVELS } from '@/config/levels';
 import { biomeFor } from '@/core/journey';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
-import { downloadImage, renderShareImage, type ShareImageInput } from '@/services/shareImage';
+import { APP_COLOURS } from '@/config/ui';
+import {
+  downloadImage,
+  renderShareImage,
+  shareImageFile,
+  type ShareImageInput,
+} from '@/services/shareImage';
 import { browserEnvironment, buildShareText, MISS_EMOJI, share } from '@/services/share';
 import type { FinishedRun } from '@/ui/app';
 import { formatDateKey } from '@/ui/format';
@@ -21,7 +27,7 @@ export interface ShareDeps {
 }
 
 const cssColour = (token: string) =>
-  getComputedStyle(document.documentElement).getPropertyValue(token).trim() || '#2b2134';
+  getComputedStyle(document.documentElement).getPropertyValue(token).trim() || APP_COLOURS.ink;
 
 async function imageInput(deps: ShareDeps, run: FinishedRun): Promise<ShareImageInput> {
   const { puzzle, animals } = deps;
@@ -61,19 +67,26 @@ async function imageInput(deps: ShareDeps, run: FinishedRun): Promise<ShareImage
 }
 
 export function startShare(deps: ShareDeps) {
-  // One finished run per page: its image is made once, as the results open,
-  // so a tap on Share can hand it to the share sheet straight away.
-  let image: Promise<Blob | null> | null = null;
+  // One finished run per page: its image is made once, as the results open.
+  // `ready` holds it once made, so a tap on Share never waits for drawing
+  // (browsers only allow a share right after the tap); until then the text
+  // goes alone.
+  let ready: File | null = null;
+  let making: Promise<File | null> | null = null;
   const teamImage = (run: FinishedRun) =>
-    (image ??= imageInput(deps, run).then(renderShareImage, (error: unknown) => {
-      console.error('Share image failed', error);
-      return null;
-    }));
+    (making ??= imageInput(deps, run)
+      .then(renderShareImage)
+      .then((blob) => (ready = blob && shareImageFile(blob, deps.puzzle.number)))
+      .catch((error: unknown) => {
+        console.error('Share image failed', error);
+        return null;
+      }));
   return {
     /** Starts making the image (call when the results show). */
     prepare: (run: FinishedRun) => void teamImage(run),
-    share: (run: FinishedRun) =>
-      share(
+    share: (run: FinishedRun) => {
+      void teamImage(run); // in case it was never started
+      return share(
         buildShareText(
           { results: run.results, animals: deps.animals },
           deps.puzzle.number,
@@ -82,11 +95,12 @@ export function startShare(deps: ShareDeps) {
           themeFor(deps.puzzle.date)?.name ?? null,
         ),
         browserEnvironment(),
-        () => teamImage(run),
-      ),
+        () => ready,
+      );
+    },
     saveImage: (run: FinishedRun) =>
-      void teamImage(run).then((blob) => {
-        if (blob) downloadImage(blob, `tabimate-${deps.puzzle.number}.png`);
+      void teamImage(run).then((file) => {
+        if (file) downloadImage(file);
       }),
   };
 }

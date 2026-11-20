@@ -1,0 +1,30 @@
+/* Shared by the start and results screens: rows of buttons, the streak line, tomorrow. */
+.results__actions,
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.button--small {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-md);
+}
+
+.streak {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-3);
+}
+
+.streak__freeze {
+  color: var(--hint);
+  font-weight: 700;
+}
+
+.tomorrow strong {
+  color: var(--ink);
+}

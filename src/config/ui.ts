@@ -22,4 +22,26 @@ export const SHARE_IMAGE = {
   spriteScale: 4,
   /** Emoji drawn for a member without a sprite, px. */
   emojiPx: 96,
+  /** Space kept clear at each side of a text line, px. */
+  textMargin: 40,
+  /** Text lines: baseline from the top (footer: from the bottom) and size, px. */
+  text: {
+    title: { y: 130, px: 88 },
+    subtitle: { y: 200, px: 44 },
+    score: { y: 350, px: 120 },
+    biome: { y: 430, px: 52 },
+    footer: { fromBottom: 50, px: 36 },
+  },
+  /** Level badges under the team: a box centred on each member, gap below the scene. */
+  badge: { width: 112, height: 60, gap: 24, px: 40, baseline: 45 },
+} as const;
+
+/**
+ * Colours used outside the style sheets: the PWA manifest and browser bar
+ * (vite.config.ts, index.html) and the share image's fallback ink. They match
+ * tokens.css (--night, --ink), which ui/styles.test.ts checks.
+ */
+export const APP_COLOURS = {
+  night: '#1d2b3a',
+  ink: '#2b2134',
 } as const;

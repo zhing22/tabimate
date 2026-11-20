@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { SCORE_BANDS } from '@/config/history';
 import { LEVELS } from '@/config/levels';
+import { APP_COLOURS } from '@/config/ui';
 import tokens from './styles/tokens.css?raw';
+import indexHtml from '../../index.html?raw';
 
 const token = (name: string): string | undefined =>
   new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, 'i').exec(tokens)?.[1];
@@ -20,6 +22,12 @@ const contrast = (a: string, b: string): number => {
 };
 
 describe('tokens.css', () => {
+  it('matches the colours config names for the manifest, browser bar and share image', () => {
+    expect(token('--night')).toBe(APP_COLOURS.night);
+    expect(token('--ink')).toBe(APP_COLOURS.ink);
+    expect(indexHtml).toContain(`<meta name="theme-color" content="${APP_COLOURS.night}" />`);
+  });
+
   it.each(SCORE_BANDS.map((b) => [b.label, b.colour] as const))(
     'defines the %s band colour %s and readable text on it',
     (_label, name) => {

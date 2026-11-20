@@ -16,6 +16,12 @@ const MOJIBAKE = new RegExp(
     ch(0xc3) + range(0x80, 0xbf), // a garbled accented letter
     ch(0xc2) + range(0xa0, 0xbf), // a garbled symbol or no-break space
     ch(0xe6) + ch(0x2014), // a garbled CJK character, as in the brief's title
+    // Read as Latin-1 instead (as perl does with a non-ASCII literal in its
+    // script): the follow-on bytes become invisible C1 controls, so a snowflake
+    // turns into a-circumflex plus two of them.
+    ch(0xe2) + range(0x80, 0x9f),
+    ch(0xc2) + range(0x80, 0x9f),
+    ch(0xf0) + range(0x80, 0x9f),
   ].join('|'),
 );
 const TEXT = /\.(ts|js|json|md|css|html|txt|svg)$|^\.(gitattributes|prettierignore)$/;

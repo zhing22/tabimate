@@ -10,7 +10,11 @@
 @import './results.css';
 @import './team.css';
 @import './answers.css';
+@import './actions.css';
 @import './journal.css';
+@import './journalDetail.css';
+@import './badges.css';
 @import './toast.css';
 @import './history.css';
+@import './installHint.css';
 @import './debug.css';

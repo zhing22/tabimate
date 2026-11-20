@@ -30,7 +30,7 @@ export interface ShareImageLayout {
 }
 
 export function shareImageLayout(members: number): ShareImageLayout {
-  const { width, height, sceneTop, sceneScale } = SHARE_IMAGE;
+  const { width, height, sceneTop, sceneScale, text, badge } = SHARE_IMAGE;
   const w = BACKDROP.width * sceneScale;
   const h = BACKDROP_HEIGHT * sceneScale;
   const groundY = sceneTop + BACKDROP_GROUND_Y * sceneScale;
@@ -41,13 +41,13 @@ export function shareImageLayout(members: number): ShareImageLayout {
     groundY,
     // Evenly spaced, with half a gap at each edge.
     slots: Array.from({ length: members }, (_, i) => Math.round((width * (i + 0.5)) / members)),
-    badgeY: sceneTop + h + 24,
+    badgeY: sceneTop + h + badge.gap,
     text: {
-      title: 130,
-      subtitle: 200,
-      score: 350,
-      biome: 430,
-      footer: height - 50,
+      title: text.title.y,
+      subtitle: text.subtitle.y,
+      score: text.score.y,
+      biome: text.biome.y,
+      footer: height - text.footer.fromBottom,
     },
   };
 }

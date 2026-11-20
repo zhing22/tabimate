@@ -1,0 +1,37 @@
+/* Achievements in the Field Journal: unlocked ones with their date, locked ones dimmed. */
+.badge-list {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.badge {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: rgb(255 255 255 / 0.45);
+  border-radius: var(--radius-2);
+}
+
+.badge--locked {
+  opacity: 0.55;
+}
+
+.badge--locked .badge__icon {
+  filter: grayscale(1);
+}
+
+.badge__icon {
+  font-size: var(--text-xl);
+}
+
+.badge__body {
+  display: grid;
+  font-size: var(--text-sm);
+}
+
+.badge__when {
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+}

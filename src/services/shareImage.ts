@@ -14,7 +14,7 @@ export interface ShareImageMember {
 
 export interface ShareImageInput {
   readonly title: string;
-  /** "20 Nov 2026 · Fishy Friday" */
+  /** The date, "20 Nov 2026" (the theme is in the title). */
   readonly subtitle: string;
   readonly score: number;
   readonly biome: string;
@@ -32,7 +32,7 @@ const FONT = '"Pixelify Sans", system-ui, sans-serif';
 
 function drawText(ctx: CanvasRenderingContext2D, text: string, y: number, px: number, w: number) {
   ctx.font = `700 ${px}px ${FONT}`;
-  ctx.fillText(text, w / 2, y, w - 80);
+  ctx.fillText(text, w / 2, y, w - 2 * SHARE_IMAGE.textMargin);
 }
 
 function drawBackground(
@@ -55,11 +55,12 @@ function drawBadge(
   x: number,
   y: number,
 ) {
+  const box = SHARE_IMAGE.badge;
   ctx.fillStyle = badge.colour;
-  ctx.fillRect(x - 56, y, 112, 60);
+  ctx.fillRect(x - box.width / 2, y, box.width, box.height);
   ctx.fillStyle = badge.ink;
-  ctx.font = `700 40px ${FONT}`;
-  ctx.fillText(badge.text, x, y + 45);
+  ctx.font = `700 ${box.px}px ${FONT}`;
+  ctx.fillText(badge.text, x, y + box.baseline);
 }
 
 async function drawMember(
@@ -104,13 +105,13 @@ export async function drawShareImage(
   for (const [i, member] of input.members.entries()) {
     await drawMember(ctx, member, at.slots[i]!, at, load);
   }
+  const { text } = SHARE_IMAGE;
   ctx.fillStyle = input.ink;
-  drawText(ctx, input.title, at.text.title, 88, at.width);
-  drawText(ctx, input.subtitle, at.text.subtitle, 44, at.width);
-  drawText(ctx, `${input.score} points`, at.text.score, 120, at.width);
-  drawText(ctx, input.biome, at.text.biome, 52, at.width);
-  ctx.fillStyle = input.ink;
-  drawText(ctx, input.footer, at.text.footer, 36, at.width);
+  drawText(ctx, input.title, at.text.title, text.title.px, at.width);
+  drawText(ctx, input.subtitle, at.text.subtitle, text.subtitle.px, at.width);
+  drawText(ctx, `${input.score} points`, at.text.score, text.score.px, at.width);
+  drawText(ctx, input.biome, at.text.biome, text.biome.px, at.width);
+  drawText(ctx, input.footer, at.text.footer, text.footer.px, at.width);
 }
 
 const loadImage: ImageLoader = async (src) => {
@@ -128,7 +129,7 @@ export async function renderShareImage(input: ShareImageInput): Promise<Blob | n
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
   try {
-    await document.fonts.load(`700 40px ${FONT}`);
+    await document.fonts.load(`700 ${SHARE_IMAGE.badge.px}px ${FONT}`);
   } catch {
     // The fallback font will do.
   }
@@ -136,12 +137,19 @@ export async function renderShareImage(input: ShareImageInput): Promise<Blob | n
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
 }
 
+/** The image's file name, shared or saved alike: "tabimate-31.png". */
+export const shareImageName = (puzzleNumber: number): string => `tabimate-${puzzleNumber}.png`;
+
+/** The image as a PNG file, named for the puzzle. */
+export const shareImageFile = (blob: Blob, puzzleNumber: number): File =>
+  new File([blob], shareImageName(puzzleNumber), { type: 'image/png' });
+
 /** Saves a file the old way: a temporary download link, clicked. */
-export function downloadImage(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
+export function downloadImage(file: File): void {
+  const url = URL.createObjectURL(file);
   const link = document.createElement('a');
   link.href = url;
-  link.download = filename;
+  link.download = file.name;
   document.body.append(link);
   link.click();
   link.remove();

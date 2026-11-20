@@ -39,37 +39,36 @@ export const browserEnvironment = (): ShareEnvironment => ({
   },
 });
 
-/** The share data: the text, with the image as a file when the sheet takes one. */
-async function shareData(
+/**
+ * The share data: the text, with the image file when it is ready and the sheet
+ * takes files. Synchronous on purpose: nothing is awaited between the tap and
+ * navigator.share, which browsers (Safari above all) only allow right after it.
+ */
+function shareData(
   text: string,
   nav: ShareEnvironment['navigator'],
-  image?: () => Promise<Blob | null>,
-): Promise<ShareData> {
-  const blob = image && typeof nav.canShare === 'function' ? await image() : null;
-  if (!blob) return { text };
-  const files = [new File([blob], SHARE_IMAGE_NAME, { type: 'image/png' })];
-  return nav.canShare?.({ files }) ? { text, files } : { text };
+  image?: () => File | null,
+): ShareData {
+  const file = image && typeof nav.canShare === 'function' ? image() : null;
+  return file && nav.canShare?.({ files: [file] }) ? { text, files: [file] } : { text };
 }
-
-/** The share image's file name. */
-export const SHARE_IMAGE_NAME = 'tabimate.png';
 
 /**
  * Shares with the system sheet on phones (navigator.share), with the team
  * image attached where the sheet takes files; otherwise copies the text to the
  * clipboard. A dismissed sheet is 'cancelled'; a sheet that fails falls back
- * to copying. `image` should be ready (made when the results opened): browsers
- * only allow a share soon after the tap.
+ * to copying. `image` returns the image if it is already made, else null (the
+ * text goes alone rather than waiting for it).
  */
 export async function share(
   text: string,
   env: ShareEnvironment = browserEnvironment(),
-  image?: () => Promise<Blob | null>,
+  image?: () => File | null,
 ): Promise<ShareOutcome> {
   const nav = env.navigator;
   if (env.preferSheet && typeof nav.share === 'function') {
     try {
-      await nav.share(await shareData(text, nav, image));
+      await nav.share(shareData(text, nav, image));
       return 'shared';
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return 'cancelled';
