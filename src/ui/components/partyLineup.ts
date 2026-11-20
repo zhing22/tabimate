@@ -1,5 +1,5 @@
 import { isShiny } from '@/config/levels';
-import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
+import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT, UI_SPRITE_SCALE } from '@/config/render';
 import { biomeFor } from '@/core/journey';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
@@ -7,8 +7,7 @@ import type { Component } from './component';
 import { portrait } from './portrait';
 import type { TeamRound } from './teamCard';
 
-/** Screen pixels per sprite pixel in the line-up (and its backdrop). */
-const SCALE = 2;
+const SCALE = UI_SPRITE_SCALE.lineup;
 /** Without a painted backdrop: the same crop of the scene, so nothing jumps when one arrives. */
 const FALLBACK = { height: BACKDROP_HEIGHT, groundY: BACKDROP_GROUND_Y };
 

@@ -2,6 +2,7 @@ import type { Portraits } from '@/core/portrait';
 import { badgeList } from '../components/badgeList';
 import { journalDetail } from '../components/journalDetail';
 import { journalGrid } from '../components/journalGrid';
+import { nextTabIndex } from '../components/tabKeys';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
 import type { BadgeLine, JournalCell, JournalTab } from '../journalView';
@@ -53,10 +54,34 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
     panel.prepend(detail);
   }
 
-  function showTab(tab: JournalTab | typeof BADGES_TAB) {
-    for (const button of tabList.children) {
-      button.setAttribute('aria-selected', String(button.getAttribute('data-tab') === tab.id));
-    }
+  const tabs = [...props.tabs, BADGES_TAB];
+  const buttons = tabs.map((tab, i) => {
+    const button = h(
+      'button',
+      { class: 'journal__tab', type: 'button', role: 'tab', 'aria-controls': 'journal-panel' },
+      h('span', { 'aria-hidden': 'true' }, tab.icon),
+      ` ${tab.label}`,
+    );
+    button.addEventListener('click', () => showTab(i));
+    return button;
+  });
+  tabList.append(...buttons);
+  // Roving tabindex: Tab reaches only the selected tab; arrows, Home and End move along.
+  tabList.addEventListener('keydown', (event) => {
+    const current = buttons.findIndex((b) => b.getAttribute('aria-selected') === 'true');
+    const next = nextTabIndex(event.key, current, buttons.length);
+    if (next === null) return;
+    event.preventDefault();
+    showTab(next);
+    buttons[next]!.focus();
+  });
+
+  function showTab(index: number) {
+    buttons.forEach((button, i) => {
+      button.setAttribute('aria-selected', String(i === index));
+      button.tabIndex = i === index ? 0 : -1;
+    });
+    const tab = tabs[index]!;
     if (!('cells' in tab)) {
       panel.replaceChildren(badgeList(props.badges));
       return;
@@ -66,18 +91,6 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
       open: (cell) => openCell(cell, grid.children[tab.cells.indexOf(cell)] as HTMLElement),
     });
     panel.replaceChildren(...[setHeader(tab), grid].filter((el) => el !== null));
-  }
-
-  for (const tab of [...props.tabs, BADGES_TAB]) {
-    const button = h(
-      'button',
-      { class: 'journal__tab', type: 'button', role: 'tab', 'data-tab': tab.id },
-      h('span', { 'aria-hidden': 'true' }, tab.icon),
-      ` ${tab.label}`,
-    );
-    button.setAttribute('aria-controls', 'journal-panel');
-    button.addEventListener('click', () => showTab(tab));
-    tabList.append(button);
   }
 
   root.append(
@@ -91,7 +104,8 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
       back,
     ),
   );
-  showTab(props.tabs[0] ?? BADGES_TAB);
+  showTab(0);
   focus(root.querySelector<HTMLElement>('#journal-title'));
+  // Nothing to stop: every listener is on elements the host removes with the screen.
   return () => {};
 };

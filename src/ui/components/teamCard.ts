@@ -1,4 +1,5 @@
 import { isShiny } from '@/config/levels';
+import { UI_SPRITE_SCALE } from '@/config/render';
 import type { Portraits } from '@/core/portrait';
 import { pointsFor } from '@/core/scoring';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
@@ -20,7 +21,7 @@ export interface TeamRound {
   readonly answers: readonly AnswerLine[];
 }
 
-const SCALE = 2;
+const SCALE = UI_SPRITE_SCALE.team;
 
 /** The row: picture, "Q3 · the full prompt" over the animal, and "VU · 50" at the right. */
 function summary(round: TeamRound, index: number, portraits: Portraits | undefined) {

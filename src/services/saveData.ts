@@ -14,7 +14,13 @@ export const SAVE_KEY = 'tabimate.save';
 /** Where an unreadable save is copied before it is written over, so it can be recovered. */
 export const BACKUP_KEY = 'tabimate.save.bak';
 
-/** Bump when the shape changes, and add a migration from the old version (migrations.ts). */
+/**
+ * Bump when the shape changes, and add a migration from the old version
+ * (migrations.ts). Saves key journal entries and runs by animal id, so renaming
+ * or merging an animal id in animals.json also needs a migration that moves
+ * them; without one, old finds drop out of every set. (validate-data already
+ * fails if an id used by any puzzle file, released ones included, disappears.)
+ */
 export const SCHEMA_VERSION = 3;
 
 export interface SaveData {

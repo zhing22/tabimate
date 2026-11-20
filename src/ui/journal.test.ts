@@ -12,6 +12,8 @@ import { emptyStats } from '@/core/streak';
 import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle } from '@/core/types';
 import { createApp } from './app';
+import { UNKNOWN_NAME } from './components/journalGrid';
+import { nextTabIndex } from './components/tabKeys';
 import { formatDateKey } from './format';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
@@ -76,16 +78,44 @@ describe('Field Journal screen', () => {
     expect(t.$('h1')?.textContent).toBe('Tabimate');
   });
 
-  it('shows found animals as buttons and the rest as nameless silhouettes', () => {
+  it('names found animals under their picture, and the rest "???" as silhouettes', () => {
     const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
-    expect(t.$$('.journal-cell__button').map((b) => b.getAttribute('aria-label'))).toEqual([
-      'Tiger',
-    ]);
+    expect(t.$$('.journal-cell__button').map((b) => b.textContent)).toEqual(['🐾Tiger']);
     const unknown = t.$$('.journal-cell--unknown');
     expect(unknown).toHaveLength(ANIMALS.size - 1);
+    expect(unknown[0]?.querySelector('.journal-cell__name')?.textContent).toBe(UNKNOWN_NAME);
     expect(unknown[0]?.textContent).not.toContain('Platypus');
+  });
+
+  it('counts a group answer ("penguin") as found, in the grid and the total', () => {
+    const penguin = addRun({}, { puzzleDate: '2026-11-05', results: [hit('penguin')] }).journal;
+    const t = setup({ journal: penguin, achievements: [] });
+    t.app.showStart();
+    button(t, 'Field Journal').click();
+    expect(t.$('.meta')?.textContent).toBe(`1 of ${ANIMALS.size} animals found`);
+    expect(t.$('.journal-cell__button .journal-cell__name')?.textContent).toBe('Penguin');
+  });
+
+  it('moves between tabs with the arrow keys, Home and End; only the selected one is tabbable', () => {
+    const t = setup();
+    t.app.showStart();
+    button(t, 'Field Journal').click();
+    const tabs = t.$$('[role="tab"]');
+    const selected = () => tabs.findIndex((b) => b.getAttribute('aria-selected') === 'true');
+    expect(tabs.map((b) => b.tabIndex)).toEqual(tabs.map((_, i) => (i === 0 ? 0 : -1)));
+    tabs[0]!.focus();
+    pressKey(tabs[0]!, 'ArrowRight');
+    expect(selected()).toBe(1);
+    expect(document.activeElement).toBe(tabs[1]);
+    pressKey(tabs[1]!, 'End');
+    expect(selected()).toBe(tabs.length - 1);
+    expect(t.$('.badge-list')).not.toBeNull();
+    pressKey(tabs.at(-1)!, 'ArrowRight'); // wraps round
+    expect(selected()).toBe(0);
+    expect(tabs[0]!.tabIndex).toBe(0);
+    expect(tabs[1]!.tabIndex).toBe(-1);
   });
 
   it('opens a found animal to its page: first found date and times found', () => {
@@ -162,5 +192,15 @@ describe('formatDateKey', () => {
   it('reads a puzzle key as a date, without time zones', () => {
     expect(formatDateKey('2026-11-07')).toBe('7 Nov 2026');
     expect(formatDateKey('nonsense')).toBe('nonsense');
+  });
+});
+
+describe('nextTabIndex', () => {
+  it('steps and wraps with the arrows, jumps with Home and End, ignores other keys', () => {
+    expect(nextTabIndex('ArrowLeft', 0, 4)).toBe(3);
+    expect(nextTabIndex('ArrowRight', 3, 4)).toBe(0);
+    expect(nextTabIndex('Home', 2, 4)).toBe(0);
+    expect(nextTabIndex('End', 0, 4)).toBe(3);
+    expect(nextTabIndex('a', 1, 4)).toBeNull();
   });
 });

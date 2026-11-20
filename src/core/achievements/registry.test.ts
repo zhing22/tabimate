@@ -37,7 +37,7 @@ describe('achievements', () => {
   });
 
   it('first jackpot and first group', () => {
-    expect(earned(ctx({ history: [day([TOP_LEVEL])] }))).toEqual(['first-jackpot']);
+    expect(earned(ctx({ history: [day([TOP_LEVEL, 0])] }))).toEqual(['first-jackpot']);
     expect(earned(ctx({ journal: journalOf('penguin') }))).toEqual(['first-group']);
   });
 
@@ -46,7 +46,7 @@ describe('achievements', () => {
     expect(earned(ctx({ stats }))).toEqual(STREAK_GOALS.slice(0, 2).map((d) => `streak-${d}`));
   });
 
-  it('all answered needs every prompt of a full day; a perfect day needs them rare too', () => {
+  it('all answered needs every prompt of that day; a perfect day needs them rare too', () => {
     const below = (PERFECT_DAY_LEVEL - 1) as LevelId;
     expect(earned(ctx({ history: [day(full(below))] }))).toEqual(['all-answered']);
     expect(earned(ctx({ history: [day(full(PERFECT_DAY_LEVEL))] }))).toEqual([
@@ -55,7 +55,8 @@ describe('achievements', () => {
     ]);
     const oneMiss = [...full(PERFECT_DAY_LEVEL).slice(1), 0 as LevelId];
     expect(earned(ctx({ history: [day(oneMiss)] }))).toEqual([]);
-    expect(earned(ctx({ history: [day([2, 2, 2])] }))).toEqual([]); // an old 3-prompt day
+    // An old 3-prompt day counts by its own prompts, not today's PROMPTS_PER_DAY.
+    expect(earned(ctx({ history: [day([2, 2, 2])] }))).toEqual(['all-answered', 'perfect-day']);
   });
 
   it('journal sizes', () => {
@@ -67,12 +68,12 @@ describe('achievements', () => {
     const penguins = journalOf('emperor-penguin', 'african-penguin');
     expect(earned(ctx({ journal: penguins }))).toEqual(['set-complete']);
     const last = BIOMES[BIOMES.length - 1]!;
-    expect(earned(ctx({ history: [day([1], last.minScore)] }))).toEqual(['last-biome']);
-    expect(earned(ctx({ history: [day([1], last.minScore - 1)] }))).toEqual([]);
+    expect(earned(ctx({ history: [day([1, 0], last.minScore)] }))).toEqual(['last-biome']);
+    expect(earned(ctx({ history: [day([1, 0], last.minScore - 1)] }))).toEqual([]);
   });
 
   it('evaluate returns only achievements not unlocked before', () => {
-    const c = ctx({ history: [day([TOP_LEVEL])], journal: journalOf('penguin') });
+    const c = ctx({ history: [day([TOP_LEVEL, 0])], journal: journalOf('penguin') });
     expect(evaluate(c, new Set(['first-jackpot']))).toEqual(['first-group']);
   });
 });

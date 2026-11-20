@@ -10,7 +10,7 @@ import type { RunState } from './types';
 const run: RunState = {
   mode: 'daily',
   puzzleDate: '2026-11-19',
-  promptCount: 2,
+  promptCount: 3,
   status: 'finished',
   roundEndsAt: null,
   results: [
@@ -24,6 +24,8 @@ const run: RunState = {
       timeMs: 1,
       match: { level: 1, animalId: 'penguin', strategy: 'exact', input: 'x' },
     },
+    // A miss, so the day is not "every prompt answered".
+    { promptId: 'c', timeMs: 1, match: { level: 0, animalId: null, strategy: null, input: '' } },
   ],
 };
 const stats = recordRun(emptyStats(), historyEntry(run));

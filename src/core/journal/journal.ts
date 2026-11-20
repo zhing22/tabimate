@@ -24,6 +24,11 @@ export interface JournalRun {
 
 export const emptyJournal = (): Journal => ({});
 
+/**
+ * Every answer ever found, groups included: "penguin" is a real answer and
+ * fills its own cell. The journal total and the journal-N goals count this way;
+ * sets (sets.ts) count species only, on purpose (a family name is not a bear).
+ */
 export const journalSize = (journal: Journal): number => Object.keys(journal).length;
 
 export const isInJournal = (journal: Journal, id: AnimalId): boolean =>

@@ -3,7 +3,6 @@
 // achievement earned before it existed unlocks on the next finished run.
 import { BIOMES } from '@/config/biomes';
 import { JOURNAL_GOALS, PERFECT_DAY_LEVEL, STREAK_GOALS } from '@/config/collection';
-import { PROMPTS_PER_DAY } from '@/config/game';
 import { TOP_LEVEL } from '@/config/levels';
 import { journalSize, type Journal, type JournalRun } from '../journal/journal';
 import { JOURNAL_SETS, setProgress } from '../journal/sets';
@@ -38,8 +37,10 @@ export interface UnlockedAchievement {
 }
 
 const LAST_BIOME = BIOMES[BIOMES.length - 1]!;
+// A day's levels hold one entry per prompt it had, so "every prompt" is that day's own
+// count: changing PROMPTS_PER_DAY later never changes who qualified before.
 const answeredAll = (levels: readonly number[]) =>
-  levels.length >= PROMPTS_PER_DAY && levels.every((level) => level > 0);
+  levels.length > 0 && levels.every((level) => level > 0);
 
 const streakGoal = (days: number): Achievement => ({
   id: `streak-${days}`,
@@ -77,14 +78,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: 'all-answered',
     name: 'Full house',
-    description: `Answer all ${PROMPTS_PER_DAY} prompts in one day.`,
+    description: 'Answer every prompt in one day.',
     icon: '✅',
     check: ({ history }) => history.some((day) => answeredAll(day.levels)),
   },
   {
     id: 'perfect-day',
     name: 'Perfect day',
-    description: `Answer all ${PROMPTS_PER_DAY} prompts with rarer animals only.`,
+    description: 'Answer every prompt in one day with rarer animals only.',
     icon: '💎',
     check: ({ history }) =>
       history.some(

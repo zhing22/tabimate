@@ -147,3 +147,13 @@ export const SPRITE_SOURCE: 'pixel' | 'emoji' = 'pixel';
 
 /** How long a blink shows its eyes-closed frame. */
 export const BLINK_MS = 140;
+
+/** Screen pixels per sprite pixel in the UI's sprite pictures: whole numbers keep them crisp. */
+export const UI_SPRITE_SCALE = {
+  /** The results line-up (and its backdrop). */
+  lineup: 2,
+  /** The results team rows. */
+  team: 2,
+  /** The Field Journal grid. */
+  journal: 2,
+} as const;
