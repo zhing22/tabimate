@@ -3,6 +3,7 @@ import type { Clock } from '@/core/clock';
 import { collectRun, type CollectedRun, type Collection } from '@/core/collection';
 import { dailyKey, shiftKey } from '@/core/date';
 import { canOverwrite } from '@/core/game';
+import { fillJournal, journalSize } from '@/core/journal/journal';
 import type { StorageAdapter } from '@/core/storage';
 import {
   historyEntry,
@@ -39,6 +40,8 @@ export interface ProgressService {
   getStats(): Stats;
   /** Today's streak, and whether a freeze is holding it after a missed day. */
   streakStatus(): StreakStatus;
+  /** Debug: puts every animal in the journal (see fillJournal). Returns how many were added. */
+  fillJournal(animals: AnimalLookup): number;
 }
 
 /** Drops full run state older than RUNS_KEPT_DAYS before `latest`. */
@@ -107,5 +110,12 @@ export function createProgressService(storage: StorageAdapter, clock: Clock): Pr
     },
 
     streakStatus: () => streakStatus(read().stats, dailyKey(clock.now())),
+
+    fillJournal(animals) {
+      const data = read();
+      const journal = fillJournal(data.journal, animals.keys(), dailyKey(clock.now()));
+      write({ ...data, journal });
+      return journalSize(journal) - journalSize(data.journal);
+    },
   };
 }

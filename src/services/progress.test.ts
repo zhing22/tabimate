@@ -140,6 +140,19 @@ describe('progress: streaks', () => {
   });
 });
 
+describe('progress: fill journal', () => {
+  it('adds every animal once and keeps the rest of the save', () => {
+    const page = openPage(createMemoryStorageAdapter(), '2026-11-07T05:00:00Z');
+    finish(page);
+    const found = Object.keys(page.progress.getCollection().journal).length;
+    const streak = page.progress.getStats().streak;
+    expect(page.progress.fillJournal(ANIMALS)).toBe(ANIMALS.size - found);
+    expect(Object.keys(page.progress.getCollection().journal)).toHaveLength(ANIMALS.size);
+    expect(page.progress.getStats().streak).toBe(streak);
+    expect(page.progress.fillJournal(ANIMALS)).toBe(0);
+  });
+});
+
 describe('progress: storage', () => {
   it('keeps full runs for RUNS_KEPT_DAYS but history for every day', () => {
     const storage = createMemoryStorageAdapter();

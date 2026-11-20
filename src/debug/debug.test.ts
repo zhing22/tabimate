@@ -54,6 +54,7 @@ describe('createDebugPanel', () => {
     storage.set(SAVE_KEY, { some: 'save' });
     storage.set(BACKUP_KEY, 'old');
     const navigate = vi.fn();
+    const fillJournal = vi.fn(() => 3);
     const panel = createDebugPanel({
       bus,
       puzzle: { date: '2026-11-16', number: 11, prompts: [PROMPT] },
@@ -62,11 +63,12 @@ describe('createDebugPanel', () => {
       dateKey: '2026-11-16',
       navigate,
       confirm: () => confirm,
+      fillJournal,
     });
     document.body.replaceChildren(panel.el);
     const button = (text: string) =>
       [...panel.el.querySelectorAll('button')].find((b) => b.textContent === text)!;
-    return { bus, storage, navigate, panel, button };
+    return { bus, storage, navigate, fillJournal, panel, button };
   };
 
   it('logs how the matcher read each guess, newest first', () => {
@@ -87,6 +89,16 @@ describe('createDebugPanel', () => {
     expect(t.navigate).toHaveBeenLastCalledWith('?debug=1&date=2026-11-20');
     t.button('Today').click();
     expect(t.navigate).toHaveBeenLastCalledWith('?debug=1');
+  });
+
+  it('fills the journal after asking, then reloads', () => {
+    const keep = setup(false);
+    keep.button('Fill journal').click();
+    expect(keep.fillJournal).not.toHaveBeenCalled();
+    const fill = setup(true);
+    fill.button('Fill journal').click();
+    expect(fill.fillJournal).toHaveBeenCalledOnce();
+    expect(fill.navigate).toHaveBeenCalled();
   });
 
   it('wipes the save after asking, and keeps it if not', () => {

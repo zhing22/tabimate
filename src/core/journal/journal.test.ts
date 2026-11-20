@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AnswerLevel } from '@/config/levels';
 import { ANIMALS } from '../matcher/testFixtures';
 import type { Animal, RoundResult } from '../types';
-import { addRun, emptyJournal, isInJournal, journalSize } from './journal';
+import { addRun, emptyJournal, fillJournal, isInJournal, journalSize } from './journal';
 import { JOURNAL_SETS, setMembers, setProgress } from './sets';
 
 const hit = (animalId: string, level: AnswerLevel): RoundResult => ({
@@ -98,5 +98,20 @@ describe('journal sets', () => {
       total: 0,
       complete: false,
     });
+  });
+});
+
+describe('fillJournal', () => {
+  it('adds every missing animal once, keeping animals already found as they were', () => {
+    const before = addRun(emptyJournal(), run('2026-11-19', hit('tiger', 4))).journal;
+    const after = fillJournal(before, ['tiger', 'platypus'], '2026-11-20');
+    expect(after.tiger).toEqual(before.tiger);
+    expect(after.platypus).toEqual({
+      animalId: 'platypus',
+      firstFoundKey: '2026-11-20',
+      timesFound: 1,
+      bestLevel: 1,
+    });
+    expect(isInJournal(before, 'platypus')).toBe(false);
   });
 });

@@ -1,6 +1,7 @@
 // A hidden panel for testing and playtests, shown only with ?debug=1:
-// play another day's puzzle, see how the matcher read each guess, and wipe
-// this browser's saved progress. Never shown to players who don't ask for it.
+// play another day's puzzle, see how the matcher read each guess, wipe this
+// browser's saved progress or fill its Field Journal. Never shown to players
+// who don't ask for it.
 import { isDateKey } from '@/core/date';
 import type { GameBus } from '@/core/events';
 import type { StorageAdapter } from '@/core/storage';
@@ -30,6 +31,8 @@ export interface DebugPanelDeps {
   /** Opens the page with these debug options, e.g. another date. */
   readonly navigate: (search: string) => void;
   readonly confirm: (question: string) => boolean;
+  /** Puts every animal in this browser's Field Journal; returns how many were added. */
+  readonly fillJournal: () => number;
 }
 
 const line = (g: GuessExplained) =>
@@ -49,6 +52,7 @@ export function createDebugPanel(deps: DebugPanelDeps): { el: HTMLElement; destr
   const go = h('button', { type: 'button' }, 'Play this date');
   const today = h('button', { type: 'button' }, 'Today');
   const reset = h('button', { type: 'button' }, 'Reset progress');
+  const fill = h('button', { type: 'button' }, 'Fill journal');
   const el = h(
     'details',
     // Starts folded to one line, so it never covers the game until asked.
@@ -59,7 +63,7 @@ export function createDebugPanel(deps: DebugPanelDeps): { el: HTMLElement; destr
       `debug · ${deps.dateKey}${deps.puzzle ? ` · #${deps.puzzle.number}` : ' · no puzzle'}`,
     ),
     h('div', { class: 'debug__row' }, dateInput, go, today),
-    h('div', { class: 'debug__row' }, reset),
+    h('div', { class: 'debug__row' }, reset, fill),
     h('p', { class: 'debug__hint' }, 'Guesses (newest first):'),
     log,
   );
@@ -73,6 +77,11 @@ export function createDebugPanel(deps: DebugPanelDeps): { el: HTMLElement; destr
     deps.storage.remove(SAVE_KEY);
     deps.storage.remove(BACKUP_KEY);
     deps.navigate(location.search);
+  });
+  fill.addEventListener('click', () => {
+    if (!deps.confirm('Add every animal to the Field Journal (as found today, level 1)?')) return;
+    deps.fillJournal();
+    deps.navigate(location.search); // reload, so every screen reads the new journal
   });
 
   let prompt: Prompt | null = null;

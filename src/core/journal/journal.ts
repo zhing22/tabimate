@@ -63,3 +63,17 @@ export function addRun(
   }
   return { journal: next, newlyFound };
 }
+
+/**
+ * Every animal in `ids` in the journal (the debug panel's "Fill journal"):
+ * one not yet found is added as found once on `key`, at level 1; animals
+ * already found keep their own record.
+ */
+export function fillJournal(journal: Journal, ids: Iterable<AnimalId>, key: DateKey): Journal {
+  const next: Record<AnimalId, JournalEntry> = { ...journal };
+  for (const id of ids) {
+    if (!isInJournal(next, id))
+      next[id] = { animalId: id, firstFoundKey: key, timesFound: 1, bestLevel: 1 };
+  }
+  return next;
+}

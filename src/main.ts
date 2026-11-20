@@ -128,7 +128,10 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
 load()
   .then(async ({ puzzle, animals }) => {
     const game = puzzle ? play(puzzle, animals) : undefined;
-    if (debug.enabled) startDebug({ bus: game?.bus, puzzle, animals, storage, dateKey: key });
+    if (debug.enabled) {
+      const fillJournal = () => progress.fillJournal(animals);
+      startDebug({ bus: game?.bus, puzzle, animals, storage, dateKey: key, fillJournal });
+    }
     if (game) {
       await loading.finish(game.ready);
       game.begin();
