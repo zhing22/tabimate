@@ -375,6 +375,514 @@
           "level": 5
         }
       ]
+    },
+    {
+      "id": "herd",
+      "text": "Name an animal that lives in a herd",
+      "answers": [
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "deer",
+          "level": 1
+        },
+        {
+          "animalId": "antelope",
+          "level": 1
+        },
+        {
+          "animalId": "plains-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "african-elephant",
+          "level": 2
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 2
+        },
+        {
+          "animalId": "american-bison",
+          "level": 2
+        },
+        {
+          "animalId": "blue-wildebeest",
+          "level": 2
+        },
+        {
+          "animalId": "impala",
+          "level": 2
+        },
+        {
+          "animalId": "springbok",
+          "level": 2
+        },
+        {
+          "animalId": "red-deer",
+          "level": 2
+        },
+        {
+          "animalId": "reindeer",
+          "level": 2
+        },
+        {
+          "animalId": "muskox",
+          "level": 2
+        },
+        {
+          "animalId": "giraffe",
+          "level": 2
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "wild-yak",
+          "level": 2
+        },
+        {
+          "animalId": "llama",
+          "level": 2
+        },
+        {
+          "animalId": "gemsbok",
+          "level": 3
+        },
+        {
+          "animalId": "greater-kudu",
+          "level": 3
+        },
+        {
+          "animalId": "sable-antelope",
+          "level": 3
+        },
+        {
+          "animalId": "chital",
+          "level": 3
+        },
+        {
+          "animalId": "fallow-deer",
+          "level": 3
+        },
+        {
+          "animalId": "vicuna",
+          "level": 3
+        },
+        {
+          "animalId": "pronghorn",
+          "level": 3
+        },
+        {
+          "animalId": "mountain-zebra",
+          "level": 3
+        },
+        {
+          "animalId": "grevys-zebra",
+          "level": 4
+        },
+        {
+          "animalId": "addax",
+          "level": 4
+        },
+        {
+          "animalId": "saiga-antelope",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "songbird",
+      "text": "Name a bird that sings",
+      "answers": [
+        {
+          "animalId": "magpie",
+          "level": 1
+        },
+        {
+          "animalId": "european-robin",
+          "level": 2
+        },
+        {
+          "animalId": "american-robin",
+          "level": 2
+        },
+        {
+          "animalId": "barn-swallow",
+          "level": 2
+        },
+        {
+          "animalId": "common-starling",
+          "level": 2
+        },
+        {
+          "animalId": "house-sparrow",
+          "level": 2
+        },
+        {
+          "animalId": "blue-jay",
+          "level": 2
+        },
+        {
+          "animalId": "northern-cardinal",
+          "level": 2
+        },
+        {
+          "animalId": "eurasian-blue-tit",
+          "level": 2
+        },
+        {
+          "animalId": "eurasian-magpie",
+          "level": 2
+        },
+        {
+          "animalId": "common-raven",
+          "level": 3
+        },
+        {
+          "animalId": "black-billed-magpie",
+          "level": 3
+        },
+        {
+          "animalId": "superb-lyrebird",
+          "level": 4
+        },
+        {
+          "animalId": "red-billed-blue-magpie",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "south-america",
+      "text": "Name an animal that lives in South America",
+      "answers": [
+        {
+          "animalId": "monkey",
+          "level": 1
+        },
+        {
+          "animalId": "parrot",
+          "level": 1
+        },
+        {
+          "animalId": "toucan",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "condor",
+          "level": 1
+        },
+        {
+          "animalId": "jaguar",
+          "level": 2
+        },
+        {
+          "animalId": "capybara",
+          "level": 2
+        },
+        {
+          "animalId": "llama",
+          "level": 2
+        },
+        {
+          "animalId": "alpaca",
+          "level": 2
+        },
+        {
+          "animalId": "giant-anteater",
+          "level": 2
+        },
+        {
+          "animalId": "brown-throated-sloth",
+          "level": 2
+        },
+        {
+          "animalId": "green-anaconda",
+          "level": 2
+        },
+        {
+          "animalId": "scarlet-macaw",
+          "level": 2
+        },
+        {
+          "animalId": "toco-toucan",
+          "level": 2
+        },
+        {
+          "animalId": "red-bellied-piranha",
+          "level": 2
+        },
+        {
+          "animalId": "andean-condor",
+          "level": 2
+        },
+        {
+          "animalId": "amazon-river-dolphin",
+          "level": 2
+        },
+        {
+          "animalId": "spectacled-bear",
+          "level": 2
+        },
+        {
+          "animalId": "vicuna",
+          "level": 2
+        },
+        {
+          "animalId": "electric-eel",
+          "level": 2
+        },
+        {
+          "animalId": "nine-banded-armadillo",
+          "level": 2
+        },
+        {
+          "animalId": "hyacinth-macaw",
+          "level": 3
+        },
+        {
+          "animalId": "greater-rhea",
+          "level": 3
+        },
+        {
+          "animalId": "giant-otter",
+          "level": 3
+        },
+        {
+          "animalId": "spectacled-caiman",
+          "level": 3
+        },
+        {
+          "animalId": "golden-lion-tamarin",
+          "level": 3
+        },
+        {
+          "animalId": "common-squirrel-monkey",
+          "level": 3
+        },
+        {
+          "animalId": "ocelot",
+          "level": 3
+        },
+        {
+          "animalId": "hoatzin",
+          "level": 3
+        },
+        {
+          "animalId": "south-american-tapir",
+          "level": 3
+        },
+        {
+          "animalId": "long-tailed-chinchilla",
+          "level": 3
+        },
+        {
+          "animalId": "guinea-pig",
+          "level": 3
+        },
+        {
+          "animalId": "galapagos-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "marine-iguana",
+          "level": 3
+        },
+        {
+          "animalId": "blue-footed-booby",
+          "level": 3
+        },
+        {
+          "animalId": "humboldt-penguin",
+          "level": 3
+        },
+        {
+          "animalId": "chilean-flamingo",
+          "level": 3
+        },
+        {
+          "animalId": "mountain-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "amazonian-manatee",
+          "level": 4
+        },
+        {
+          "animalId": "southern-lapwing",
+          "level": 4
+        },
+        {
+          "animalId": "sword-billed-hummingbird",
+          "level": 4
+        },
+        {
+          "animalId": "galapagos-penguin",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "solitary",
+      "text": "Name an animal that lives alone",
+      "answers": [
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "orangutan",
+          "level": 1
+        },
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 2
+        },
+        {
+          "animalId": "leopard",
+          "level": 2
+        },
+        {
+          "animalId": "jaguar",
+          "level": 2
+        },
+        {
+          "animalId": "polar-bear",
+          "level": 2
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 2
+        },
+        {
+          "animalId": "koala",
+          "level": 2
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "snow-leopard",
+          "level": 2
+        },
+        {
+          "animalId": "cougar",
+          "level": 2
+        },
+        {
+          "animalId": "giant-panda",
+          "level": 2
+        },
+        {
+          "animalId": "wolverine",
+          "level": 2
+        },
+        {
+          "animalId": "aardvark",
+          "level": 2
+        },
+        {
+          "animalId": "giant-anteater",
+          "level": 2
+        },
+        {
+          "animalId": "red-panda",
+          "level": 2
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "eurasian-lynx",
+          "level": 3
+        },
+        {
+          "animalId": "sloth-bear",
+          "level": 3
+        },
+        {
+          "animalId": "sun-bear",
+          "level": 3
+        },
+        {
+          "animalId": "honey-badger",
+          "level": 3
+        },
+        {
+          "animalId": "okapi",
+          "level": 3
+        },
+        {
+          "animalId": "aye-aye",
+          "level": 3
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 3
+        },
+        {
+          "animalId": "clouded-leopard",
+          "level": 3
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 3
+        },
+        {
+          "animalId": "common-wombat",
+          "level": 3
+        },
+        {
+          "animalId": "moose",
+          "level": 3
+        },
+        {
+          "animalId": "numbat",
+          "level": 3
+        },
+        {
+          "animalId": "malayan-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "chinese-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "giant-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "ground-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "tapanuli-orangutan",
+          "level": 5
+        }
+      ]
     }
   ]
 }

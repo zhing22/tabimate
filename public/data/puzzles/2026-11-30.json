@@ -1,0 +1,268 @@
+{
+  "date": "2026-11-30",
+  "number": 25,
+  "prompts": [
+    {
+      "id": "misleading-name",
+      "text": "Name an animal whose name is misleading (a jellyfish is not a fish)",
+      "answers": [
+        {
+          "animalId": "jellyfish",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "killer-whale",
+          "level": 2
+        },
+        {
+          "animalId": "guinea-pig",
+          "level": 2
+        },
+        {
+          "animalId": "moon-jellyfish",
+          "level": 2
+        },
+        {
+          "animalId": "electric-eel",
+          "level": 3
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "black-tailed-prairie-dog",
+          "level": 3
+        },
+        {
+          "animalId": "red-panda",
+          "level": 3
+        },
+        {
+          "animalId": "crown-of-thorns-starfish",
+          "level": 3
+        },
+        {
+          "animalId": "box-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "peacock-mantis-shrimp",
+          "level": 4
+        },
+        {
+          "animalId": "stellers-sea-cow",
+          "level": 4
+        },
+        {
+          "animalId": "portuguese-man-o-war",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "flying-mammal",
+      "text": "Name a mammal that can truly fly",
+      "answers": [
+        {
+          "animalId": "bat",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "common-vampire-bat",
+          "level": 2
+        },
+        {
+          "animalId": "little-brown-bat",
+          "level": 2
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "mexican-free-tailed-bat",
+          "level": 3
+        },
+        {
+          "animalId": "indian-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "large-flying-fox",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "cannot-roar",
+      "text": "Name a big cat that can't roar",
+      "answers": [
+        {
+          "animalId": "cheetah",
+          "level": 2
+        },
+        {
+          "animalId": "snow-leopard",
+          "level": 3
+        },
+        {
+          "animalId": "cougar",
+          "level": 3
+        },
+        {
+          "animalId": "clouded-leopard",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "not-a-rodent",
+      "text": "Name an animal people mistake for a rodent",
+      "answers": [
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "hare",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "european-rabbit",
+          "level": 2
+        },
+        {
+          "animalId": "european-hare",
+          "level": 2
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 2
+        },
+        {
+          "animalId": "arctic-hare",
+          "level": 3
+        },
+        {
+          "animalId": "snowshoe-hare",
+          "level": 3
+        },
+        {
+          "animalId": "four-toed-hedgehog",
+          "level": 3
+        },
+        {
+          "animalId": "sugar-glider",
+          "level": 3
+        },
+        {
+          "animalId": "pygmy-rabbit",
+          "level": 4
+        },
+        {
+          "animalId": "aye-aye",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "flies-backwards",
+      "text": "Name a bird that can fly backwards",
+      "answers": [
+        {
+          "animalId": "hummingbird",
+          "level": 1
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "level": 2
+        },
+        {
+          "animalId": "annas-hummingbird",
+          "level": 3
+        },
+        {
+          "animalId": "bee-hummingbird",
+          "level": 3
+        },
+        {
+          "animalId": "sword-billed-hummingbird",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "harmless-snake",
+      "text": "Name a snake that is not venomous",
+      "answers": [
+        {
+          "animalId": "reticulated-python",
+          "level": 2
+        },
+        {
+          "animalId": "green-anaconda",
+          "level": 2
+        },
+        {
+          "animalId": "boa-constrictor",
+          "level": 2
+        },
+        {
+          "animalId": "grass-snake",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "bird-cousin",
+      "text": "Name a reptile whose closest living relatives are birds",
+      "answers": [
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "american-alligator",
+          "level": 2
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "nile-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "spectacled-caiman",
+          "level": 3
+        },
+        {
+          "animalId": "american-crocodile",
+          "level": 3
+        },
+        {
+          "animalId": "mugger-crocodile",
+          "level": 3
+        },
+        {
+          "animalId": "gharial",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}

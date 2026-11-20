@@ -1,0 +1,528 @@
+{
+  "date": "2026-11-29",
+  "number": 24,
+  "prompts": [
+    {
+      "id": "named-after-a-person",
+      "text": "Name an animal named after a person",
+      "answers": [
+        {
+          "animalId": "humboldt-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "grevys-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "stellers-sea-eagle",
+          "level": 2
+        },
+        {
+          "animalId": "harriss-hawk",
+          "level": 3
+        },
+        {
+          "animalId": "coopers-hawk",
+          "level": 3
+        },
+        {
+          "animalId": "weddell-seal",
+          "level": 3
+        },
+        {
+          "animalId": "adelie-penguin",
+          "level": 3
+        },
+        {
+          "animalId": "annas-hummingbird",
+          "level": 3
+        },
+        {
+          "animalId": "rissos-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "bairds-tapir",
+          "level": 3
+        },
+        {
+          "animalId": "hermanns-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "kemps-ridley-sea-turtle",
+          "level": 4
+        },
+        {
+          "animalId": "hectors-dolphin",
+          "level": 5
+        },
+        {
+          "animalId": "queen-alexandras-birdwing",
+          "level": 5
+        },
+        {
+          "animalId": "stellers-sea-cow",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "lives-100-years",
+      "text": "Name an animal that can live more than 100 years",
+      "answers": [
+        {
+          "animalId": "tortoise",
+          "level": 1
+        },
+        {
+          "animalId": "galapagos-tortoise",
+          "level": 2
+        },
+        {
+          "animalId": "aldabra-giant-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "bowhead-whale",
+          "level": 4
+        },
+        {
+          "animalId": "greenland-shark",
+          "level": 4
+        },
+        {
+          "animalId": "tuatara",
+          "level": 5
+        },
+        {
+          "animalId": "olm",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "starts-with-red",
+      "text": "Name an animal whose name starts with \"Red\"",
+      "answers": [
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "red-panda",
+          "level": 2
+        },
+        {
+          "animalId": "red-kangaroo",
+          "level": 2
+        },
+        {
+          "animalId": "red-squirrel",
+          "level": 2
+        },
+        {
+          "animalId": "red-deer",
+          "level": 2
+        },
+        {
+          "animalId": "red-wolf",
+          "level": 3
+        },
+        {
+          "animalId": "red-kite",
+          "level": 3
+        },
+        {
+          "animalId": "red-eyed-tree-frog",
+          "level": 3
+        },
+        {
+          "animalId": "red-bellied-piranha",
+          "level": 3
+        },
+        {
+          "animalId": "red-lionfish",
+          "level": 3
+        },
+        {
+          "animalId": "red-tailed-hawk",
+          "level": 3
+        },
+        {
+          "animalId": "red-king-crab",
+          "level": 3
+        },
+        {
+          "animalId": "red-crowned-crane",
+          "level": 4
+        },
+        {
+          "animalId": "red-wood-ant",
+          "level": 4
+        },
+        {
+          "animalId": "red-ruffed-lemur",
+          "level": 5
+        },
+        {
+          "animalId": "red-billed-blue-magpie",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "same-letter",
+      "text": "Name an animal whose two words start with the same letter",
+      "answers": [
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 2
+        },
+        {
+          "animalId": "toco-toucan",
+          "level": 2
+        },
+        {
+          "animalId": "electric-eel",
+          "level": 2
+        },
+        {
+          "animalId": "american-alligator",
+          "level": 2
+        },
+        {
+          "animalId": "fennec-fox",
+          "level": 2
+        },
+        {
+          "animalId": "california-condor",
+          "level": 3
+        },
+        {
+          "animalId": "coconut-crab",
+          "level": 3
+        },
+        {
+          "animalId": "aye-aye",
+          "level": 3
+        },
+        {
+          "animalId": "harriss-hawk",
+          "level": 3
+        },
+        {
+          "animalId": "greylag-goose",
+          "level": 3
+        },
+        {
+          "animalId": "common-crane",
+          "level": 3
+        },
+        {
+          "animalId": "passenger-pigeon",
+          "level": 3
+        },
+        {
+          "animalId": "smalltooth-sawfish",
+          "level": 5
+        },
+        {
+          "animalId": "sacred-scarab",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "no-backbone",
+      "text": "Name an animal without a backbone",
+      "answers": [
+        {
+          "animalId": "octopus",
+          "level": 1
+        },
+        {
+          "animalId": "jellyfish",
+          "level": 1
+        },
+        {
+          "animalId": "crab",
+          "level": 1
+        },
+        {
+          "animalId": "spider",
+          "level": 1
+        },
+        {
+          "animalId": "scorpion",
+          "level": 1
+        },
+        {
+          "animalId": "butterfly",
+          "level": 1
+        },
+        {
+          "animalId": "bee",
+          "level": 1
+        },
+        {
+          "animalId": "beetle",
+          "level": 1
+        },
+        {
+          "animalId": "ant",
+          "level": 1
+        },
+        {
+          "animalId": "common-octopus",
+          "level": 2
+        },
+        {
+          "animalId": "giant-squid",
+          "level": 2
+        },
+        {
+          "animalId": "american-lobster",
+          "level": 2
+        },
+        {
+          "animalId": "moon-jellyfish",
+          "level": 2
+        },
+        {
+          "animalId": "portuguese-man-o-war",
+          "level": 2
+        },
+        {
+          "animalId": "blue-crab",
+          "level": 2
+        },
+        {
+          "animalId": "monarch-butterfly",
+          "level": 2
+        },
+        {
+          "animalId": "western-honey-bee",
+          "level": 2
+        },
+        {
+          "animalId": "seven-spot-ladybird",
+          "level": 2
+        },
+        {
+          "animalId": "goliath-birdeater",
+          "level": 2
+        },
+        {
+          "animalId": "southern-black-widow",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-scorpion",
+          "level": 2
+        },
+        {
+          "animalId": "box-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "lions-mane-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "giant-pacific-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "mimic-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "red-king-crab",
+          "level": 3
+        },
+        {
+          "animalId": "coconut-crab",
+          "level": 3
+        },
+        {
+          "animalId": "antarctic-krill",
+          "level": 3
+        },
+        {
+          "animalId": "crown-of-thorns-starfish",
+          "level": 3
+        },
+        {
+          "animalId": "atlas-moth",
+          "level": 3
+        },
+        {
+          "animalId": "luna-moth",
+          "level": 3
+        },
+        {
+          "animalId": "european-mantis",
+          "level": 3
+        },
+        {
+          "animalId": "desert-locust",
+          "level": 3
+        },
+        {
+          "animalId": "emperor-dragonfly",
+          "level": 3
+        },
+        {
+          "animalId": "painted-lady",
+          "level": 3
+        },
+        {
+          "animalId": "buff-tailed-bumblebee",
+          "level": 3
+        },
+        {
+          "animalId": "european-stag-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "hercules-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "red-wood-ant",
+          "level": 3
+        },
+        {
+          "animalId": "european-garden-spider",
+          "level": 3
+        },
+        {
+          "animalId": "deathstalker",
+          "level": 3
+        },
+        {
+          "animalId": "japanese-spider-crab",
+          "level": 4
+        },
+        {
+          "animalId": "peacock-mantis-shrimp",
+          "level": 4
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "bullet-ant",
+          "level": 4
+        },
+        {
+          "animalId": "sacred-scarab",
+          "level": 4
+        },
+        {
+          "animalId": "menelaus-blue-morpho",
+          "level": 4
+        },
+        {
+          "animalId": "peacock-spider",
+          "level": 4
+        },
+        {
+          "animalId": "chambered-nautilus",
+          "level": 5
+        },
+        {
+          "animalId": "queen-alexandras-birdwing",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "night-primate",
+      "text": "Name a primate that is active at night",
+      "answers": [
+        {
+          "animalId": "aye-aye",
+          "level": 3
+        },
+        {
+          "animalId": "sunda-slow-loris",
+          "level": 3
+        },
+        {
+          "animalId": "philippine-tarsier",
+          "level": 4
+        },
+        {
+          "animalId": "gray-mouse-lemur",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "hibernates",
+      "text": "Name an animal that hibernates",
+      "answers": [
+        {
+          "animalId": "bear",
+          "level": 1
+        },
+        {
+          "animalId": "hedgehog",
+          "level": 1
+        },
+        {
+          "animalId": "bat",
+          "level": 1
+        },
+        {
+          "animalId": "brown-bear",
+          "level": 2
+        },
+        {
+          "animalId": "american-black-bear",
+          "level": 2
+        },
+        {
+          "animalId": "european-hedgehog",
+          "level": 2
+        },
+        {
+          "animalId": "asian-black-bear",
+          "level": 3
+        },
+        {
+          "animalId": "little-brown-bat",
+          "level": 3
+        },
+        {
+          "animalId": "common-frog",
+          "level": 3
+        },
+        {
+          "animalId": "common-toad",
+          "level": 3
+        },
+        {
+          "animalId": "grass-snake",
+          "level": 3
+        },
+        {
+          "animalId": "alpine-marmot",
+          "level": 5
+        },
+        {
+          "animalId": "hermanns-tortoise",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,512 @@
+{
+  "date": "2026-11-27",
+  "number": 22,
+  "prompts": [
+    {
+      "id": "fish",
+      "text": "Name a fish",
+      "answers": [
+        {
+          "animalId": "shark",
+          "level": 1
+        },
+        {
+          "animalId": "ray",
+          "level": 1
+        },
+        {
+          "animalId": "goldfish",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-salmon",
+          "level": 2
+        },
+        {
+          "animalId": "ocellaris-clownfish",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-bluefin-tuna",
+          "level": 2
+        },
+        {
+          "animalId": "swordfish",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-cod",
+          "level": 2
+        },
+        {
+          "animalId": "red-bellied-piranha",
+          "level": 2
+        },
+        {
+          "animalId": "great-white-shark",
+          "level": 2
+        },
+        {
+          "animalId": "whale-shark",
+          "level": 2
+        },
+        {
+          "animalId": "hammerhead-shark",
+          "level": 2
+        },
+        {
+          "animalId": "electric-eel",
+          "level": 3
+        },
+        {
+          "animalId": "ocean-sunfish",
+          "level": 3
+        },
+        {
+          "animalId": "red-lionfish",
+          "level": 3
+        },
+        {
+          "animalId": "great-barracuda",
+          "level": 3
+        },
+        {
+          "animalId": "leafy-seadragon",
+          "level": 3
+        },
+        {
+          "animalId": "humpback-anglerfish",
+          "level": 3
+        },
+        {
+          "animalId": "blobfish",
+          "level": 3
+        },
+        {
+          "animalId": "basking-shark",
+          "level": 3
+        },
+        {
+          "animalId": "giant-oceanic-manta-ray",
+          "level": 3
+        },
+        {
+          "animalId": "tiger-shark",
+          "level": 3
+        },
+        {
+          "animalId": "bull-shark",
+          "level": 3
+        },
+        {
+          "animalId": "nurse-shark",
+          "level": 3
+        },
+        {
+          "animalId": "greenland-shark",
+          "level": 4
+        },
+        {
+          "animalId": "smalltooth-sawfish",
+          "level": 4
+        },
+        {
+          "animalId": "west-indian-ocean-coelacanth",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "dolphin",
+      "text": "Name a dolphin or a porpoise",
+      "answers": [
+        {
+          "animalId": "dolphin",
+          "level": 1
+        },
+        {
+          "animalId": "bottlenose-dolphin",
+          "level": 2
+        },
+        {
+          "animalId": "killer-whale",
+          "level": 2
+        },
+        {
+          "animalId": "short-beaked-common-dolphin",
+          "level": 2
+        },
+        {
+          "animalId": "amazon-river-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "spinner-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "rissos-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "hectors-dolphin",
+          "level": 4
+        },
+        {
+          "animalId": "vaquita",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "crustacean",
+      "text": "Name a crab, lobster or shrimp",
+      "answers": [
+        {
+          "animalId": "crab",
+          "level": 1
+        },
+        {
+          "animalId": "american-lobster",
+          "level": 2
+        },
+        {
+          "animalId": "blue-crab",
+          "level": 2
+        },
+        {
+          "animalId": "red-king-crab",
+          "level": 2
+        },
+        {
+          "animalId": "antarctic-krill",
+          "level": 3
+        },
+        {
+          "animalId": "coconut-crab",
+          "level": 3
+        },
+        {
+          "animalId": "japanese-spider-crab",
+          "level": 4
+        },
+        {
+          "animalId": "peacock-mantis-shrimp",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "tentacles",
+      "text": "Name an animal with tentacles",
+      "answers": [
+        {
+          "animalId": "octopus",
+          "level": 1
+        },
+        {
+          "animalId": "jellyfish",
+          "level": 1
+        },
+        {
+          "animalId": "common-octopus",
+          "level": 2
+        },
+        {
+          "animalId": "giant-squid",
+          "level": 2
+        },
+        {
+          "animalId": "portuguese-man-o-war",
+          "level": 2
+        },
+        {
+          "animalId": "moon-jellyfish",
+          "level": 2
+        },
+        {
+          "animalId": "box-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "giant-pacific-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "lions-mane-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "mimic-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "chambered-nautilus",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "pinniped",
+      "text": "Name a seal, sea lion or walrus",
+      "answers": [
+        {
+          "animalId": "seal",
+          "level": 1
+        },
+        {
+          "animalId": "walrus",
+          "level": 2
+        },
+        {
+          "animalId": "california-sea-lion",
+          "level": 2
+        },
+        {
+          "animalId": "harbour-seal",
+          "level": 2
+        },
+        {
+          "animalId": "grey-seal",
+          "level": 2
+        },
+        {
+          "animalId": "leopard-seal",
+          "level": 2
+        },
+        {
+          "animalId": "harp-seal",
+          "level": 2
+        },
+        {
+          "animalId": "weddell-seal",
+          "level": 3
+        },
+        {
+          "animalId": "southern-elephant-seal",
+          "level": 3
+        },
+        {
+          "animalId": "hawaiian-monk-seal",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "webbed-feet",
+      "text": "Name a bird with webbed feet",
+      "answers": [
+        {
+          "animalId": "duck",
+          "level": 1
+        },
+        {
+          "animalId": "goose",
+          "level": 1
+        },
+        {
+          "animalId": "swan",
+          "level": 1
+        },
+        {
+          "animalId": "penguin",
+          "level": 1
+        },
+        {
+          "animalId": "pelican",
+          "level": 1
+        },
+        {
+          "animalId": "gull",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
+          "level": 1
+        },
+        {
+          "animalId": "flamingo",
+          "level": 1
+        },
+        {
+          "animalId": "mallard",
+          "level": 2
+        },
+        {
+          "animalId": "canada-goose",
+          "level": 2
+        },
+        {
+          "animalId": "mute-swan",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "brown-pelican",
+          "level": 2
+        },
+        {
+          "animalId": "european-herring-gull",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 2
+        },
+        {
+          "animalId": "black-swan",
+          "level": 2
+        },
+        {
+          "animalId": "mandarin-duck",
+          "level": 2
+        },
+        {
+          "animalId": "greater-flamingo",
+          "level": 2
+        },
+        {
+          "animalId": "king-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "blue-footed-booby",
+          "level": 3
+        },
+        {
+          "animalId": "common-eider",
+          "level": 3
+        },
+        {
+          "animalId": "wood-duck",
+          "level": 3
+        },
+        {
+          "animalId": "northern-pintail",
+          "level": 3
+        },
+        {
+          "animalId": "muscovy-duck",
+          "level": 3
+        },
+        {
+          "animalId": "greylag-goose",
+          "level": 3
+        },
+        {
+          "animalId": "whooper-swan",
+          "level": 3
+        },
+        {
+          "animalId": "trumpeter-swan",
+          "level": 3
+        },
+        {
+          "animalId": "wandering-albatross",
+          "level": 3
+        },
+        {
+          "animalId": "nene",
+          "level": 4
+        },
+        {
+          "animalId": "laysan-albatross",
+          "level": 4
+        },
+        {
+          "animalId": "bar-headed-goose",
+          "level": 4
+        },
+        {
+          "animalId": "southern-royal-albatross",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "water-reptile",
+      "text": "Name a reptile that lives in water",
+      "answers": [
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "american-alligator",
+          "level": 2
+        },
+        {
+          "animalId": "saltwater-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "nile-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "green-anaconda",
+          "level": 2
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "loggerhead-sea-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "marine-iguana",
+          "level": 3
+        },
+        {
+          "animalId": "gharial",
+          "level": 3
+        },
+        {
+          "animalId": "spectacled-caiman",
+          "level": 3
+        },
+        {
+          "animalId": "american-crocodile",
+          "level": 3
+        },
+        {
+          "animalId": "mugger-crocodile",
+          "level": 3
+        },
+        {
+          "animalId": "olive-ridley-sea-turtle",
+          "level": 4
+        },
+        {
+          "animalId": "kemps-ridley-sea-turtle",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,660 @@
+{
+  "date": "2026-11-26",
+  "number": 21,
+  "prompts": [
+    {
+      "id": "long-tongue",
+      "text": "Name an animal with a long tongue",
+      "answers": [
+        {
+          "animalId": "pangolin",
+          "level": 1
+        },
+        {
+          "animalId": "hummingbird",
+          "level": 1
+        },
+        {
+          "animalId": "woodpecker",
+          "level": 1
+        },
+        {
+          "animalId": "giraffe",
+          "level": 2
+        },
+        {
+          "animalId": "giant-anteater",
+          "level": 2
+        },
+        {
+          "animalId": "ruby-throated-hummingbird",
+          "level": 2
+        },
+        {
+          "animalId": "great-spotted-woodpecker",
+          "level": 2
+        },
+        {
+          "animalId": "veiled-chameleon",
+          "level": 3
+        },
+        {
+          "animalId": "panther-chameleon",
+          "level": 3
+        },
+        {
+          "animalId": "aardvark",
+          "level": 3
+        },
+        {
+          "animalId": "okapi",
+          "level": 3
+        },
+        {
+          "animalId": "sun-bear",
+          "level": 3
+        },
+        {
+          "animalId": "sunda-pangolin",
+          "level": 3
+        },
+        {
+          "animalId": "numbat",
+          "level": 4
+        },
+        {
+          "animalId": "giant-pangolin",
+          "level": 4
+        },
+        {
+          "animalId": "chinese-pangolin",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "orange",
+      "text": "Name an animal that is mostly orange",
+      "answers": [
+        {
+          "animalId": "orangutan",
+          "level": 1
+        },
+        {
+          "animalId": "tiger",
+          "level": 2
+        },
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "ocellaris-clownfish",
+          "level": 2
+        },
+        {
+          "animalId": "monarch-butterfly",
+          "level": 2
+        },
+        {
+          "animalId": "red-panda",
+          "level": 2
+        },
+        {
+          "animalId": "red-squirrel",
+          "level": 2
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "golden-lion-tamarin",
+          "level": 3
+        },
+        {
+          "animalId": "painted-lady",
+          "level": 3
+        },
+        {
+          "animalId": "tapanuli-orangutan",
+          "level": 4
+        },
+        {
+          "animalId": "golden-snub-nosed-monkey",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "colourful-beak",
+      "text": "Name a bird with a colourful beak",
+      "answers": [
+        {
+          "animalId": "toucan",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "hornbill",
+          "level": 1
+        },
+        {
+          "animalId": "toco-toucan",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 2
+        },
+        {
+          "animalId": "keel-billed-toucan",
+          "level": 2
+        },
+        {
+          "animalId": "great-hornbill",
+          "level": 2
+        },
+        {
+          "animalId": "mute-swan",
+          "level": 2
+        },
+        {
+          "animalId": "horned-puffin",
+          "level": 3
+        },
+        {
+          "animalId": "tufted-puffin",
+          "level": 3
+        },
+        {
+          "animalId": "rhinoceros-hornbill",
+          "level": 3
+        },
+        {
+          "animalId": "mandarin-duck",
+          "level": 3
+        },
+        {
+          "animalId": "greater-flamingo",
+          "level": 3
+        },
+        {
+          "animalId": "black-swan",
+          "level": 3
+        },
+        {
+          "animalId": "red-billed-blue-magpie",
+          "level": 4
+        },
+        {
+          "animalId": "saddle-billed-stork",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "pouch",
+      "text": "Name an animal that carries its baby in a pouch",
+      "answers": [
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "koala",
+          "level": 2
+        },
+        {
+          "animalId": "red-kangaroo",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-grey-kangaroo",
+          "level": 2
+        },
+        {
+          "animalId": "common-wombat",
+          "level": 2
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 2
+        },
+        {
+          "animalId": "western-grey-kangaroo",
+          "level": 3
+        },
+        {
+          "animalId": "quokka",
+          "level": 3
+        },
+        {
+          "animalId": "sugar-glider",
+          "level": 3
+        },
+        {
+          "animalId": "thylacine",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "hooves",
+      "text": "Name an animal with hooves",
+      "answers": [
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "deer",
+          "level": 1
+        },
+        {
+          "animalId": "antelope",
+          "level": 1
+        },
+        {
+          "animalId": "rhinoceros",
+          "level": 1
+        },
+        {
+          "animalId": "camel",
+          "level": 1
+        },
+        {
+          "animalId": "tapir",
+          "level": 1
+        },
+        {
+          "animalId": "plains-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "giraffe",
+          "level": 2
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "red-deer",
+          "level": 2
+        },
+        {
+          "animalId": "moose",
+          "level": 2
+        },
+        {
+          "animalId": "reindeer",
+          "level": 2
+        },
+        {
+          "animalId": "white-tailed-deer",
+          "level": 2
+        },
+        {
+          "animalId": "american-bison",
+          "level": 2
+        },
+        {
+          "animalId": "impala",
+          "level": 2
+        },
+        {
+          "animalId": "wild-boar",
+          "level": 2
+        },
+        {
+          "animalId": "llama",
+          "level": 2
+        },
+        {
+          "animalId": "alpaca",
+          "level": 2
+        },
+        {
+          "animalId": "dromedary",
+          "level": 2
+        },
+        {
+          "animalId": "white-rhino",
+          "level": 2
+        },
+        {
+          "animalId": "black-rhino",
+          "level": 2
+        },
+        {
+          "animalId": "wild-yak",
+          "level": 2
+        },
+        {
+          "animalId": "common-warthog",
+          "level": 3
+        },
+        {
+          "animalId": "muskox",
+          "level": 3
+        },
+        {
+          "animalId": "greater-kudu",
+          "level": 3
+        },
+        {
+          "animalId": "gemsbok",
+          "level": 3
+        },
+        {
+          "animalId": "springbok",
+          "level": 3
+        },
+        {
+          "animalId": "pygmy-hippopotamus",
+          "level": 3
+        },
+        {
+          "animalId": "okapi",
+          "level": 3
+        },
+        {
+          "animalId": "pronghorn",
+          "level": 3
+        },
+        {
+          "animalId": "vicuna",
+          "level": 3
+        },
+        {
+          "animalId": "bactrian-camel",
+          "level": 3
+        },
+        {
+          "animalId": "fallow-deer",
+          "level": 3
+        },
+        {
+          "animalId": "roe-deer",
+          "level": 3
+        },
+        {
+          "animalId": "chital",
+          "level": 3
+        },
+        {
+          "animalId": "malayan-tapir",
+          "level": 3
+        },
+        {
+          "animalId": "sable-antelope",
+          "level": 3
+        },
+        {
+          "animalId": "mountain-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "bairds-tapir",
+          "level": 4
+        },
+        {
+          "animalId": "grevys-zebra",
+          "level": 4
+        },
+        {
+          "animalId": "sumatran-rhinoceros",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "flies-not-bird",
+      "text": "Name an animal that flies or glides but is not a bird",
+      "answers": [
+        {
+          "animalId": "bat",
+          "level": 1
+        },
+        {
+          "animalId": "butterfly",
+          "level": 1
+        },
+        {
+          "animalId": "bee",
+          "level": 1
+        },
+        {
+          "animalId": "beetle",
+          "level": 1
+        },
+        {
+          "animalId": "flying-fox",
+          "level": 1
+        },
+        {
+          "animalId": "common-vampire-bat",
+          "level": 2
+        },
+        {
+          "animalId": "monarch-butterfly",
+          "level": 2
+        },
+        {
+          "animalId": "sugar-glider",
+          "level": 2
+        },
+        {
+          "animalId": "western-honey-bee",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-dragonfly",
+          "level": 2
+        },
+        {
+          "animalId": "little-brown-bat",
+          "level": 2
+        },
+        {
+          "animalId": "grey-headed-flying-fox",
+          "level": 2
+        },
+        {
+          "animalId": "painted-lady",
+          "level": 2
+        },
+        {
+          "animalId": "mexican-free-tailed-bat",
+          "level": 3
+        },
+        {
+          "animalId": "indian-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "large-flying-fox",
+          "level": 3
+        },
+        {
+          "animalId": "atlas-moth",
+          "level": 3
+        },
+        {
+          "animalId": "luna-moth",
+          "level": 3
+        },
+        {
+          "animalId": "desert-locust",
+          "level": 3
+        },
+        {
+          "animalId": "buff-tailed-bumblebee",
+          "level": 3
+        },
+        {
+          "animalId": "seven-spot-ladybird",
+          "level": 3
+        },
+        {
+          "animalId": "hercules-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "european-stag-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "queen-alexandras-birdwing",
+          "level": 4
+        },
+        {
+          "animalId": "menelaus-blue-morpho",
+          "level": 4
+        },
+        {
+          "animalId": "siberian-flying-squirrel",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "fish-eating-bird",
+      "text": "Name a bird that eats fish",
+      "answers": [
+        {
+          "animalId": "pelican",
+          "level": 1
+        },
+        {
+          "animalId": "penguin",
+          "level": 1
+        },
+        {
+          "animalId": "kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "heron",
+          "level": 1
+        },
+        {
+          "animalId": "puffin",
+          "level": 1
+        },
+        {
+          "animalId": "gull",
+          "level": 1
+        },
+        {
+          "animalId": "albatross",
+          "level": 1
+        },
+        {
+          "animalId": "brown-pelican",
+          "level": 2
+        },
+        {
+          "animalId": "common-kingfisher",
+          "level": 2
+        },
+        {
+          "animalId": "grey-heron",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-puffin",
+          "level": 2
+        },
+        {
+          "animalId": "osprey",
+          "level": 2
+        },
+        {
+          "animalId": "bald-eagle",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "great-blue-heron",
+          "level": 2
+        },
+        {
+          "animalId": "african-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "king-penguin",
+          "level": 2
+        },
+        {
+          "animalId": "great-egret",
+          "level": 2
+        },
+        {
+          "animalId": "belted-kingfisher",
+          "level": 3
+        },
+        {
+          "animalId": "little-egret",
+          "level": 3
+        },
+        {
+          "animalId": "black-crowned-night-heron",
+          "level": 3
+        },
+        {
+          "animalId": "white-tailed-eagle",
+          "level": 3
+        },
+        {
+          "animalId": "stellers-sea-eagle",
+          "level": 3
+        },
+        {
+          "animalId": "blue-footed-booby",
+          "level": 3
+        },
+        {
+          "animalId": "arctic-tern",
+          "level": 3
+        },
+        {
+          "animalId": "magnificent-frigatebird",
+          "level": 3
+        },
+        {
+          "animalId": "shoebill",
+          "level": 3
+        },
+        {
+          "animalId": "australian-pelican",
+          "level": 3
+        },
+        {
+          "animalId": "great-white-pelican",
+          "level": 3
+        },
+        {
+          "animalId": "galapagos-penguin",
+          "level": 4
+        },
+        {
+          "animalId": "yellow-eyed-penguin",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}

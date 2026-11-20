@@ -335,6 +335,510 @@
           "level": 1
         }
       ]
+    },
+    {
+      "id": "freshwater",
+      "text": "Name an animal that lives in a river or lake",
+      "answers": [
+        {
+          "animalId": "frog",
+          "level": 1
+        },
+        {
+          "animalId": "otter",
+          "level": 1
+        },
+        {
+          "animalId": "duck",
+          "level": 1
+        },
+        {
+          "animalId": "crocodile",
+          "level": 1
+        },
+        {
+          "animalId": "swan",
+          "level": 1
+        },
+        {
+          "animalId": "heron",
+          "level": 1
+        },
+        {
+          "animalId": "salamander",
+          "level": 1
+        },
+        {
+          "animalId": "kingfisher",
+          "level": 1
+        },
+        {
+          "animalId": "manatee",
+          "level": 1
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "north-american-beaver",
+          "level": 2
+        },
+        {
+          "animalId": "american-alligator",
+          "level": 2
+        },
+        {
+          "animalId": "mallard",
+          "level": 2
+        },
+        {
+          "animalId": "common-frog",
+          "level": 2
+        },
+        {
+          "animalId": "eurasian-otter",
+          "level": 2
+        },
+        {
+          "animalId": "grey-heron",
+          "level": 2
+        },
+        {
+          "animalId": "mute-swan",
+          "level": 2
+        },
+        {
+          "animalId": "atlantic-salmon",
+          "level": 2
+        },
+        {
+          "animalId": "goldfish",
+          "level": 2
+        },
+        {
+          "animalId": "red-bellied-piranha",
+          "level": 2
+        },
+        {
+          "animalId": "capybara",
+          "level": 2
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "common-kingfisher",
+          "level": 2
+        },
+        {
+          "animalId": "nile-crocodile",
+          "level": 2
+        },
+        {
+          "animalId": "american-bullfrog",
+          "level": 2
+        },
+        {
+          "animalId": "giant-salamander",
+          "level": 2
+        },
+        {
+          "animalId": "giant-otter",
+          "level": 3
+        },
+        {
+          "animalId": "electric-eel",
+          "level": 3
+        },
+        {
+          "animalId": "gharial",
+          "level": 3
+        },
+        {
+          "animalId": "amazon-river-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "great-crested-newt",
+          "level": 3
+        },
+        {
+          "animalId": "spectacled-caiman",
+          "level": 3
+        },
+        {
+          "animalId": "hellbender",
+          "level": 3
+        },
+        {
+          "animalId": "mugger-crocodile",
+          "level": 3
+        },
+        {
+          "animalId": "axolotl",
+          "level": 3
+        },
+        {
+          "animalId": "amazonian-manatee",
+          "level": 4
+        },
+        {
+          "animalId": "olm",
+          "level": 4
+        },
+        {
+          "animalId": "japanese-giant-salamander",
+          "level": 4
+        },
+        {
+          "animalId": "african-clawed-frog",
+          "level": 4
+        },
+        {
+          "animalId": "chinese-giant-salamander",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "insect",
+      "text": "Name an insect",
+      "answers": [
+        {
+          "animalId": "butterfly",
+          "level": 1
+        },
+        {
+          "animalId": "bee",
+          "level": 1
+        },
+        {
+          "animalId": "beetle",
+          "level": 1
+        },
+        {
+          "animalId": "ant",
+          "level": 1
+        },
+        {
+          "animalId": "monarch-butterfly",
+          "level": 2
+        },
+        {
+          "animalId": "western-honey-bee",
+          "level": 2
+        },
+        {
+          "animalId": "seven-spot-ladybird",
+          "level": 2
+        },
+        {
+          "animalId": "european-mantis",
+          "level": 2
+        },
+        {
+          "animalId": "painted-lady",
+          "level": 2
+        },
+        {
+          "animalId": "buff-tailed-bumblebee",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-dragonfly",
+          "level": 2
+        },
+        {
+          "animalId": "desert-locust",
+          "level": 2
+        },
+        {
+          "animalId": "european-stag-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "atlas-moth",
+          "level": 3
+        },
+        {
+          "animalId": "luna-moth",
+          "level": 3
+        },
+        {
+          "animalId": "red-wood-ant",
+          "level": 3
+        },
+        {
+          "animalId": "hercules-beetle",
+          "level": 3
+        },
+        {
+          "animalId": "menelaus-blue-morpho",
+          "level": 3
+        },
+        {
+          "animalId": "bullet-ant",
+          "level": 4
+        },
+        {
+          "animalId": "sacred-scarab",
+          "level": 4
+        },
+        {
+          "animalId": "queen-alexandras-birdwing",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "shell",
+      "text": "Name an animal with a shell",
+      "answers": [
+        {
+          "animalId": "tortoise",
+          "level": 1
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "crab",
+          "level": 1
+        },
+        {
+          "animalId": "galapagos-tortoise",
+          "level": 2
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "loggerhead-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "american-lobster",
+          "level": 2
+        },
+        {
+          "animalId": "blue-crab",
+          "level": 2
+        },
+        {
+          "animalId": "nine-banded-armadillo",
+          "level": 2
+        },
+        {
+          "animalId": "red-king-crab",
+          "level": 2
+        },
+        {
+          "animalId": "aldabra-giant-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "hermanns-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "african-spurred-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "gopher-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "coconut-crab",
+          "level": 3
+        },
+        {
+          "animalId": "japanese-spider-crab",
+          "level": 3
+        },
+        {
+          "animalId": "olive-ridley-sea-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "peacock-mantis-shrimp",
+          "level": 3
+        },
+        {
+          "animalId": "kemps-ridley-sea-turtle",
+          "level": 4
+        },
+        {
+          "animalId": "chambered-nautilus",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "eats-grass",
+      "text": "Name an animal that eats grass",
+      "answers": [
+        {
+          "animalId": "zebra",
+          "level": 1
+        },
+        {
+          "animalId": "deer",
+          "level": 1
+        },
+        {
+          "animalId": "antelope",
+          "level": 1
+        },
+        {
+          "animalId": "rabbit",
+          "level": 1
+        },
+        {
+          "animalId": "kangaroo",
+          "level": 1
+        },
+        {
+          "animalId": "goose",
+          "level": 1
+        },
+        {
+          "animalId": "plains-zebra",
+          "level": 2
+        },
+        {
+          "animalId": "red-deer",
+          "level": 2
+        },
+        {
+          "animalId": "american-bison",
+          "level": 2
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "white-rhino",
+          "level": 2
+        },
+        {
+          "animalId": "impala",
+          "level": 2
+        },
+        {
+          "animalId": "blue-wildebeest",
+          "level": 2
+        },
+        {
+          "animalId": "wild-yak",
+          "level": 2
+        },
+        {
+          "animalId": "european-rabbit",
+          "level": 2
+        },
+        {
+          "animalId": "red-kangaroo",
+          "level": 2
+        },
+        {
+          "animalId": "capybara",
+          "level": 2
+        },
+        {
+          "animalId": "llama",
+          "level": 2
+        },
+        {
+          "animalId": "alpaca",
+          "level": 2
+        },
+        {
+          "animalId": "muskox",
+          "level": 2
+        },
+        {
+          "animalId": "canada-goose",
+          "level": 2
+        },
+        {
+          "animalId": "guinea-pig",
+          "level": 2
+        },
+        {
+          "animalId": "springbok",
+          "level": 3
+        },
+        {
+          "animalId": "gemsbok",
+          "level": 3
+        },
+        {
+          "animalId": "grevys-zebra",
+          "level": 3
+        },
+        {
+          "animalId": "vicuna",
+          "level": 3
+        },
+        {
+          "animalId": "common-warthog",
+          "level": 3
+        },
+        {
+          "animalId": "sable-antelope",
+          "level": 3
+        },
+        {
+          "animalId": "pronghorn",
+          "level": 3
+        },
+        {
+          "animalId": "common-wombat",
+          "level": 3
+        },
+        {
+          "animalId": "quokka",
+          "level": 3
+        },
+        {
+          "animalId": "dugong",
+          "level": 3
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "giant-panda",
+          "level": 3
+        },
+        {
+          "animalId": "saiga-antelope",
+          "level": 4
+        },
+        {
+          "animalId": "nene",
+          "level": 4
+        },
+        {
+          "animalId": "addax",
+          "level": 5
+        }
+      ]
     }
   ]
 }

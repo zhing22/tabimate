@@ -143,6 +143,242 @@
           "level": 1
         }
       ]
+    },
+    {
+      "id": "venomous",
+      "text": "Name a venomous animal",
+      "answers": [
+        {
+          "animalId": "snake",
+          "level": 1
+        },
+        {
+          "animalId": "scorpion",
+          "level": 1
+        },
+        {
+          "animalId": "jellyfish",
+          "level": 1
+        },
+        {
+          "animalId": "spider",
+          "level": 1
+        },
+        {
+          "animalId": "bee",
+          "level": 1
+        },
+        {
+          "animalId": "king-cobra",
+          "level": 2
+        },
+        {
+          "animalId": "black-mamba",
+          "level": 2
+        },
+        {
+          "animalId": "inland-taipan",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-diamondback-rattlesnake",
+          "level": 2
+        },
+        {
+          "animalId": "box-jellyfish",
+          "level": 2
+        },
+        {
+          "animalId": "southern-black-widow",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-scorpion",
+          "level": 2
+        },
+        {
+          "animalId": "western-honey-bee",
+          "level": 2
+        },
+        {
+          "animalId": "gila-monster",
+          "level": 2
+        },
+        {
+          "animalId": "red-lionfish",
+          "level": 2
+        },
+        {
+          "animalId": "portuguese-man-o-war",
+          "level": 2
+        },
+        {
+          "animalId": "lions-mane-jellyfish",
+          "level": 3
+        },
+        {
+          "animalId": "goliath-birdeater",
+          "level": 3
+        },
+        {
+          "animalId": "deathstalker",
+          "level": 3
+        },
+        {
+          "animalId": "platypus",
+          "level": 3
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 3
+        },
+        {
+          "animalId": "bullet-ant",
+          "level": 3
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "common-stingray",
+          "level": 3
+        },
+        {
+          "animalId": "peacock-spider",
+          "level": 4
+        },
+        {
+          "animalId": "sunda-slow-loris",
+          "level": 5
+        },
+        {
+          "animalId": "crown-of-thorns-starfish",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "extinct",
+      "text": "Name an animal that is extinct",
+      "answers": [
+        {
+          "animalId": "dodo",
+          "level": 2
+        },
+        {
+          "animalId": "woolly-mammoth",
+          "level": 2
+        },
+        {
+          "animalId": "thylacine",
+          "level": 3
+        },
+        {
+          "animalId": "passenger-pigeon",
+          "level": 3
+        },
+        {
+          "animalId": "great-auk",
+          "level": 5
+        },
+        {
+          "animalId": "stellers-sea-cow",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "changes-colour",
+      "text": "Name an animal that can change colour",
+      "answers": [
+        {
+          "animalId": "octopus",
+          "level": 1
+        },
+        {
+          "animalId": "veiled-chameleon",
+          "level": 2
+        },
+        {
+          "animalId": "panther-chameleon",
+          "level": 2
+        },
+        {
+          "animalId": "common-octopus",
+          "level": 2
+        },
+        {
+          "animalId": "arctic-fox",
+          "level": 2
+        },
+        {
+          "animalId": "snowshoe-hare",
+          "level": 2
+        },
+        {
+          "animalId": "arctic-hare",
+          "level": 3
+        },
+        {
+          "animalId": "giant-pacific-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "giant-squid",
+          "level": 3
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "mimic-octopus",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "deep-sea",
+      "text": "Name an animal that lives deep in the ocean",
+      "answers": [
+        {
+          "animalId": "giant-squid",
+          "level": 2
+        },
+        {
+          "animalId": "sperm-whale",
+          "level": 2
+        },
+        {
+          "animalId": "blobfish",
+          "level": 2
+        },
+        {
+          "animalId": "humpback-anglerfish",
+          "level": 2
+        },
+        {
+          "animalId": "japanese-spider-crab",
+          "level": 3
+        },
+        {
+          "animalId": "chambered-nautilus",
+          "level": 3
+        },
+        {
+          "animalId": "greenland-shark",
+          "level": 4
+        },
+        {
+          "animalId": "southern-elephant-seal",
+          "level": 4
+        },
+        {
+          "animalId": "west-indian-ocean-coelacanth",
+          "level": 5
+        }
+      ]
     }
   ]
 }

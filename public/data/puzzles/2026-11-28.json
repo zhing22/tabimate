@@ -1,0 +1,512 @@
+{
+  "date": "2026-11-28",
+  "number": 23,
+  "prompts": [
+    {
+      "id": "antlers",
+      "text": "Name an animal with antlers",
+      "answers": [
+        {
+          "animalId": "deer",
+          "level": 1
+        },
+        {
+          "animalId": "red-deer",
+          "level": 2
+        },
+        {
+          "animalId": "moose",
+          "level": 2
+        },
+        {
+          "animalId": "reindeer",
+          "level": 2
+        },
+        {
+          "animalId": "white-tailed-deer",
+          "level": 2
+        },
+        {
+          "animalId": "roe-deer",
+          "level": 3
+        },
+        {
+          "animalId": "fallow-deer",
+          "level": 3
+        },
+        {
+          "animalId": "chital",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "green",
+      "text": "Name an animal that is mostly green",
+      "answers": [
+        {
+          "animalId": "green-iguana",
+          "level": 2
+        },
+        {
+          "animalId": "red-eyed-tree-frog",
+          "level": 2
+        },
+        {
+          "animalId": "veiled-chameleon",
+          "level": 2
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "green-anaconda",
+          "level": 2
+        },
+        {
+          "animalId": "european-mantis",
+          "level": 2
+        },
+        {
+          "animalId": "budgerigar",
+          "level": 2
+        },
+        {
+          "animalId": "kea",
+          "level": 3
+        },
+        {
+          "animalId": "luna-moth",
+          "level": 3
+        },
+        {
+          "animalId": "european-green-woodpecker",
+          "level": 3
+        },
+        {
+          "animalId": "green-peafowl",
+          "level": 3
+        },
+        {
+          "animalId": "leafy-seadragon",
+          "level": 3
+        },
+        {
+          "animalId": "resplendent-quetzal",
+          "level": 4
+        },
+        {
+          "animalId": "kakapo",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "scavenger",
+      "text": "Name a scavenger",
+      "answers": [
+        {
+          "animalId": "vulture",
+          "level": 1
+        },
+        {
+          "animalId": "condor",
+          "level": 1
+        },
+        {
+          "animalId": "spotted-hyena",
+          "level": 2
+        },
+        {
+          "animalId": "turkey-vulture",
+          "level": 2
+        },
+        {
+          "animalId": "griffon-vulture",
+          "level": 2
+        },
+        {
+          "animalId": "andean-condor",
+          "level": 2
+        },
+        {
+          "animalId": "common-raven",
+          "level": 2
+        },
+        {
+          "animalId": "tasmanian-devil",
+          "level": 2
+        },
+        {
+          "animalId": "bald-eagle",
+          "level": 3
+        },
+        {
+          "animalId": "marabou-stork",
+          "level": 3
+        },
+        {
+          "animalId": "bearded-vulture",
+          "level": 3
+        },
+        {
+          "animalId": "wolverine",
+          "level": 3
+        },
+        {
+          "animalId": "coconut-crab",
+          "level": 4
+        },
+        {
+          "animalId": "greenland-shark",
+          "level": 4
+        },
+        {
+          "animalId": "california-condor",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "ape",
+      "text": "Name an ape",
+      "answers": [
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "orangutan",
+          "level": 1
+        },
+        {
+          "animalId": "gibbon",
+          "level": 1
+        },
+        {
+          "animalId": "chimpanzee",
+          "level": 2
+        },
+        {
+          "animalId": "western-gorilla",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "level": 2
+        },
+        {
+          "animalId": "bonobo",
+          "level": 2
+        },
+        {
+          "animalId": "lar-gibbon",
+          "level": 3
+        },
+        {
+          "animalId": "siamang",
+          "level": 3
+        },
+        {
+          "animalId": "sumatran-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "bornean-orangutan",
+          "level": 3
+        },
+        {
+          "animalId": "tapanuli-orangutan",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "bushy-tail",
+      "text": "Name an animal with a bushy tail",
+      "answers": [
+        {
+          "animalId": "fox",
+          "level": 1
+        },
+        {
+          "animalId": "squirrel",
+          "level": 1
+        },
+        {
+          "animalId": "wolf",
+          "level": 1
+        },
+        {
+          "animalId": "red-fox",
+          "level": 2
+        },
+        {
+          "animalId": "red-squirrel",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-gray-squirrel",
+          "level": 2
+        },
+        {
+          "animalId": "arctic-fox",
+          "level": 2
+        },
+        {
+          "animalId": "raccoon",
+          "level": 2
+        },
+        {
+          "animalId": "red-panda",
+          "level": 2
+        },
+        {
+          "animalId": "grey-wolf",
+          "level": 2
+        },
+        {
+          "animalId": "fennec-fox",
+          "level": 3
+        },
+        {
+          "animalId": "gray-fox",
+          "level": 3
+        },
+        {
+          "animalId": "kit-fox",
+          "level": 3
+        },
+        {
+          "animalId": "long-tailed-chinchilla",
+          "level": 3
+        },
+        {
+          "animalId": "giant-anteater",
+          "level": 3
+        },
+        {
+          "animalId": "ruffed-lemur",
+          "level": 3
+        },
+        {
+          "animalId": "numbat",
+          "level": 4
+        },
+        {
+          "animalId": "aye-aye",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "long-legged-bird",
+      "text": "Name a bird with long legs",
+      "answers": [
+        {
+          "animalId": "flamingo",
+          "level": 1
+        },
+        {
+          "animalId": "crane",
+          "level": 1
+        },
+        {
+          "animalId": "stork",
+          "level": 1
+        },
+        {
+          "animalId": "heron",
+          "level": 1
+        },
+        {
+          "animalId": "ostrich",
+          "level": 1
+        },
+        {
+          "animalId": "greater-flamingo",
+          "level": 2
+        },
+        {
+          "animalId": "grey-heron",
+          "level": 2
+        },
+        {
+          "animalId": "white-stork",
+          "level": 2
+        },
+        {
+          "animalId": "common-ostrich",
+          "level": 2
+        },
+        {
+          "animalId": "emu",
+          "level": 2
+        },
+        {
+          "animalId": "great-blue-heron",
+          "level": 2
+        },
+        {
+          "animalId": "great-egret",
+          "level": 2
+        },
+        {
+          "animalId": "secretarybird",
+          "level": 3
+        },
+        {
+          "animalId": "marabou-stork",
+          "level": 3
+        },
+        {
+          "animalId": "red-crowned-crane",
+          "level": 3
+        },
+        {
+          "animalId": "whooping-crane",
+          "level": 3
+        },
+        {
+          "animalId": "sarus-crane",
+          "level": 3
+        },
+        {
+          "animalId": "grey-crowned-crane",
+          "level": 3
+        },
+        {
+          "animalId": "common-crane",
+          "level": 3
+        },
+        {
+          "animalId": "shoebill",
+          "level": 3
+        },
+        {
+          "animalId": "greater-rhea",
+          "level": 3
+        },
+        {
+          "animalId": "southern-cassowary",
+          "level": 3
+        },
+        {
+          "animalId": "little-egret",
+          "level": 3
+        },
+        {
+          "animalId": "black-stork",
+          "level": 3
+        },
+        {
+          "animalId": "saddle-billed-stork",
+          "level": 3
+        },
+        {
+          "animalId": "american-flamingo",
+          "level": 3
+        },
+        {
+          "animalId": "lesser-flamingo",
+          "level": 3
+        },
+        {
+          "animalId": "chilean-flamingo",
+          "level": 4
+        },
+        {
+          "animalId": "somali-ostrich",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "snake-or-lizard",
+      "text": "Name a snake or a lizard",
+      "answers": [
+        {
+          "animalId": "snake",
+          "level": 1
+        },
+        {
+          "animalId": "lizard",
+          "level": 1
+        },
+        {
+          "animalId": "king-cobra",
+          "level": 2
+        },
+        {
+          "animalId": "green-anaconda",
+          "level": 2
+        },
+        {
+          "animalId": "reticulated-python",
+          "level": 2
+        },
+        {
+          "animalId": "boa-constrictor",
+          "level": 2
+        },
+        {
+          "animalId": "black-mamba",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-diamondback-rattlesnake",
+          "level": 2
+        },
+        {
+          "animalId": "komodo-dragon",
+          "level": 2
+        },
+        {
+          "animalId": "green-iguana",
+          "level": 2
+        },
+        {
+          "animalId": "leopard-gecko",
+          "level": 2
+        },
+        {
+          "animalId": "grass-snake",
+          "level": 3
+        },
+        {
+          "animalId": "inland-taipan",
+          "level": 3
+        },
+        {
+          "animalId": "veiled-chameleon",
+          "level": 3
+        },
+        {
+          "animalId": "panther-chameleon",
+          "level": 3
+        },
+        {
+          "animalId": "tokay-gecko",
+          "level": 3
+        },
+        {
+          "animalId": "gila-monster",
+          "level": 3
+        },
+        {
+          "animalId": "frilled-lizard",
+          "level": 3
+        },
+        {
+          "animalId": "marine-iguana",
+          "level": 3
+        },
+        {
+          "animalId": "thorny-devil",
+          "level": 5
+        }
+      ]
+    }
+  ]
+}

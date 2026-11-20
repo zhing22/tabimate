@@ -207,6 +207,382 @@
           "level": 1
         }
       ]
+    },
+    {
+      "id": "egg-laying-mammal",
+      "text": "Name a mammal that lays eggs",
+      "answers": [
+        {
+          "animalId": "echidna",
+          "level": 1
+        },
+        {
+          "animalId": "platypus",
+          "level": 2
+        },
+        {
+          "animalId": "short-beaked-echidna",
+          "level": 3
+        },
+        {
+          "animalId": "western-long-beaked-echidna",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "plant-eating-giant",
+      "text": "Name a giant that eats only plants",
+      "answers": [
+        {
+          "animalId": "elephant",
+          "level": 1
+        },
+        {
+          "animalId": "rhinoceros",
+          "level": 1
+        },
+        {
+          "animalId": "gorilla",
+          "level": 1
+        },
+        {
+          "animalId": "camel",
+          "level": 1
+        },
+        {
+          "animalId": "manatee",
+          "level": 1
+        },
+        {
+          "animalId": "sea-cow",
+          "level": 1
+        },
+        {
+          "animalId": "african-elephant",
+          "level": 2
+        },
+        {
+          "animalId": "asian-elephant",
+          "level": 2
+        },
+        {
+          "animalId": "hippo",
+          "level": 2
+        },
+        {
+          "animalId": "giraffe",
+          "level": 2
+        },
+        {
+          "animalId": "white-rhino",
+          "level": 2
+        },
+        {
+          "animalId": "black-rhino",
+          "level": 2
+        },
+        {
+          "animalId": "american-bison",
+          "level": 2
+        },
+        {
+          "animalId": "moose",
+          "level": 2
+        },
+        {
+          "animalId": "wild-yak",
+          "level": 2
+        },
+        {
+          "animalId": "western-gorilla",
+          "level": 2
+        },
+        {
+          "animalId": "eastern-gorilla",
+          "level": 2
+        },
+        {
+          "animalId": "dromedary",
+          "level": 2
+        },
+        {
+          "animalId": "bactrian-camel",
+          "level": 2
+        },
+        {
+          "animalId": "dugong",
+          "level": 2
+        },
+        {
+          "animalId": "indian-rhinoceros",
+          "level": 3
+        },
+        {
+          "animalId": "african-forest-elephant",
+          "level": 3
+        },
+        {
+          "animalId": "muskox",
+          "level": 3
+        },
+        {
+          "animalId": "okapi",
+          "level": 3
+        },
+        {
+          "animalId": "giant-panda",
+          "level": 3
+        },
+        {
+          "animalId": "galapagos-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "aldabra-giant-tortoise",
+          "level": 3
+        },
+        {
+          "animalId": "west-indian-manatee",
+          "level": 3
+        },
+        {
+          "animalId": "sumatran-rhinoceros",
+          "level": 4
+        },
+        {
+          "animalId": "west-african-manatee",
+          "level": 4
+        },
+        {
+          "animalId": "javan-rhinoceros",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "breathes-air-at-sea",
+      "text": "Name a sea animal that has to come up for air",
+      "answers": [
+        {
+          "animalId": "whale",
+          "level": 1
+        },
+        {
+          "animalId": "dolphin",
+          "level": 1
+        },
+        {
+          "animalId": "seal",
+          "level": 1
+        },
+        {
+          "animalId": "sea-turtle",
+          "level": 1
+        },
+        {
+          "animalId": "sea-cow",
+          "level": 1
+        },
+        {
+          "animalId": "blue-whale",
+          "level": 2
+        },
+        {
+          "animalId": "humpback-whale",
+          "level": 2
+        },
+        {
+          "animalId": "bottlenose-dolphin",
+          "level": 2
+        },
+        {
+          "animalId": "killer-whale",
+          "level": 2
+        },
+        {
+          "animalId": "sperm-whale",
+          "level": 2
+        },
+        {
+          "animalId": "walrus",
+          "level": 2
+        },
+        {
+          "animalId": "california-sea-lion",
+          "level": 2
+        },
+        {
+          "animalId": "harbour-seal",
+          "level": 2
+        },
+        {
+          "animalId": "green-sea-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "leatherback-turtle",
+          "level": 2
+        },
+        {
+          "animalId": "beluga-whale",
+          "level": 2
+        },
+        {
+          "animalId": "narwhal",
+          "level": 2
+        },
+        {
+          "animalId": "dugong",
+          "level": 2
+        },
+        {
+          "animalId": "sea-otter",
+          "level": 2
+        },
+        {
+          "animalId": "grey-seal",
+          "level": 2
+        },
+        {
+          "animalId": "fin-whale",
+          "level": 3
+        },
+        {
+          "animalId": "bowhead-whale",
+          "level": 3
+        },
+        {
+          "animalId": "gray-whale",
+          "level": 3
+        },
+        {
+          "animalId": "common-minke-whale",
+          "level": 3
+        },
+        {
+          "animalId": "leopard-seal",
+          "level": 3
+        },
+        {
+          "animalId": "weddell-seal",
+          "level": 3
+        },
+        {
+          "animalId": "harp-seal",
+          "level": 3
+        },
+        {
+          "animalId": "southern-elephant-seal",
+          "level": 3
+        },
+        {
+          "animalId": "hawksbill-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "loggerhead-sea-turtle",
+          "level": 3
+        },
+        {
+          "animalId": "rissos-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "spinner-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "short-beaked-common-dolphin",
+          "level": 3
+        },
+        {
+          "animalId": "north-atlantic-right-whale",
+          "level": 4
+        },
+        {
+          "animalId": "hectors-dolphin",
+          "level": 4
+        },
+        {
+          "animalId": "hawaiian-monk-seal",
+          "level": 4
+        },
+        {
+          "animalId": "olive-ridley-sea-turtle",
+          "level": 4
+        },
+        {
+          "animalId": "kemps-ridley-sea-turtle",
+          "level": 4
+        },
+        {
+          "animalId": "marine-iguana",
+          "level": 4
+        },
+        {
+          "animalId": "vaquita",
+          "level": 5
+        }
+      ]
+    },
+    {
+      "id": "eight-legs",
+      "text": "Name an animal with eight legs",
+      "answers": [
+        {
+          "animalId": "spider",
+          "level": 1
+        },
+        {
+          "animalId": "scorpion",
+          "level": 1
+        },
+        {
+          "animalId": "octopus",
+          "level": 1
+        },
+        {
+          "animalId": "goliath-birdeater",
+          "level": 2
+        },
+        {
+          "animalId": "southern-black-widow",
+          "level": 2
+        },
+        {
+          "animalId": "european-garden-spider",
+          "level": 2
+        },
+        {
+          "animalId": "emperor-scorpion",
+          "level": 2
+        },
+        {
+          "animalId": "common-octopus",
+          "level": 2
+        },
+        {
+          "animalId": "deathstalker",
+          "level": 3
+        },
+        {
+          "animalId": "giant-pacific-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "mimic-octopus",
+          "level": 3
+        },
+        {
+          "animalId": "greater-blue-ringed-octopus",
+          "level": 4
+        },
+        {
+          "animalId": "peacock-spider",
+          "level": 5
+        }
+      ]
     }
   ]
 }
