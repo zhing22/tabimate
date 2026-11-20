@@ -1,26 +1,22 @@
 import type { ImageSource, KAPLAYCtx, SpriteAnims } from 'kaplay';
-import { TEMPLATE_KEYS, type AnimalArt, type Palette } from '@/config/render';
+import { TEMPLATE_KEYS, type AnimalArt } from '@/config/render';
 import { representativeFor } from '@/core/hierarchy';
 import type { PortraitImage } from '@/core/portrait';
-import type { Animal, AnimalId } from '@/core/types';
-import { makeCanvas, portraitFrom } from './canvasArt';
-import { blinkPalette, resolvePalette } from './paletteUtils';
+import type { Animal } from '@/core/types';
+import { blinkPalette, plainPalette, resolvePalette } from './paletteUtils';
 import { recolor, type Pixels } from './recolor';
-import { parseAsepriteSheet, type SheetInfo } from './sheet';
+import type { SheetInfo } from './sheet';
+import {
+  movementTags,
+  portraitOfSheet,
+  toCanvas,
+  warnMissing,
+  type LoadedSheet,
+  type PixelArt,
+} from './sheetImages';
 import type { SpriteProvider, SpriteRef } from './spriteProvider';
 
-/** What the provider needs about colours and sheets (see data/spriteArtSource). */
-export interface PixelArt {
-  readonly palettes: ReadonlyMap<string, Palette>;
-  readonly animals: ReadonlyMap<AnimalId, AnimalArt>;
-  readonly sheets: readonly string[];
-}
-
-/** A sheet's image and frame data, loaded once per archetype. */
-export interface LoadedSheet {
-  readonly info: SheetInfo;
-  readonly pixels: Pixels;
-}
+export { readSheet, type LoadedSheet, type PixelArt } from './sheetImages';
 
 export interface PixelSpriteOptions {
   /** Colours and the list of sheets; loaded inside load(), so start-up isn't held up. */
@@ -32,44 +28,6 @@ export interface PixelSpriteOptions {
   readonly toImage?: (pixels: Pixels) => ImageSource;
   /** Turns a recoloured sheet's first frame into a UI still. Tests swap it out. */
   readonly toPortrait?: (pixels: Pixels, sheet: SheetInfo) => PortraitImage;
-}
-
-/**
- * Reads a downloaded sheet (see data/spriteArtSource loadSheetFiles): its
- * pixels, and its frames, which must lie inside the image.
- */
-export function readSheet(files: { json: unknown; image: HTMLImageElement }): LoadedSheet {
-  const { width, height } = files.image;
-  const { ctx } = makeCanvas(width, height);
-  ctx.drawImage(files.image, 0, 0);
-  return {
-    info: parseAsepriteSheet(files.json, { width, height }),
-    pixels: ctx.getImageData(0, 0, width, height),
-  };
-}
-
-function toCanvas({ width, height, data }: Pixels): HTMLCanvasElement {
-  const { canvas, ctx } = makeCanvas(width, height);
-  ctx.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
-  return canvas;
-}
-
-/**
- * A UI still from a recoloured sheet: its first frame, plus its walk cycle
- * laid out in one row so the page can play it in place.
- */
-function portraitOfSheet(pixels: Pixels, sheet: SheetInfo): PortraitImage {
-  const canvas = toCanvas(pixels);
-  const still = portraitFrom(canvas, sheet.frames[0]!, false);
-  const walk = sheet.tags.walk;
-  if (!walk) return still;
-  const frames = walk.to - walk.from + 1;
-  const { canvas: strip, ctx } = makeCanvas(sheet.frameWidth * frames, sheet.frameHeight);
-  for (let i = 0; i < frames; i++) {
-    const f = sheet.frames[walk.from + i]!;
-    ctx.drawImage(canvas, f.x, f.y, f.w, f.h, i * sheet.frameWidth, 0, f.w, f.h);
-  }
-  return { ...still, walk: { src: strip.toDataURL('image/png'), frames, fps: walk.fps } };
 }
 
 /**
@@ -109,11 +67,14 @@ export function createPixelSpriteProvider(
     art: AnimalArt,
     palettes: PixelArt['palettes'],
     sheet: LoadedSheet,
+    /** A group drawn as its representative: plainer colours (its shiny stays as designed). */
+    plain: boolean,
   ) {
     const pair: SpriteRef[] = [];
     for (const shiny of [false, true]) {
-      const palette = resolvePalette(art, shiny, palettes);
-      if (!palette) return; // validation makes this rare; the emoji stands in
+      const resolved = resolvePalette(art, shiny, palettes);
+      if (!resolved) return; // validation makes this rare; the emoji stands in
+      const palette = plain && !shiny ? plainPalette(art.palette, resolved, palettes) : resolved;
       const name = `pixel/${animal.id}${shiny ? '/shiny' : ''}`;
       const open = recolor(sheet.pixels, TEMPLATE_KEYS, palette);
       stills.set(name, { pixels: open.pixels, sheet: sheet.info });
@@ -130,7 +91,7 @@ export function createPixelSpriteProvider(
         name,
         blinkName: `${name}/blink`,
         facesLeft: false,
-        ...(sheet.info.tags.walk ? { walk: sheet.info.tags.walk } : {}),
+        ...movementTags(sheet.info),
       });
     }
     refs.set(animal, [pair[0]!, pair[1]!]);
@@ -147,19 +108,15 @@ export function createPixelSpriteProvider(
         console.warn('Sprite colours could not be loaded; drawing emoji instead.', error);
         return;
       }
+      // Each sheet loaded once, however many animals use it.
       const sheets = new Map<string, Promise<LoadedSheet | null>>();
-      const sheetFor = (archetype: string) => {
-        if (!sheets.has(archetype)) {
-          sheets.set(
-            archetype,
-            options.loadSheet(archetype).catch((error: unknown) => {
-              console.warn(`Sprite sheet "${archetype}" could not be loaded; using emoji.`, error);
-              return null;
-            }),
-          );
-        }
-        return sheets.get(archetype)!;
-      };
+      const loadOnce = (archetype: string) =>
+        options.loadSheet(archetype).catch((error: unknown) => {
+          console.warn(`Sprite sheet "${archetype}" could not be loaded; using emoji.`, error);
+          return null;
+        });
+      const sheetFor = (archetype: string) =>
+        sheets.get(archetype) ?? sheets.set(archetype, loadOnce(archetype)).get(archetype)!;
       // A group ("penguin") has no art of its own: it is drawn as its representative.
       const lookup = new Map(list.map((a) => [a.id, a]));
       await Promise.all(
@@ -168,9 +125,11 @@ export function createPixelSpriteProvider(
           const colours = art.animals.get(source.id);
           if (!colours || !art.sheets.includes(source.archetype)) return;
           const sheet = await sheetFor(source.archetype);
-          if (sheet) await build(animal, colours, art.palettes, sheet);
+          if (sheet) await build(animal, colours, art.palettes, sheet, source !== animal);
         }),
       );
+      const missing = list.filter((animal) => !refs.has(animal));
+      if (import.meta.env.DEV) warnMissing(missing, lookup);
     },
     spriteFor: (animal, shiny) =>
       refs.get(animal)?.[shiny ? 1 : 0] ?? options.fallback.spriteFor(animal, shiny),

@@ -31,7 +31,7 @@ export interface RendererDeps {
  */
 export function createRenderer(k: KAPLAYCtx, world: World, deps: RendererDeps) {
   const drawScenery = createSceneryRenderer(kaplaySceneryBackend(k), deps);
-  const drawParty = createPartyRenderer(k, world, deps.sprites);
+  const drawParty = createPartyRenderer(k, world, deps.sprites, deps.reducedMotion);
   const drawTitleCard = createTitleCardRenderer(k);
   const printPos = k.vec2(0, 0);
   const print: DrawRectOpt = {

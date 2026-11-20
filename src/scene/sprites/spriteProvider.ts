@@ -9,6 +9,10 @@ export interface SpriteRef {
   readonly facesLeft: boolean;
   /** Frames to play while walking; without it the sprite is one still frame. */
   readonly walk?: FrameTag;
+  /** Wing beats for a sky animal (the sheet's 'flap' tag); it hovers on walk frames without. */
+  readonly flap?: FrameTag;
+  /** Swimming frames for a water animal (the sheet's 'swim' tag). */
+  readonly swim?: FrameTag;
   /** The same frames with the eyes closed, shown briefly when the idle motion blinks. */
   readonly blinkName?: string;
 }

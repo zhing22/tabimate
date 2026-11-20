@@ -1,5 +1,4 @@
 import { GROUND_Y } from '@/config/render';
-import type { Movement } from '@/core/types';
 
 /** A position the scene writes into, so the frame loop allocates nothing. */
 export interface Point {
@@ -73,20 +72,3 @@ export function createTrail(capacity: number): Trail {
   trail.reset(0, GROUND_Y);
   return trail;
 }
-
-/**
- * How each kind of animal follows its spot on the path. Land animals walk on
- * it; sky (hover) and water (bob) come later. Unknown kinds walk.
- */
-export type MovementFn = (onPath: Point, timeS: number, phase: number, out: Point) => Point;
-
-const land: MovementFn = (onPath, _t, _phase, out) => {
-  out.x = onPath.x;
-  out.y = onPath.y;
-  return out;
-};
-
-export const MOVEMENT_STRATEGIES: Partial<Record<Movement, MovementFn>> = { land };
-
-export const movementFor = (movement: Movement): MovementFn =>
-  MOVEMENT_STRATEGIES[movement] ?? land;

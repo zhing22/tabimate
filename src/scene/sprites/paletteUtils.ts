@@ -1,5 +1,6 @@
 import type { HexColour } from '@/config/colour';
 import type { AnimalArt, Palette } from '@/config/render';
+import { PLAIN_PALETTE } from '@/config/sprites';
 
 type Rgb = readonly [number, number, number];
 
@@ -31,6 +32,30 @@ export function resolvePalette(
   if (shiny || !art.paletteOverride) return base;
   const overrides = art.paletteOverride;
   return base.map((hex, slot) => overrides[slot] ?? hex) as unknown as Palette;
+}
+
+/** One colour with its saturation scaled (0 grey, 1 unchanged). */
+function desaturate(hex: HexColour, by: number): HexColour {
+  const [h, s, l] = rgbToHsl(hexToRgb(hex));
+  return rgbToHex(hslToRgb(h, s * by, l));
+}
+
+/**
+ * A group's plainer colours, from its representative's palette: the
+ * "<name>-plain" palette if palettes.json has one, else the same palette
+ * desaturated (outline and eyes kept, so it still reads as a character).
+ */
+export function plainPalette(
+  name: string,
+  palette: Palette,
+  palettes: ReadonlyMap<string, Palette>,
+): Palette {
+  const designed = palettes.get(`${name}${PLAIN_PALETTE.suffix}`);
+  if (designed) return designed;
+  const by = PLAIN_PALETTE.saturation;
+  return palette.map((hex, slot) =>
+    slot === 0 || slot === 5 ? hex : desaturate(hex, by),
+  ) as unknown as Palette;
 }
 
 /** The same palette with the eyes (slot 5) closed: drawn in the base colour. */

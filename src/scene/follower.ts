@@ -1,3 +1,4 @@
+import { WATER } from '@/config/movement';
 import { BLINK_MS, FOLLOWER_STEP_OFFSET_S, POP_IN_MS, SIZE_PX } from '@/config/render';
 import { isShiny, type LevelId } from '@/config/levels';
 import type { Animal } from '@/core/types';
@@ -19,6 +20,18 @@ export interface Follower {
   pop: number;
   /** Seconds left of a blink (eyes-closed frames); 0 when the eyes are open. */
   blink: number;
+  /** Its own clock for hovering and bobbing (scene/entities/movement.ts), seconds. */
+  motionS: number;
+  /** 0..2π: where in its bob it starts, so the party doesn't bob in step. */
+  readonly phase: number;
+  /** A water animal's bubble on land: 1 whole, easing to 0 as it pops in water. Else 0. */
+  bubble: number;
+}
+
+/** What the world around the party is like this frame. */
+export interface FollowerEnv {
+  /** The party is in a biome with water to swim in (WATER.swimBiomes). */
+  readonly inWater: boolean;
 }
 
 const STEPS_PER_S = 5;
@@ -63,6 +76,9 @@ export function createFollower({
     pose: { dy: 0, scaleY: 1, angle: 0 },
     pop: animate ? 0 : 1,
     blink: 0,
+    motionS: 0,
+    phase: (index * 2.4) % (2 * Math.PI),
+    bubble: animal.movement === 'water' ? 1 : 0,
     idle: createIdleMotion({
       seed: `${animal.id}|${index}`,
       reducedMotion,
@@ -75,10 +91,26 @@ export function createFollower({
   return follower;
 }
 
-/** One frame for follower `index`: step in time with a walking player, or idle. */
-export function updateFollower(f: Follower, index: number, player: Player, dtS: number): void {
-  if (player.walking) stepPose(followerStepTime(player, index), f.pose);
+/**
+ * One frame for follower `index`: step in time with a walking player, or
+ * idle. Off the ground (sky, water) there are no steps: only its own bob.
+ */
+export function updateFollower(
+  f: Follower,
+  index: number,
+  player: Player,
+  dtS: number,
+  env: FollowerEnv,
+): void {
+  const walks = f.animal.movement === 'land';
+  if (player.walking && walks) stepPose(followerStepTime(player, index), f.pose);
   else f.idle.update(dtS, f.pose);
   if (f.blink > 0) f.blink = Math.max(0, f.blink - dtS);
   if (f.pop < 1) f.pop = Math.min(1, f.pop + (dtS * 1000) / POP_IN_MS);
+  f.motionS += dtS;
+  if (f.animal.movement === 'water') {
+    // Pops (eases to 0) in water, and forms again on land.
+    const step = (dtS * 1000) / WATER.popMs;
+    f.bubble = env.inWater ? Math.max(0, f.bubble - step) : Math.min(1, f.bubble + step);
+  }
 }

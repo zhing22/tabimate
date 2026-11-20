@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { GROUND_Y, WALK } from '@/config/render';
-import { createTrail, movementFor, type Point } from './followerTrail';
+import { createTrail, type Point } from './followerTrail';
 import { createIdleMotion, SQUASH_MIN, type Pose } from './idleMotion';
 import { createPlayer, walkSeconds } from './player';
 
@@ -43,11 +43,6 @@ describe('createTrail', () => {
     trail.reset(0, GROUND_Y);
     trail.record(100, GROUND_Y);
     expect(trail.pointBehind(1_000, point()).x).toBe(93);
-  });
-
-  it('walks every movement it does not know yet on the path', () => {
-    const out = movementFor('sky')({ x: 5, y: GROUND_Y }, 0, 0, point());
-    expect(out).toEqual({ x: 5, y: GROUND_Y });
   });
 });
 

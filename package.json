@@ -18,7 +18,8 @@
     "art:sample": "tsx scripts/drawSampleSheet.ts",
     "seed-traits": "tsx scripts/seed-traits.ts",
     "draft-descriptions": "tsx scripts/draft-descriptions.ts",
-    "content-report": "tsx scripts/content-report.ts"
+    "content-report": "tsx scripts/content-report.ts",
+    "sprite-coverage": "tsx scripts/sprite-coverage.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

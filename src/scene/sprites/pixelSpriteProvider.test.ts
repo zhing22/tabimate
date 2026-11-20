@@ -176,7 +176,10 @@ describe('createPixelSpriteProvider', () => {
     const { provider } = setup({ sheetFails: true });
     await provider.load([TIGER, LEOPARD]);
     expect(provider.spriteFor(TIGER, false).name).toBe('emoji/tiger');
-    expect(warn).toHaveBeenCalledTimes(1); // once per sheet, not per animal
+    // Once per sheet, not per animal; then the dev list of who is drawn as emoji.
+    const messages = warn.mock.calls.map((call) => String(call[0]));
+    expect(messages.filter((m) => m.includes('could not be loaded'))).toHaveLength(1);
+    expect(messages).toContainEqual(expect.stringContaining('big-cat: tiger, snow-leopard'));
     warn.mockRestore();
   });
 
@@ -201,5 +204,51 @@ describe('createPixelSpriteProvider: portraits', () => {
     await provider.load([KOALA]);
     expect(provider.portrait(null, false)?.src).toBe('emoji:player');
     expect(provider.portrait(KOALA, false)?.src).toBe('emoji:koala');
+  });
+});
+
+describe('createPixelSpriteProvider: groups and missing art', () => {
+  const RED: Palette = ['#111111', '#ff0000', '#aa0000', '#ff8888', '#00ff00', '#0000ff'];
+  const group: Animal = {
+    ...ANIMALS.get('tiger')!,
+    id: 'big-cat',
+    kind: 'group',
+    representative: 'tiger',
+  };
+  const basePixel = (loaded: ReturnType<typeof setup>['loaded'], name: string) =>
+    Array.from(loaded.get(name)!.pixels.data.slice(0, 3));
+  const eyePixel = (loaded: ReturnType<typeof setup>['loaded'], name: string) =>
+    Array.from(loaded.get(name)!.pixels.data.slice(4, 7));
+
+  it("draws a group in a plainer copy of its representative's colours", async () => {
+    const { provider, loaded } = setup({ art: { palettes: new Map([['cat', RED]]) } });
+    await provider.load([group, TIGER]);
+    expect(basePixel(loaded, 'pixel/tiger')).toEqual(hexToRgb('#ff0000'));
+    const [r, g, b] = basePixel(loaded, 'pixel/big-cat');
+    expect(r).toBeLessThan(255); // less saturated: red moves towards grey
+    expect(g).toBeGreaterThan(0);
+    expect(b).toBe(g);
+    expect(eyePixel(loaded, 'pixel/big-cat')).toEqual(hexToRgb(RED[5])); // eyes kept
+  });
+
+  it('uses a designed "-plain" palette when palettes.json has one', async () => {
+    const PLAIN: Palette = ['#111111', '#808080', '#606060', '#a0a0a0', '#404040', '#000000'];
+    const palettes = new Map([
+      ['cat', RED],
+      ['cat-plain', PLAIN],
+    ]);
+    const { provider, loaded } = setup({ art: { palettes } });
+    await provider.load([group, TIGER]);
+    expect(basePixel(loaded, 'pixel/big-cat')).toEqual(hexToRgb(PLAIN[1]));
+  });
+
+  it('warns (in development) which animals have no pixel sprite, by archetype', async () => {
+    const warn = quiet();
+    const { provider } = setup();
+    await provider.load([TIGER, KOALA]);
+    const messages = warn.mock.calls.map((call) => String(call[0]));
+    expect(messages).toContainEqual(expect.stringContaining('No pixel sprite for 1 animal'));
+    expect(messages).toContainEqual(expect.stringContaining('marsupial: koala'));
+    warn.mockRestore();
   });
 });

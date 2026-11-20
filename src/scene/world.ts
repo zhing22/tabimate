@@ -1,3 +1,4 @@
+import { WATER } from '@/config/movement';
 import { FOLLOWER_SPACING, FOOTPRINT_STEP, GROUND_Y } from '@/config/render';
 import { MAX_PROMPTS_PER_PUZZLE } from '@/config/game';
 import { distanceFor } from '@/core/journey';
@@ -7,7 +8,7 @@ import { createTrail, type Trail } from './entities/followerTrail';
 import { createIdleMotion, type Pose } from './entities/idleMotion';
 import { createPlayer, type Player } from './entities/player';
 import { createFollower, stepPose, updateFollower, type Follower } from './follower';
-import { createWorldState, worldStateAt, type WorldState } from './strip';
+import { createWorldState, dominantBiome, worldStateAt, type WorldState } from './strip';
 import { createTitleCards, type TitleCard } from './titleCards';
 
 export type { Follower } from './follower';
@@ -35,6 +36,8 @@ export interface World {
    */
   readonly state: WorldState;
   readonly titleCard: TitleCard;
+  /** The world around the party this frame: water to swim in (Wetland). */
+  readonly env: { inWater: boolean };
   /** Rebuilds the scene from a saved run, without animation. */
   restore(results: readonly RoundResult[]): void;
   /**
@@ -66,9 +69,11 @@ export function createWorld(options: WorldOptions): World {
   const titles = createTitleCards();
   let lastX = 0;
 
+  const env = { inWater: false };
   const locate = () => {
     worldStateAt(player.x, state);
     if (reducedMotion) state.blend = 0;
+    env.inWater = WATER.swimBiomes.includes(dominantBiome(state));
   };
 
   /** A result joins the journey: a follower for a hit, footprints for a miss. */
@@ -102,6 +107,7 @@ export function createWorld(options: WorldOptions): World {
     footprints,
     state,
     titleCard: titles.card,
+    env,
 
     restore(results) {
       followers.length = 0;
@@ -125,7 +131,9 @@ export function createWorld(options: WorldOptions): World {
       trail.record(player.x, GROUND_Y);
       if (player.walking) stepPose(player.stepTime, playerPose);
       else playerIdle.update(dtS, playerPose);
-      for (let i = 0; i < followers.length; i++) updateFollower(followers[i]!, i, player, dtS);
+      for (let i = 0; i < followers.length; i++) {
+        updateFollower(followers[i]!, i, player, dtS, env);
+      }
       titles.pass(lastX, player.x);
       lastX = player.x;
       locate();
