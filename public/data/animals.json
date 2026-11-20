@@ -588,7 +588,13 @@
     "description": "A flightless bird endemic to Australia, where it is the tallest native bird.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Emu",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "common-ostrich",
@@ -604,7 +610,13 @@
     "description": "A flightless bird native to certain areas of Africa and is the largest living bird.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_ostrich",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["africa"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "brown-kiwi",
@@ -620,7 +632,13 @@
     "description": "A nocturnal flightless bird and kiwi.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/North_Island_brown_kiwi",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "kakapo",
@@ -636,7 +654,13 @@
     "description": "A large, nocturnal, ground-dwelling parrot of the superfamily Strigopoidea.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/K%C4%81k%C4%81p%C5%8D",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "indian-peafowl",
@@ -1318,6 +1342,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Emperor_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["antarctica", "south-america"],
@@ -1338,7 +1363,13 @@
     "description": "A penguin confined to southern African waters.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_penguin",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["africa"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "penguin",
@@ -1354,7 +1385,7 @@
     "description": "Flightless semi-aquatic sea birds which live almost exclusively in the Southern Hemisphere.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Penguin",
-    "traits": { "class": "bird", "feathers": true, "continent": ["south-america"] }
+    "traits": { "class": "bird", "feathers": true, "continent": ["south-america"], "flies": false }
   },
   {
     "id": "bear",
@@ -1802,7 +1833,7 @@
     "description": "Flightless birds endemic to New Zealand of the order Apterygiformes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Kiwi_(bird)",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"] }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "flies": false }
   },
   {
     "id": "ostrich",
@@ -1818,7 +1849,7 @@
     "description": "Large flightless birds.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ostrich",
-    "traits": { "class": "bird", "feathers": true }
+    "traits": { "class": "bird", "feathers": true, "flies": false }
   },
   {
     "id": "peafowl",
@@ -2653,6 +2684,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/King_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["africa", "antarctica", "south-america"],
@@ -2674,6 +2706,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ad%C3%A9lie_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["north-america", "south-america"],
@@ -2695,6 +2728,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gentoo_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -2716,6 +2750,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chinstrap_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -2737,6 +2772,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Little_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -2758,6 +2794,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Macaroni_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["africa", "south-america"],
@@ -2779,6 +2816,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Humboldt_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -2800,6 +2838,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Western_rockhopper_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["africa", "south-america"],
@@ -2820,7 +2859,13 @@
     "description": "A penguin endemic to New Zealand.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Yellow-eyed_penguin",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "galapagos-penguin",
@@ -2837,6 +2882,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Galapagos_penguin",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -4547,7 +4593,13 @@
     "description": "A kiwi endemic to the South Island of New Zealand.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_spotted_kiwi",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "little-spotted-kiwi",
@@ -4563,7 +4615,13 @@
     "description": "A small flightless bird in the kiwi family, Apterygidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Little_spotted_kiwi",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["oceania"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "somali-ostrich",
@@ -4579,7 +4637,13 @@
     "description": "A large flightless bird native to the Horn of Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Somali_ostrich",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["africa"],
+      "extinct": false,
+      "flies": false
+    }
   },
   {
     "id": "green-peafowl",
@@ -8649,6 +8713,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Southern_cassowary",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["africa", "asia", "oceania"],
@@ -8669,6 +8734,7 @@
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Greater_rhea",
     "traits": {
+      "flies": false,
       "class": "bird",
       "feathers": true,
       "continent": ["south-america"],
@@ -8753,7 +8819,13 @@
     "description": "An extinct flightless bird that was endemic to Mauritius.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Dodo",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": true }
+    "traits": {
+      "class": "bird",
+      "feathers": true,
+      "continent": ["africa"],
+      "extinct": true,
+      "flies": false
+    }
   },
   {
     "id": "passenger-pigeon",

@@ -209,8 +209,46 @@ describe('the real migrations', () => {
         version: SCHEMA_VERSION,
         runs: { '2026-11-07': run },
         stats: { streak: 1, bestStreak: 1, lastPlayedKey: '2026-11-07', history },
+        journal: { platypus: PLATYPUS_FOUND },
+        achievements: [],
       },
       lossy: false,
     });
   });
+
+  it('upgrades a v2 save, back-filling the journal from its finished runs only', () => {
+    const v2 = {
+      version: 2,
+      runs: { '2026-11-07': finishedRun('2026-11-07'), '2026-11-08': playingRun('2026-11-08') },
+      stats: { streak: 1, bestStreak: 1, lastPlayedKey: '2026-11-07', history: [] },
+    };
+    const { data, lossy } = readSaveData(JSON.parse(JSON.stringify(v2)));
+    expect(lossy).toBe(false);
+    expect(data.journal).toEqual({ platypus: PLATYPUS_FOUND });
+    expect(data.achievements).toEqual([]);
+  });
+
+  it('keeps good journal entries and achievements, dropping bad ones (lossy)', () => {
+    const v3 = {
+      version: 3,
+      runs: {},
+      journal: { platypus: PLATYPUS_FOUND, tiger: { animalId: 'lion', timesFound: 1 } },
+      achievements: [
+        { id: 'streak-3', unlockedKey: '2026-11-07' },
+        { id: 'streak-3', unlockedKey: '2026-11-08' },
+        { id: 'x' },
+      ],
+    };
+    const { data, lossy } = readSaveData(v3);
+    expect(lossy).toBe(true);
+    expect(data.journal).toEqual({ platypus: PLATYPUS_FOUND });
+    expect(data.achievements).toEqual([{ id: 'streak-3', unlockedKey: '2026-11-07' }]);
+  });
 });
+
+const PLATYPUS_FOUND = {
+  animalId: 'platypus',
+  firstFoundKey: '2026-11-07',
+  timesFound: 1,
+  bestLevel: 2,
+};

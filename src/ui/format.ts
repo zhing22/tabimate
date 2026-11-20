@@ -8,3 +8,12 @@ export function formatCountdown(ms: number): string {
 
 /** Whole seconds left, rounded up: 0.2 s left still shows "1". */
 export const secondsLeft = (ms: number): number => Math.max(0, Math.ceil(ms / 1000));
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** A puzzle key as a date people read: "2026-11-19" -> "19 Nov 2026" (no time zones involved). */
+export function formatDateKey(key: string): string {
+  const [year, month, day] = key.split('-').map(Number);
+  const name = MONTHS[(month ?? 1) - 1];
+  return name && year && day ? `${day} ${name} ${year}` : key;
+}

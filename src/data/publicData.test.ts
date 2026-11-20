@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { JOURNAL_SETS, setMembers } from '@/core/journal/sets';
 import { matchAnswer } from '@/core/matcher';
 import { namesSeveralAnimals } from '@/core/matcher/lists';
 import { normalize } from '@/core/matcher/normalize';
@@ -23,6 +24,12 @@ describe('public/data', () => {
 
   it('has a valid animal registry', () => {
     expect(registry.size).toBeGreaterThanOrEqual(30);
+  });
+
+  it('gives every journal set something to collect', () => {
+    for (const set of JOURNAL_SETS) {
+      expect(setMembers(set, registry).length, set.id).toBeGreaterThanOrEqual(2);
+    }
   });
 
   it('has puzzle files', () => {

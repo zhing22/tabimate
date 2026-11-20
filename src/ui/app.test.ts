@@ -4,6 +4,7 @@ import { INSTANT_REVEAL, ROUND_TIME_MS, type RevealTiming } from '@/config/game'
 import { createBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
+import { emptyCollection } from '@/core/collection';
 import { emptyStats } from '@/core/streak';
 import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
@@ -46,6 +47,7 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
     animals: ANIMALS,
     clock: time.clock,
     getStats,
+    getCollection: () => emptyCollection(),
     reload,
     share,
     revealTiming,

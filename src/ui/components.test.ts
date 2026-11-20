@@ -468,7 +468,7 @@ describe('startScreen', () => {
     startScreen(
       root,
       { puzzleNumber: 1, promptCount: 7, streak: 0, theme: null },
-      { play: () => {} },
+      { play: () => {}, journal: () => {} },
     );
     const text = root.textContent ?? '';
     expect(text).toContain('from LC (10) up to CR (100)');
@@ -482,7 +482,7 @@ describe('startScreen', () => {
     startScreen(
       root,
       { puzzleNumber: 31, promptCount: 7, streak: 0, theme: fishy },
-      { play: () => {} },
+      { play: () => {}, journal: () => {} },
     );
     expect(root.querySelector('.theme__name')?.textContent).toBe('Fishy Friday');
     expect(root.querySelector('.theme__tagline')?.textContent).toBe(fishy.tagline);

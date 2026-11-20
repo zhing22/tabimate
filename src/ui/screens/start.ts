@@ -20,11 +20,15 @@ function scoringLine(): string {
 
 export interface StartActions {
   play(): void;
+  /** Opens the Field Journal. */
+  journal(): void;
 }
 
 export const startScreen: Screen<StartProps, StartActions> = (root, props, actions) => {
   const play = h('button', { class: 'button button--primary', type: 'button' }, 'Play');
   play.addEventListener('click', () => actions.play());
+  const journal = h('button', { class: 'button', type: 'button' }, 'Field Journal');
+  journal.addEventListener('click', () => actions.journal());
 
   root.append(
     h(
@@ -43,6 +47,7 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
         : null,
       props.streak > 0 ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak`) : null,
       play,
+      journal,
       h(
         'details',
         { class: 'how-to' },

@@ -12,6 +12,8 @@ export interface RevealContext {
   /** The prompt answered, with every accepted answer and its level. */
   readonly prompt: Prompt;
   readonly animals: AnimalLookup;
+  /** True when this animal is in neither the Field Journal nor earlier answers today. */
+  readonly newToJournal: boolean;
 }
 
 export interface RevealExtra {
@@ -25,6 +27,13 @@ const jackpot: RevealExtra = {
   id: 'jackpot',
   appliesTo: (result) => result.match.level === TOP_LEVEL,
   render: () => h('p', { class: 'reveal-extra reveal-extra--jackpot' }, 'Jackpot find!'),
+};
+
+/** A first-ever find: it goes into the Field Journal when the run ends. */
+const newFind: RevealExtra = {
+  id: 'newFind',
+  appliesTo: ({ match }, { newToJournal }) => match.level !== 0 && newToJournal,
+  render: () => h('p', { class: 'reveal-extra reveal-extra--new' }, 'New to your journal!'),
 };
 
 /** The animal's one-line description, when it has one. */
@@ -53,8 +62,8 @@ const nearMiss: RevealExtra = {
   },
 };
 
-/** Shown in this order: the banner first, then the fact, then the hint. */
-export const REVEAL_EXTRAS: readonly RevealExtra[] = [jackpot, factLine, nearMiss];
+/** Shown in this order: the banner first, the new-find tag, then the fact, then the hint. */
+export const REVEAL_EXTRAS: readonly RevealExtra[] = [jackpot, newFind, factLine, nearMiss];
 
 /** The extras that apply to a result, rendered in order. */
 export const revealExtras = (result: RoundResult, ctx: RevealContext): HTMLElement[] =>

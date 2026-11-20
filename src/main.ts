@@ -5,6 +5,7 @@ import { themeFor } from '@/config/themes';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { biomeFor } from '@/core/journey';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
+import { emitCollected } from '@/core/collectionEvents';
 import { createGameController } from '@/core/gameController';
 import { puzzleAnimals } from '@/core/puzzleAnimals';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
@@ -87,6 +88,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     animals,
     clock,
     getStats: () => progress.getStats(),
+    getCollection: () => progress.getCollection(),
     ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
     reload,
     // The link is this site, whatever host serves it (dev, preview or the real domain).
@@ -101,10 +103,12 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
         ),
       ),
   });
-  // One listener, in this order: record the run, then show results with its streak.
+  // One listener, in this order: record the run (streak, journal, achievements),
+  // show results with its streak, then announce what it added to the collection.
   bus.on('runFinished', ({ results, score }) => {
-    progress.completeRun(controller.getState());
+    const collected = progress.completeRun(controller.getState(), animals);
     app.showResults({ results, score, stats: progress.getStats() });
+    if (collected) emitCollected(bus, collected, puzzle.date);
   });
   return {
     bus,

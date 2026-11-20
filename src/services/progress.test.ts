@@ -35,7 +35,7 @@ function openPage(storage: StorageAdapter, iso: string) {
     scheduler: time.scheduler,
   });
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
-  bus.on('runFinished', () => progress.completeRun(game.getState()));
+  bus.on('runFinished', () => progress.completeRun(game.getState(), ANIMALS));
   const saved = progress.loadToday(key);
   const restored = saved !== null && game.restore(saved);
   if (!restored) game.start();
@@ -100,7 +100,7 @@ describe('progress: one run per day', () => {
     const fresh = createRunState(puzzleFor('2026-11-07'));
     expect(progress.saveRun(playingRun('2026-11-07'))).toBe(true);
     expect(progress.saveRun(fresh)).toBe(false);
-    expect(progress.completeRun(finishedRun('2026-11-07'))).toBe(true);
+    expect(progress.completeRun(finishedRun('2026-11-07'), ANIMALS)).not.toBeNull();
     expect(progress.saveRun(fresh)).toBe(false);
     expect(progress.loadToday('2026-11-07')?.status).toBe('finished');
   });
@@ -145,7 +145,7 @@ describe('progress: storage', () => {
     const storage = createMemoryStorageAdapter();
     const progress = createProgressService(storage, createFakeTime().clock);
     const days = Array.from({ length: 10 }, (_, i) => `2026-11-${String(i + 1).padStart(2, '0')}`);
-    for (const day of days) progress.completeRun(finishedRun(day));
+    for (const day of days) progress.completeRun(finishedRun(day), ANIMALS);
     expect(progress.loadToday('2026-11-03')).toBeNull();
     expect(progress.loadToday('2026-11-04')?.status).toBe('finished');
     expect(progress.getStats().history).toHaveLength(10);
@@ -255,5 +255,34 @@ describe('progress: damaged saves', () => {
     finish(openPage(storage, '2026-11-07T05:00:00Z'));
     finish(openPage(storage, '2026-11-08T05:00:00Z'));
     expect(storage.get(BACKUP_KEY)).toBeNull();
+  });
+});
+
+describe('progress: the Field Journal and achievements', () => {
+  it('adds a finished run to the journal once, and keeps it across a reload', () => {
+    const storage = createMemoryStorageAdapter();
+    const progress = createProgressService(storage, createFakeTime().clock);
+    const collected = progress.completeRun(finishedRun('2026-11-07'), ANIMALS);
+    expect(collected?.newlyFound).toEqual(['platypus']);
+    // The same finish again (a reload on the results screen) adds nothing.
+    expect(progress.completeRun(finishedRun('2026-11-07'), ANIMALS)).toBeNull();
+    const reloaded = createProgressService(storage, createFakeTime().clock).getCollection();
+    expect(reloaded.journal.platypus).toMatchObject({ timesFound: 1, bestLevel: 2 });
+  });
+
+  it('saves the achievements a run unlocks, with the day that unlocked them', () => {
+    const storage = createMemoryStorageAdapter();
+    const progress = createProgressService(storage, createFakeTime().clock);
+    for (const day of ['2026-11-07', '2026-11-08', '2026-11-09']) {
+      progress.completeRun(finishedRun(day), ANIMALS);
+    }
+    const { achievements } = createProgressService(storage, createFakeTime().clock).getCollection();
+    expect(achievements).toContainEqual({ id: 'streak-3', unlockedKey: '2026-11-09' });
+  });
+
+  it('does not collect a run that is not finished', () => {
+    const progress = createProgressService(createMemoryStorageAdapter(), createFakeTime().clock);
+    expect(progress.completeRun(playingRun('2026-11-07'), ANIMALS)).toBeNull();
+    expect(progress.getCollection().journal).toEqual({});
   });
 });

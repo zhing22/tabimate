@@ -29,6 +29,8 @@ function setup() {
     revealFinished: 0,
     biomeEntered: 0,
     runFinished: 0,
+    journalUpdated: 0,
+    achievementUnlocked: 0,
     stateChanged: 0,
   } satisfies Record<keyof GameEvents, 0>) as (keyof GameEvents)[];
   for (const name of names) bus.on(name, (payload) => log.push([name, payload] as Logged));

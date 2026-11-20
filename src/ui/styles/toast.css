@@ -1,0 +1,47 @@
+/* Toasts: a note at the top of the screen that never blocks a tap. */
+.toast-layer {
+  position: fixed;
+  top: max(var(--space-3), env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  justify-items: center;
+  padding: 0 var(--space-4);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  max-width: var(--card-max);
+  padding: var(--space-2) var(--space-4);
+  background: var(--paper);
+  border-radius: var(--radius-2);
+  box-shadow:
+    0 0 0 3px var(--ink),
+    0 4px 0 3px rgb(0 0 0 / 0.25);
+  animation: toast-in var(--dur-med) ease-out;
+}
+
+.toast__icon {
+  font-size: var(--text-xl);
+}
+
+.toast__body {
+  display: grid;
+  font-size: var(--text-sm);
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(-120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

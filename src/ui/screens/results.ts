@@ -25,6 +25,8 @@ export interface ResultsActions {
   next(): void;
   /** Shares (or copies) the run's share text. */
   share(): Promise<ShareOutcome>;
+  /** Opens the Field Journal. */
+  journal(): void;
 }
 
 const SHARE_LABEL = 'Share';
@@ -87,6 +89,8 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     "Play today's puzzle",
   );
   nextButton.addEventListener('click', () => actions.next());
+  const journalButton = h('button', { class: 'button', type: 'button' }, 'Field Journal');
+  journalButton.addEventListener('click', () => actions.journal());
   const timer = countdown({
     msLeft: props.msUntilNext,
     onDone: () => (nextButton.hidden = false),
@@ -118,7 +122,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
           ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
           : null,
       ),
-      shareIt.el,
+      h('div', { class: 'results__actions' }, shareIt.el, journalButton),
       h('h2', { class: 'section-title' }, 'Your team'),
       team.el,
       h('p', { class: 'meta next-puzzle' }, 'Next puzzle in ', timer.el),

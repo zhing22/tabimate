@@ -1,59 +1,18 @@
-import { REVEAL_TIMING, ROUND_TIME_MS, type RevealTiming } from '@/config/game';
+import { ROUND_TIME_MS } from '@/config/game';
 import { themeFor } from '@/config/themes';
-import type { Clock } from '@/core/clock';
 import { msUntilNextReset } from '@/core/date';
-import type { GameBus } from '@/core/events';
-import type { GameController } from '@/core/gameController';
-import { pointsFor } from '@/core/scoring';
-import type { Stats } from '@/core/streak';
-import type { Animal, AnimalId, Puzzle, RoundResult } from '@/core/types';
-import type { Delay, FrameLoop } from './frames';
-import type { ScreenHost } from './host';
-import { revealScreen } from './screens/reveal';
-import { revealExtras } from './reveal/extras';
-import type { Backdrops, Portraits } from '@/core/portrait';
-import type { ShareOutcome } from '@/core/share';
-import { resultsScreen } from './screens/results';
+import type { RoundResult } from '@/core/types';
+import type { App, AppDeps } from './appTypes';
+import { createCollectionUi } from './collectionUi';
 import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
-
-export type { FinishedRun } from './resultsProps';
+import { showRevealCard } from './revealFlow';
 import { roundSlot } from './roundSlot';
+import { resultsScreen } from './screens/results';
 import { DID_YOU_MEAN, NOT_FOUND } from './screens/roundView';
 import { startScreen } from './screens/start';
 
-export interface AppDeps {
-  readonly host: ScreenHost;
-  readonly bus: GameBus;
-  readonly controller: GameController;
-  readonly puzzle: Puzzle;
-  readonly animals: ReadonlyMap<AnimalId, Animal>;
-  readonly clock: Clock;
-  readonly getStats: () => Stats;
-  /** Loads the page again, e.g. when a new puzzle is out. */
-  readonly reload: () => void;
-  /** Pictures of the sprites, from the scene; without them the results use emoji. */
-  readonly portraits?: Portraits;
-  /** Stills of the biomes, from the scene: the line-up stands in one. */
-  readonly backdrops?: Backdrops;
-  /** Shares a finished run (main.ts builds the text; see services/share.ts). */
-  readonly share: (run: FinishedRun) => Promise<ShareOutcome>;
-  /** The reveal's beats; tests pass INSTANT_REVEAL. */
-  readonly revealTiming?: RevealTiming;
-  readonly frames?: FrameLoop;
-  readonly delay?: Delay;
-}
-
-export interface App {
-  /** Shows the start screen (when there was no saved run to restore). */
-  showStart(): void;
-  /**
-   * Shows the results. main.ts calls it after recording the run, instead of a
-   * runFinished listener here, so the streak never depends on which listener
-   * subscribed first.
-   */
-  showResults(run: FinishedRun): void;
-  destroy(): void;
-}
+export type { FinishedRun } from './resultsProps';
+export type { App, AppDeps } from './appTypes';
 
 /**
  * The UI router: turns game events into screens and player actions into
@@ -64,6 +23,7 @@ export function createApp(deps: AppDeps): App {
   const now = () => clock.now().getTime();
   const animalOf: AnimalOf = (result) =>
     result.match.animalId === null ? null : (animals.get(result.match.animalId) ?? null);
+  const collection = createCollectionUi({ ...deps, portraits: deps.portraits, delay: deps.delay });
   // Moving on only counts once the result is visible, so an Enter pressed twice
   // in a hurry can't skip past a reveal during its drum-roll.
   let resultShown = false;
@@ -77,34 +37,34 @@ export function createApp(deps: AppDeps): App {
     { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
     { submit: (text) => controller.submit(text), next, draft: (text) => controller.setDraft(text) },
   );
+  const revealDeps = {
+    host,
+    puzzle,
+    animals,
+    animalOf,
+    timing: deps.revealTiming,
+    isNew: (result: RoundResult, index: number) =>
+      result.match.animalId !== null &&
+      collection.isNewToJournal(
+        result.match.animalId,
+        controller.getState().results.slice(0, index),
+      ),
+  };
 
   function showReveal(index: number, result: RoundResult) {
     resultShown = false;
     round.lock();
-    const animal = animalOf(result);
-    const prompt = puzzle.prompts[index];
-    host.showOverlay(
-      revealScreen,
-      {
-        result,
-        animal,
-        extras: prompt ? revealExtras(result, { animal, prompt, animals }) : [],
-        points: pointsFor(result.match.level),
-        timing: deps.revealTiming ?? REVEAL_TIMING,
-        isLast: index === puzzle.prompts.length - 1,
-        focusNext: !round.mounted,
+    showRevealCard(revealDeps, index, result, {
+      focusNext: !round.mounted,
+      revealed: (summary) => {
+        resultShown = true;
+        host.announce(summary);
       },
-      {
-        revealed: (summary) => {
-          resultShown = true;
-          host.announce(summary);
-        },
-        next,
-      },
-    );
+      next,
+    });
   }
 
-  function showResults(run: FinishedRun) {
+  function renderResults(run: FinishedRun) {
     // Fixed when the screen opens: asking "time to the next reset" every second
     // would jump back to 24 h at noon and never reach zero.
     const nextPuzzleAt = now() + msUntilNextReset(clock.now());
@@ -117,9 +77,25 @@ export function createApp(deps: AppDeps): App {
         ...(deps.portraits ? { portraits: deps.portraits } : {}),
         ...(deps.backdrops ? { backdrops: deps.backdrops } : {}),
       },
-      { next: deps.reload, share: () => deps.share(run) },
+      {
+        next: deps.reload,
+        share: () => deps.share(run),
+        journal: () => collection.openJournal(() => renderResults(run)),
+      },
     );
-    host.announce(`Journey complete: ${run.score} points.`);
+  }
+
+  function showStart() {
+    host.show(
+      startScreen,
+      {
+        puzzleNumber: puzzle.number,
+        promptCount: puzzle.prompts.length,
+        streak: deps.getStats().streak,
+        theme: themeFor(puzzle.date),
+      },
+      { play: () => controller.start(), journal: () => collection.openJournal(showStart) },
+    );
   }
 
   const stops = [
@@ -145,21 +121,14 @@ export function createApp(deps: AppDeps): App {
   ];
 
   return {
-    showStart() {
-      host.show(
-        startScreen,
-        {
-          puzzleNumber: puzzle.number,
-          promptCount: puzzle.prompts.length,
-          streak: deps.getStats().streak,
-          theme: themeFor(puzzle.date),
-        },
-        { play: () => controller.start() },
-      );
+    showStart,
+    showResults(run) {
+      renderResults(run);
+      host.announce(`Journey complete: ${run.score} points.`);
     },
-    showResults,
     destroy() {
       for (const stop of stops) stop();
+      collection.destroy();
       host.destroy();
     },
   };

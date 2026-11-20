@@ -14,6 +14,8 @@ export interface ScreenHost {
   /** Shows a layer above the screen without unmounting it (keeps input focus). */
   showOverlay<P, A>(screen: Screen<P, A>, props: P, actions: A): void;
   clearOverlay(): void;
+  /** A layer for toasts: above screens and overlays, outliving both, read politely. */
+  readonly toasts: HTMLElement;
   /** Says something to screen readers, politely. */
   announce(text: string): void;
   destroy(): void;
@@ -27,7 +29,8 @@ export function createScreenHost(root: HTMLElement): ScreenHost {
   const screenLayer = h('div', { class: 'screen-layer' });
   const overlayLayer = h('div', { class: 'overlay-layer' });
   const live = h('p', { class: 'sr-only', 'aria-live': 'polite', 'aria-atomic': 'true' });
-  root.replaceChildren(screenLayer, overlayLayer, live);
+  const toasts = h('div', { class: 'toast-layer', 'aria-live': 'polite' });
+  root.replaceChildren(screenLayer, overlayLayer, live, toasts);
 
   let unmountScreen: Unmount | null = null;
   let unmountOverlay: Unmount | null = null;
@@ -56,6 +59,7 @@ export function createScreenHost(root: HTMLElement): ScreenHost {
       unmountOverlay = screen(overlayLayer, props, actions);
     },
     clearOverlay,
+    toasts,
     announce(text) {
       // Clearing first makes a repeated message (two misses in a row) be read again.
       live.textContent = '';
