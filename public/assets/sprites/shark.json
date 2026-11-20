@@ -1,0 +1,99 @@
+{
+  "frames": {
+    "shark 0.aseprite": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 1.aseprite": {
+      "frame": {
+        "x": 24,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 2.aseprite": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 3.aseprite": {
+      "frame": {
+        "x": 72,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 4.aseprite": {
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 5.aseprite": {
+      "frame": {
+        "x": 120,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 6.aseprite": {
+      "frame": {
+        "x": 144,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "shark 7.aseprite": {
+      "frame": {
+        "x": 168,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    }
+  },
+  "meta": {
+    "app": "scripts/drawPlaceholderSheets.ts",
+    "image": "shark.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 192,
+      "h": 24
+    },
+    "frameTags": [
+      {
+        "name": "walk",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      },
+      {
+        "name": "swim",
+        "from": 4,
+        "to": 7,
+        "direction": "forward"
+      }
+    ]
+  }
+}

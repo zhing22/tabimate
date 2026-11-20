@@ -85,7 +85,8 @@
     "description": "Members of the genus Loxodonta comprising two living elephant species, the African bush elephant.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_elephant",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "african-elephant"
   },
   {
     "id": "asian-elephant",
@@ -101,7 +102,8 @@
     "description": "The only living species in the genus Elephas.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Asian_elephant",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "asian-elephant"
   },
   {
     "id": "giant-panda",
@@ -117,7 +119,8 @@
     "description": "A bear species endemic to China.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Giant_panda",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "giant-panda"
   },
   {
     "id": "red-panda",
@@ -132,7 +135,8 @@
     "description": "A small mammal native to the eastern Himalayas and southwestern China.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_panda",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "red-panda"
   },
   {
     "id": "polar-bear",
@@ -153,7 +157,8 @@
       "feathers": false,
       "continent": ["asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "polar-bear"
   },
   {
     "id": "brown-bear",
@@ -169,7 +174,8 @@
     "description": "A large bear native to Eurasia and North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Brown_bear",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "brown-bear"
   },
   {
     "id": "grey-wolf",
@@ -190,7 +196,8 @@
       "feathers": false,
       "continent": ["asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "grey-wolf"
   },
   {
     "id": "red-fox",
@@ -211,7 +218,8 @@
       "feathers": false,
       "continent": ["africa", "asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "red-fox"
   },
   {
     "id": "koala",
@@ -226,7 +234,8 @@
     "description": "An arboreal herbivorous marsupial native to Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Koala",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "koala"
   },
   {
     "id": "red-kangaroo",
@@ -242,7 +251,8 @@
     "description": "The largest of all kangaroos, the largest terrestrial mammal native to Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_kangaroo",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "red-kangaroo"
   },
   {
     "id": "tasmanian-devil",
@@ -257,7 +267,8 @@
     "description": "A carnivorous marsupial of the family Dasyuridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Tasmanian_devil",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "tasmanian-devil"
   },
   {
     "id": "platypus",
@@ -272,7 +283,8 @@
     "description": "A semiaquatic, egg-laying mammal endemic to eastern Australia, including Tasmania.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Platypus",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "platypus"
   },
   {
     "id": "short-beaked-echidna",
@@ -293,7 +305,8 @@
       "feathers": false,
       "continent": ["asia", "oceania"],
       "extinct": false
-    }
+    },
+    "palette": "short-beaked-echidna"
   },
   {
     "id": "european-hedgehog",
@@ -309,7 +322,8 @@
     "description": "A hedgehog species native to Europe from Iberia and Italy northwards into Scandinavia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/European_hedgehog",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "european-hedgehog"
   },
   {
     "id": "european-rabbit",
@@ -325,7 +339,8 @@
     "description": "A rabbit native to the Iberian Peninsula and southwestern France.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/European_rabbit",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "european-rabbit"
   },
   {
     "id": "house-mouse",
@@ -346,7 +361,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "house-mouse"
   },
   {
     "id": "sumatran-orangutan",
@@ -362,7 +378,8 @@
     "description": "One of the three orangutans.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sumatran_orangutan",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "sumatran-orangutan"
   },
   {
     "id": "bornean-orangutan",
@@ -378,7 +395,8 @@
     "description": "An orangutan species endemic to the island of Borneo.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bornean_orangutan",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "bornean-orangutan"
   },
   {
     "id": "eastern-gorilla",
@@ -394,7 +412,8 @@
     "description": "A critically endangered genus Gorilla and the largest living primate.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eastern_gorilla",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "eastern-gorilla"
   },
   {
     "id": "chimpanzee",
@@ -409,7 +428,8 @@
     "description": "A medium-sized great ape species found in the forests and savannas of equatorial Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chimpanzee",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "chimpanzee"
   },
   {
     "id": "ruffed-lemur",
@@ -425,7 +445,8 @@
     "description": "An endangered ruffed lemur, one of two which are endemic to the island of Madagascar.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "ruffed-lemur"
   },
   {
     "id": "black-rhino",
@@ -441,7 +462,8 @@
     "description": "A rhinoceros native to East and Southern Africa, including Angola, Botswana, Eswatini, Kenya, Lesotho, Malawi.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black_rhinoceros",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "black-rhino"
   },
   {
     "id": "white-rhino",
@@ -457,7 +479,8 @@
     "description": "The largest extant rhinoceros.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/White_rhinoceros",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "white-rhino"
   },
   {
     "id": "giraffe",
@@ -472,7 +495,8 @@
     "description": "Large African hoofed mammals.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Giraffe",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "giraffe"
   },
   {
     "id": "plains-zebra",
@@ -488,7 +512,8 @@
     "description": "The most common and geographically widespread zebra.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Plains_zebra",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "plains-zebra"
   },
   {
     "id": "hippo",
@@ -503,7 +528,8 @@
     "description": "A large semiaquatic mammal native to sub-Saharan Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Hippopotamus",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "hippo"
   },
   {
     "id": "malayan-tapir",
@@ -519,7 +545,8 @@
     "description": "The only living tapir species outside of the Americas.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Malayan_tapir",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "malayan-tapir"
   },
   {
     "id": "sunda-pangolin",
@@ -535,7 +562,8 @@
     "description": "A pangolin.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sunda_pangolin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "sunda-pangolin"
   },
   {
     "id": "komodo-dragon",
@@ -557,7 +585,8 @@
       "continent": ["asia"],
       "extinct": false,
       "size": "large"
-    }
+    },
+    "palette": "komodo-dragon"
   },
   {
     "id": "saltwater-crocodile",
@@ -573,7 +602,8 @@
     "description": "A crocodilian native to saltwater habitats, brackish wetlands.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Saltwater_crocodile",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "saltwater-crocodile"
   },
   {
     "id": "emu",
@@ -594,7 +624,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "emu"
   },
   {
     "id": "common-ostrich",
@@ -616,7 +647,8 @@
       "continent": ["africa"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "common-ostrich"
   },
   {
     "id": "brown-kiwi",
@@ -638,7 +670,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "brown-kiwi"
   },
   {
     "id": "kakapo",
@@ -660,7 +693,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "kakapo"
   },
   {
     "id": "indian-peafowl",
@@ -681,7 +715,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "indian-peafowl"
   },
   {
     "id": "axolotl",
@@ -697,7 +732,8 @@
     "description": "A mole salamander.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Axolotl",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false, "size": "small" }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false, "size": "small" },
+    "palette": "axolotl"
   },
   {
     "id": "chinese-giant-salamander",
@@ -713,7 +749,8 @@
     "description": "The largest salamander and the largest amphibian in the world.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chinese_giant_salamander",
-    "traits": { "class": "amphibian", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "chinese-giant-salamander"
   },
   {
     "id": "bald-eagle",
@@ -734,7 +771,8 @@
       "feathers": true,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "bald-eagle"
   },
   {
     "id": "peregrine-falcon",
@@ -755,7 +793,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "peregrine-falcon"
   },
   {
     "id": "philippine-eagle",
@@ -771,7 +810,8 @@
     "description": "A critically endangered eagle of the family Accipitridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Philippine_eagle",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "philippine-eagle"
   },
   {
     "id": "california-condor",
@@ -792,7 +832,8 @@
       "feathers": true,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "california-condor"
   },
   {
     "id": "barn-owl",
@@ -813,7 +854,8 @@
       "feathers": true,
       "continent": ["africa", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "barn-owl"
   },
   {
     "id": "snowy-owl",
@@ -829,7 +871,8 @@
     "description": "A large, white owl of the true owl family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Snowy_owl",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "snowy-owl"
   },
   {
     "id": "african-grey-parrot",
@@ -845,7 +888,8 @@
     "description": "An African parrot in the family Psittacidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Grey_parrot",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "african-grey-parrot"
   },
   {
     "id": "greater-flamingo",
@@ -867,7 +911,8 @@
       "continent": ["africa"],
       "extinct": false,
       "size": "medium"
-    }
+    },
+    "palette": "greater-flamingo"
   },
   {
     "id": "red-crowned-crane",
@@ -883,7 +928,8 @@
     "description": "A large Northeast Asian crane among the rarest cranes in the world.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red-crowned_crane",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "red-crowned-crane"
   },
   {
     "id": "white-stork",
@@ -899,7 +945,8 @@
     "description": "A large bird in the stork family, Ciconiidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/White_stork",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "white-stork"
   },
   {
     "id": "northern-lapwing",
@@ -915,7 +962,8 @@
     "description": "A bird in the lapwing subfamily.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Northern_lapwing",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "northern-lapwing"
   },
   {
     "id": "ruby-throated-hummingbird",
@@ -931,7 +979,8 @@
     "description": "A hummingbird that generally spends the winter in Central America, Mexico, and Florida.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ruby-throated_hummingbird",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "ruby-throated-hummingbird"
   },
   {
     "id": "common-kingfisher",
@@ -952,7 +1001,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "common-kingfisher"
   },
   {
     "id": "eurasian-magpie",
@@ -973,7 +1023,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "eurasian-magpie"
   },
   {
     "id": "mallard",
@@ -989,7 +1040,8 @@
     "description": "A dabbling duck that breeds throughout temperate and subtropical North America, Eurasia, and North Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Mallard",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "mallard"
   },
   {
     "id": "atlantic-puffin",
@@ -1005,7 +1057,8 @@
     "description": "A seabird in the auk family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Atlantic_puffin",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "atlantic-puffin"
   },
   {
     "id": "wandering-albatross",
@@ -1026,7 +1079,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "wandering-albatross"
   },
   {
     "id": "grey-headed-flying-fox",
@@ -1042,7 +1096,8 @@
     "description": "A megabat native to Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Grey-headed_flying_fox",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "grey-headed-flying-fox"
   },
   {
     "id": "killer-whale",
@@ -1063,7 +1118,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "killer-whale"
   },
   {
     "id": "blue-whale",
@@ -1085,7 +1141,8 @@
       "continent": ["south-america"],
       "extinct": false,
       "size": "huge"
-    }
+    },
+    "palette": "blue-whale"
   },
   {
     "id": "humpback-whale",
@@ -1107,7 +1164,8 @@
       "continent": ["south-america"],
       "extinct": false,
       "size": "huge"
-    }
+    },
+    "palette": "humpback-whale"
   },
   {
     "id": "vaquita",
@@ -1122,7 +1180,8 @@
     "description": "A porpoise endemic to the northern end of the Gulf of California in Baja California.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Vaquita",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "vaquita"
   },
   {
     "id": "bottlenose-dolphin",
@@ -1138,7 +1197,8 @@
     "description": "A toothed whale in the genus Tursiops.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bottlenose_dolphin",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "bottlenose-dolphin"
   },
   {
     "id": "great-white-shark",
@@ -1154,7 +1214,8 @@
     "description": "A large shark.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_white_shark",
-    "traits": { "class": "fish", "feathers": false, "extinct": false, "size": "huge" }
+    "traits": { "class": "fish", "feathers": false, "extinct": false, "size": "huge" },
+    "palette": "great-white-shark"
   },
   {
     "id": "whale-shark",
@@ -1176,7 +1237,8 @@
       "continent": ["south-america"],
       "extinct": false,
       "size": "huge"
-    }
+    },
+    "palette": "whale-shark"
   },
   {
     "id": "great-hammerhead",
@@ -1197,7 +1259,8 @@
       "feathers": false,
       "continent": ["north-america", "oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "great-hammerhead"
   },
   {
     "id": "hawksbill-turtle",
@@ -1218,7 +1281,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "hawksbill-turtle"
   },
   {
     "id": "leatherback-turtle",
@@ -1234,7 +1298,8 @@
     "description": "A large sea turtle.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Leatherback_sea_turtle",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "leatherback-turtle"
   },
   {
     "id": "common-octopus",
@@ -1255,7 +1320,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "common-octopus"
   },
   {
     "id": "dugong",
@@ -1271,7 +1337,8 @@
     "description": "A marine mammal.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Dugong",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "dugong"
   },
   {
     "id": "west-indian-manatee",
@@ -1287,7 +1354,8 @@
     "description": "A large, aquatic mammal native to warm coastal areas of the Caribbean.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/West_Indian_manatee",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "west-indian-manatee"
   },
   {
     "id": "sea-otter",
@@ -1309,7 +1377,8 @@
       "continent": ["asia", "europe", "north-america"],
       "extinct": false,
       "size": "medium"
-    }
+    },
+    "palette": "sea-otter"
   },
   {
     "id": "harbour-seal",
@@ -1325,7 +1394,8 @@
     "description": "A true seal found along temperate and Arctic marine coastlines of the Northern Hemisphere.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Harbor_seal",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "harbour-seal"
   },
   {
     "id": "emperor-penguin",
@@ -1347,7 +1417,8 @@
       "feathers": true,
       "continent": ["antarctica", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "emperor-penguin"
   },
   {
     "id": "african-penguin",
@@ -1369,7 +1440,8 @@
       "continent": ["africa"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "african-penguin"
   },
   {
     "id": "penguin",
@@ -2689,7 +2761,8 @@
       "feathers": true,
       "continent": ["africa", "antarctica", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "king-penguin"
   },
   {
     "id": "adelie-penguin",
@@ -2711,7 +2784,8 @@
       "feathers": true,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "adelie-penguin"
   },
   {
     "id": "gentoo-penguin",
@@ -2733,7 +2807,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "gentoo-penguin"
   },
   {
     "id": "chinstrap-penguin",
@@ -2755,7 +2830,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "chinstrap-penguin"
   },
   {
     "id": "little-penguin",
@@ -2777,7 +2853,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "little-penguin"
   },
   {
     "id": "macaroni-penguin",
@@ -2799,7 +2876,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "macaroni-penguin"
   },
   {
     "id": "humboldt-penguin",
@@ -2821,7 +2899,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "humboldt-penguin"
   },
   {
     "id": "southern-rockhopper-penguin",
@@ -2843,7 +2922,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "southern-rockhopper-penguin"
   },
   {
     "id": "yellow-eyed-penguin",
@@ -2865,7 +2945,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "yellow-eyed-penguin"
   },
   {
     "id": "galapagos-penguin",
@@ -2887,7 +2968,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "galapagos-penguin"
   },
   {
     "id": "sun-bear",
@@ -2903,7 +2985,8 @@
     "description": "A bear species in the family Ursidae found in the tropical forests of Southeast Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sun_bear",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "sun-bear"
   },
   {
     "id": "sloth-bear",
@@ -2919,7 +3002,8 @@
     "description": "A myrmecophagous bear species native to the Indian subcontinent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sloth_bear",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "sloth-bear"
   },
   {
     "id": "american-black-bear",
@@ -2935,7 +3019,8 @@
     "description": "A medium-sized bear which is endemic to North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/American_black_bear",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "american-black-bear"
   },
   {
     "id": "asian-black-bear",
@@ -2956,7 +3041,8 @@
       "feathers": false,
       "continent": ["asia", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "asian-black-bear"
   },
   {
     "id": "spectacled-bear",
@@ -2977,7 +3063,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "spectacled-bear"
   },
   {
     "id": "leopard",
@@ -2993,7 +3080,8 @@
     "description": "One of the five extant cat species in the genus Panthera.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Leopard",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "leopard"
   },
   {
     "id": "jaguar",
@@ -3014,7 +3102,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "jaguar"
   },
   {
     "id": "clouded-leopard",
@@ -3030,7 +3119,8 @@
     "description": "A wild cat that has large dusky-grey blotches and irregular spots.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Clouded_leopard",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "clouded-leopard"
   },
   {
     "id": "green-sea-turtle",
@@ -3051,7 +3141,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "green-sea-turtle"
   },
   {
     "id": "loggerhead-sea-turtle",
@@ -3072,7 +3163,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "loggerhead-sea-turtle"
   },
   {
     "id": "olive-ridley-sea-turtle",
@@ -3093,7 +3185,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "olive-ridley-sea-turtle"
   },
   {
     "id": "kemps-ridley-sea-turtle",
@@ -3109,7 +3202,8 @@
     "description": "A turtle in the family Cheloniidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Kemp's_ridley_sea_turtle",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "kemps-ridley-sea-turtle"
   },
   {
     "id": "nile-crocodile",
@@ -3125,7 +3219,8 @@
     "description": "A large crocodilian native to freshwater habitats in Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Nile_crocodile",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "nile-crocodile"
   },
   {
     "id": "american-crocodile",
@@ -3141,7 +3236,8 @@
     "description": "A crocodilian found in the Neotropics.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/American_crocodile",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "american-crocodile"
   },
   {
     "id": "mugger-crocodile",
@@ -3157,7 +3253,8 @@
     "description": "A medium-sized broad-snouted crocodile, also known as mugger and marsh crocodile.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Mugger_crocodile",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "mugger-crocodile"
   },
   {
     "id": "grey-seal",
@@ -3173,7 +3270,8 @@
     "description": "A large seal of the family Phocidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Grey_seal",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "grey-seal"
   },
   {
     "id": "leopard-seal",
@@ -3194,7 +3292,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "leopard-seal"
   },
   {
     "id": "weddell-seal",
@@ -3215,7 +3314,8 @@
       "feathers": false,
       "continent": ["antarctica"],
       "extinct": false
-    }
+    },
+    "palette": "weddell-seal"
   },
   {
     "id": "harp-seal",
@@ -3236,7 +3336,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "harp-seal"
   },
   {
     "id": "southern-elephant-seal",
@@ -3257,7 +3358,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "southern-elephant-seal"
   },
   {
     "id": "hawaiian-monk-seal",
@@ -3273,7 +3375,8 @@
     "description": "A vulnerable earless seal in the family Phocidae that is endemic to the Hawaiian Islands.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Hawaiian_monk_seal",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "hawaiian-monk-seal"
   },
   {
     "id": "african-forest-elephant",
@@ -3289,7 +3392,8 @@
     "description": "An elephant species native to humid tropical forests in West Africa and the Congo Basin.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_forest_elephant",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "african-forest-elephant"
   },
   {
     "id": "indian-rhinoceros",
@@ -3305,7 +3409,8 @@
     "description": "A rhinoceros species native to the Indian subcontinent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Indian_rhinoceros",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "indian-rhinoceros"
   },
   {
     "id": "sumatran-rhinoceros",
@@ -3321,7 +3426,8 @@
     "description": "A rare member of the family Rhinocerotidae and one of five extant rhinoceros.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "sumatran-rhinoceros"
   },
   {
     "id": "javan-rhinoceros",
@@ -3337,7 +3443,8 @@
     "description": "A critically endangered member of the genus Rhinoceros of the family Rhinocerotidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Javan_rhinoceros",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "javan-rhinoceros"
   },
   {
     "id": "tapanuli-orangutan",
@@ -3353,7 +3460,8 @@
     "description": "An orangutan restricted to South Tapanuli in the island of Sumatra in Indonesia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Tapanuli_orangutan",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "tapanuli-orangutan"
   },
   {
     "id": "fin-whale",
@@ -3374,7 +3482,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "fin-whale"
   },
   {
     "id": "sperm-whale",
@@ -3395,7 +3504,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "sperm-whale"
   },
   {
     "id": "common-minke-whale",
@@ -3411,7 +3521,8 @@
     "description": "A minke whale within the suborder of baleen whales.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_minke_whale",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "common-minke-whale"
   },
   {
     "id": "bowhead-whale",
@@ -3427,7 +3538,8 @@
     "description": "A baleen whale belonging to the family Balaenidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bowhead_whale",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "bowhead-whale"
   },
   {
     "id": "north-atlantic-right-whale",
@@ -3443,7 +3555,8 @@
     "description": "A baleen whale, one of three right whale species belonging to the genus Eubalaena.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/North_Atlantic_right_whale",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "north-atlantic-right-whale"
   },
   {
     "id": "gray-whale",
@@ -3459,7 +3572,8 @@
     "description": "A baleen whale that migrates between feeding and breeding grounds yearly.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gray_whale",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "gray-whale"
   },
   {
     "id": "beluga-whale",
@@ -3475,7 +3589,8 @@
     "description": "An Arctic and sub-Arctic cetacean.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Beluga_whale",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "beluga-whale"
   },
   {
     "id": "narwhal",
@@ -3491,7 +3606,8 @@
     "description": "A toothed whale native to the Arctic.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Narwhal",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "narwhal"
   },
   {
     "id": "short-beaked-common-dolphin",
@@ -3512,7 +3628,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "short-beaked-common-dolphin"
   },
   {
     "id": "amazon-river-dolphin",
@@ -3528,7 +3645,8 @@
     "description": "A toothed whale endemic to South America and is classified in the family Iniidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Amazon_river_dolphin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "amazon-river-dolphin"
   },
   {
     "id": "rissos-dolphin",
@@ -3549,7 +3667,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "rissos-dolphin"
   },
   {
     "id": "hectors-dolphin",
@@ -3565,7 +3684,8 @@
     "description": "One of six dolphin species belonging to the genus Cephalorhynchus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Hector's_dolphin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "hectors-dolphin"
   },
   {
     "id": "spinner-dolphin",
@@ -3581,7 +3701,8 @@
     "description": "A small dolphin found in off-shore tropical waters around the world.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Spinner_dolphin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "spinner-dolphin"
   },
   {
     "id": "tiger-shark",
@@ -3602,7 +3723,8 @@
       "feathers": false,
       "continent": ["oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "tiger-shark"
   },
   {
     "id": "bull-shark",
@@ -3623,7 +3745,8 @@
       "feathers": false,
       "continent": ["oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "bull-shark"
   },
   {
     "id": "shortfin-mako-shark",
@@ -3644,7 +3767,8 @@
       "feathers": false,
       "continent": ["oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "shortfin-mako-shark"
   },
   {
     "id": "basking-shark",
@@ -3665,7 +3789,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "basking-shark"
   },
   {
     "id": "blue-shark",
@@ -3686,7 +3811,8 @@
       "feathers": false,
       "continent": ["oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "blue-shark"
   },
   {
     "id": "nurse-shark",
@@ -3707,7 +3833,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "nurse-shark"
   },
   {
     "id": "greenland-shark",
@@ -3723,7 +3850,8 @@
     "description": "A large shark of the family Somniosidae, closely related to the Pacific.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Greenland_shark",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "greenland-shark"
   },
   {
     "id": "scalloped-hammerhead",
@@ -3744,7 +3872,8 @@
       "feathers": false,
       "continent": ["oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "scalloped-hammerhead"
   },
   {
     "id": "golden-eagle",
@@ -3765,7 +3894,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "golden-eagle"
   },
   {
     "id": "harpy-eagle",
@@ -3786,7 +3916,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "harpy-eagle"
   },
   {
     "id": "white-tailed-eagle",
@@ -3802,7 +3933,8 @@
     "description": "A large bird of prey, widely distributed across temperate Eurasia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/White-tailed_eagle",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "white-tailed-eagle"
   },
   {
     "id": "stellers-sea-eagle",
@@ -3818,7 +3950,8 @@
     "description": "A very large diurnal bird of prey in the family Accipitridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Steller's_sea_eagle",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "stellers-sea-eagle"
   },
   {
     "id": "martial-eagle",
@@ -3834,7 +3967,8 @@
     "description": "A large eagle native to sub-Saharan Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Martial_eagle",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "martial-eagle"
   },
   {
     "id": "great-horned-owl",
@@ -3855,7 +3989,8 @@
       "feathers": true,
       "continent": ["asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "great-horned-owl"
   },
   {
     "id": "eurasian-eagle-owl",
@@ -3876,7 +4011,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "eurasian-eagle-owl"
   },
   {
     "id": "tawny-owl",
@@ -3897,7 +4033,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "tawny-owl"
   },
   {
     "id": "burrowing-owl",
@@ -3918,7 +4055,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "burrowing-owl"
   },
   {
     "id": "little-owl",
@@ -3934,7 +4072,8 @@
     "description": "A bird that inhabits much of the temperate and warmer parts of Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Little_owl",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "little-owl"
   },
   {
     "id": "scarlet-macaw",
@@ -3955,7 +4094,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "scarlet-macaw"
   },
   {
     "id": "hyacinth-macaw",
@@ -3976,7 +4116,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "hyacinth-macaw"
   },
   {
     "id": "budgerigar",
@@ -3997,7 +4138,8 @@
       "feathers": true,
       "continent": ["africa", "oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "budgerigar"
   },
   {
     "id": "cockatiel",
@@ -4018,7 +4160,8 @@
       "feathers": true,
       "continent": ["africa", "oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "cockatiel"
   },
   {
     "id": "sulphur-crested-cockatoo",
@@ -4034,7 +4177,8 @@
     "description": "A relatively large white cockatoo found in wooded habitats in Australia, New Guinea.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sulphur-crested_cockatoo",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "sulphur-crested-cockatoo"
   },
   {
     "id": "kea",
@@ -4050,7 +4194,8 @@
     "description": "A large parrot in the family Strigopidae that is endemic to the forested.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Kea",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "kea"
   },
   {
     "id": "rainbow-lorikeet",
@@ -4066,7 +4211,8 @@
     "description": "A parrot found in Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Rainbow_lorikeet",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "rainbow-lorikeet"
   },
   {
     "id": "fire-salamander",
@@ -4082,7 +4228,8 @@
     "description": "A common salamander found in Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Fire_salamander",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "fire-salamander"
   },
   {
     "id": "japanese-giant-salamander",
@@ -4098,7 +4245,8 @@
     "description": "A fully aquatic giant salamander endemic to Japan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Japanese_giant_salamander",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "japanese-giant-salamander"
   },
   {
     "id": "hellbender",
@@ -4119,7 +4267,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "hellbender"
   },
   {
     "id": "olm",
@@ -4135,7 +4284,8 @@
     "description": "The nine species in the genus Proteus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Olm",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "olm"
   },
   {
     "id": "great-crested-newt",
@@ -4151,7 +4301,8 @@
     "description": "A newt species native to Great Britain, northern and central continental Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Northern_crested_newt",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "great-crested-newt"
   },
   {
     "id": "ethiopian-wolf",
@@ -4173,7 +4324,8 @@
       "continent": ["africa"],
       "extinct": false,
       "size": "medium"
-    }
+    },
+    "palette": "ethiopian-wolf"
   },
   {
     "id": "red-wolf",
@@ -4189,7 +4341,8 @@
     "description": "A canine native to the southeastern United States.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_wolf",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "red-wolf"
   },
   {
     "id": "arctic-fox",
@@ -4210,7 +4363,8 @@
       "feathers": false,
       "continent": ["asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "arctic-fox"
   },
   {
     "id": "fennec-fox",
@@ -4226,7 +4380,8 @@
     "description": "A small fox native to the deserts of North Africa, ranging from Western Sahara.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Fennec_fox",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "fennec-fox"
   },
   {
     "id": "kit-fox",
@@ -4242,7 +4397,8 @@
     "description": "A fox species that inhabits arid and semi-arid regions of the Southwestern United States.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Kit_fox",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "kit-fox"
   },
   {
     "id": "gray-fox",
@@ -4263,7 +4419,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "gray-fox"
   },
   {
     "id": "eastern-grey-kangaroo",
@@ -4279,7 +4436,8 @@
     "description": "A marsupial found in the eastern third of Australia, with a population of several million.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eastern_grey_kangaroo",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "eastern-grey-kangaroo"
   },
   {
     "id": "western-grey-kangaroo",
@@ -4295,7 +4453,8 @@
     "description": "A large and very common kangaroo found across almost the entire southern part of Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Western_grey_kangaroo",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "western-grey-kangaroo"
   },
   {
     "id": "western-long-beaked-echidna",
@@ -4311,7 +4470,8 @@
     "description": "One of the four extant echidnas and one of three Zaglossus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Western_long-beaked_echidna",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "western-long-beaked-echidna"
   },
   {
     "id": "four-toed-hedgehog",
@@ -4327,7 +4487,8 @@
     "description": "A hedgehog found throughout much of central and eastern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Four-toed_hedgehog",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "four-toed-hedgehog"
   },
   {
     "id": "pygmy-rabbit",
@@ -4343,7 +4504,8 @@
     "description": "A rabbit species native to the United States.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Pygmy_rabbit",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "pygmy-rabbit"
   },
   {
     "id": "wood-mouse",
@@ -4359,7 +4521,8 @@
     "description": "A murid rodent native to Europe and northwestern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Wood_mouse",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "wood-mouse"
   },
   {
     "id": "western-gorilla",
@@ -4375,7 +4538,8 @@
     "description": "A great ape found in Africa, one of two hominine genus Gorilla.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Western_gorilla",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "western-gorilla"
   },
   {
     "id": "ring-tailed-lemur",
@@ -4391,7 +4555,8 @@
     "description": "A medium- to larger-sized strepsirrhine primate and the most internationally recognized lemur species.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ring-tailed_lemur",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "ring-tailed-lemur"
   },
   {
     "id": "red-ruffed-lemur",
@@ -4407,7 +4572,8 @@
     "description": "One of two species in the genus Varecia, the ruffed lemurs.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_ruffed_lemur",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "red-ruffed-lemur"
   },
   {
     "id": "gray-mouse-lemur",
@@ -4423,7 +4589,8 @@
     "description": "A small lemur, a strepsirrhine primate, found only on the island of Madagascar.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gray_mouse_lemur",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "gray-mouse-lemur"
   },
   {
     "id": "aye-aye",
@@ -4439,7 +4606,8 @@
     "description": "A long-fingered lemur, a strepsirrhine primate native to Madagascar with rodent-like teeth that grow perpetually.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Aye-aye",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "aye-aye"
   },
   {
     "id": "grevys-zebra",
@@ -4455,7 +4623,8 @@
     "description": "The largest living wild equid and the most threatened of the three zebras.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gr%C3%A9vy's_zebra",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "grevys-zebra"
   },
   {
     "id": "mountain-zebra",
@@ -4471,7 +4640,8 @@
     "description": "A zebra species in the family Equidae, native to southwestern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Mountain_zebra",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "mountain-zebra"
   },
   {
     "id": "bairds-tapir",
@@ -4492,7 +4662,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "bairds-tapir"
   },
   {
     "id": "south-american-tapir",
@@ -4508,7 +4679,8 @@
     "description": "One of the four recognized species in the tapir family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/South_American_tapir",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "south-american-tapir"
   },
   {
     "id": "mountain-tapir",
@@ -4529,7 +4701,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "mountain-tapir"
   },
   {
     "id": "chinese-pangolin",
@@ -4545,7 +4718,8 @@
     "description": "A pangolin native to the northern Indian subcontinent, northern parts of Southeast Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chinese_pangolin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "chinese-pangolin"
   },
   {
     "id": "giant-pangolin",
@@ -4561,7 +4735,8 @@
     "description": "A pangolin from genus Smutsia of subfamily Smutsiinae within the family Manidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Giant_pangolin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "giant-pangolin"
   },
   {
     "id": "ground-pangolin",
@@ -4577,7 +4752,8 @@
     "description": "A pangolin from genus Smutsia of subfamily Smutsiinae the within family Manidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ground_pangolin",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "ground-pangolin"
   },
   {
     "id": "great-spotted-kiwi",
@@ -4599,7 +4775,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "great-spotted-kiwi"
   },
   {
     "id": "little-spotted-kiwi",
@@ -4621,7 +4798,8 @@
       "continent": ["oceania"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "little-spotted-kiwi"
   },
   {
     "id": "somali-ostrich",
@@ -4643,7 +4821,8 @@
       "continent": ["africa"],
       "extinct": false,
       "flies": false
-    }
+    },
+    "palette": "somali-ostrich"
   },
   {
     "id": "green-peafowl",
@@ -4659,7 +4838,8 @@
     "description": "A peafowl species native to the tropical forests of Southeast Asia and Southern China.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Green_peafowl",
-    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false },
+    "palette": "green-peafowl"
   },
   {
     "id": "congo-peafowl",
@@ -4675,7 +4855,8 @@
     "description": "A species native to the Congo Basin.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Congo_peafowl",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "congo-peafowl"
   },
   {
     "id": "gyrfalcon",
@@ -4691,7 +4872,8 @@
     "description": "A bird of prey and the largest species in the falcon family, Falconidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gyrfalcon",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "gyrfalcon"
   },
   {
     "id": "common-kestrel",
@@ -4712,7 +4894,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "common-kestrel"
   },
   {
     "id": "merlin",
@@ -4733,7 +4916,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "merlin"
   },
   {
     "id": "andean-condor",
@@ -4754,7 +4938,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "andean-condor"
   },
   {
     "id": "american-flamingo",
@@ -4775,7 +4960,8 @@
       "feathers": true,
       "continent": ["africa", "north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "american-flamingo"
   },
   {
     "id": "lesser-flamingo",
@@ -4791,7 +4977,8 @@
     "description": "A flamingo occurring in sub-Saharan Africa and western India.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Lesser_flamingo",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "lesser-flamingo"
   },
   {
     "id": "chilean-flamingo",
@@ -4812,7 +4999,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "chilean-flamingo"
   },
   {
     "id": "whooping-crane",
@@ -4828,7 +5016,8 @@
     "description": "An endangered crane species, native to North America, named for its \"whooping\" calls.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Whooping_crane",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "whooping-crane"
   },
   {
     "id": "sarus-crane",
@@ -4844,7 +5033,8 @@
     "description": "A large nonmigratory crane found in parts of the Indian subcontinent, Southeast Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sarus_crane",
-    "traits": { "class": "bird", "feathers": true }
+    "traits": { "class": "bird", "feathers": true },
+    "palette": "sarus-crane"
   },
   {
     "id": "grey-crowned-crane",
@@ -4860,7 +5050,8 @@
     "description": "A large crane species native to Sub-Saharan Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Grey_crowned_crane",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "grey-crowned-crane"
   },
   {
     "id": "common-crane",
@@ -4876,7 +5067,8 @@
     "description": "A bird of the family Gruidae, the cranes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_crane",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "common-crane"
   },
   {
     "id": "marabou-stork",
@@ -4892,7 +5084,8 @@
     "description": "A large wading bird in the stork family Ciconiidae native to sub-Saharan Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Marabou_stork",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "marabou-stork"
   },
   {
     "id": "black-stork",
@@ -4908,7 +5101,8 @@
     "description": "A large bird in the stork family Ciconiidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black_stork",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "black-stork"
   },
   {
     "id": "saddle-billed-stork",
@@ -4924,7 +5118,8 @@
     "description": "A large wading bird in the stork family, Ciconiidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Saddle-billed_stork",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "saddle-billed-stork"
   },
   {
     "id": "southern-lapwing",
@@ -4945,7 +5140,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "southern-lapwing"
   },
   {
     "id": "masked-lapwing",
@@ -4961,7 +5157,8 @@
     "description": "A large, common and conspicuous bird native to Australia, New Zealand and New Guinea.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Masked_lapwing",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "masked-lapwing"
   },
   {
     "id": "annas-hummingbird",
@@ -4977,7 +5174,8 @@
     "description": "A North American hummingbird named after Anna Masséna, Duchess of Rivoli.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Anna's_hummingbird",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "annas-hummingbird"
   },
   {
     "id": "bee-hummingbird",
@@ -4998,7 +5196,8 @@
       "feathers": true,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "bee-hummingbird"
   },
   {
     "id": "sword-billed-hummingbird",
@@ -5019,7 +5218,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "sword-billed-hummingbird"
   },
   {
     "id": "laughing-kookaburra",
@@ -5035,7 +5235,8 @@
     "description": "A bird in the kingfisher subfamily Halcyoninae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Laughing_kookaburra",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "laughing-kookaburra"
   },
   {
     "id": "belted-kingfisher",
@@ -5056,7 +5257,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "belted-kingfisher"
   },
   {
     "id": "sacred-kingfisher",
@@ -5072,7 +5274,8 @@
     "description": "A medium-sized woodland kingfisher that inhabits mangroves, woodlands, forests and river valleys in Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sacred_kingfisher",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "sacred-kingfisher"
   },
   {
     "id": "black-billed-magpie",
@@ -5088,7 +5291,8 @@
     "description": "A bird in the corvid family found in the western half of North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black-billed_magpie",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "black-billed-magpie"
   },
   {
     "id": "red-billed-blue-magpie",
@@ -5104,7 +5308,8 @@
     "description": "A bird in the crow family, Corvidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red-billed_blue_magpie",
-    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false },
+    "palette": "red-billed-blue-magpie"
   },
   {
     "id": "mandarin-duck",
@@ -5125,7 +5330,8 @@
       "feathers": true,
       "continent": ["africa", "asia"],
       "extinct": false
-    }
+    },
+    "palette": "mandarin-duck"
   },
   {
     "id": "wood-duck",
@@ -5141,7 +5347,8 @@
     "description": "A partially migratory perching duck found in North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Wood_duck",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "wood-duck"
   },
   {
     "id": "common-eider",
@@ -5157,7 +5364,8 @@
     "description": "A large sea-duck that is distributed over the northern coasts of Europe, North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_eider",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "common-eider"
   },
   {
     "id": "northern-pintail",
@@ -5178,7 +5386,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "northern-pintail"
   },
   {
     "id": "muscovy-duck",
@@ -5199,7 +5408,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "muscovy-duck"
   },
   {
     "id": "horned-puffin",
@@ -5215,7 +5425,8 @@
     "description": "An auk found in the North Pacific Ocean, including the coasts of Alaska, Siberia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Horned_puffin",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "horned-puffin"
   },
   {
     "id": "tufted-puffin",
@@ -5231,7 +5442,8 @@
     "description": "A relatively abundant medium-sized pelagic seabird in the auk family found throughout the North Pacific.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Tufted_puffin",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "tufted-puffin"
   },
   {
     "id": "black-browed-albatross",
@@ -5252,7 +5464,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "black-browed-albatross"
   },
   {
     "id": "laysan-albatross",
@@ -5268,7 +5481,8 @@
     "description": "A large seabird that ranges across the North Pacific.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Laysan_albatross",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "laysan-albatross"
   },
   {
     "id": "southern-royal-albatross",
@@ -5289,7 +5503,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "southern-royal-albatross"
   },
   {
     "id": "indian-flying-fox",
@@ -5305,7 +5520,8 @@
     "description": "A flying fox native to the Indian subcontinent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Indian_flying_fox",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "indian-flying-fox"
   },
   {
     "id": "large-flying-fox",
@@ -5321,7 +5537,8 @@
     "description": "A southeast Asian megabat in the family Pteropodidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Large_flying_fox",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "large-flying-fox"
   },
   {
     "id": "giant-pacific-octopus",
@@ -5337,7 +5554,8 @@
     "description": "A large marine cephalopod belonging to the genus Enteroctopus and Enteroctopodidae family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Giant_Pacific_octopus",
-    "traits": { "class": "mollusc", "feathers": false, "extinct": false }
+    "traits": { "class": "mollusc", "feathers": false, "extinct": false },
+    "palette": "giant-pacific-octopus"
   },
   {
     "id": "greater-blue-ringed-octopus",
@@ -5353,7 +5571,8 @@
     "description": "One of four extremely venomous blue-ringed octopuses belonging to the family Octopodidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Greater_blue-ringed_octopus",
-    "traits": { "class": "mollusc", "feathers": false, "extinct": false }
+    "traits": { "class": "mollusc", "feathers": false, "extinct": false },
+    "palette": "greater-blue-ringed-octopus"
   },
   {
     "id": "mimic-octopus",
@@ -5369,7 +5588,8 @@
     "description": "An octopus from the Indo-Pacific region.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Mimic_octopus",
-    "traits": { "class": "mollusc", "feathers": false, "extinct": false }
+    "traits": { "class": "mollusc", "feathers": false, "extinct": false },
+    "palette": "mimic-octopus"
   },
   {
     "id": "amazonian-manatee",
@@ -5390,7 +5610,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "amazonian-manatee"
   },
   {
     "id": "west-african-manatee",
@@ -5406,7 +5627,8 @@
     "description": "A manatee that inhabits much of Western Africa – from Senegal to Angola.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_manatee",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "west-african-manatee"
   },
   {
     "id": "stellers-sea-cow",
@@ -5422,7 +5644,8 @@
     "description": "An extinct sirenian described by Georg Wilhelm Steller in 1741.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Steller's_sea_cow",
-    "traits": { "class": "mammal", "feathers": false, "extinct": true }
+    "traits": { "class": "mammal", "feathers": false, "extinct": true },
+    "palette": "stellers-sea-cow"
   },
   {
     "id": "american-bullfrog",
@@ -5438,7 +5661,8 @@
     "description": "A large frog in the family Ranidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/American_bullfrog",
-    "traits": { "class": "amphibian", "feathers": false }
+    "traits": { "class": "amphibian", "feathers": false },
+    "palette": "american-bullfrog"
   },
   {
     "id": "strawberry-poison-dart-frog",
@@ -5454,7 +5678,8 @@
     "description": "A small poison dart frog found in Central America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Strawberry_poison_dart_frog",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "strawberry-poison-dart-frog"
   },
   {
     "id": "red-eyed-tree-frog",
@@ -5470,7 +5695,8 @@
     "description": "A tree frog in the subfamily Phyllomedusinae native to forests of Central America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Agalychnis_callidryas",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "red-eyed-tree-frog"
   },
   {
     "id": "common-frog",
@@ -5486,7 +5712,8 @@
     "description": "The common frog or grass frog, also known as the European common frog.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_frog",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "common-frog"
   },
   {
     "id": "african-clawed-frog",
@@ -5502,7 +5729,8 @@
     "description": "An African aquatic frog of the family Pipidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_clawed_frog",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "african-clawed-frog"
   },
   {
     "id": "goliath-frog",
@@ -5518,7 +5746,8 @@
     "description": "A frog in the family Conrauidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Goliath_frog",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "goliath-frog"
   },
   {
     "id": "cane-toad",
@@ -5539,7 +5768,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "cane-toad"
   },
   {
     "id": "common-toad",
@@ -5555,7 +5785,8 @@
     "description": "A toad found throughout most of Europe, western North Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_toad",
-    "traits": { "class": "amphibian", "feathers": false, "extinct": false }
+    "traits": { "class": "amphibian", "feathers": false, "extinct": false },
+    "palette": "common-toad"
   },
   {
     "id": "king-cobra",
@@ -5571,7 +5802,8 @@
     "description": "A species complex of snakes endemic to Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/King_cobra",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "king-cobra"
   },
   {
     "id": "black-mamba",
@@ -5587,7 +5819,8 @@
     "description": "A highly venomous snake belonging to the family Elapidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black_mamba",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "black-mamba"
   },
   {
     "id": "reticulated-python",
@@ -5603,7 +5836,8 @@
     "description": "A python species native to South and Southeast Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Reticulated_python",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "reticulated-python"
   },
   {
     "id": "green-anaconda",
@@ -5619,7 +5853,8 @@
     "description": "A snake in the family Boidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Green_anaconda",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "green-anaconda"
   },
   {
     "id": "inland-taipan",
@@ -5635,7 +5870,8 @@
     "description": "An extremely venomous snake in the family Elapidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Inland_taipan",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "inland-taipan"
   },
   {
     "id": "eastern-diamondback-rattlesnake",
@@ -5656,7 +5892,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "eastern-diamondback-rattlesnake"
   },
   {
     "id": "boa-constrictor",
@@ -5677,7 +5914,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "boa-constrictor"
   },
   {
     "id": "grass-snake",
@@ -5693,7 +5931,8 @@
     "description": "An Eurasian semi-aquatic non-venomous colubrid snake.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Grass_snake",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "grass-snake"
   },
   {
     "id": "green-iguana",
@@ -5714,7 +5953,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "green-iguana"
   },
   {
     "id": "marine-iguana",
@@ -5730,7 +5970,8 @@
     "description": "An iguana found only on the Galápagos Islands.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Marine_iguana",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "marine-iguana"
   },
   {
     "id": "gila-monster",
@@ -5746,7 +5987,8 @@
     "description": "A venomous lizard native to the Southwestern United States.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gila_monster",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "gila-monster"
   },
   {
     "id": "frilled-lizard",
@@ -5762,7 +6004,8 @@
     "description": "A lizard in the family Agamidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Frilled_lizard",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "frilled-lizard"
   },
   {
     "id": "thorny-devil",
@@ -5778,7 +6021,8 @@
     "description": "A lizard in the family Agamidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Thorny_devil",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "thorny-devil"
   },
   {
     "id": "veiled-chameleon",
@@ -5794,7 +6038,8 @@
     "description": "A chameleon native to the Arabian Peninsula in Yemen and Saudi Arabia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Veiled_chameleon",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "veiled-chameleon"
   },
   {
     "id": "panther-chameleon",
@@ -5810,7 +6055,8 @@
     "description": "A chameleon found in the eastern.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Panther_chameleon",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "panther-chameleon"
   },
   {
     "id": "leopard-gecko",
@@ -5826,7 +6072,8 @@
     "description": "A ground-dwelling gecko native primarily to the rocky dry grassland and desert regions of Afghanistan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Leopard_gecko",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "leopard-gecko"
   },
   {
     "id": "tokay-gecko",
@@ -5842,7 +6089,8 @@
     "description": "A nocturnal arboreal gecko in the genus Gekko, the true geckos.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Tokay_gecko",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false, "size": "tiny" }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false, "size": "tiny" },
+    "palette": "tokay-gecko"
   },
   {
     "id": "galapagos-tortoise",
@@ -5858,7 +6106,8 @@
     "description": "A very large tortoise in the genus Chelonoidis.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gal%C3%A1pagos_tortoise",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "galapagos-tortoise"
   },
   {
     "id": "aldabra-giant-tortoise",
@@ -5874,7 +6123,8 @@
     "description": "A tortoise in the family Testudinidae and genus Aldabrachelys.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Aldabra_giant_tortoise",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["africa"] }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["africa"] },
+    "palette": "aldabra-giant-tortoise"
   },
   {
     "id": "african-spurred-tortoise",
@@ -5890,7 +6140,8 @@
     "description": "An endangered tortoise inhabiting the southern edge of the Sahara Desert and the Sahel.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_spurred_tortoise",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "african-spurred-tortoise"
   },
   {
     "id": "hermanns-tortoise",
@@ -5906,7 +6157,8 @@
     "description": "A tortoise native to Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Hermann's_tortoise",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "hermanns-tortoise"
   },
   {
     "id": "gopher-tortoise",
@@ -5927,7 +6179,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "gopher-tortoise"
   },
   {
     "id": "red-deer",
@@ -5943,7 +6196,8 @@
     "description": "A deer in the genus Cervus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_deer",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "red-deer"
   },
   {
     "id": "moose",
@@ -5964,7 +6218,8 @@
       "feathers": false,
       "continent": ["asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "moose"
   },
   {
     "id": "reindeer",
@@ -5985,7 +6240,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "reindeer"
   },
   {
     "id": "white-tailed-deer",
@@ -6006,7 +6262,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "white-tailed-deer"
   },
   {
     "id": "roe-deer",
@@ -6027,7 +6284,8 @@
       "feathers": false,
       "continent": ["asia", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "roe-deer"
   },
   {
     "id": "fallow-deer",
@@ -6048,7 +6306,8 @@
       "feathers": false,
       "continent": ["asia", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "fallow-deer"
   },
   {
     "id": "chital",
@@ -6064,7 +6323,8 @@
     "description": "A deer species native to the Indian subcontinent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chital",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "chital"
   },
   {
     "id": "springbok",
@@ -6080,7 +6340,8 @@
     "description": "An antelope found mainly in south and southwest Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Springbok",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "springbok"
   },
   {
     "id": "impala",
@@ -6096,7 +6357,8 @@
     "description": "A medium-sized antelope found in eastern and southern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Impala",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "impala"
   },
   {
     "id": "blue-wildebeest",
@@ -6112,7 +6374,8 @@
     "description": "A large antelope and one of the two wildebeest.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Blue_wildebeest",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "blue-wildebeest"
   },
   {
     "id": "greater-kudu",
@@ -6128,7 +6391,8 @@
     "description": "A large woodland antelope, found throughout eastern and southern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Greater_kudu",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "greater-kudu"
   },
   {
     "id": "gemsbok",
@@ -6144,7 +6408,8 @@
     "description": "A large antelope in the genus Oryx.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gemsbok",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "gemsbok"
   },
   {
     "id": "saiga-antelope",
@@ -6160,7 +6425,8 @@
     "description": "An antelope which during antiquity inhabited a vast area of the Eurasian steppe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Saiga_antelope",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "saiga-antelope"
   },
   {
     "id": "sable-antelope",
@@ -6176,7 +6442,8 @@
     "description": "A large antelope which inhabits wooded savanna in East and Southern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sable_antelope",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "sable-antelope"
   },
   {
     "id": "addax",
@@ -6192,7 +6459,8 @@
     "description": "An antelope native to the Sahara.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Addax",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "addax"
   },
   {
     "id": "japanese-macaque",
@@ -6208,7 +6476,8 @@
     "description": "A terrestrial Old World monkey species that is native to Japan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Japanese_macaque",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "japanese-macaque"
   },
   {
     "id": "proboscis-monkey",
@@ -6224,7 +6493,8 @@
     "description": "An arboreal Old World monkey with an unusually large nose, a reddish-brown skin color.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Proboscis_monkey",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "proboscis-monkey"
   },
   {
     "id": "mandrill",
@@ -6240,7 +6510,8 @@
     "description": "A large Old World monkey native to west central Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Mandrill",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "mandrill"
   },
   {
     "id": "golden-snub-nosed-monkey",
@@ -6256,7 +6527,8 @@
     "description": "An Old World monkey in the subfamily Colobinae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Golden_snub-nosed_monkey",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "golden-snub-nosed-monkey"
   },
   {
     "id": "mantled-howler",
@@ -6277,7 +6549,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "mantled-howler"
   },
   {
     "id": "common-squirrel-monkey",
@@ -6292,7 +6565,8 @@
     "emoji": "🐒",
     "description": "The traditional common name for several small squirrel monkey species native to the tropical areas.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Common_squirrel_monkey"
+    "wiki": "https://en.wikipedia.org/wiki/Common_squirrel_monkey",
+    "palette": "common-squirrel-monkey"
   },
   {
     "id": "golden-lion-tamarin",
@@ -6313,7 +6587,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "golden-lion-tamarin"
   },
   {
     "id": "rhesus-macaque",
@@ -6329,7 +6604,8 @@
     "description": "An Old World monkey in the Macaca genus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Rhesus_macaque",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "rhesus-macaque"
   },
   {
     "id": "red-squirrel",
@@ -6345,7 +6621,8 @@
     "description": "A tree squirrel in the genus Sciurus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_squirrel",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "red-squirrel"
   },
   {
     "id": "eastern-gray-squirrel",
@@ -6361,7 +6638,8 @@
     "description": "A tree squirrel in the genus Sciurus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eastern_gray_squirrel",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "eastern-gray-squirrel"
   },
   {
     "id": "siberian-flying-squirrel",
@@ -6377,7 +6655,8 @@
     "description": "An Old World flying squirrel ranging from the Baltic Sea in the west.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Siberian_flying_squirrel",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "siberian-flying-squirrel"
   },
   {
     "id": "black-tailed-prairie-dog",
@@ -6393,7 +6672,8 @@
     "description": "A rodent of the family Sciuridae found in the Great Plains of North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black-tailed_prairie_dog",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "black-tailed-prairie-dog"
   },
   {
     "id": "alpine-marmot",
@@ -6409,7 +6689,8 @@
     "description": "A large ground-dwelling squirrel, from the marmots.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Alpine_marmot",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "alpine-marmot"
   },
   {
     "id": "red-tailed-hawk",
@@ -6430,7 +6711,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "red-tailed-hawk"
   },
   {
     "id": "coopers-hawk",
@@ -6451,7 +6733,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "coopers-hawk"
   },
   {
     "id": "eurasian-goshawk",
@@ -6467,7 +6750,8 @@
     "description": "A medium-large bird of prey in the family Accipitridae, a family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eurasian_goshawk",
-    "traits": { "class": "bird", "feathers": true }
+    "traits": { "class": "bird", "feathers": true },
+    "palette": "eurasian-goshawk"
   },
   {
     "id": "harriss-hawk",
@@ -6488,7 +6772,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "harriss-hawk"
   },
   {
     "id": "european-herring-gull",
@@ -6509,7 +6794,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "european-herring-gull"
   },
   {
     "id": "black-headed-gull",
@@ -6530,7 +6816,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "black-headed-gull"
   },
   {
     "id": "black-legged-kittiwake",
@@ -6551,7 +6838,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "black-legged-kittiwake"
   },
   {
     "id": "laughing-gull",
@@ -6567,7 +6855,8 @@
     "description": "A medium-sized gull of North and South America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Laughing_gull",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa", "south-america"] }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa", "south-america"] },
+    "palette": "laughing-gull"
   },
   {
     "id": "grey-heron",
@@ -6588,7 +6877,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "grey-heron"
   },
   {
     "id": "great-blue-heron",
@@ -6609,7 +6899,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "great-blue-heron"
   },
   {
     "id": "great-egret",
@@ -6630,7 +6921,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "great-egret"
   },
   {
     "id": "little-egret",
@@ -6651,7 +6943,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "little-egret"
   },
   {
     "id": "black-crowned-night-heron",
@@ -6672,7 +6965,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "black-crowned-night-heron"
   },
   {
     "id": "mute-swan",
@@ -6694,7 +6988,8 @@
       "continent": ["africa"],
       "extinct": false,
       "size": "large"
-    }
+    },
+    "palette": "mute-swan"
   },
   {
     "id": "black-swan",
@@ -6710,7 +7005,8 @@
     "description": "A large waterbird, a swan which breeds mainly in the southeast.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Black_swan",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "black-swan"
   },
   {
     "id": "trumpeter-swan",
@@ -6726,7 +7022,8 @@
     "description": "A swan found in North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Trumpeter_swan",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "trumpeter-swan"
   },
   {
     "id": "whooper-swan",
@@ -6742,7 +7039,8 @@
     "description": "A large northern hemisphere swan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Whooper_swan",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "whooper-swan"
   },
   {
     "id": "canada-goose",
@@ -6758,7 +7056,8 @@
     "description": "A large goose with a black head and neck, white cheeks, white under its chin.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Canada_goose",
-    "traits": { "class": "bird", "feathers": true, "extinct": false, "size": "medium" }
+    "traits": { "class": "bird", "feathers": true, "extinct": false, "size": "medium" },
+    "palette": "canada-goose"
   },
   {
     "id": "greylag-goose",
@@ -6779,7 +7078,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "greylag-goose"
   },
   {
     "id": "bar-headed-goose",
@@ -6795,7 +7095,8 @@
     "description": "A goose that breeds in Central Asia in colonies of thousands near mountain lakes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bar-headed_goose",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "bar-headed-goose"
   },
   {
     "id": "nene",
@@ -6811,7 +7112,8 @@
     "description": "A bird endemic to the Hawaiian Islands.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Nene_(bird)",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "nene"
   },
   {
     "id": "great-spotted-woodpecker",
@@ -6827,7 +7129,8 @@
     "description": "A medium-sized woodpecker with pied black and white plumage.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_spotted_woodpecker",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "great-spotted-woodpecker"
   },
   {
     "id": "pileated-woodpecker",
@@ -6843,7 +7146,8 @@
     "description": "A large, crow-sized woodpecker with a prominent red crest, white neck stripe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Pileated_woodpecker",
-    "traits": { "class": "bird", "feathers": true }
+    "traits": { "class": "bird", "feathers": true },
+    "palette": "pileated-woodpecker"
   },
   {
     "id": "european-green-woodpecker",
@@ -6859,7 +7163,8 @@
     "description": "A large green woodpecker with a bright red crown and a black moustache.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eurasian_green_woodpecker",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "european-green-woodpecker"
   },
   {
     "id": "acorn-woodpecker",
@@ -6880,7 +7185,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "acorn-woodpecker"
   },
   {
     "id": "great-hornbill",
@@ -6896,7 +7202,8 @@
     "description": "One of the larger members of the hornbill family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_hornbill",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "great-hornbill"
   },
   {
     "id": "southern-ground-hornbill",
@@ -6912,7 +7219,8 @@
     "description": "One of two ground hornbill, both of which are found solely within Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Southern_ground_hornbill",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "southern-ground-hornbill"
   },
   {
     "id": "rhinoceros-hornbill",
@@ -6928,7 +7236,8 @@
     "description": "A large forest hornbill.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Rhinoceros_hornbill",
-    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["asia"], "extinct": false },
+    "palette": "rhinoceros-hornbill"
   },
   {
     "id": "toco-toucan",
@@ -6949,7 +7258,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "toco-toucan"
   },
   {
     "id": "keel-billed-toucan",
@@ -6970,7 +7280,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "keel-billed-toucan"
   },
   {
     "id": "giant-oceanic-manta-ray",
@@ -6991,7 +7302,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "giant-oceanic-manta-ray"
   },
   {
     "id": "spotted-eagle-ray",
@@ -7012,7 +7324,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "spotted-eagle-ray"
   },
   {
     "id": "common-stingray",
@@ -7028,7 +7341,8 @@
     "description": "A stingray in the family Dasyatidae, found in the northeastern Atlantic Ocean and the Mediterranean.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_stingray",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "common-stingray"
   },
   {
     "id": "smalltooth-sawfish",
@@ -7049,7 +7363,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "smalltooth-sawfish"
   },
   {
     "id": "moon-jellyfish",
@@ -7064,7 +7379,8 @@
     "emoji": "🪼",
     "description": "A true jellyfish in the family Ulmaridae and the type its genus, Aurelia.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Aurelia_aurita"
+    "wiki": "https://en.wikipedia.org/wiki/Aurelia_aurita",
+    "palette": "moon-jellyfish"
   },
   {
     "id": "lions-mane-jellyfish",
@@ -7079,7 +7395,8 @@
     "emoji": "🪼",
     "description": "One of the largest known jellyfish.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Lion's_mane_jellyfish"
+    "wiki": "https://en.wikipedia.org/wiki/Lion's_mane_jellyfish",
+    "palette": "lions-mane-jellyfish"
   },
   {
     "id": "box-jellyfish",
@@ -7094,7 +7411,8 @@
     "emoji": "🪼",
     "description": "An extremely venomous box jellyfish found in coastal waters from northern Australia.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Chironex_fleckeri"
+    "wiki": "https://en.wikipedia.org/wiki/Chironex_fleckeri",
+    "palette": "box-jellyfish"
   },
   {
     "id": "red-king-crab",
@@ -7110,7 +7428,8 @@
     "description": "A king crab native to cold waters in the North Pacific Ocean and adjacent seas.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_king_crab",
-    "traits": { "class": "crustacean", "feathers": false }
+    "traits": { "class": "crustacean", "feathers": false },
+    "palette": "red-king-crab"
   },
   {
     "id": "japanese-spider-crab",
@@ -7126,7 +7445,8 @@
     "description": "A marine crab and is the largest crab found in the waters around Japan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Japanese_spider_crab",
-    "traits": { "class": "crustacean", "feathers": false }
+    "traits": { "class": "crustacean", "feathers": false },
+    "palette": "japanese-spider-crab"
   },
   {
     "id": "coconut-crab",
@@ -7142,7 +7462,8 @@
     "description": "A terrestrial giant hermit crab.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Coconut_crab",
-    "traits": { "class": "crustacean", "feathers": false, "extinct": false }
+    "traits": { "class": "crustacean", "feathers": false, "extinct": false },
+    "palette": "coconut-crab"
   },
   {
     "id": "blue-crab",
@@ -7158,7 +7479,8 @@
     "description": "A crab native to the waters of the western Atlantic Ocean.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Callinectes_sapidus",
-    "traits": { "class": "crustacean", "feathers": false }
+    "traits": { "class": "crustacean", "feathers": false },
+    "palette": "blue-crab"
   },
   {
     "id": "monarch-butterfly",
@@ -7174,7 +7496,8 @@
     "description": "A milkweed butterfly in the family Nymphalidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Monarch_butterfly",
-    "traits": { "class": "insect", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "monarch-butterfly"
   },
   {
     "id": "queen-alexandras-birdwing",
@@ -7190,7 +7513,8 @@
     "description": "The largest butterfly in the world.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Queen_Alexandra's_birdwing",
-    "traits": { "class": "insect", "feathers": false, "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "extinct": false },
+    "palette": "queen-alexandras-birdwing"
   },
   {
     "id": "menelaus-blue-morpho",
@@ -7206,7 +7530,8 @@
     "description": "One of 30 butterfly in the subfamily Morphinae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Morpho_menelaus",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "menelaus-blue-morpho"
   },
   {
     "id": "painted-lady",
@@ -7222,7 +7547,8 @@
     "description": "The most widespread of all butterfly species.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Vanessa_cardui",
-    "traits": { "class": "insect", "feathers": false, "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "extinct": false },
+    "palette": "painted-lady"
   },
   {
     "id": "western-honey-bee",
@@ -7243,7 +7569,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "western-honey-bee"
   },
   {
     "id": "buff-tailed-bumblebee",
@@ -7259,7 +7586,8 @@
     "description": "One of the most numerous bumblebee species in Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bombus_terrestris",
-    "traits": { "class": "insect", "feathers": false, "continent": ["africa", "asia", "europe"] }
+    "traits": { "class": "insect", "feathers": false, "continent": ["africa", "asia", "europe"] },
+    "palette": "buff-tailed-bumblebee"
   },
   {
     "id": "hercules-beetle",
@@ -7275,7 +7603,8 @@
     "description": "A rhinoceros beetle native to the tropical forests of southern Mexico, Central America, South America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Hercules_beetle",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "hercules-beetle"
   },
   {
     "id": "european-stag-beetle",
@@ -7291,7 +7620,8 @@
     "description": "One of the best-known stag beetle in Western Europe.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Lucanus_cervus",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "european-stag-beetle"
   },
   {
     "id": "seven-spot-ladybird",
@@ -7307,7 +7637,8 @@
     "description": "A carnivorous beetle native to Europe, most of Asia, and North Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Coccinella_septempunctata",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "seven-spot-ladybird"
   },
   {
     "id": "sacred-scarab",
@@ -7323,7 +7654,8 @@
     "description": "The type genus Scarabaeus and the family Scarabaeidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Scarabaeus_sacer",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "sacred-scarab"
   },
   {
     "id": "bullet-ant",
@@ -7339,7 +7671,8 @@
     "description": "An ant known for its extremely painful sting.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Paraponera_clavata",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "bullet-ant"
   },
   {
     "id": "red-wood-ant",
@@ -7355,7 +7688,8 @@
     "description": "A boreal member of the Formica rufa ants, and is the type species.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Formica_rufa",
-    "traits": { "class": "insect", "feathers": false, "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "extinct": false },
+    "palette": "red-wood-ant"
   },
   {
     "id": "goliath-birdeater",
@@ -7371,7 +7705,8 @@
     "description": "A large spider that belongs to the tarantula family Theraphosidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Goliath_birdeater",
-    "traits": { "class": "arachnid", "feathers": false, "size": "small" }
+    "traits": { "class": "arachnid", "feathers": false, "size": "small" },
+    "palette": "goliath-birdeater"
   },
   {
     "id": "southern-black-widow",
@@ -7387,7 +7722,8 @@
     "description": "A venomous spider in the genus Latrodectus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Latrodectus_mactans",
-    "traits": { "class": "arachnid", "feathers": false }
+    "traits": { "class": "arachnid", "feathers": false },
+    "palette": "southern-black-widow"
   },
   {
     "id": "peacock-spider",
@@ -7403,7 +7739,8 @@
     "description": "A species in the jumping spider family, belonging to the genus Maratus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Maratus_volans",
-    "traits": { "class": "arachnid", "feathers": false, "continent": ["oceania"] }
+    "traits": { "class": "arachnid", "feathers": false, "continent": ["oceania"] },
+    "palette": "peacock-spider"
   },
   {
     "id": "european-garden-spider",
@@ -7419,7 +7756,8 @@
     "description": "Commonly called the European garden spider, cross orbweaver, diadem spider, orangie, cross spider.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Araneus_diadematus",
-    "traits": { "class": "arachnid", "feathers": false }
+    "traits": { "class": "arachnid", "feathers": false },
+    "palette": "european-garden-spider"
   },
   {
     "id": "emperor-scorpion",
@@ -7435,7 +7773,8 @@
     "description": "A scorpion native to rainforests and savannas in West Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Emperor_scorpion",
-    "traits": { "class": "arachnid", "feathers": false }
+    "traits": { "class": "arachnid", "feathers": false },
+    "palette": "emperor-scorpion"
   },
   {
     "id": "deathstalker",
@@ -7451,7 +7790,8 @@
     "description": "A scorpion, a member of the family Buthidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Deathstalker",
-    "traits": { "class": "arachnid", "feathers": false }
+    "traits": { "class": "arachnid", "feathers": false },
+    "palette": "deathstalker"
   },
   {
     "id": "eurasian-otter",
@@ -7467,7 +7807,8 @@
     "description": "A semiaquatic mammal native to Eurasia and the Maghreb.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eurasian_otter",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "eurasian-otter"
   },
   {
     "id": "giant-otter",
@@ -7488,7 +7829,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "giant-otter"
   },
   {
     "id": "north-american-river-otter",
@@ -7504,7 +7846,8 @@
     "description": "A semiaquatic mammal that is endemic to the North American continent throughout most of Canada.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/North_American_river_otter",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "north-american-river-otter"
   },
   {
     "id": "dromedary",
@@ -7520,7 +7863,8 @@
     "description": "A large camel of the genus Camelus with one hump on its back.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Dromedary",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "dromedary"
   },
   {
     "id": "bactrian-camel",
@@ -7536,7 +7880,8 @@
     "description": "A camel native to the steppes of Central Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bactrian_camel",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "bactrian-camel"
   },
   {
     "id": "common-vampire-bat",
@@ -7557,7 +7902,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "common-vampire-bat"
   },
   {
     "id": "little-brown-bat",
@@ -7573,7 +7919,8 @@
     "description": "An endangered mouse-eared microbat found in North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Little_brown_bat",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "little-brown-bat"
   },
   {
     "id": "mexican-free-tailed-bat",
@@ -7594,7 +7941,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "mexican-free-tailed-bat"
   },
   {
     "id": "european-hare",
@@ -7610,7 +7958,8 @@
     "description": "A hare native to Europe and parts of Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/European_hare",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["europe"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["europe"], "extinct": false },
+    "palette": "european-hare"
   },
   {
     "id": "arctic-hare",
@@ -7626,7 +7975,8 @@
     "description": "A hare highly adapted to living in the Arctic tundra and other icy biomes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Arctic_hare",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "arctic-hare"
   },
   {
     "id": "snowshoe-hare",
@@ -7642,7 +7992,8 @@
     "description": "A hare found in North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Snowshoe_hare",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "snowshoe-hare"
   },
   {
     "id": "lar-gibbon",
@@ -7658,7 +8009,8 @@
     "description": "An endangered primate in the gibbon family, Hylobatidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Lar_gibbon",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "lar-gibbon"
   },
   {
     "id": "siamang",
@@ -7674,7 +8026,8 @@
     "description": "An endangered arboreal, black-furred gibbon native to the tropical rainforests of Indonesia, Malaysia, and Thailand.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Siamang",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "siamang"
   },
   {
     "id": "australian-pelican",
@@ -7690,7 +8043,8 @@
     "description": "A large waterbird in the family Pelecanidae, widespread on the inland.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Australian_pelican",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "australian-pelican"
   },
   {
     "id": "brown-pelican",
@@ -7711,7 +8065,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "brown-pelican"
   },
   {
     "id": "great-white-pelican",
@@ -7727,7 +8082,8 @@
     "description": "A bird in the pelican family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_white_pelican",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "great-white-pelican"
   },
   {
     "id": "bearded-vulture",
@@ -7743,7 +8099,8 @@
     "description": "A very large bird of prey in the monotypic genus Gypaetus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bearded_vulture",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "bearded-vulture"
   },
   {
     "id": "turkey-vulture",
@@ -7764,7 +8121,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "turkey-vulture"
   },
   {
     "id": "griffon-vulture",
@@ -7780,7 +8138,8 @@
     "description": "A large Old World vulture in the bird of prey family Accipitridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eurasian_griffon_vulture",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "griffon-vulture"
   },
   {
     "id": "cougar",
@@ -7800,7 +8159,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "cougar"
   },
   {
     "id": "eurasian-lynx",
@@ -7820,7 +8180,8 @@
       "feathers": false,
       "continent": ["asia", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "eurasian-lynx"
   },
   {
     "id": "serval",
@@ -7835,7 +8196,8 @@
     "description": "A wild small cat native to Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Serval",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "serval"
   },
   {
     "id": "caracal",
@@ -7850,7 +8212,8 @@
     "description": "A wild cat native to Africa, the Middle East, Central Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Caracal",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "caracal"
   },
   {
     "id": "ocelot",
@@ -7870,7 +8233,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "ocelot"
   },
   {
     "id": "sand-cat",
@@ -7885,7 +8249,8 @@
     "description": "A small wild cat that inhabits sandy and stony deserts far from water sources.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sand_cat",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "sand-cat"
   },
   {
     "id": "gharial",
@@ -7900,7 +8265,8 @@
     "description": "A crocodilian in the family Gavialidae and among the longest of all living crocodilians.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Gharial",
-    "traits": { "class": "reptile", "feathers": false, "extinct": false }
+    "traits": { "class": "reptile", "feathers": false, "extinct": false },
+    "palette": "gharial"
   },
   {
     "id": "american-alligator",
@@ -7920,7 +8286,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "american-alligator"
   },
   {
     "id": "spectacled-caiman",
@@ -7940,7 +8307,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "spectacled-caiman"
   },
   {
     "id": "tuatara",
@@ -7955,7 +8323,8 @@
     "description": "A reptile endemic to New Zealand.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Tuatara",
-    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"] }
+    "traits": { "class": "reptile", "feathers": false, "continent": ["oceania"] },
+    "palette": "tuatara"
   },
   {
     "id": "walrus",
@@ -7970,7 +8339,8 @@
     "description": "A large pinniped marine mammal.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Walrus",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "walrus"
   },
   {
     "id": "california-sea-lion",
@@ -7985,7 +8355,8 @@
     "description": "A coastal eared seal native to western North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/California_sea_lion",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "california-sea-lion"
   },
   {
     "id": "bonobo",
@@ -8000,7 +8371,8 @@
     "description": "The smallest great ape and one of the two making up the genus Pan.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Bonobo",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "bonobo"
   },
   {
     "id": "sunda-slow-loris",
@@ -8015,7 +8387,8 @@
     "description": "A strepsirrhine primate and a slow loris native to Indonesia, West Malaysia, southern Thailand.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sunda_slow_loris",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "sunda-slow-loris"
   },
   {
     "id": "philippine-tarsier",
@@ -8030,7 +8403,8 @@
     "description": "A tarsier endemic to the Philippines.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Philippine_tarsier",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "philippine-tarsier"
   },
   {
     "id": "capybara",
@@ -8050,7 +8424,8 @@
       "feathers": false,
       "continent": ["north-america", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "capybara"
   },
   {
     "id": "north-american-beaver",
@@ -8070,7 +8445,8 @@
       "feathers": false,
       "continent": ["europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "north-american-beaver"
   },
   {
     "id": "naked-mole-rat",
@@ -8085,7 +8461,8 @@
     "description": "A burrowing rodent native to the Horn of Africa and parts of Kenya.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Naked_mole-rat",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "naked-mole-rat"
   },
   {
     "id": "long-tailed-chinchilla",
@@ -8105,7 +8482,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "long-tailed-chinchilla"
   },
   {
     "id": "north-american-porcupine",
@@ -8120,7 +8498,8 @@
     "description": "A large quill-covered rodent in the New World porcupine family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/North_American_porcupine",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "north-american-porcupine"
   },
   {
     "id": "guinea-pig",
@@ -8135,7 +8514,8 @@
     "description": "A rodent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Guinea_pig",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "guinea-pig"
   },
   {
     "id": "brown-rat",
@@ -8150,7 +8530,8 @@
     "description": "A widespread, common rat.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Brown_rat",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "brown-rat"
   },
   {
     "id": "golden-hamster",
@@ -8165,7 +8546,8 @@
     "description": "A rodent belonging to the hamster subfamily, Cricetinae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Golden_hamster",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "golden-hamster"
   },
   {
     "id": "giant-anteater",
@@ -8185,7 +8567,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "giant-anteater"
   },
   {
     "id": "nine-banded-armadillo",
@@ -8200,7 +8583,8 @@
     "description": "An armadillo native to South America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Nine-banded_armadillo",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "nine-banded-armadillo"
   },
   {
     "id": "brown-throated-sloth",
@@ -8215,7 +8599,8 @@
     "description": "A three-toed sloth found in the Neotropical realm of Central and South America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Brown-throated_sloth",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "brown-throated-sloth"
   },
   {
     "id": "aardvark",
@@ -8230,7 +8615,8 @@
     "description": "A medium-sized, burrowing, nocturnal mammal native to Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Aardvark",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["africa"], "extinct": false },
+    "palette": "aardvark"
   },
   {
     "id": "okapi",
@@ -8245,7 +8631,8 @@
     "description": "An artiodactyl mammal that is endemic to the northeast Democratic Republic of the Congo.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Okapi",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "okapi"
   },
   {
     "id": "meerkat",
@@ -8260,7 +8647,8 @@
     "description": "A small mongoose found in southern Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Meerkat",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "meerkat"
   },
   {
     "id": "spotted-hyena",
@@ -8275,7 +8663,8 @@
     "description": "A hyena species, currently classed as the sole extant member of the genus Crocuta.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Spotted_hyena",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "spotted-hyena"
   },
   {
     "id": "african-wild-dog",
@@ -8290,7 +8679,8 @@
     "description": "A wild canine native to sub-Saharan Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/African_wild_dog",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "african-wild-dog"
   },
   {
     "id": "raccoon",
@@ -8310,7 +8700,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "raccoon"
   },
   {
     "id": "wolverine",
@@ -8330,7 +8721,8 @@
       "feathers": false,
       "continent": ["asia", "europe", "north-america"],
       "extinct": false
-    }
+    },
+    "palette": "wolverine"
   },
   {
     "id": "honey-badger",
@@ -8345,7 +8737,8 @@
     "description": "A mammal widely distributed across Africa, Southwest Asia, and the Indian subcontinent.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Honey_badger",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "honey-badger"
   },
   {
     "id": "european-badger",
@@ -8360,7 +8753,8 @@
     "description": "A badger in the family Mustelidae native to Europe and West Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/European_badger",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "european-badger"
   },
   {
     "id": "american-bison",
@@ -8381,7 +8775,8 @@
       "continent": ["north-america"],
       "extinct": false,
       "size": "huge"
-    }
+    },
+    "palette": "american-bison"
   },
   {
     "id": "wild-yak",
@@ -8396,7 +8791,8 @@
     "description": "A large, wild bovine native to the Himalayas.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Wild_yak",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["asia"], "extinct": false },
+    "palette": "wild-yak"
   },
   {
     "id": "muskox",
@@ -8416,7 +8812,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "muskox"
   },
   {
     "id": "wild-boar",
@@ -8436,7 +8833,8 @@
       "feathers": false,
       "continent": ["asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "wild-boar"
   },
   {
     "id": "common-warthog",
@@ -8451,7 +8849,8 @@
     "description": "A wild member of the pig family found in grassland, savanna.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_warthog",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "common-warthog"
   },
   {
     "id": "pygmy-hippopotamus",
@@ -8466,7 +8865,8 @@
     "description": "A small hippopotamid which is native to the forests and swamps of West Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "pygmy-hippopotamus"
   },
   {
     "id": "dingo",
@@ -8481,7 +8881,8 @@
     "description": "A lineage of dog found in Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Dingo",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "dingo"
   },
   {
     "id": "common-wombat",
@@ -8496,7 +8897,8 @@
     "description": "A marsupial, one of three extant wombats.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Common_wombat",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "common-wombat"
   },
   {
     "id": "sugar-glider",
@@ -8511,7 +8913,8 @@
     "description": "A small, omnivorous, arboreal, and nocturnal gliding possum.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Sugar_glider",
-    "traits": { "class": "mammal", "feathers": false, "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "extinct": false },
+    "palette": "sugar-glider"
   },
   {
     "id": "quokka",
@@ -8526,7 +8929,8 @@
     "description": "A macropod native to Australia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Quokka",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "quokka"
   },
   {
     "id": "numbat",
@@ -8541,7 +8945,8 @@
     "description": "An insectivorous marsupial.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Numbat",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "numbat"
   },
   {
     "id": "llama",
@@ -8556,7 +8961,8 @@
     "description": "A domesticated South American camelid, widely used as a meat.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Llama",
-    "traits": { "class": "mammal", "feathers": false, "continent": ["south-america"] }
+    "traits": { "class": "mammal", "feathers": false, "continent": ["south-america"] },
+    "palette": "llama"
   },
   {
     "id": "alpaca",
@@ -8571,7 +8977,8 @@
     "description": "A domesticated South American camelid.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Alpaca",
-    "traits": { "class": "mammal", "feathers": false }
+    "traits": { "class": "mammal", "feathers": false },
+    "palette": "alpaca"
   },
   {
     "id": "vicuna",
@@ -8591,7 +8998,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "vicuna"
   },
   {
     "id": "pronghorn",
@@ -8611,7 +9019,8 @@
       "feathers": false,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "pronghorn"
   },
   {
     "id": "thylacine",
@@ -8632,7 +9041,8 @@
       "continent": ["oceania"],
       "extinct": true,
       "size": "medium"
-    }
+    },
+    "palette": "thylacine"
   },
   {
     "id": "woolly-mammoth",
@@ -8647,7 +9057,8 @@
     "description": "An extinct mammoth that lived from the Middle Pleistocene until its extinction in the Holocene.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Woolly_mammoth",
-    "traits": { "class": "mammal", "feathers": false, "extinct": true }
+    "traits": { "class": "mammal", "feathers": false, "extinct": true },
+    "palette": "woolly-mammoth"
   },
   {
     "id": "osprey",
@@ -8667,7 +9078,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "osprey"
   },
   {
     "id": "secretarybird",
@@ -8682,7 +9094,8 @@
     "description": "A large bird of prey that is endemic to Africa.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Secretarybird",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "secretarybird"
   },
   {
     "id": "red-kite",
@@ -8697,7 +9110,8 @@
     "description": "A bird of prey in the family Accipitridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_kite",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"] }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"] },
+    "palette": "red-kite"
   },
   {
     "id": "southern-cassowary",
@@ -8718,7 +9132,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "oceania"],
       "extinct": false
-    }
+    },
+    "palette": "southern-cassowary"
   },
   {
     "id": "greater-rhea",
@@ -8739,7 +9154,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "greater-rhea"
   },
   {
     "id": "greater-roadrunner",
@@ -8759,7 +9175,8 @@
       "feathers": true,
       "continent": ["north-america"],
       "extinct": false
-    }
+    },
+    "palette": "greater-roadrunner"
   },
   {
     "id": "superb-lyrebird",
@@ -8774,7 +9191,8 @@
     "description": "An Australian passerine songbird, one of two species from the family Menuridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Superb_lyrebird",
-    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["oceania"], "extinct": false },
+    "palette": "superb-lyrebird"
   },
   {
     "id": "resplendent-quetzal",
@@ -8789,7 +9207,8 @@
     "description": "A small bird found in Central America and southern Mexico that lives in tropical forests.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Resplendent_quetzal",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "resplendent-quetzal"
   },
   {
     "id": "victoria-crowned-pigeon",
@@ -8804,7 +9223,8 @@
     "description": "A large, bluish-grey pigeon with elegant blue lace-like crests, maroon breast and red irises.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Victoria_crowned_pigeon",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "victoria-crowned-pigeon"
   },
   {
     "id": "dodo",
@@ -8825,7 +9245,8 @@
       "continent": ["africa"],
       "extinct": true,
       "flies": false
-    }
+    },
+    "palette": "dodo"
   },
   {
     "id": "passenger-pigeon",
@@ -8840,7 +9261,8 @@
     "description": "An extinct pigeon that was endemic to North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Passenger_pigeon",
-    "traits": { "class": "bird", "feathers": true, "extinct": true, "size": "small" }
+    "traits": { "class": "bird", "feathers": true, "extinct": true, "size": "small" },
+    "palette": "passenger-pigeon"
   },
   {
     "id": "great-auk",
@@ -8855,7 +9277,8 @@
     "description": "An extinct flightless alcid that first appeared around 400,000 years ago.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Great_auk",
-    "traits": { "class": "bird", "feathers": true, "extinct": true, "size": "medium" }
+    "traits": { "class": "bird", "feathers": true, "extinct": true, "size": "medium" },
+    "palette": "great-auk"
   },
   {
     "id": "barn-swallow",
@@ -8875,7 +9298,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "barn-swallow"
   },
   {
     "id": "european-robin",
@@ -8895,7 +9319,8 @@
       "feathers": true,
       "continent": ["africa", "europe"],
       "extinct": false
-    }
+    },
+    "palette": "european-robin"
   },
   {
     "id": "american-robin",
@@ -8910,7 +9335,8 @@
     "description": "A migratory bird of the true thrush genus and Turdidae, the wider thrush family.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/American_robin",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "american-robin"
   },
   {
     "id": "house-sparrow",
@@ -8931,7 +9357,8 @@
       "continent": ["africa", "south-america"],
       "extinct": false,
       "size": "tiny"
-    }
+    },
+    "palette": "house-sparrow"
   },
   {
     "id": "common-starling",
@@ -8951,7 +9378,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "europe", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "common-starling"
   },
   {
     "id": "blue-jay",
@@ -8966,7 +9394,8 @@
     "description": "A passerine bird in the family Corvidae, native to eastern North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Blue_jay",
-    "traits": { "class": "bird", "feathers": true, "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "extinct": false },
+    "palette": "blue-jay"
   },
   {
     "id": "northern-cardinal",
@@ -8981,7 +9410,8 @@
     "description": "A bird in the genus Cardinalis.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Northern_cardinal",
-    "traits": { "class": "bird", "feathers": true, "extinct": false, "size": "small" }
+    "traits": { "class": "bird", "feathers": true, "extinct": false, "size": "small" },
+    "palette": "northern-cardinal"
   },
   {
     "id": "common-raven",
@@ -9002,7 +9432,8 @@
       "continent": ["africa", "south-america"],
       "extinct": false,
       "size": "small"
-    }
+    },
+    "palette": "common-raven"
   },
   {
     "id": "eurasian-blue-tit",
@@ -9017,7 +9448,8 @@
     "description": "A small passerine bird in the tit family, Paridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Eurasian_blue_tit",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "eurasian-blue-tit"
   },
   {
     "id": "arctic-tern",
@@ -9037,7 +9469,8 @@
       "feathers": true,
       "continent": ["africa", "asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "arctic-tern"
   },
   {
     "id": "blue-footed-booby",
@@ -9057,7 +9490,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "blue-footed-booby"
   },
   {
     "id": "magnificent-frigatebird",
@@ -9077,7 +9511,8 @@
       "feathers": true,
       "continent": ["africa", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "magnificent-frigatebird"
   },
   {
     "id": "shoebill",
@@ -9092,7 +9527,8 @@
     "description": "A large long-legged wading bird.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Shoebill",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "shoebill"
   },
   {
     "id": "hoatzin",
@@ -9112,7 +9548,8 @@
       "feathers": true,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "hoatzin"
   },
   {
     "id": "wild-turkey",
@@ -9127,7 +9564,8 @@
     "description": "An upland game bird native to North America, one of two extant turkey.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Wild_turkey",
-    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false }
+    "traits": { "class": "bird", "feathers": true, "continent": ["africa"], "extinct": false },
+    "palette": "wild-turkey"
   },
   {
     "id": "ocellaris-clownfish",
@@ -9142,7 +9580,8 @@
     "description": "A marine fish belonging to the family Pomacentridae, which includes clownfishes and damselfishes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ocellaris_clownfish",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "ocellaris-clownfish"
   },
   {
     "id": "great-barracuda",
@@ -9162,7 +9601,8 @@
       "feathers": false,
       "continent": ["africa", "north-america", "oceania", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "great-barracuda"
   },
   {
     "id": "atlantic-salmon",
@@ -9177,7 +9617,8 @@
     "description": "A ray-finned fish in the family Salmonidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Atlantic_salmon",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "atlantic-salmon"
   },
   {
     "id": "west-indian-ocean-coelacanth",
@@ -9192,7 +9633,8 @@
     "description": "A crossopterygian, one of two extant coelacanth, a rare vertebrates more closely related to lungfish.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/West_Indian_Ocean_coelacanth",
-    "traits": { "extinct": false }
+    "traits": { "extinct": false },
+    "palette": "west-indian-ocean-coelacanth"
   },
   {
     "id": "ocean-sunfish",
@@ -9207,7 +9649,8 @@
     "description": "One of the largest ray-finned fish in the world.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Ocean_sunfish",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "ocean-sunfish"
   },
   {
     "id": "atlantic-bluefin-tuna",
@@ -9222,7 +9665,8 @@
     "description": "A tuna in the family Scombridae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Atlantic_bluefin_tuna",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "atlantic-bluefin-tuna"
   },
   {
     "id": "red-bellied-piranha",
@@ -9237,7 +9681,8 @@
     "description": "A freshwater ray-finned fish belonging to the family Serrasalmidae, which includes the pacus, piranhas.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red-bellied_piranha",
-    "traits": { "class": "fish", "feathers": false }
+    "traits": { "class": "fish", "feathers": false },
+    "palette": "red-bellied-piranha"
   },
   {
     "id": "electric-eel",
@@ -9252,7 +9697,8 @@
     "description": "Genus, Electrophorus, of neotropical freshwater fish from South America in the family Gymnotidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Electric_eel",
-    "traits": { "class": "fish", "feathers": false }
+    "traits": { "class": "fish", "feathers": false },
+    "palette": "electric-eel"
   },
   {
     "id": "red-lionfish",
@@ -9267,7 +9713,8 @@
     "description": "A venomous coral reef fish in the family Scorpaenidae, order Scorpaeniformes.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Red_lionfish",
-    "traits": { "class": "fish", "feathers": false, "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "extinct": false },
+    "palette": "red-lionfish"
   },
   {
     "id": "atlantic-cod",
@@ -9282,7 +9729,8 @@
     "description": "A fish of the family Gadidae, widely consumed by humans.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Atlantic_cod",
-    "traits": { "extinct": false, "size": "medium" }
+    "traits": { "extinct": false, "size": "medium" },
+    "palette": "atlantic-cod"
   },
   {
     "id": "goldfish",
@@ -9302,7 +9750,8 @@
       "feathers": false,
       "continent": ["asia", "south-america"],
       "extinct": false
-    }
+    },
+    "palette": "goldfish"
   },
   {
     "id": "swordfish",
@@ -9322,7 +9771,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "swordfish"
   },
   {
     "id": "leafy-seadragon",
@@ -9337,7 +9787,8 @@
     "description": "A marine fish.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Leafy_seadragon",
-    "traits": { "class": "fish", "feathers": false, "continent": ["oceania"], "extinct": false }
+    "traits": { "class": "fish", "feathers": false, "continent": ["oceania"], "extinct": false },
+    "palette": "leafy-seadragon"
   },
   {
     "id": "humpback-anglerfish",
@@ -9357,7 +9808,8 @@
       "feathers": false,
       "continent": ["south-america"],
       "extinct": false
-    }
+    },
+    "palette": "humpback-anglerfish"
   },
   {
     "id": "blobfish",
@@ -9372,7 +9824,8 @@
     "description": "A deep-sea fish of the family Psychrolutidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Psychrolutes_marcidus",
-    "traits": { "class": "fish", "feathers": false }
+    "traits": { "class": "fish", "feathers": false },
+    "palette": "blobfish"
   },
   {
     "id": "portuguese-man-o-war",
@@ -9386,7 +9839,8 @@
     "emoji": "🐾",
     "description": "A marine hydrozoan found in the Atlantic, Indian, and Pacific oceans.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Portuguese_man_o'_war"
+    "wiki": "https://en.wikipedia.org/wiki/Portuguese_man_o'_war",
+    "palette": "portuguese-man-o-war"
   },
   {
     "id": "american-lobster",
@@ -9401,7 +9855,8 @@
     "description": "A lobster found on the Atlantic coast of North America.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/American_lobster",
-    "traits": { "class": "crustacean", "feathers": false, "extinct": false }
+    "traits": { "class": "crustacean", "feathers": false, "extinct": false },
+    "palette": "american-lobster"
   },
   {
     "id": "antarctic-krill",
@@ -9421,7 +9876,8 @@
       "feathers": false,
       "continent": ["antarctica"],
       "extinct": false
-    }
+    },
+    "palette": "antarctic-krill"
   },
   {
     "id": "peacock-mantis-shrimp",
@@ -9436,7 +9892,8 @@
     "description": "A large odontodactylid stomatopod native to the epipelagic seabed across the Indo-Pacific.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Odontodactylus_scyllarus",
-    "traits": { "class": "crustacean", "feathers": false }
+    "traits": { "class": "crustacean", "feathers": false },
+    "palette": "peacock-mantis-shrimp"
   },
   {
     "id": "atlas-moth",
@@ -9451,7 +9908,8 @@
     "description": "A large saturniid moth endemic to the forests of Asia.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Attacus_atlas",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "atlas-moth"
   },
   {
     "id": "luna-moth",
@@ -9466,7 +9924,8 @@
     "description": "A Nearctic moth in the family Saturniidae, subfamily Saturniinae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Luna_moth",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "luna-moth"
   },
   {
     "id": "european-mantis",
@@ -9481,7 +9940,8 @@
     "description": "A large hemimetabolic insect in the family Mantidae, which is the largest order Mantodea.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/European_mantis",
-    "traits": { "class": "insect", "feathers": false, "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "extinct": false },
+    "palette": "european-mantis"
   },
   {
     "id": "desert-locust",
@@ -9496,7 +9956,8 @@
     "description": "A locust in the grasshopper family, Acrididae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Desert_locust",
-    "traits": { "class": "insect", "feathers": false }
+    "traits": { "class": "insect", "feathers": false },
+    "palette": "desert-locust"
   },
   {
     "id": "emperor-dragonfly",
@@ -9511,7 +9972,8 @@
     "description": "A large hawker dragonfly of the family Aeshnidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Emperor_dragonfly",
-    "traits": { "class": "insect", "feathers": false, "extinct": false }
+    "traits": { "class": "insect", "feathers": false, "extinct": false },
+    "palette": "emperor-dragonfly"
   },
   {
     "id": "giant-squid",
@@ -9526,7 +9988,8 @@
     "description": "A deep-ocean dwelling squid in the family Architeuthidae.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Giant_squid",
-    "traits": { "class": "mollusc", "feathers": false, "extinct": false, "size": "large" }
+    "traits": { "class": "mollusc", "feathers": false, "extinct": false, "size": "large" },
+    "palette": "giant-squid"
   },
   {
     "id": "chambered-nautilus",
@@ -9541,7 +10004,8 @@
     "description": "The best-known nautilus.",
     "descriptionReviewed": false,
     "wiki": "https://en.wikipedia.org/wiki/Chambered_nautilus",
-    "traits": { "class": "mollusc", "feathers": false }
+    "traits": { "class": "mollusc", "feathers": false },
+    "palette": "chambered-nautilus"
   },
   {
     "id": "crown-of-thorns-starfish",
@@ -9555,6 +10019,7 @@
     "emoji": "🐾",
     "description": "A large starfish that preys upon hard coral polyps.",
     "descriptionReviewed": false,
-    "wiki": "https://en.wikipedia.org/wiki/Crown-of-thorns_starfish"
+    "wiki": "https://en.wikipedia.org/wiki/Crown-of-thorns_starfish",
+    "palette": "crown-of-thorns-starfish"
   }
 ]

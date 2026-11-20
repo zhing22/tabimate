@@ -1,0 +1,57 @@
+{
+  "frames": {
+    "camel 0.aseprite": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "camel 1.aseprite": {
+      "frame": {
+        "x": 24,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "camel 2.aseprite": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "camel 3.aseprite": {
+      "frame": {
+        "x": 72,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    }
+  },
+  "meta": {
+    "app": "scripts/drawPlaceholderSheets.ts",
+    "image": "camel.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 96,
+      "h": 24
+    },
+    "frameTags": [
+      {
+        "name": "walk",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      }
+    ]
+  }
+}

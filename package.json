@@ -16,6 +16,7 @@
     "validate-data": "tsx scripts/validate-data.ts",
     "pixelate": "tsx scripts/pixelate.ts",
     "art:sample": "tsx scripts/drawSampleSheet.ts",
+    "art:placeholders": "tsx scripts/drawPlaceholderSheets.ts",
     "seed-traits": "tsx scripts/seed-traits.ts",
     "draft-descriptions": "tsx scripts/draft-descriptions.ts",
     "content-report": "tsx scripts/content-report.ts",
