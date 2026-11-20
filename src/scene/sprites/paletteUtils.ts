@@ -58,6 +58,21 @@ export function plainPalette(
   ) as unknown as Palette;
 }
 
+/**
+ * The colours a sprite is drawn in: resolvePalette, made plainer for a group
+ * drawn as its representative (`plain`; its shiny stays as designed).
+ */
+export function spritePalette(
+  art: AnimalArt,
+  shiny: boolean,
+  palettes: ReadonlyMap<string, Palette>,
+  plain: boolean,
+): Palette | null {
+  const resolved = resolvePalette(art, shiny, palettes);
+  if (!resolved || !plain || shiny) return resolved;
+  return plainPalette(art.palette, resolved, palettes);
+}
+
 /** The same palette with the eyes (slot 5) closed: drawn in the base colour. */
 export const blinkPalette = (palette: Palette): Palette =>
   [palette[0], palette[1], palette[2], palette[3], palette[4], palette[1]] as const;

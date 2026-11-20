@@ -23,6 +23,9 @@ export interface JournalActions {
 
 const BADGES_TAB = { id: 'badges', label: 'Achievements', icon: '🏆' };
 
+/** On <html> while the journal shows (journal.css: full screen on a phone). */
+export const JOURNAL_CLASS = 'is-journal';
+
 /** A set's line: "Big cats · 3 of 7", stamped once complete. */
 function setHeader(tab: JournalTab): HTMLElement | null {
   if (!tab.progress) return null;
@@ -47,11 +50,20 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
 
   function openCell(cell: JournalCell, from: HTMLElement) {
     panel.querySelector('.journal-detail')?.remove();
-    const detail = journalDetail(cell, () => {
-      detail.remove();
-      from.querySelector('button')?.focus();
-    });
+    panel.querySelector('.journal-cell--chosen')?.classList.remove('journal-cell--chosen');
+    from.classList.add('journal-cell--chosen');
+    const detail = journalDetail(
+      cell,
+      () => {
+        detail.remove();
+        from.classList.remove('journal-cell--chosen');
+        from.querySelector('button')?.focus();
+      },
+      props.portraits,
+    );
     panel.prepend(detail);
+    // On a phone the grid scrolls with the page: bring the page into view.
+    detail.scrollIntoView?.({ block: 'nearest' });
   }
 
   const tabs = [...props.tabs, BADGES_TAB];
@@ -106,6 +118,7 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
   );
   showTab(0);
   focus(root.querySelector<HTMLElement>('#journal-title'));
-  // Nothing to stop: every listener is on elements the host removes with the screen.
-  return () => {};
+  document.documentElement.classList.add(JOURNAL_CLASS);
+  // Every listener is on elements the host removes with the screen.
+  return () => document.documentElement.classList.remove(JOURNAL_CLASS);
 };

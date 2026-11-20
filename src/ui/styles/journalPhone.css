@@ -1,0 +1,26 @@
+/* On a phone the Field Journal is its own page: it covers the whole screen
+   (scene included; html.is-journal while it shows), and the grid scrolls with
+   the page instead of in a box of its own. */
+@media (max-width: 767px), (max-height: 520px) {
+  :root.is-journal:not(.is-results) #ui {
+    top: var(--vv-top, 0px);
+    height: var(--vv-height, 100dvh);
+    padding: 0;
+  }
+
+  :root.is-journal .journal {
+    align-self: stretch;
+    align-content: start;
+    max-width: none;
+    min-height: var(--vv-height, 100dvh);
+    padding: max(var(--space-4), env(safe-area-inset-top)) var(--space-4)
+      max(var(--space-4), env(safe-area-inset-bottom));
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  :root.is-journal .journal-grid {
+    max-height: none;
+    overflow-y: visible;
+  }
+}

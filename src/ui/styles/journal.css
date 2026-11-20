@@ -10,6 +10,8 @@
   overflow-x: auto;
   padding: var(--space-1) 2px var(--space-2);
   scrollbar-width: thin;
+  /* A scroller may shrink to nothing in a grid taller than the screen. */
+  min-height: max-content;
 }
 
 .journal__tab {

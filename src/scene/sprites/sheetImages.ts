@@ -49,13 +49,14 @@ export function toCanvas({ width, height, data }: Pixels): HTMLCanvasElement {
 }
 
 /**
- * A UI still from a recoloured sheet: its first frame, plus its walk cycle
- * laid out in one row so the page can play it in place.
+ * A UI still from a recoloured sheet: its first frame, plus a cycle (its walk,
+ * or the `tag` asked for if the sheet has it) laid out in one row so the page
+ * can play it in place.
  */
-export function portraitOfSheet(pixels: Pixels, sheet: SheetInfo): PortraitImage {
+export function portraitOfSheet(pixels: Pixels, sheet: SheetInfo, tag = 'walk'): PortraitImage {
   const canvas = toCanvas(pixels);
   const still = portraitFrom(canvas, sheet.frames[0]!, false);
-  const walk = sheet.tags.walk;
+  const walk = sheet.tags[tag] ?? sheet.tags.walk;
   if (!walk) return still;
   const frames = walk.to - walk.from + 1;
   const { canvas: strip, ctx } = makeCanvas(sheet.frameWidth * frames, sheet.frameHeight);

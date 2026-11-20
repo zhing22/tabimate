@@ -1,16 +1,24 @@
+import { UI_SPRITE_SCALE } from '@/config/ui';
+import type { Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import { formatDateKey } from '../format';
 import type { JournalCell } from '../journalView';
 import { levelBadge } from './levelBadge';
+import { portrait } from './portrait';
 
 const timesText = (n: number) => (n === 1 ? 'Found once' : `Found ${n} times`);
 
 /**
- * A found animal's journal page: name, rarest level found, description,
- * Wikipedia link, when it was first found and how often. `close` puts focus
- * back where the player was.
+ * A found animal's journal page: the animal moving (its sprite's walk, flap or
+ * swim; an emoji hops), name, rarest level found, description, Wikipedia link,
+ * when it was first found and how often. `close` puts focus back where the
+ * player was.
  */
-export function journalDetail(cell: JournalCell, close: () => void): HTMLElement {
+export function journalDetail(
+  cell: JournalCell,
+  close: () => void,
+  portraits?: Portraits,
+): HTMLElement {
   const { animal, entry } = cell;
   const closeButton = h(
     'button',
@@ -22,6 +30,11 @@ export function journalDetail(cell: JournalCell, close: () => void): HTMLElement
   const el = h(
     'section',
     { class: 'journal-detail', 'aria-label': animal.display },
+    h(
+      'div',
+      { class: 'journal-detail__animal' },
+      portrait(animal, false, { scale: UI_SPRITE_SCALE.journalDetail, portraits, walking: true }),
+    ),
     h(
       'div',
       { class: 'journal-detail__head' },

@@ -1,0 +1,65 @@
+import { TEMPLATE_KEYS } from '@/config/render';
+import { representativeFor } from '@/core/hierarchy';
+import type { PortraitImage, Portraits } from '@/core/portrait';
+import type { Animal, AnimalLookup, Movement } from '@/core/types';
+import { spritePalette } from './paletteUtils';
+import { recolor, type Pixels } from './recolor';
+import type { SheetInfo } from './sheet';
+import { portraitOfSheet, type LoadedSheet, type PixelArt } from './sheetImages';
+
+export interface StillPortraitOptions {
+  readonly loadArt: () => Promise<PixelArt>;
+  readonly loadSheet: (archetype: string) => Promise<LoadedSheet>;
+  /** Every animal, so a group finds its representative. */
+  readonly animals: AnimalLookup;
+  /** Makes the UI still and its cycle. Tests swap it out. */
+  readonly toPortrait?: (pixels: Pixels, sheet: SheetInfo, tag: string) => PortraitImage;
+}
+
+/** The cycle a portrait plays: how the animal gets about (the sheet's walk if it lacks it). */
+const MOVE_TAG: Readonly<Record<Movement, string>> = { land: 'walk', sky: 'flap', water: 'swim' };
+
+/**
+ * Pixel portraits of any animal, for the UI (the Field Journal), without the
+ * scene: the scene registers sprites for today's animals only. Each sheet and
+ * each portrait is made once, on first ask. Null where there is no sheet or
+ * palette, or something failed to load: the UI shows the emoji.
+ */
+export function createStillPortraits(options: StillPortraitOptions): Portraits {
+  const toPortrait = options.toPortrait ?? portraitOfSheet;
+  let art: Promise<PixelArt> | undefined;
+  const sheets = new Map<string, Promise<LoadedSheet>>();
+  const made = new Map<string, Promise<PortraitImage | null>>();
+  let warned = false; // one warning, not one per animal
+
+  const sheetFor = (archetype: string) =>
+    sheets.get(archetype) ?? sheets.set(archetype, options.loadSheet(archetype)).get(archetype)!;
+
+  async function make(animal: Animal, shiny: boolean): Promise<PortraitImage | null> {
+    art ??= options.loadArt();
+    const { animals, palettes, sheets: listed } = await art;
+    const source = representativeFor(animal, options.animals);
+    const colours = animals.get(source.id);
+    if (!colours || !listed.includes(source.archetype)) return null;
+    const palette = spritePalette(colours, shiny, palettes, source !== animal);
+    if (!palette) return null;
+    const sheet = await sheetFor(source.archetype);
+    const { pixels } = recolor(sheet.pixels, TEMPLATE_KEYS, palette);
+    return toPortrait(pixels, sheet.info, MOVE_TAG[animal.movement]);
+  }
+
+  return (animal, shiny) => {
+    if (!animal) return Promise.resolve(null); // the player has no pixel sprite yet
+    const key = `${animal.id}${shiny ? '/shiny' : ''}`;
+    let image = made.get(key);
+    if (!image) {
+      image = make(animal, shiny).catch((error: unknown) => {
+        if (!warned) console.warn(`Portraits failed (first: ${animal.id}); showing emoji.`, error);
+        warned = true;
+        return null;
+      });
+      made.set(key, image);
+    }
+    return image;
+  };
+}

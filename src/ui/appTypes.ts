@@ -28,6 +28,8 @@ export interface AppDeps {
   readonly reload: () => void;
   /** Pictures of the sprites, from the scene; without them the results use emoji. */
   readonly portraits?: Portraits;
+  /** Pictures of any animal, for the Field Journal; else it uses `portraits`. */
+  readonly journalPortraits?: Portraits | undefined;
   /** Stills of the biomes, from the scene: the line-up stands in one. */
   readonly backdrops?: Backdrops;
   /** Shares a finished run (main.ts builds the text; see services/share.ts). */

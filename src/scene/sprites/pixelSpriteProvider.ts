@@ -3,7 +3,7 @@ import { TEMPLATE_KEYS, type AnimalArt } from '@/config/render';
 import { representativeFor } from '@/core/hierarchy';
 import type { PortraitImage } from '@/core/portrait';
 import type { Animal } from '@/core/types';
-import { blinkPalette, plainPalette, resolvePalette } from './paletteUtils';
+import { blinkPalette, spritePalette } from './paletteUtils';
 import { recolor, type Pixels } from './recolor';
 import type { SheetInfo } from './sheet';
 import {
@@ -72,9 +72,8 @@ export function createPixelSpriteProvider(
   ) {
     const pair: SpriteRef[] = [];
     for (const shiny of [false, true]) {
-      const resolved = resolvePalette(art, shiny, palettes);
-      if (!resolved) return; // validation makes this rare; the emoji stands in
-      const palette = plain && !shiny ? plainPalette(art.palette, resolved, palettes) : resolved;
+      const palette = spritePalette(art, shiny, palettes, plain);
+      if (!palette) return; // validation makes this rare; the emoji stands in
       const name = `pixel/${animal.id}${shiny ? '/shiny' : ''}`;
       const open = recolor(sheet.pixels, TEMPLATE_KEYS, palette);
       stills.set(name, { pixels: open.pixels, sheet: sheet.info });

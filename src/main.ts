@@ -22,7 +22,7 @@ import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { startDebug } from '@/wiring/startDebug';
-import { startScene } from '@/wiring/startScene';
+import { journalPortraits, startScene } from '@/wiring/startScene';
 import { startShare } from '@/wiring/startShare';
 
 const root = document.querySelector<HTMLElement>('#ui');
@@ -100,6 +100,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     getStats: () => progress.getStats(),
     getCollection: () => progress.getCollection(),
     ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
+    journalPortraits: journalPortraits(animals, loader),
     getStreakStatus: () => progress.streakStatus(),
     install,
     reload,

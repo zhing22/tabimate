@@ -24,7 +24,11 @@ export function createApp(deps: AppDeps): App {
   const now = () => clock.now().getTime();
   const animalOf: AnimalOf = (result) =>
     result.match.animalId === null ? null : (animals.get(result.match.animalId) ?? null);
-  const collection = createCollectionUi({ ...deps, portraits: deps.portraits, delay: deps.delay });
+  const collection = createCollectionUi({
+    ...deps,
+    portraits: deps.journalPortraits ?? deps.portraits,
+    delay: deps.delay,
+  });
   // Moving on only counts once the result is visible, so an Enter pressed twice
   // in a hurry can't skip past a reveal during its drum-roll.
   let resultShown = false;
