@@ -45,14 +45,13 @@ export function verdict(result: BonusResult, item: BonusItem): string {
 }
 
 function intro(total: number, next: HTMLButtonElement): HTMLElement[] {
-  const step = Math.round(BONUS.step * 10) / 10;
   return [
     h('h1', { class: 'title title--sm' }, 'Bonus quiz'),
     h(
       'p',
       {},
       `${total} true-or-false questions, ${BONUS.questionMs / 1000} seconds each. ` +
-        `Each right answer adds ×${step} to today's total.`,
+        `Each right answer raises today's multiplier by ${BONUS.step} (up to ×${BONUS.maxMultiplier}).`,
     ),
     next,
   ];
@@ -67,7 +66,7 @@ function question(
     endsAt: view.endsAt,
     totalMs: BONUS.questionMs,
     now: props.now,
-    warnAtMs: 3_000,
+    warnAtMs: BONUS.warnMs,
     ...(props.frames ? { frames: props.frames } : {}),
   });
   const choice = (value: boolean) => {

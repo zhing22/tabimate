@@ -75,6 +75,16 @@ describe('the bonus quiz', () => {
     expect(t.game.getState().bonusResults).toHaveLength(1);
   });
 
+  it('counts an answer tapped after the deadline as a timeout (a late background timer)', () => {
+    const t = setup();
+    t.toQuiz();
+    t.game.next();
+    // The tab was in the background: the clock passed the deadline, the timer hasn't fired.
+    t.time.skip(BONUS.questionMs + 5_000);
+    t.game.answerBonus(true); // the right answer, looked up elsewhere
+    expect(t.story.at(-1)).toBe('answered 0 null wrong');
+  });
+
   it('picks a reload back up mid-question with the time it had left', () => {
     const first = setup();
     first.toQuiz();

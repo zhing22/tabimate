@@ -7,6 +7,8 @@
 export const BONUS = {
   questions: 3,
   questionMs: 10_000,
+  /** With this much time left (whole seconds) the question's ring turns urgent. */
+  warnMs: 3_000,
   step: 0.1,
   maxMultiplier: 1.3,
   /** An explanation's length limit, in words. */

@@ -4,6 +4,7 @@ import { BONUS } from '@/config/bonus';
 import type { Clock } from './clock';
 import type { GameBus } from './events';
 import type { GameAction } from './game';
+import { currentBonusIndex } from './bonus';
 import { createRoundTimer } from './roundTimer';
 import type { Scheduler } from './scheduler';
 import type { Puzzle, RunState } from './types';
@@ -41,12 +42,15 @@ export function createBonusRunner(deps: BonusRunnerDeps): BonusRunner {
   const itemAt = (index: number) => puzzle.bonus?.[index];
 
   /** Judges the open question; a timeout (null) is always wrong. */
-  function settle(value: boolean | null) {
+  function settle(given: boolean | null) {
     const state = getState();
     const endsAt = state.bonusEndsAt;
-    const index = state.bonusResults.length;
-    const item = itemAt(index);
-    if (state.status !== 'bonus' || endsAt === null || !item) return;
+    const index = currentBonusIndex(state);
+    const item = index === null ? undefined : itemAt(index);
+    if (index === null || endsAt === null || !item) return;
+    // Background tabs delay timers, so an answer can arrive after the deadline
+    // before the timeout has fired (time to look it up elsewhere): it is a timeout.
+    const value = now() >= endsAt ? null : given;
     const timeMs = Math.min(questionMs, Math.max(0, questionMs - (endsAt - now())));
     const correct = value !== null && value === item.answer;
     if (!dispatch({ type: 'bonusAnswer', answer: value, correct, timeMs })) return;
@@ -58,10 +62,10 @@ export function createBonusRunner(deps: BonusRunnerDeps): BonusRunner {
   /** Arms the open question's timer from the deadline in state (a reload keeps what was left). */
   function ask() {
     const state = getState();
-    const index = state.bonusResults.length;
-    const item = itemAt(index);
+    const index = currentBonusIndex(state);
+    const item = index === null ? undefined : itemAt(index);
     const endsAt = state.bonusEndsAt;
-    if (!item || endsAt === null) return;
+    if (index === null || !item || endsAt === null) return;
     const left = endsAt - now();
     if (left <= 0) {
       settle(null);

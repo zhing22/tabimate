@@ -30,6 +30,7 @@ describe('validateBonus', () => {
   it.each<[string, unknown]>([
     ['another date', quiz({ date: '2026-11-29' })],
     ['too few questions', quiz({ items: quiz().items.slice(1) })],
+    ['too many questions', quiz({ items: [...quiz().items, quiz().items[0]] })],
     [
       'an answer that is not true or false',
       quiz({ items: [{ ...quiz().items[0], answer: 'no' }, ...quiz().items.slice(1)] }),

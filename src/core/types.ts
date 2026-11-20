@@ -13,6 +13,9 @@ import type {
   Social,
 } from '@/config/traits';
 import type { AnswerLevel } from '@/config/levels';
+import type { BonusItem, BonusResult } from './bonusTypes';
+
+export type { BonusItem, BonusResult } from './bonusTypes';
 
 // Trait value types, re-exported for consumers of core. The allowed values themselves
 // (ANIMAL_CLASSES, DIETS, ...) live in config/traits.ts; these types are derived from them.
@@ -144,9 +147,6 @@ export interface RoundResult {
 
 // A union so 'unlimited' | 'archive' can be added without touching callers.
 export type GameMode = 'daily';
-
-import type { BonusItem, BonusResult } from './bonusTypes';
-export type { BonusItem, BonusResult } from './bonusTypes';
 
 /** 'bonus' only on a bonus quiz day, between the last reveal and 'finished'. */
 export type RunStatus = 'idle' | 'playing' | 'revealing' | 'bonus' | 'finished';

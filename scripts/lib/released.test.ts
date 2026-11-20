@@ -32,7 +32,14 @@ describe('checkReleased', () => {
 
   it('leaves days that are not live yet alone', () => {
     const result = checkReleased(puzzles, '2026-11-16', {});
-    expect(result).toEqual({ changed: [], unrecorded: [], overdue: [], updated: {} });
+    expect(result).toEqual({
+      changed: [],
+      unrecorded: [],
+      overdue: [],
+      removed: [],
+      late: [],
+      updated: {},
+    });
   });
 });
 
@@ -63,5 +70,24 @@ describe('checkReleased: bonus quizzes', () => {
       live.updated,
     );
     expect(changed.changed).toEqual(['2026-11-22/bonus']);
+  });
+});
+
+describe('checkReleased: removed and late files', () => {
+  it('lists a recorded live file that no longer exists, but not a future one', () => {
+    const record = { '2026-11-22/bonus': 'x', '2026-11-29/bonus': 'y' };
+    const result = checkReleased(new Map(), '2026-11-23', record);
+    expect(result.removed).toEqual(['2026-11-22/bonus']);
+  });
+
+  it('keeps a quiz that appears after its puzzle was recorded out of the record', () => {
+    const files = new Map<string, unknown>([
+      ['2026-11-22', day(5)],
+      ['2026-11-22/bonus', { items: [1] }],
+    ]);
+    const result = checkReleased(files, '2026-11-22', { '2026-11-22': fingerprint(day(5)) });
+    expect(result.late).toEqual(['2026-11-22/bonus']);
+    expect(result.unrecorded).toEqual([]);
+    expect(result.updated).toEqual({ '2026-11-22': fingerprint(day(5)) });
   });
 });

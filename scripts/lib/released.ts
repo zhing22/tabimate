@@ -33,6 +33,17 @@ export interface ReleaseCheck {
    * after it goes live, so only today may be missing; older ones mean it fell behind.
    */
   readonly overdue: string[];
+  /**
+   * Recorded keys that are live but whose file is gone. A deleted quiz breaks
+   * the saved runs that counted its questions, as a changed one would.
+   */
+  readonly removed: string[];
+  /**
+   * Bonus quizzes that appeared after their day's puzzle was recorded (went
+   * live): anyone who finished that day before has a run without the quiz.
+   * Never added to the record, so they stay flagged until removed.
+   */
+  readonly late: string[];
   /** The record with the unrecorded days added; never overwrites a day. */
   readonly updated: ReleasedRecord;
 }
@@ -48,15 +59,28 @@ export function checkReleased(
 ): ReleaseCheck {
   const changed: string[] = [];
   const unrecorded: string[] = [];
+  const late: string[] = [];
   const updated: Record<string, string> = { ...record };
-  for (const [date, json] of [...puzzles].sort(([a], [b]) => a.localeCompare(b))) {
-    if (dayOf(date) > today) continue;
+  for (const [key, json] of [...puzzles].sort(([a], [b]) => a.localeCompare(b))) {
+    if (dayOf(key) > today) continue;
     const print = fingerprint(json);
-    const known = record[date];
-    if (known === undefined) {
-      unrecorded.push(date);
-      updated[date] = print;
-    } else if (known !== print) changed.push(date);
+    const known = record[key];
+    if (known === undefined && key !== dayOf(key) && record[dayOf(key)] !== undefined) {
+      late.push(key);
+    } else if (known === undefined) {
+      unrecorded.push(key);
+      updated[key] = print;
+    } else if (known !== print) changed.push(key);
   }
-  return { changed, unrecorded, overdue: unrecorded.filter((d) => dayOf(d) < today), updated };
+  const removed = Object.keys(record)
+    .filter((key) => dayOf(key) <= today && !puzzles.has(key))
+    .sort();
+  return {
+    changed,
+    unrecorded,
+    overdue: unrecorded.filter((d) => dayOf(d) < today),
+    removed,
+    late,
+    updated,
+  };
 }

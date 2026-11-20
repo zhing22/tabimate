@@ -1,5 +1,5 @@
-// What validate-data says about released days: changed ones fail, unrecorded
-// ones are recorded (--record), overdue or pending ones are reported.
+// What validate-data says about released days: changed, removed or late files
+// fail; unrecorded ones are recorded (--record), or reported as overdue or pending.
 import { checkReleased, type ReleasedRecord } from './released.ts';
 
 export interface ReleaseReport {
@@ -11,8 +11,27 @@ export interface ReleaseReport {
 }
 
 /** "2026-11-22" -> puzzles/2026-11-22.json; "2026-11-22/bonus" -> bonus/2026-11-22.json. */
-const fileOf = (key: string): string =>
+export const fileOf = (key: string): string =>
   key.endsWith('/bonus') ? `bonus/${key.slice(0, 10)}.json` : `puzzles/${key}.json`;
+
+/** Files that went live and then changed, vanished, or appeared too late: all break saved runs. */
+function brokenFiles(released: ReturnType<typeof checkReleased>): string[] {
+  const fix = '(restore it, and fix a future day instead)';
+  return [
+    ...released.changed.map(
+      (key) =>
+        `${fileOf(key)} changed after it went live; players' saved runs no longer match it ${fix}`,
+    ),
+    ...released.removed.map(
+      (key) => `${fileOf(key)} was removed after it went live; players' saved runs need it ${fix}`,
+    ),
+    ...released.late.map(
+      (key) =>
+        `${fileOf(key)} was added after its day went live; anyone who already finished that ` +
+        `day has no quiz in their saved run (remove it; quizzes must be ready before noon)`,
+    ),
+  ];
+}
 
 export function releaseReport(
   live: ReadonlyMap<string, unknown>,
@@ -21,16 +40,9 @@ export function releaseReport(
   recording: boolean,
   recordFile: string,
 ): ReleaseReport {
-  const problems: string[] = [];
-  const warnings: string[] = [];
   const released = checkReleased(live, today, record);
-  // A changed live day fails: players who finished it keep levels the file no longer has.
-  for (const key of released.changed) {
-    problems.push(
-      `${fileOf(key)} changed after it went live; players' saved runs no longer match it ` +
-        `(restore it, and fix a future day instead)`,
-    );
-  }
+  const problems = brokenFiles(released);
+  const warnings: string[] = [];
   if (recording && released.unrecorded.length > 0) {
     return { problems, warnings, updated: released.updated, recorded: released.unrecorded.length };
   }
