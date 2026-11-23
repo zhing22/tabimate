@@ -8,19 +8,19 @@ import { drawElephant, type ElephantSpec } from './elephant.ts';
 import { drawFish, type FishSpec } from './fish.ts';
 import type { Grid, Pose } from './grid.ts';
 import { drawPenguin, type PenguinSpec } from './penguin.ts';
+import { drawPrimate, type PrimateSpec } from './primate.ts';
 import { drawQuadruped, type QuadrupedSpec } from './quadruped.ts';
 import { drawRabbit, type RabbitSpec } from './rabbit.ts';
 import { drawShark, type SharkSpec } from './shark.ts';
 import { drawBlob, drawSerpent, type BlobSpec, type SerpentSpec } from './soft.ts';
-import { drawUpright, type UprightSpec } from './upright.ts';
 import { drawWhale, type WhaleSpec } from './whale.ts';
 
 export type PlanSpec =
   | QuadrupedSpec
   | BearSpec
+  | PrimateSpec
   | ElephantSpec
   | RabbitSpec
-  | UprightSpec
   | PenguinSpec
   | BirdSpec
   | BugSpec
@@ -41,7 +41,7 @@ const PLANS: { readonly [P in PlanName]: Drawer<P> } = {
   bear: drawBear,
   elephant: drawElephant,
   rabbit: drawRabbit,
-  upright: drawUpright,
+  primate: drawPrimate,
   penguin: drawPenguin,
   bird: drawBird,
   bug: drawBug,
@@ -61,6 +61,7 @@ const SELF_SHADED: ReadonlySet<PlanName> = new Set([
   'bear',
   'elephant',
   'rabbit',
+  'primate',
   'shark',
   'whale',
 ]);

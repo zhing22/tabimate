@@ -2,6 +2,7 @@
 // Every archetype in animals.json needs an entry (a test checks); a family
 // borrows a shared look (HOOFED, RAPTOR...) and changes what sets it apart.
 import type { PlanSpec } from './plans.ts';
+import { PRIMATE_LOOKS } from './primateLooks.ts';
 
 const HOOFED = {
   plan: 'quadruped',
@@ -16,10 +17,13 @@ const SONGBIRD = { plan: 'bird', body: [6, 4], leg: 2, tail: 3 } as const;
 const WATERFOWL = { plan: 'bird', body: [10, 5], leg: 2, neck: 2, beak: 'flat', tail: 1 } as const;
 const SEABIRD = { plan: 'bird', body: [9, 4], leg: 2, beak: 'long', wing: 9 } as const;
 const WADER = { plan: 'bird', leg: 6, neck: 3, beak: 'long', tail: 1 } as const;
-const PRIMATE = { plan: 'upright', body: [7, 8], head: 3 } as const;
 const GENERIC = { plan: 'quadruped', ears: 'round' } as const;
 
 export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
+  // Primates: a look per archetype (primateLooks.ts).
+  ...Object.fromEntries(
+    Object.keys(PRIMATE_LOOKS).map((look) => [look, { plan: 'primate', look } as PlanSpec]),
+  ),
   'big-cat': { plan: 'quadruped', tail: 'long', ears: 'round', pattern: 'stripes' },
   // Elephants, rabbits and hares by look (elephant.ts, rabbit.ts).
   elephant: { plan: 'elephant', look: 'african' },
@@ -45,7 +49,6 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   marsupial: { plan: 'quadruped', body: [8, 6], leg: 3, ears: 'long', tail: 'thick', hop: true },
   monotreme: { plan: 'quadruped', body: [10, 4], leg: 1, snout: 2, ears: 'none', tail: 'short' },
   'small-mammal': { plan: 'quadruped', body: [8, 4], leg: 1, ears: 'round' },
-  primate: PRIMATE,
   rhino: { plan: 'quadruped', body: [14, 7], head: 3, snout: 1, horns: 'nose', tail: 'short' },
   hoofed: HOOFED,
   hippo: {
@@ -106,7 +109,6 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   tortoise: { plan: 'quadruped', body: [12, 6], leg: 2, ears: 'none', shell: true, tail: 'short' },
   deer: { ...HOOFED, neck: 3, horns: 'antlers' },
   antelope: { ...HOOFED, horns: 'horns' },
-  monkey: { plan: 'upright', body: [6, 7], tail: 'curl', ears: true },
   squirrel: { plan: 'quadruped', body: [8, 4], leg: 2, tail: 'bushy' },
   hawk: { ...RAPTOR, body: [7, 4] },
   gull: SEABIRD,
@@ -127,7 +129,6 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   scorpion: { plan: 'bug', legs: 8, claws: true, stinger: true },
   camel: { ...HOOFED, body: [12, 6], leg: 6, neck: 4, hump: true },
   hare: { plan: 'rabbit', look: 'hare' },
-  gibbon: { ...PRIMATE, body: [6, 7], arms: 'long' },
   pelican: { ...WATERFOWL, body: [8, 5], beak: 'pouch' },
   vulture: { ...RAPTOR, body: [10, 6], neck: 2 },
   mammal: GENERIC,

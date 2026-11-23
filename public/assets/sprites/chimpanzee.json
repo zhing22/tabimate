@@ -1,6 +1,6 @@
 {
   "frames": {
-    "primate 0.aseprite": {
+    "chimpanzee 0.aseprite": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -9,7 +9,7 @@
       },
       "duration": 120
     },
-    "primate 1.aseprite": {
+    "chimpanzee 1.aseprite": {
       "frame": {
         "x": 24,
         "y": 0,
@@ -18,7 +18,7 @@
       },
       "duration": 120
     },
-    "primate 2.aseprite": {
+    "chimpanzee 2.aseprite": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -27,7 +27,7 @@
       },
       "duration": 120
     },
-    "primate 3.aseprite": {
+    "chimpanzee 3.aseprite": {
       "frame": {
         "x": 72,
         "y": 0,
@@ -39,7 +39,7 @@
   },
   "meta": {
     "app": "scripts/drawPlaceholderSheets.ts",
-    "image": "primate.png",
+    "image": "chimpanzee.png",
     "format": "RGBA8888",
     "size": {
       "w": 96,
