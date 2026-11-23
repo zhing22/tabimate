@@ -6,6 +6,7 @@
 // and spots (highlight), blush (accent), the eye's glint (eye); the eye and
 // mouth are outline-dark. The species' colours are in palettes.json.
 import { rect, set, type Grid, type Pose } from './grid.ts';
+import { blush, cuteEye } from './face.ts';
 import { drawMarineBody, fin, paint, type Body, type Shape } from './marine.ts';
 
 export interface SharkSpec {
@@ -62,7 +63,10 @@ export function drawShark(g: Grid, pose: Pose, spec: SharkSpec): void {
   for (const dx of GILLS) for (let y = b.cy - 1; y <= b.cy + 1; y++) paint(g, ex + dx, y, 's');
   look.marks?.(g, b);
   if (look.hammer) hammer(g, b);
-  else eye(g, ex, b.cy - 2);
+  else {
+    cuteEye(g, ex, b.cy - 2);
+    blush(g, ex - 1, b.cy);
+  }
 }
 
 function fins(g: Grid, b: Body): void {
@@ -89,19 +93,10 @@ function jaw(g: Grid, b: Body, wide: boolean): void {
   for (let x = b.xAt(0.25); x < from; x++) paint(g, x, b.bottomAt(x), 'h');
 }
 
-/** A dark 2 x 2 eye with a glint, and a blush below it. */
-function eye(g: Grid, x: number, y: number): void {
-  rect(g, x, y, x + 1, y + 1, 'o');
-  set(g, x + 1, y, 'e');
-  paint(g, x - 1, y + 2, 'a');
-  paint(g, x, y + 2, 'a');
-}
-
 /** The hammer: a blade across the front of the head, an eye at its top tip. */
 function hammer(g: Grid, b: Body): void {
   rect(g, b.x1, b.cy - 4, b.x1 + 1, b.cy + 2, 'b');
   set(g, b.x1 + 1, b.cy - 4, 'o');
   set(g, b.x1 + 1, b.cy - 3, 'e');
-  paint(g, b.xAt(0.82), b.cy, 'a'); // blush
-  paint(g, b.xAt(0.82) + 1, b.cy, 'a');
+  blush(g, b.xAt(0.82), b.cy);
 }

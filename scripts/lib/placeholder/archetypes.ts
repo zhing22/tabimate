@@ -21,15 +21,13 @@ const GENERIC = { plan: 'quadruped', ears: 'round' } as const;
 
 export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   'big-cat': { plan: 'quadruped', tail: 'long', ears: 'round', pattern: 'stripes' },
-  elephant: {
-    plan: 'quadruped',
-    body: [11, 7],
-    leg: 5,
-    head: 3,
-    ears: 'round',
-    trunk: true,
-    tail: 'short',
-  },
+  // Elephants, rabbits and hares by look (elephant.ts, rabbit.ts).
+  elephant: { plan: 'elephant', look: 'african' },
+  'forest-elephant': { plan: 'elephant', look: 'forest' },
+  'asian-elephant': { plan: 'elephant', look: 'asian' },
+  rabbit: { plan: 'rabbit', look: 'rabbit' },
+  'pygmy-rabbit': { plan: 'rabbit', look: 'pygmy' },
+  'snowshoe-hare': { plan: 'rabbit', look: 'snowshoe' },
   // Bears by look (bear.ts); each species' colours are in palettes.json.
   bear: { plan: 'bear', look: 'plain' },
   panda: { plan: 'bear', look: 'panda' },
@@ -128,7 +126,7 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   spider: { plan: 'bug', body: [8, 4], legs: 8 },
   scorpion: { plan: 'bug', legs: 8, claws: true, stinger: true },
   camel: { ...HOOFED, body: [12, 6], leg: 6, neck: 4, hump: true },
-  hare: { plan: 'quadruped', body: [9, 5], leg: 3, ears: 'long', tail: 'short', hop: true },
+  hare: { plan: 'rabbit', look: 'hare' },
   gibbon: { ...PRIMATE, body: [6, 7], arms: 'long' },
   pelican: { ...WATERFOWL, body: [8, 5], beak: 'pouch' },
   vulture: { ...RAPTOR, body: [10, 6], neck: 2 },
