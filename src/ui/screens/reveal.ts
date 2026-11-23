@@ -65,6 +65,52 @@ function nextButton(label: string, next: () => void): HTMLButtonElement {
   return button;
 }
 
+/** The card: a drum-roll line, then the picture, name, extras, badge, points and Next. */
+function revealCard(props: RevealProps, pointsEl: HTMLElement, next: HTMLElement): HTMLElement {
+  const { animal } = props;
+  const level = props.result.match.level;
+  return h(
+    'section',
+    {
+      class: 'card reveal reveal--pending',
+      'data-level': level,
+      // Styled by effect, not level number, so LEVELS decides which level is shiny.
+      'data-effect': LEVELS[level].effectId,
+      style: `--reveal-level: var(${LEVELS[level].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
+      'aria-label': 'Result',
+    },
+    h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
+    h(
+      'div',
+      { class: 'reveal__body' },
+      revealPicture(props),
+      h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
+      props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,
+      h('div', { class: 'reveal__badge' }, levelBadge(level, { size: 'lg' }).el),
+      pointsEl,
+      next,
+    ),
+  );
+}
+
+/** The animal's sprite walking (shiny at the shiny level), or a paw print or puff for a miss. */
+function revealPicture({ animal, result, portraits }: RevealProps): HTMLElement {
+  const level = result.match.level;
+  return h(
+    'div',
+    { class: 'reveal__emoji', 'aria-hidden': 'true' },
+    animal
+      ? portrait(animal, isShiny(level), {
+          scale: UI_SPRITE_SCALE.reveal,
+          portraits,
+          walking: true,
+        })
+      : level
+        ? '🐾'
+        : '💨',
+  );
+}
+
 /**
  * Shown as an overlay above the round, so the answer box keeps focus (and the
  * phone keeps its keyboard). Focus is not moved; the live region speaks instead.
@@ -79,40 +125,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   const next = nextButton(label, () => actions.next());
   const pointsEl = h('p', { class: 'reveal__points' }, `+${level ? points : 0}`);
   let stopCount = () => {};
-  const card = h(
-    'section',
-    {
-      class: 'card reveal reveal--pending',
-      'data-level': level,
-      // Styled by effect, not level number, so LEVELS decides which level is shiny.
-      'data-effect': LEVELS[level].effectId,
-      style: `--reveal-level: var(${LEVELS[level].colour}); --reveal-badge-ms: ${props.timing.badgePopMs}ms`,
-      'aria-label': 'Result',
-    },
-    h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
-    h(
-      'div',
-      { class: 'reveal__body' },
-      h(
-        'div',
-        { class: 'reveal__emoji', 'aria-hidden': 'true' },
-        animal
-          ? portrait(animal, isShiny(level), {
-              scale: UI_SPRITE_SCALE.reveal,
-              portraits: props.portraits,
-              walking: true,
-            })
-          : level
-            ? '🐾'
-            : '💨',
-      ),
-      h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
-      props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,
-      h('div', { class: 'reveal__badge' }, levelBadge(level, { size: 'lg' }).el),
-      pointsEl,
-      next,
-    ),
-  );
+  const card = revealCard(props, pointsEl, next);
   root.append(card);
 
   const timers: ReturnType<typeof setTimeout>[] = [];

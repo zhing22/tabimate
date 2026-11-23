@@ -44,17 +44,7 @@ export function drawMarineBody(g: Grid, pose: Pose, shape: Shape, tail: number):
   const tops = new Map<number, number>();
   const bottoms = new Map<number, number>();
   for (let x = x0; x <= x1; x++) {
-    const t = (x - x0) / (x1 - x0);
-    const half = Math.max(
-      0.5,
-      (shape.high / 2) * Math.sin(Math.PI * t ** shape.bulk) ** shape.point,
-    );
-    const mid = CY + sway * (1 - t) ** 3 * 2;
-    const top = Math.round(mid - half);
-    const bottom = Math.round(mid + half);
-    rect(g, x, top, x, bottom, 'b');
-    const pale = Math.round(bottom - (bottom - top) * shape.belly);
-    if (pale < bottom) rect(g, x, pale + 1, x, bottom, 'h');
+    const [top, bottom] = column(g, x, (x - x0) / (x1 - x0), shape, sway);
     tops.set(x, top);
     bottoms.set(x, bottom);
   }
@@ -67,6 +57,18 @@ export function drawMarineBody(g: Grid, pose: Pose, shape: Shape, tail: number):
     topAt: (x) => tops.get(x) ?? CY,
     bottomAt: (x) => bottoms.get(x) ?? CY,
   };
+}
+
+/** One column of the body at fraction t (0 the tail, 1 the nose): back, then pale belly. */
+function column(g: Grid, x: number, t: number, shape: Shape, sway: number): [number, number] {
+  const half = Math.max(0.5, (shape.high / 2) * Math.sin(Math.PI * t ** shape.bulk) ** shape.point);
+  const mid = CY + sway * (1 - t) ** 3 * 2;
+  const top = Math.round(mid - half);
+  const bottom = Math.round(mid + half);
+  rect(g, x, top, x, bottom, 'b');
+  const pale = Math.round(bottom - (bottom - top) * shape.belly);
+  if (pale < bottom) rect(g, x, pale + 1, x, bottom, 'h');
+  return [top, bottom];
 }
 
 /** Recolours a pixel of the body, leaving the water around it empty. */

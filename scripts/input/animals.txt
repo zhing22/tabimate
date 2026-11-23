@@ -75,6 +75,9 @@ species | House mouse | parent=mouse
 species | Sumatran orangutan | parent=orangutan
 species | Bornean orangutan | parent=orangutan
 species | Eastern gorilla | parent=gorilla
+# Chimpanzee has no ape group: the "Apes and monkeys" journal set names it by id
+# (core/journal/sets.ts is('chimpanzee')). If it ever gets a group, put that group
+# in the set instead of the id.
 species | Chimpanzee
 species | Black-and-white ruffed lemur | id=ruffed-lemur | parent=lemur
 species | Black rhinoceros | id=black-rhino | parent=rhinoceros

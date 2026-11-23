@@ -50,19 +50,8 @@ export function drawRabbit(g: Grid, pose: Pose, spec: RabbitSpec): void {
 
   ellipse(g, bx - rx, by - 1, 1.5, 1.5, look.tail); // tail
   ears(g, hx, hy - 2, look, airborne ? 1 : 0);
-  const [footLen, footKey] = look.foot;
-  // Hind foot: flat on the ground, stretched back in the air; front paws.
   const footY = by + ry + look.legs;
-  rect(
-    g,
-    bx - rx + 1 - (airborne ? 1 : 0),
-    footY,
-    bx - rx + footLen - (airborne ? 1 : 0),
-    footY,
-    footKey,
-  );
-  rect(g, bx + 1, by + ry, bx + 1, footY - 1, 's'); // far front leg
-  rect(g, bx - 2, by, bx - 1, footY - 1, 'b'); // hind leg
+  hindAndFarLegs(g, look, bx, by, footY, airborne);
   ellipse(g, bx, by, rx, ry, 'b');
   ellipse(g, bx + 1, by + 1, rx - 2, ry - 1.5, 'h'); // belly
   rect(g, bx + 3, by + ry, bx + 3, footY, 'b'); // near front paw
@@ -71,6 +60,23 @@ export function drawRabbit(g: Grid, pose: Pose, spec: RabbitSpec): void {
   set(g, hx + 4, hy + 1, 'a'); // nose
   cuteEye(g, hx, hy - 1);
   blush(g, hx - 1, hy + 1);
+}
+
+/** The hind foot (flat on the ground, stretched back in the air), hind leg and far front leg. */
+function hindAndFarLegs(
+  g: Grid,
+  look: Look,
+  bx: number,
+  by: number,
+  footY: number,
+  airborne: boolean,
+) {
+  const [rx, ry] = look.body;
+  const [footLen, footKey] = look.foot;
+  const back = airborne ? 1 : 0;
+  rect(g, bx - rx + 1 - back, footY, bx - rx + footLen - back, footY, footKey);
+  rect(g, bx + 1, by + ry, bx + 1, footY - 1, 's'); // far front leg
+  rect(g, bx - 2, by, bx - 1, footY - 1, 'b'); // hind leg
 }
 
 /** Two ears up from the head, the far one darker; they tilt back as it leaps. */

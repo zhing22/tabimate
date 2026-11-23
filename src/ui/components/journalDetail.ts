@@ -1,5 +1,7 @@
 import { UI_SPRITE_SCALE } from '@/config/ui';
 import type { Portraits } from '@/core/portrait';
+import type { JournalEntry } from '@/core/journal/journal';
+import type { Animal } from '@/core/types';
 import { h } from '../dom';
 import { formatDateKey } from '../format';
 import type { JournalCell } from '../journalView';
@@ -12,8 +14,7 @@ const timesText = (n: number) => (n === 1 ? 'Found once' : `Found ${n} times`);
  * A found animal's journal page: the animal moving (its sprite's walk, flap or
  * swim; an emoji hops), name, rarest level found, description, and one line
  * with the Wikipedia link, when it was first found and how often; a corner ×
- * closes it. `close` puts focus back where the
- * player was.
+ * closes it. `close` puts focus back where the player was.
  */
 export function journalDetail(
   cell: JournalCell,
@@ -38,33 +39,42 @@ export function journalDetail(
       { class: 'journal-detail__animal' },
       portrait(animal, false, { scale: UI_SPRITE_SCALE.journalDetail, portraits, walking: true }),
     ),
-    h(
-      'div',
-      { class: 'journal-detail__head' },
-      title,
-      entry ? levelBadge(entry.bestLevel).el : null,
-    ),
+    detailHead(title, entry),
     animal.description
       ? h('p', { class: 'journal-detail__description' }, animal.description)
       : null,
-    // One line under it: the Wikipedia link, then when it was first found.
-    h(
-      'p',
-      { class: 'meta journal-detail__meta' },
-      animal.wiki
-        ? h(
-            'a',
-            { href: animal.wiki, target: '_blank', rel: 'noopener', class: 'answer__wiki' },
-            'Wikipedia',
-          )
-        : null,
-      animal.wiki && entry ? ' · ' : null,
-      entry
-        ? `First found ${formatDateKey(entry.firstFoundKey)} · ${timesText(entry.timesFound)}`
-        : null,
-    ),
+    detailMeta(animal, entry),
     closeButton,
   );
   queueMicrotask(() => title.focus());
   return el;
+}
+
+/** The name, and the rarest level it was found at. */
+function detailHead(title: HTMLElement, entry: JournalEntry | null): HTMLElement {
+  return h(
+    'div',
+    { class: 'journal-detail__head' },
+    title,
+    entry ? levelBadge(entry.bestLevel).el : null,
+  );
+}
+
+/** One line: the Wikipedia link, then when it was first found and how often. */
+function detailMeta(animal: Animal, entry: JournalEntry | null): HTMLElement {
+  return h(
+    'p',
+    { class: 'meta journal-detail__meta' },
+    animal.wiki
+      ? h(
+          'a',
+          { href: animal.wiki, target: '_blank', rel: 'noopener', class: 'answer__wiki' },
+          'Wikipedia',
+        )
+      : null,
+    animal.wiki && entry ? ' · ' : null,
+    entry
+      ? `First found ${formatDateKey(entry.firstFoundKey)} · ${timesText(entry.timesFound)}`
+      : null,
+  );
 }

@@ -1,8 +1,8 @@
 import type { Portraits } from '@/core/portrait';
 import { badgeList } from '../components/badgeList';
 import { journalDetail } from '../components/journalDetail';
-import { journalGrid } from '../components/journalGrid';
-import { nextTabIndex } from '../components/tabKeys';
+import { journalGrid, type JournalGrid } from '../components/journalGrid';
+import { tabRow } from '../components/journalTabs';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
 import type { BadgeLine, JournalCell, JournalTab } from '../journalView';
@@ -38,6 +38,39 @@ function setHeader(tab: JournalTab): HTMLElement | null {
   );
 }
 
+/** Opens a found animal's page above the grid, marking its cell; closing puts focus back. */
+function cellOpener(panel: HTMLElement, portraits: Portraits | undefined) {
+  return (cell: JournalCell, from: HTMLElement) => {
+    panel.querySelector('.journal-detail')?.remove();
+    panel.querySelector('.journal-cell--chosen')?.classList.remove('journal-cell--chosen');
+    from.classList.add('journal-cell--chosen');
+    const close = () => {
+      detail.remove();
+      from.classList.remove('journal-cell--chosen');
+      from.querySelector('button')?.focus();
+    };
+    const detail = journalDetail(cell, close, portraits);
+    panel.prepend(detail);
+    // The panel scrolls: bring the page into view.
+    detail.scrollIntoView?.({ block: 'nearest' });
+  };
+}
+
+/** Title and count on the left, Back on the right: one compact row. */
+function header(found: number, total: number, back: HTMLElement): HTMLElement {
+  return h(
+    'div',
+    { class: 'journal__head' },
+    h(
+      'div',
+      { class: 'journal__title' },
+      h('h1', { id: 'journal-title', class: 'title title--sm', tabindex: -1 }, 'Field Journal'),
+      h('p', { class: 'meta' }, `${found} of ${total} animals found`),
+    ),
+    back,
+  );
+}
+
 /**
  * The Field Journal: every animal ever found, sets to complete and the
  * achievements, in tabs. A found animal opens to its page above the grid.
@@ -46,90 +79,42 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
   const back = h('button', { class: 'button journal__back', type: 'button' }, 'Back');
   back.addEventListener('click', () => actions.close());
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
-  const tabList = h('div', { class: 'journal__tabs', role: 'tablist', 'aria-label': 'Journal' });
-
-  function openCell(cell: JournalCell, from: HTMLElement) {
-    panel.querySelector('.journal-detail')?.remove();
-    panel.querySelector('.journal-cell--chosen')?.classList.remove('journal-cell--chosen');
-    from.classList.add('journal-cell--chosen');
-    const detail = journalDetail(
-      cell,
-      () => {
-        detail.remove();
-        from.classList.remove('journal-cell--chosen');
-        from.querySelector('button')?.focus();
-      },
-      props.portraits,
-    );
-    panel.prepend(detail);
-    // On a phone the grid scrolls with the page: bring the page into view.
-    detail.scrollIntoView?.({ block: 'nearest' });
-  }
-
+  const openCell = cellOpener(panel, props.portraits);
   const tabs = [...props.tabs, BADGES_TAB];
-  const buttons = tabs.map((tab, i) => {
-    const button = h(
-      'button',
-      { class: 'journal__tab', type: 'button', role: 'tab', 'aria-controls': 'journal-panel' },
-      h('span', { 'aria-hidden': 'true' }, tab.icon),
-      ` ${tab.label}`,
-    );
-    button.addEventListener('click', () => showTab(i));
-    return button;
-  });
-  tabList.append(...buttons);
-  // Roving tabindex: Tab reaches only the selected tab; arrows, Home and End move along.
-  tabList.addEventListener('keydown', (event) => {
-    const current = buttons.findIndex((b) => b.getAttribute('aria-selected') === 'true');
-    const next = nextTabIndex(event.key, current, buttons.length);
-    if (next === null) return;
-    event.preventDefault();
-    showTab(next);
-    buttons[next]!.focus();
-  });
+  let grid: JournalGrid | null = null;
 
   function showTab(index: number) {
-    buttons.forEach((button, i) => {
-      button.setAttribute('aria-selected', String(i === index));
-      button.tabIndex = i === index ? 0 : -1;
-    });
-    // The tab row scrolls sideways: keep the chosen tab in view.
-    buttons[index]!.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+    row.select(index);
+    grid?.destroy();
+    grid = null;
     const tab = tabs[index]!;
     if (!('cells' in tab)) {
       panel.replaceChildren(badgeList(props.badges));
       return;
     }
-    const grid = journalGrid(tab.cells, {
+    const shown = journalGrid(tab.cells, {
       portraits: props.portraits,
-      open: (cell) => openCell(cell, grid.children[tab.cells.indexOf(cell)] as HTMLElement),
+      open: (cell) => openCell(cell, shown.el.children[tab.cells.indexOf(cell)] as HTMLElement),
     });
-    panel.replaceChildren(...[setHeader(tab), grid].filter((el) => el !== null));
+    grid = shown;
+    panel.replaceChildren(...[setHeader(tab), shown.el].filter((el) => el !== null));
   }
+  const row = tabRow(tabs, showTab);
 
   root.append(
     h(
       'section',
       { class: 'card card--journal journal', 'aria-labelledby': 'journal-title' },
-      // One compact row for the title, the count and Back: the room goes to the animals.
-      h(
-        'div',
-        { class: 'journal__head' },
-        h(
-          'div',
-          { class: 'journal__title' },
-          h('h1', { id: 'journal-title', class: 'title title--sm', tabindex: -1 }, 'Field Journal'),
-          h('p', { class: 'meta' }, `${props.found} of ${props.total} animals found`),
-        ),
-        back,
-      ),
-      tabList,
+      header(props.found, props.total, back),
+      row.el,
       panel,
     ),
   );
   showTab(0);
   focus(root.querySelector<HTMLElement>('#journal-title'));
   document.documentElement.classList.add(JOURNAL_CLASS);
-  // Every listener is on elements the host removes with the screen.
-  return () => document.documentElement.classList.remove(JOURNAL_CLASS);
+  return () => {
+    grid?.destroy();
+    document.documentElement.classList.remove(JOURNAL_CLASS);
+  };
 };
