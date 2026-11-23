@@ -5,7 +5,7 @@ import { PLACEHOLDER_ART } from '../../../src/config/placeholderArt.ts';
 import { TEMPLATE_KEYS } from '../../../src/config/render.ts';
 import type { Movement } from '../../../src/core/types.ts';
 import { createGrid, outline, shade, SLOT, type Grid, type Pose } from './grid.ts';
-import { drawPlan, type PlanSpec } from './plans.ts';
+import { drawPlan, shadesItself, type PlanSpec } from './plans.ts';
 
 export type Tag = Pose['mode'];
 
@@ -25,7 +25,7 @@ export function drawFrames(spec: PlanSpec, tags: readonly Tag[]): Grid[] {
     Array.from({ length: PLACEHOLDER_ART.framesPerTag }, (_, phase) => {
       const g = createGrid();
       drawPlan(g, { mode, phase }, spec);
-      shade(g);
+      if (!shadesItself(spec)) shade(g);
       outline(g);
       return g;
     }),

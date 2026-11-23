@@ -2,7 +2,7 @@
 #   kind | Display name | key=value ...   keys: id wiki parent rep emoji move
 
 # --- Animals already in animals.json ---
-group | Penguin | rep=emperor-penguin
+group | Penguin | rep=emperor-penguin | move=land
 group | Bear | rep=brown-bear
 group | Big cat | rep=lion
 group | Sea turtle | rep=leatherback-turtle

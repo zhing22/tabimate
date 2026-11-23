@@ -5,12 +5,20 @@ import { drawBird } from './bird.ts';
 import { drawBug, type BugSpec } from './bug.ts';
 import { drawFish, type FishSpec } from './fish.ts';
 import type { Grid, Pose } from './grid.ts';
+import { drawPenguin, type PenguinSpec } from './penguin.ts';
 import { drawQuadruped, type QuadrupedSpec } from './quadruped.ts';
 import { drawBlob, drawSerpent, type BlobSpec, type SerpentSpec } from './soft.ts';
 import { drawUpright, type UprightSpec } from './upright.ts';
 
 export type PlanSpec =
-  QuadrupedSpec | UprightSpec | BirdSpec | BugSpec | FishSpec | SerpentSpec | BlobSpec;
+  | QuadrupedSpec
+  | UprightSpec
+  | PenguinSpec
+  | BirdSpec
+  | BugSpec
+  | FishSpec
+  | SerpentSpec
+  | BlobSpec;
 type PlanName = PlanSpec['plan'];
 type Drawer<P extends PlanName> = (
   g: Grid,
@@ -21,12 +29,21 @@ type Drawer<P extends PlanName> = (
 const PLANS: { readonly [P in PlanName]: Drawer<P> } = {
   quadruped: drawQuadruped,
   upright: drawUpright,
+  penguin: drawPenguin,
   bird: drawBird,
   bug: drawBug,
   fish: drawFish,
   serpent: drawSerpent,
   blob: drawBlob,
 };
+
+/**
+ * Plans that colour every pixel themselves (a penguin's white front is its
+ * highlight slot), so the lit-top, shadowed-underside pass would spoil them.
+ */
+const SELF_SHADED: ReadonlySet<PlanName> = new Set(['penguin']);
+
+export const shadesItself = (spec: PlanSpec): boolean => SELF_SHADED.has(spec.plan);
 
 /** The cast is safe: PLANS maps each plan name to the drawer for that spec. */
 export function drawPlan(g: Grid, pose: Pose, spec: PlanSpec): void {

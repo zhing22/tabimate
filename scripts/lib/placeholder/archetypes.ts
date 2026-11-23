@@ -83,7 +83,11 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   sirenian: { plan: 'fish', body: [15, 7], tail: 'flukes', dorsal: 'none', flippers: true },
   otter: { plan: 'quadruped', body: [12, 4], leg: 2, ears: 'round', tail: 'thick' },
   seal: { plan: 'fish', body: [14, 6], tail: 'flukes', dorsal: 'none', snout: 1, flippers: true },
-  penguin: { plan: 'upright', body: [7, 9], arms: 'flippers', beak: true, belly: true },
+  // Penguins by look (penguin.ts); each species' colours are in palettes.json.
+  penguin: { plan: 'penguin', look: 'banded' },
+  'great-penguin': { plan: 'penguin', look: 'great' },
+  'crested-penguin': { plan: 'penguin', look: 'crested' },
+  'brush-penguin': { plan: 'penguin', look: 'brush' },
   frog: { plan: 'quadruped', body: [9, 5], leg: 2, head: 3, ears: 'none', tail: 'none', hop: true },
   snake: { plan: 'serpent' },
   lizard: { plan: 'quadruped', body: [10, 3], leg: 2, snout: 1, ears: 'none', tail: 'thick' },
