@@ -16,6 +16,8 @@ export interface Shape {
   readonly belly: number;
   /** How far something reaches past the nose (a tusk, a hammer), px. */
   readonly nose?: number;
+  /** How far the tail end sways up and down, px (default 2). */
+  readonly sway?: number;
 }
 
 export interface Body {
@@ -38,7 +40,7 @@ const CENTRE = 12;
 export function drawMarineBody(g: Grid, pose: Pose, shape: Shape, tail: number): Body {
   const x0 = Math.round(CENTRE - (shape.len + tail + (shape.nose ?? 0)) / 2) + tail;
   const x1 = x0 + shape.len - 1;
-  const sway = swing(pose.phase);
+  const sway = swing(pose.phase) * ((shape.sway ?? 2) / 2);
   const tops = new Map<number, number>();
   const bottoms = new Map<number, number>();
   for (let x = x0; x <= x1; x++) {

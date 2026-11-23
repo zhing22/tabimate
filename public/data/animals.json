@@ -3710,7 +3710,7 @@
     "aliases": [],
     "kind": "species",
     "parent": "shark",
-    "archetype": "shark",
+    "archetype": "tiger-shark",
     "movement": "water",
     "size": "L",
     "tint": "#7a8a98",

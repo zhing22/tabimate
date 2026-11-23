@@ -89,6 +89,7 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   narwhal: { plan: 'whale', look: 'narwhal' },
   dolphin: { plan: 'fish', body: [14, 5], tail: 'flukes', dorsal: 'small', snout: 2 },
   shark: { plan: 'shark', look: 'classic' },
+  'tiger-shark': { plan: 'shark', look: 'striped' },
   hammerhead: { plan: 'shark', look: 'hammerhead' },
   'filter-shark': { plan: 'shark', look: 'filter' },
   turtle: { plan: 'quadruped', body: [12, 5], leg: 2, ears: 'none', shell: true, tail: 'short' },
