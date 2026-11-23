@@ -1,6 +1,6 @@
 {
   "frames": {
-    "parrot 0.aseprite": {
+    "lorikeet 0.aseprite": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -9,7 +9,7 @@
       },
       "duration": 120
     },
-    "parrot 1.aseprite": {
+    "lorikeet 1.aseprite": {
       "frame": {
         "x": 24,
         "y": 0,
@@ -18,7 +18,7 @@
       },
       "duration": 120
     },
-    "parrot 2.aseprite": {
+    "lorikeet 2.aseprite": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -27,7 +27,7 @@
       },
       "duration": 120
     },
-    "parrot 3.aseprite": {
+    "lorikeet 3.aseprite": {
       "frame": {
         "x": 72,
         "y": 0,
@@ -36,7 +36,7 @@
       },
       "duration": 120
     },
-    "parrot 4.aseprite": {
+    "lorikeet 4.aseprite": {
       "frame": {
         "x": 96,
         "y": 0,
@@ -45,7 +45,7 @@
       },
       "duration": 120
     },
-    "parrot 5.aseprite": {
+    "lorikeet 5.aseprite": {
       "frame": {
         "x": 120,
         "y": 0,
@@ -54,7 +54,7 @@
       },
       "duration": 120
     },
-    "parrot 6.aseprite": {
+    "lorikeet 6.aseprite": {
       "frame": {
         "x": 144,
         "y": 0,
@@ -63,7 +63,7 @@
       },
       "duration": 120
     },
-    "parrot 7.aseprite": {
+    "lorikeet 7.aseprite": {
       "frame": {
         "x": 168,
         "y": 0,
@@ -75,7 +75,7 @@
   },
   "meta": {
     "app": "scripts/drawPlaceholderSheets.ts",
-    "image": "parrot.png",
+    "image": "lorikeet.png",
     "format": "RGBA8888",
     "size": {
       "w": 192,

@@ -63,6 +63,11 @@ export function line(g: Grid, x0: number, y0: number, x1: number, y1: number, k:
   }
 }
 
+/** Recolours a pixel only where it is already `on` (a band across a wing). */
+export function paintOver(g: Grid, x: number, y: number, on: Key, k: Key): void {
+  if (get(g, Math.round(x), Math.round(y)) === on) set(g, x, y, k);
+}
+
 const isEmpty = (g: Grid, x: number, y: number) => get(g, x, y) === '.';
 
 /** Body pixels with nothing above are lit, with nothing below in shadow. */

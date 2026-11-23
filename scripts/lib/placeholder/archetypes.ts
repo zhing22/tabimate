@@ -2,6 +2,7 @@
 // Every archetype in animals.json needs an entry (a test checks); a family
 // borrows a shared look (HOOFED, RAPTOR...) and changes what sets it apart.
 import type { PlanSpec } from './plans.ts';
+import { PARROT_LOOKS } from './parrotLooks.ts';
 import { PRIMATE_LOOKS } from './primateLooks.ts';
 
 const HOOFED = {
@@ -23,6 +24,10 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   // Primates: a look per archetype (primateLooks.ts).
   ...Object.fromEntries(
     Object.keys(PRIMATE_LOOKS).map((look) => [look, { plan: 'primate', look } as PlanSpec]),
+  ),
+  // Parrots: a look per archetype (parrotLooks.ts).
+  ...Object.fromEntries(
+    Object.keys(PARROT_LOOKS).map((look) => [look, { plan: 'parrot', look } as PlanSpec]),
   ),
   'big-cat': { plan: 'quadruped', tail: 'long', ears: 'round', pattern: 'stripes' },
   // Elephants, rabbits and hares by look (elephant.ts, rabbit.ts).
@@ -70,7 +75,6 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
     pattern: 'back',
   },
   ratite: { plan: 'bird', body: [8, 6], leg: 7, neck: 5, head: 1.5, tail: 1, wing: 4 },
-  parrot: { plan: 'bird', beak: 'hook', tail: 4 },
   fowl: { plan: 'bird', body: [8, 6], crest: true, tail: 3 },
   amphibian: { plan: 'quadruped', body: [10, 3], leg: 1, ears: 'none', tail: 'thick' },
   raptor: RAPTOR,

@@ -7,6 +7,7 @@ import { drawBug, type BugSpec } from './bug.ts';
 import { drawElephant, type ElephantSpec } from './elephant.ts';
 import { drawFish, type FishSpec } from './fish.ts';
 import type { Grid, Pose } from './grid.ts';
+import { drawParrot, type ParrotSpec } from './parrot.ts';
 import { drawPenguin, type PenguinSpec } from './penguin.ts';
 import { drawPrimate, type PrimateSpec } from './primate.ts';
 import { drawQuadruped, type QuadrupedSpec } from './quadruped.ts';
@@ -19,6 +20,7 @@ export type PlanSpec =
   | QuadrupedSpec
   | BearSpec
   | PrimateSpec
+  | ParrotSpec
   | ElephantSpec
   | RabbitSpec
   | PenguinSpec
@@ -42,6 +44,7 @@ const PLANS: { readonly [P in PlanName]: Drawer<P> } = {
   elephant: drawElephant,
   rabbit: drawRabbit,
   primate: drawPrimate,
+  parrot: drawParrot,
   penguin: drawPenguin,
   bird: drawBird,
   bug: drawBug,
@@ -62,6 +65,7 @@ const SELF_SHADED: ReadonlySet<PlanName> = new Set([
   'elephant',
   'rabbit',
   'primate',
+  'parrot',
   'shark',
   'whale',
 ]);

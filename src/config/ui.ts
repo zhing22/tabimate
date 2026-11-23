@@ -7,8 +7,8 @@ export const UI_SPRITE_SCALE = {
   team: 2,
   /** The Field Journal grid. */
   journal: 2,
-  /** The chosen animal on its journal page, moving. */
-  journalDetail: 3,
+  /** The chosen animal on its journal page, moving (in a 64 px box). */
+  journalDetail: 2,
   /** The animal on the reveal card, walking. */
   reveal: 3,
 } as const;
