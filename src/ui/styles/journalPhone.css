@@ -33,6 +33,10 @@
     display: block;
     min-height: 0;
     overflow-y: auto;
+    /* Room for the scrollbar, which some phones draw over the content: it
+       would hide the popup's right border and the last column's edge. */
+    padding-right: var(--space-2);
+    scrollbar-gutter: stable;
   }
 
   :root.is-journal .journal__panel > * + * {
