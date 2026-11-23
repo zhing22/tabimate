@@ -36,3 +36,7 @@ const MONTH_NAMES = [
 /** { year: 2026, month: 11 } -> "November 2026". */
 export const formatMonth = ({ year, month }: { year: number; month: number }): string =>
   `${MONTH_NAMES[month - 1] ?? ''} ${year}`;
+
+/** A share of players as the results show it: "12%", "<1%" for a few, "0%" for none. */
+export const formatShare = (percent: number): string =>
+  percent > 0 && percent < 0.5 ? '<1%' : `${Math.round(percent)}%`;

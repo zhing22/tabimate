@@ -1,6 +1,7 @@
 import { LEVELS, type AnswerLevel } from '@/config/levels';
 import type { AnimalId } from '@/core/types';
 import { h } from '../dom';
+import { formatShare } from '../format';
 
 /** One answer to a prompt, as the results list it. */
 export interface AnswerLine {
@@ -40,9 +41,14 @@ function details(answer: AnswerLine, id: string) {
  * One answer: a button with its name, level and points that opens to its
  * description and Wikipedia link. Each row is tinted with its level's colour
  * (answers.css lightens it), so rarity reads at a glance; the player's own is
- * marked for sight and for screen readers.
+ * marked for sight and for screen readers. With , the percentage of
+ * players who picked it.
  */
-export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
+export function answerRow(
+  answer: AnswerLine,
+  id: string,
+  share: number | null = null,
+): HTMLLIElement {
   const panel = details(answer, `${id}-details`);
   const button = h(
     'button',
@@ -59,7 +65,13 @@ export function answerRow(answer: AnswerLine, id: string): HTMLLIElement {
       // Shown, not just read out: everyone should find their own answer at a glance.
       answer.picked ? h('span', { class: 'answer__mine' }, ' (your answer)') : null,
     ),
-    h('span', { class: 'answer__level' }, levelPoints(answer.level, answer.points)),
+    h(
+      'span',
+      { class: 'answer__level' },
+      levelPoints(answer.level, answer.points),
+      // How many players picked it, once enough have played (null: hidden).
+      share === null ? null : h('span', { class: 'answer__share' }, ` · ${formatShare(share)}`),
+    ),
   );
   button.addEventListener('click', () => {
     const open = button.getAttribute('aria-expanded') !== 'true';

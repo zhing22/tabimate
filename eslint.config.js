@@ -75,14 +75,14 @@ const pureRules = {
 };
 
 export default tseslint.config(
-  { ignores: ['dist/', 'coverage/', 'node_modules/', 'art/'] },
+  { ignores: ['dist/', 'coverage/', 'node_modules/', 'art/', '.wrangler/'] },
 
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.node.json'],
+        project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.functions.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -142,6 +142,17 @@ export default tseslint.config(
   {
     files: ['src/scene/**/*.ts'],
     rules: restrictImports(['ui'], 'scene/ must not import ui/; talk through core events.'),
+  },
+
+  // Server code (Cloudflare Pages Functions): Workers globals, and only pure
+  // code from src/ (types, config, core), never the browser layers.
+  {
+    files: ['functions/**/*.ts'],
+    languageOptions: { globals: { ...globals.serviceworker } },
+    rules: restrictImports(
+      ['ui', 'scene', 'services', 'data', 'dev', 'wiring'],
+      'functions/ shares only pure code from src/ (config, core) and functions/lib.',
+    ),
   },
 
   // Build and art scripts run in Node (npm run pixelate, npm run art:sample).

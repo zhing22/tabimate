@@ -11,7 +11,7 @@
     "test:watch": "vitest",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json && tsc -p tsconfig.functions.json",
     "check": "npm run validate-data && npm run typecheck && npm run lint && npm run test",
     "validate-data": "tsx scripts/validate-data.ts",
     "pixelate": "tsx scripts/pixelate.ts",
@@ -20,9 +20,14 @@
     "seed-traits": "tsx scripts/seed-traits.ts",
     "draft-descriptions": "tsx scripts/draft-descriptions.ts",
     "content-report": "tsx scripts/content-report.ts",
-    "sprite-coverage": "tsx scripts/sprite-coverage.ts"
+    "sprite-coverage": "tsx scripts/sprite-coverage.ts",
+    "test:d1": "tsx --test functions/test/runsApi.d1.ts",
+    "db:migrate:local": "wrangler d1 migrations apply tabimate --local",
+    "db:migrate:remote": "wrangler d1 migrations apply tabimate --remote",
+    "dev:api": "npm run build && npm run db:migrate:local && wrangler pages dev dist --d1 DB=00000000-0000-0000-0000-000000000000"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261123.1",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
@@ -37,9 +42,14 @@
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.6",
     "vite-plugin-pwa": "^2.0.0",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "wrangler": "^4.166.0"
   },
   "dependencies": {
     "kaplay": "3001.0.19"
+  },
+  "allowScripts": {
+    "workerd@1.20261119.1": true,
+    "esbuild@0.28.2": true
   }
 }

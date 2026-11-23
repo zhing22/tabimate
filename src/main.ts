@@ -24,6 +24,7 @@ import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { startDebug } from '@/wiring/startDebug';
 import { journalPortraits, startScene } from '@/wiring/startScene';
 import { startShare } from '@/wiring/startShare';
+import { startStats } from '@/wiring/startStats';
 
 const root = document.querySelector<HTMLElement>('#ui');
 if (!root) throw new Error('index.html is missing #ui');
@@ -42,6 +43,9 @@ const reload = () => location.reload();
 // ?debug=1 shows the debug panel; with it, ?date=YYYY-MM-DD plays that day's puzzle.
 const debug = readDebugParams(location.search);
 const shareUrl = () => new URL(import.meta.env.BASE_URL, location.origin).href;
+// Player stats: the API on the live site, nothing in development (a run that
+// failed to send last time is retried once now).
+const playerStats = startStats(storage, shareUrl());
 
 const key = debug.date ?? dailyKey(clock.now());
 // The loading screen goes up at once: the day's number and theme come from the date.
@@ -106,11 +110,14 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     reload,
     share: sharing.share,
     saveImage: sharing.saveImage,
+    dayStats: (dateKey) => playerStats.dayStats(dateKey),
   });
   // One listener, in this order: record the run (streak, journal, achievements),
   // show results with its streak, then announce what it added to the collection.
   bus.on('runFinished', (totals) => {
     const collected = progress.completeRun(controller.getState(), animals);
+    // A reload of a finished run sends it again; the server keeps the first.
+    playerStats.submit(puzzle, totals.results);
     const run = { ...totals, stats: progress.getStats() };
     app.showResults(run);
     sharing.prepare(run);

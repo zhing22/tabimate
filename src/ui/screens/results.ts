@@ -1,6 +1,7 @@
 import type { InstallOffer } from '@/core/install';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
+import type { DayStats } from '@/core/stats';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { countdown } from '../components/countdown';
 import { installHint } from '../components/installHint';
@@ -13,6 +14,8 @@ import type { Screen } from '../host';
 
 export interface ResultsProps {
   readonly rounds: readonly TeamRound[];
+  /** Players' picks for the day, when the server has them (the shares show once it settles). */
+  readonly dayStats?: Promise<DayStats | null> | undefined;
   /** The day total, after any bonus. */
   readonly score: number;
   /** The answers' points alone: where the walk ended (the line-up's scenery). */
@@ -48,6 +51,10 @@ export { SAID_MS } from '../components/shareButton';
 
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
   const team = teamCard(props.rounds, props.portraits);
+  let open = true;
+  void props.dayStats?.then((stats) => {
+    if (open && stats) team.showShares(stats);
+  });
   const party = partyLineup(props.rounds, {
     portraits: props.portraits,
     backdrops: props.backdrops,
@@ -113,6 +120,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   // Lets the layout show the scene full-window behind this card on phones too.
   document.documentElement.classList.add(RESULTS_CLASS);
   return () => {
+    open = false;
     document.documentElement.classList.remove(RESULTS_CLASS);
     timer.destroy();
     team.destroy();

@@ -13,7 +13,7 @@ export default defineConfig({
     // per-file VM contexts make the matcher ~40x slower than real use, which
     // the matcher's speed test would wrongly flag.
     pool: 'threads',
-    include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'scripts/**/*.test.ts', 'functions/**/*.test.ts'],
     passWithNoTests: true,
     // So tests can read stylesheets with ?raw (ui/styles.test.ts checks the tokens).
     css: true,

@@ -79,6 +79,12 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
             'Close enough? We fix typos and short names for you: press Go again to answer.',
           ),
           h('li', {}, 'Every animal you find joins your trail. One journey a day.'),
+          // Privacy: what player stats send, in plain words (v2 Step 13).
+          h(
+            'li',
+            { class: 'how-to__privacy' },
+            'No sign-up, no personal data. When you finish, your answers are sent with a random id kept on this device, so we can show how many players picked each one.',
+          ),
         ),
       ),
     ),

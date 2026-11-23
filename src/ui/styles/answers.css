@@ -122,3 +122,9 @@
   font-size: var(--text-sm);
   color: var(--ink-soft);
 }
+
+/* The share of players who picked an answer, beside its level and points. */
+.answer__share {
+  font-weight: 400;
+  color: var(--ink-soft);
+}

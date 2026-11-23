@@ -1,0 +1,14 @@
+# Wrangler config for the local database and migrations (npm run db:migrate:*,
+# npm run dev:api). Deliberately no pages_build_output_dir: with it, this file
+# would replace the Pages project's dashboard settings, where the production
+# D1 binding (DB) lives.
+name = "tabimate"
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tabimate"
+# The id printed by `npx wrangler d1 create tabimate`. Needed only for
+# db:migrate:remote; local development works with this placeholder.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

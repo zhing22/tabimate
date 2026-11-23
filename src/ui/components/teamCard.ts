@@ -1,9 +1,11 @@
 import { isShiny } from '@/config/levels';
 import { UI_SPRITE_SCALE } from '@/config/ui';
 import type { Portraits } from '@/core/portrait';
+import { pickedShare, type DayStats } from '@/core/stats';
 import { pointsFor } from '@/core/scoring';
 import type { Animal, Prompt, RoundResult } from '@/core/types';
 import { h } from '../dom';
+import { formatShare } from '../format';
 import { answerList, type AnswerList } from './answerList';
 import type { AnswerLine } from './answerRow';
 import type { Component } from './component';
@@ -60,8 +62,20 @@ function summary(round: TeamRound, index: number, portraits: Portraits | undefin
  * name, level and points), or a miss. Each opens to every answer the prompt
  * accepted; the list is built on first open, then scrolls to the player's own.
  */
-export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): Component {
+export interface TeamCard extends Component {
+  /**
+   * Players' picks, once they arrive: "12% picked this" under each answer
+   * and a share beside every answer in its list. Prompts with too few players
+   * (pickedShare null) show none.
+   */
+  showShares(stats: DayStats): void;
+}
+
+export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): TeamCard {
   const lists: AnswerList[] = [];
+  let stats: DayStats | null = null;
+  const shareOf = (round: TeamRound) => (animalId: string) =>
+    pickedShare(stats, round.prompt.id, animalId);
   const el = h(
     'ol',
     { class: 'team-card' },
@@ -71,7 +85,7 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): C
       details.addEventListener('toggle', () => {
         if (!details.open) return;
         if (!list) {
-          list = answerList(round.answers, { question: `Q${i + 1}` });
+          list = answerList(round.answers, { question: `Q${i + 1}`, share: shareOf(round) });
           lists.push(list);
           details.append(list.el);
         }
@@ -80,5 +94,22 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): C
       return h('li', {}, details);
     }),
   );
-  return { el, destroy: () => lists.forEach((l) => l.destroy()) };
+  return {
+    el,
+    showShares(next) {
+      stats = next;
+      rounds.forEach((round, i) => {
+        const id = round.result.match.animalId;
+        const share = id === null ? null : shareOf(round)(id);
+        const text = el.children[i]?.querySelector('.team-card__text');
+        text?.querySelector('.team-card__share')?.remove();
+        if (share !== null)
+          text?.append(
+            h('span', { class: 'team-card__share' }, `${formatShare(share)} picked this`),
+          );
+      });
+      lists.forEach((l) => l.refresh());
+    },
+    destroy: () => lists.forEach((l) => l.destroy()),
+  };
 }

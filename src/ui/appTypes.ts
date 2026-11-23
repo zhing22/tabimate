@@ -6,8 +6,9 @@ import type { GameBus } from '@/core/events';
 import type { GameController } from '@/core/gameController';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
+import type { DayStats } from '@/core/stats';
 import type { Stats, StreakStatus } from '@/core/streak';
-import type { Animal, AnimalId, Puzzle } from '@/core/types';
+import type { Animal, AnimalId, DateKey, Puzzle } from '@/core/types';
 import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import type { FinishedRun } from './resultsProps';
@@ -36,6 +37,8 @@ export interface AppDeps {
   readonly share: (run: FinishedRun) => Promise<ShareOutcome>;
   /** Saves the run's team image as a file; absent where none can be made. */
   readonly saveImage?: (run: FinishedRun) => void;
+  /** Players' picks for a day (player stats); absent or null: the results show no shares. */
+  readonly dayStats?: (dateKey: DateKey) => Promise<DayStats | null>;
   /** The "Install Tabimate" hint's browser side. */
   readonly install?: InstallOffer;
   /** The reveal's beats; tests pass INSTANT_REVEAL. */

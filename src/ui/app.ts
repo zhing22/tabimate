@@ -83,6 +83,7 @@ export function createApp(deps: AppDeps): App {
         ...(deps.delay ? { delay: deps.delay } : {}),
         ...(deps.portraits ? { portraits: deps.portraits } : {}),
         ...(deps.backdrops ? { backdrops: deps.backdrops } : {}),
+        ...(deps.dayStats ? { dayStats: deps.dayStats(puzzle.date) } : {}),
         install: deps.install,
       },
       {

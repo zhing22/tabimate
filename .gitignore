@@ -25,3 +25,6 @@ dist-ssr
 
 # Content drafting: drafts are committed for review; the HTTP cache is not.
 data-drafts/cache/
+
+# Wrangler: local D1 state and build output.
+.wrangler/

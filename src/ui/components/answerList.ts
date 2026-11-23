@@ -6,11 +6,15 @@ import type { Component } from './component';
 export interface AnswerListOptions {
   /** The question it answers, e.g. "Q3": names the region and search box, and prefixes ids. */
   readonly question: string;
+  /** How many players picked an answer, as a percentage; null hides it. Read as rows render. */
+  readonly share?: (animalId: string) => number | null;
 }
 
 export interface AnswerList extends Component {
   /** Scrolls the player's answer into the middle of the box. Call once it is visible. */
   readonly reveal: () => void;
+  /** Draws the rows again, e.g. once player shares arrive. */
+  readonly refresh: () => void;
 }
 
 /** Lowercase without accents, so "kakapo" finds "Kākāpō". */
@@ -49,7 +53,7 @@ export function answerList(answers: readonly AnswerLine[], options: AnswerListOp
     const end = Math.min(count, shown.length);
     for (; rendered < end; rendered++) {
       const answer = shown[rendered]!;
-      list.append(answerRow(answer, ids.get(answer)!));
+      list.append(answerRow(answer, ids.get(answer)!, options.share?.(answer.animalId) ?? null));
     }
   };
   const show = (items: readonly AnswerLine[]) => {
@@ -103,6 +107,7 @@ export function answerList(answers: readonly AnswerLine[], options: AnswerListOp
       // Within the box only: scrollIntoView would also scroll the page.
       box.scrollTop = row.offsetTop - (box.clientHeight - row.offsetHeight) / 2;
     },
+    refresh: () => show(shown),
     destroy: () => {},
   };
 }
