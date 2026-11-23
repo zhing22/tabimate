@@ -22,6 +22,20 @@ const under =
     return group !== undefined && isMoreSpecific(animal, group, animals);
   };
 
+/** In any of these sets' filters ("whales and dolphins"). */
+const either =
+  (...filters: JournalSet['filter'][]) =>
+  (animal: Animal, animals: AnimalLookup): boolean =>
+    filters.some((f) => f(animal, animals));
+
+/** One animal by id, for a species that sits under no group. */
+const is =
+  (id: string) =>
+  (animal: Animal): boolean =>
+    animal.id === id;
+
+const ofClass = (value: string): AnimalFilter => ({ op: 'equals', trait: 'class', value });
+
 /** Every animal passing a core/traits.ts filter. */
 const having =
   (filter: AnimalFilter) =>
@@ -34,6 +48,57 @@ export const JOURNAL_SETS: readonly JournalSet[] = [
   { id: 'penguins', name: 'Penguins', icon: '🐧', filter: under('penguin') },
   { id: 'sharks', name: 'Sharks', icon: '🦈', filter: under('shark') },
   {
+    id: 'whales',
+    name: 'Whales and dolphins',
+    icon: '🐋',
+    filter: either(under('whale'), under('dolphin')),
+  },
+  {
+    id: 'seals',
+    name: 'Seals and sea cows',
+    icon: '🦭',
+    filter: either(under('seal'), under('sea-cow')),
+  },
+  { id: 'elephants', name: 'Elephants', icon: '🐘', filter: under('elephant') },
+  {
+    id: 'primates',
+    name: 'Apes and monkeys',
+    icon: '🐒',
+    filter: either(
+      ...['gorilla', 'orangutan', 'monkey', 'gibbon', 'lemur'].map(under),
+      is('chimpanzee'),
+    ),
+  },
+  {
+    id: 'rabbits',
+    name: 'Rabbits and hares',
+    icon: '🐇',
+    filter: either(under('rabbit'), under('hare')),
+  },
+  {
+    id: 'deer',
+    name: 'Deer and antelope',
+    icon: '🦌',
+    filter: either(under('deer'), under('antelope')),
+  },
+  {
+    id: 'birds-of-prey',
+    name: 'Birds of prey',
+    icon: '🦅',
+    filter: either(...['eagle', 'hawk', 'falcon', 'condor', 'vulture'].map(under)),
+  },
+  { id: 'owls', name: 'Owls', icon: '🦉', filter: under('owl') },
+  { id: 'parrots', name: 'Parrots', icon: '🦜', filter: under('parrot') },
+  { id: 'reptiles', name: 'Reptiles', icon: '🦎', filter: having(ofClass('reptile')) },
+  { id: 'amphibians', name: 'Amphibians', icon: '🐸', filter: having(ofClass('amphibian')) },
+  { id: 'fish', name: 'Fish', icon: '🐟', filter: having(ofClass('fish')) },
+  {
+    id: 'bugs',
+    name: 'Insects and spiders',
+    icon: '🐞',
+    filter: having({ op: 'or', filters: [ofClass('insect'), ofClass('arachnid')] }),
+  },
+  {
     id: 'oceania',
     name: 'Australia and Oceania',
     icon: '🦘',
@@ -45,10 +110,7 @@ export const JOURNAL_SETS: readonly JournalSet[] = [
     icon: '🥚',
     filter: having({
       op: 'and',
-      filters: [
-        { op: 'equals', trait: 'class', value: 'bird' },
-        { op: 'equals', trait: 'flies', value: false },
-      ],
+      filters: [ofClass('bird'), { op: 'equals', trait: 'flies', value: false }],
     }),
   },
 ];

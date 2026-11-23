@@ -43,7 +43,7 @@ function setHeader(tab: JournalTab): HTMLElement | null {
  * achievements, in tabs. A found animal opens to its page above the grid.
  */
 export const journalScreen: Screen<JournalProps, JournalActions> = (root, props, actions) => {
-  const back = h('button', { class: 'button', type: 'button' }, 'Back');
+  const back = h('button', { class: 'button journal__back', type: 'button' }, 'Back');
   back.addEventListener('click', () => actions.close());
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
   const tabList = h('div', { class: 'journal__tabs', role: 'tablist', 'aria-label': 'Journal' });
@@ -93,6 +93,8 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
       button.setAttribute('aria-selected', String(i === index));
       button.tabIndex = i === index ? 0 : -1;
     });
+    // The tab row scrolls sideways: keep the chosen tab in view.
+    buttons[index]!.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
     const tab = tabs[index]!;
     if (!('cells' in tab)) {
       panel.replaceChildren(badgeList(props.badges));
@@ -109,11 +111,20 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
     h(
       'section',
       { class: 'card card--journal journal', 'aria-labelledby': 'journal-title' },
-      h('h1', { id: 'journal-title', class: 'title title--sm', tabindex: -1 }, 'Field Journal'),
-      h('p', { class: 'meta' }, `${props.found} of ${props.total} animals found`),
+      // One compact row for the title, the count and Back: the room goes to the animals.
+      h(
+        'div',
+        { class: 'journal__head' },
+        h(
+          'div',
+          { class: 'journal__title' },
+          h('h1', { id: 'journal-title', class: 'title title--sm', tabindex: -1 }, 'Field Journal'),
+          h('p', { class: 'meta' }, `${props.found} of ${props.total} animals found`),
+        ),
+        back,
+      ),
       tabList,
       panel,
-      back,
     ),
   );
   showTab(0);

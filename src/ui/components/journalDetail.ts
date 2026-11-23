@@ -10,8 +10,9 @@ const timesText = (n: number) => (n === 1 ? 'Found once' : `Found ${n} times`);
 
 /**
  * A found animal's journal page: the animal moving (its sprite's walk, flap or
- * swim; an emoji hops), name, rarest level found, description, Wikipedia link,
- * when it was first found and how often. `close` puts focus back where the
+ * swim; an emoji hops), name, rarest level found, description, and one line
+ * with the Wikipedia link, when it was first found and how often; a corner ×
+ * closes it. `close` puts focus back where the
  * player was.
  */
 export function journalDetail(
@@ -20,10 +21,12 @@ export function journalDetail(
   portraits?: Portraits,
 ): HTMLElement {
   const { animal, entry } = cell;
+  // A small corner button, so the page stays compact.
   const closeButton = h(
     'button',
-    { class: 'button journal-detail__close', type: 'button' },
-    'Close',
+    { class: 'journal-detail__close', type: 'button' },
+    h('span', { 'aria-hidden': 'true' }, '×'),
+    h('span', { class: 'sr-only' }, 'Close'),
   );
   closeButton.addEventListener('click', close);
   const title = h('h2', { class: 'section-title', tabindex: -1 }, animal.display);
@@ -44,20 +47,22 @@ export function journalDetail(
     animal.description
       ? h('p', { class: 'journal-detail__description' }, animal.description)
       : null,
-    animal.wiki
-      ? h(
-          'a',
-          { href: animal.wiki, target: '_blank', rel: 'noopener', class: 'answer__wiki' },
-          'Read more on Wikipedia',
-        )
-      : null,
-    entry
-      ? h(
-          'p',
-          { class: 'meta' },
-          `First found ${formatDateKey(entry.firstFoundKey)} · ${timesText(entry.timesFound)}`,
-        )
-      : null,
+    // One line under it: the Wikipedia link, then when it was first found.
+    h(
+      'p',
+      { class: 'meta journal-detail__meta' },
+      animal.wiki
+        ? h(
+            'a',
+            { href: animal.wiki, target: '_blank', rel: 'noopener', class: 'answer__wiki' },
+            'Wikipedia',
+          )
+        : null,
+      animal.wiki && entry ? ' · ' : null,
+      entry
+        ? `First found ${formatDateKey(entry.firstFoundKey)} · ${timesText(entry.timesFound)}`
+        : null,
+    ),
     closeButton,
   );
   queueMicrotask(() => title.focus());
