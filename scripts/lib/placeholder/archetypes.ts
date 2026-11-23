@@ -30,7 +30,11 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
     trunk: true,
     tail: 'short',
   },
-  bear: { plan: 'quadruped', body: [12, 7], leg: 3, head: 3, ears: 'round', tail: 'short' },
+  // Bears by look (bear.ts); each species' colours are in palettes.json.
+  bear: { plan: 'bear', look: 'plain' },
+  panda: { plan: 'bear', look: 'panda' },
+  'chest-mark-bear': { plan: 'bear', look: 'chest' },
+  'spectacled-bear': { plan: 'bear', look: 'spectacled' },
   'small-carnivore': {
     plan: 'quadruped',
     body: [10, 4],
