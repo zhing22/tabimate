@@ -3,9 +3,10 @@
 // export format, plus a palette from its tint for every animal without one.
 // Real art wins: a sheet whose meta.app isn't this script's is never touched,
 // so exporting an Aseprite sheet of the same name replaces a placeholder.
+// A placeholder no archetype uses any more (one split into looks) is removed.
 //
 //   npm run art:placeholders [-- --dry-run]
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, rmSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import sharp from 'sharp';
 import type { HexColour } from '../src/config/colour.ts';
@@ -67,6 +68,18 @@ for (const [archetype, moves] of [...movements].sort(([a], [b]) => a.localeCompa
   drawn.push(`${archetype} (${tags.join(', ')})`);
 }
 
+const removed: string[] = [];
+for (const name of [...manifest]) {
+  const json = `${SPRITES}/${name}.json`;
+  if (movements.has(name) || !existsSync(json) || !isPlaceholder(readJson<unknown>(json))) continue;
+  if (!dry) {
+    rmSync(json);
+    rmSync(`${SPRITES}/${name}.png`, { force: true });
+  }
+  manifest.delete(name);
+  removed.push(name);
+}
+
 const palettes = readJson<Record<string, HexColour[]>>(`${DATA}/palettes.json`);
 const master = readJson<HexColour[]>(`${DATA}/master-palette.json`);
 const added = addDerivedPalettes(raw, palettes, master, drawsItself);
@@ -79,5 +92,6 @@ if (!dry) {
 console.log(
   `${dry ? '[dry run] ' : ''}Drew ${drawn.length} placeholder sheets:\n  ${drawn.join('\n  ')}`,
 );
+console.log(`Removed ${removed.length} unused placeholders: ${removed.join(', ') || 'none'}`);
 console.log(`Kept ${kept.length} sheets of real art: ${kept.join(', ') || 'none'}`);
 console.log(`Gave ${added.length} animals a palette from their tint.`);

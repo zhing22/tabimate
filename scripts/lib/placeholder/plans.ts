@@ -8,8 +8,10 @@ import { drawFish, type FishSpec } from './fish.ts';
 import type { Grid, Pose } from './grid.ts';
 import { drawPenguin, type PenguinSpec } from './penguin.ts';
 import { drawQuadruped, type QuadrupedSpec } from './quadruped.ts';
+import { drawShark, type SharkSpec } from './shark.ts';
 import { drawBlob, drawSerpent, type BlobSpec, type SerpentSpec } from './soft.ts';
 import { drawUpright, type UprightSpec } from './upright.ts';
+import { drawWhale, type WhaleSpec } from './whale.ts';
 
 export type PlanSpec =
   | QuadrupedSpec
@@ -19,6 +21,8 @@ export type PlanSpec =
   | BirdSpec
   | BugSpec
   | FishSpec
+  | SharkSpec
+  | WhaleSpec
   | SerpentSpec
   | BlobSpec;
 type PlanName = PlanSpec['plan'];
@@ -36,15 +40,17 @@ const PLANS: { readonly [P in PlanName]: Drawer<P> } = {
   bird: drawBird,
   bug: drawBug,
   fish: drawFish,
+  shark: drawShark,
+  whale: drawWhale,
   serpent: drawSerpent,
   blob: drawBlob,
 };
 
 /**
  * Plans that colour every pixel themselves (a penguin's white front is its
- * highlight slot, a bear's muzzle too), so the lit-top, shadowed-underside pass would spoil them.
+ * highlight slot, a bear's muzzle, a shark's or whale's belly too), so the lit-top, shadowed-underside pass would spoil them.
  */
-const SELF_SHADED: ReadonlySet<PlanName> = new Set(['penguin', 'bear']);
+const SELF_SHADED: ReadonlySet<PlanName> = new Set(['penguin', 'bear', 'shark', 'whale']);
 
 export const shadesItself = (spec: PlanSpec): boolean => SELF_SHADED.has(spec.plan);
 

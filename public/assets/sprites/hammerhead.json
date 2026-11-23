@@ -1,6 +1,6 @@
 {
   "frames": {
-    "whale 0.aseprite": {
+    "hammerhead 0.aseprite": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -9,7 +9,7 @@
       },
       "duration": 120
     },
-    "whale 1.aseprite": {
+    "hammerhead 1.aseprite": {
       "frame": {
         "x": 24,
         "y": 0,
@@ -18,7 +18,7 @@
       },
       "duration": 120
     },
-    "whale 2.aseprite": {
+    "hammerhead 2.aseprite": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -27,7 +27,7 @@
       },
       "duration": 120
     },
-    "whale 3.aseprite": {
+    "hammerhead 3.aseprite": {
       "frame": {
         "x": 72,
         "y": 0,
@@ -36,7 +36,7 @@
       },
       "duration": 120
     },
-    "whale 4.aseprite": {
+    "hammerhead 4.aseprite": {
       "frame": {
         "x": 96,
         "y": 0,
@@ -45,7 +45,7 @@
       },
       "duration": 120
     },
-    "whale 5.aseprite": {
+    "hammerhead 5.aseprite": {
       "frame": {
         "x": 120,
         "y": 0,
@@ -54,7 +54,7 @@
       },
       "duration": 120
     },
-    "whale 6.aseprite": {
+    "hammerhead 6.aseprite": {
       "frame": {
         "x": 144,
         "y": 0,
@@ -63,7 +63,7 @@
       },
       "duration": 120
     },
-    "whale 7.aseprite": {
+    "hammerhead 7.aseprite": {
       "frame": {
         "x": 168,
         "y": 0,
@@ -75,7 +75,7 @@
   },
   "meta": {
     "app": "scripts/drawPlaceholderSheets.ts",
-    "image": "whale.png",
+    "image": "hammerhead.png",
     "format": "RGBA8888",
     "size": {
       "w": 192,
