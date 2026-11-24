@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
 import { ACHIEVEMENTS, achievementById } from '@/core/achievements/registry';
 import type { Collection } from '@/core/collection';
@@ -60,22 +60,24 @@ const unlockedStreak = {
 };
 
 describe('Achievements page', () => {
-  it('opens from the start screen beside Journal and History, and goes back', () => {
+  it('opens from the start screen beside Journal and History, and goes back', async () => {
     const t = setup(unlockedStreak);
     t.app.showStart();
     const links = t.$$('.collection-links button').map((b) => b.textContent);
     expect(links).toEqual(['Field Journal', 'Achievements', 'History']);
     t.button('Achievements').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(document.activeElement?.textContent).toBe('Achievements');
     expect(t.$('.page-head .meta')?.textContent).toBe(`1 of ${ACHIEVEMENTS.length} unlocked`);
     t.button('Back').click();
     expect(t.$('.collection-links')).not.toBeNull();
   });
 
-  it('groups badges by section, empty sections left out', () => {
+  it('groups badges by section, empty sections left out', async () => {
     const t = setup(unlockedStreak);
     t.app.showStart();
     t.button('Achievements').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     const headings = t.$$('.achievements__heading').map((h) => h.textContent);
     expect(headings[0]).toContain('Streaks');
     expect(headings[0]).toContain('1 of 3');
@@ -83,10 +85,11 @@ describe('Achievements page', () => {
     expect(t.$$('.achievements__section')).toHaveLength(headings.length);
   });
 
-  it('shows an unlocked badge with its date, a locked one dimmed with its progress', () => {
+  it('shows an unlocked badge with its date, a locked one dimmed with its progress', async () => {
     const t = setup(unlockedStreak);
     t.app.showStart();
     t.button('Achievements').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     const won = t.$(`#${badgeId('streak-3')}`)!;
     expect(won.classList.contains('badge--locked')).toBe(false);
     expect(won.textContent).toContain(`Unlocked ${formatDateKey('2026-11-07')}`);
@@ -101,19 +104,31 @@ describe('Achievements page', () => {
     expect(t.$(`#${badgeId('first-jackpot')}`)!.querySelector('progress')).toBeNull();
   });
 
-  it('opens from a tapped achievement toast, scrolled to that badge', () => {
+  it('opens from a tapped achievement toast, scrolled to that badge', async () => {
     const t = setup(unlockedStreak);
     t.app.showStart();
     const streak = achievementById('streak-3')!;
     t.bus.emit('achievementUnlocked', { achievement: streak, unlockedKey: '2026-11-07' });
-    const toast = t.$('.toast--action')!;
-    expect(toast.tagName).toBe('BUTTON');
-    expect(toast.textContent).toContain('Open achievements');
-    toast.click();
+    const open = t.$('.toast__open')!;
+    expect(open.getAttribute('aria-label')).toBe(`Open achievements: ${streak.name}`);
+    open.click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(document.activeElement?.id).toBe(badgeId('streak-3'));
     expect(t.$(`#${badgeId('streak-3')}`)!.classList.contains('badge--focus')).toBe(true);
     t.button('Back').click(); // back to the screen the toast showed over
     expect(t.$('.collection-links')).not.toBeNull();
+  });
+});
+
+describe('collection pages loading on first open', () => {
+  it('shows only the page asked for last, however the loads finish', async () => {
+    const t = setup(unlockedStreak);
+    t.app.showStart();
+    t.button('Field Journal').click();
+    t.button('Achievements').click(); // asked for before the journal has loaded
+    await vi.dynamicImportSettled();
+    expect(t.$('h1')?.textContent).toBe('Achievements');
+    expect(t.$('.journal')).toBeNull();
   });
 });
 

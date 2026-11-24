@@ -9,10 +9,8 @@ import {
   type AchievementSection,
 } from '@/config/collection';
 import { TOP_LEVEL } from '@/config/levels';
-import type { Journal, JournalRun } from '../journal/journal';
+import type { JournalRun } from '../journal/journal';
 import { JOURNAL_SETS, setProgress } from '../journal/sets';
-import type { HistoryEntry, Stats } from '../streak';
-import type { AnimalLookup } from '../types';
 import { journalGoal, streakGoal } from './goals';
 import {
   bestDayProgress,
@@ -26,16 +24,15 @@ export type { Progress, ProgressContext } from './progress';
 
 export type AchievementId = string;
 
-export interface AchievementContext {
-  /** The run just finished: base is the answers' points, score the day total after the bonus. */
+/**
+ * What a check reads: the record (ProgressContext: every finished day, this
+ * one included; the journal with this run's finds added; stats; animals),
+ * plus the run just finished.
+ */
+export type AchievementContext = ProgressContext & {
+  /** base is the answers' points, score the day total after the bonus. */
   readonly run: JournalRun & { readonly base: number; readonly score: number };
-  /** Every finished day, this one included. */
-  readonly history: readonly HistoryEntry[];
-  /** With this run's finds already added. */
-  readonly journal: Journal;
-  readonly stats: Stats;
-  readonly animals: AnimalLookup;
-}
+};
 
 export interface Achievement {
   readonly id: AchievementId;

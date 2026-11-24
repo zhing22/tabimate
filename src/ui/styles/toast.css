@@ -25,15 +25,28 @@
   animation: toast-in var(--dur-med) ease-out;
 }
 
-/* A toast that does something (an achievement's opens its page): it takes
-   taps, though the layer around it still lets them through. */
-.toast--action {
+/* An achievement toast's "Open" button: the only part of a toast that takes
+   taps (the layer and the rest of the toast let them through). */
+.toast__open {
   pointer-events: auto;
-  border: 0;
+  flex: none;
+  min-height: 36px;
+  padding: 0 var(--space-3);
   font: inherit;
-  color: inherit;
-  text-align: left;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius-2);
   cursor: pointer;
+}
+
+/* On the Journal and Achievements pages, toasts sit at the bottom, clear of
+   the header and its Back button. */
+:root.is-collection .toast-layer {
+  top: auto;
+  bottom: max(var(--space-3), env(safe-area-inset-bottom));
 }
 
 .toast__icon {

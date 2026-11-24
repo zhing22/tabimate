@@ -51,6 +51,10 @@
   --radius-1: 2px;
   --radius-2: 4px;
 
+  /* Achievement badges: the grid's narrowest column (two fit at 360 px) and the progress bar's height */
+  --badge-min: 8.5rem;
+  --progress-h: 8px;
+
   /* Type */
   --font-pixel: 'Pixelify Sans', ui-monospace, monospace;
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;

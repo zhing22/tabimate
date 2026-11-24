@@ -14,6 +14,11 @@ export const PERFECT_DAY_LEVEL: AnswerLevel = ANSWER_LEVELS[1] ?? TOP_LEVEL;
 export const TOAST = {
   /** Each toast stays up this long; several queue one after another. */
   showMs: 3_500,
+  /**
+   * A toast's "Open" button holds it while focused or under the pointer;
+   * once both leave, it stays this much longer.
+   */
+  resumeMs: 2_000,
 } as const;
 
 /**

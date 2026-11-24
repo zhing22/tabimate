@@ -35,12 +35,14 @@ export const journalProgress = (count: number) => (ctx: ProgressContext) =>
 /**
  * The best single day against a goal for each of its prompts: how many of
  * that day's prompts met `counts`, out of its own prompt count (so an old
- * 3-prompt day is measured against 3). No days yet: none of PROMPTS_PER_DAY.
+ * 3-prompt day is measured against 3). With no day closer than none, it is
+ * none of the first day's own count; with no days at all, none of
+ * PROMPTS_PER_DAY.
  */
 export const bestDayProgress =
   (counts: (level: number) => boolean) =>
   (ctx: ProgressContext): Progress => {
-    let best = upTo(0, PROMPTS_PER_DAY);
+    let best = upTo(0, ctx.history[0]?.levels.length || PROMPTS_PER_DAY);
     for (const day of ctx.history) {
       const met = day.levels.filter(counts).length;
       const target = day.levels.length;

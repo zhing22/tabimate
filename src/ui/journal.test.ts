@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { TOAST } from '@/config/collection';
 import { INSTANT_REVEAL } from '@/config/game';
 import { achievementById } from '@/core/achievements/registry';
@@ -69,30 +69,33 @@ const button = (t: ReturnType<typeof setup>, text: string) =>
 describe('Field Journal screen', () => {
   const tigerFound = addRun({}, { puzzleDate: '2026-11-05', results: [hit('tiger')] }).journal;
 
-  it('opens from the start screen and goes back to it', () => {
+  it('opens from the start screen and goes back to it', async () => {
     const t = setup();
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('Field Journal');
     expect(t.$('.meta')?.textContent).toBe(`0 of ${ANIMALS.size} animals found`);
     button(t, 'Back').click();
     expect(t.$('h1')?.textContent).toBe('Tabimate');
   });
 
-  it('opens History from the start screen too, and goes back', () => {
+  it('opens History from the start screen too, and goes back', async () => {
     const t = setup();
     t.app.showStart();
     button(t, 'History').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('History');
     expect(t.$('.calendar')).not.toBeNull();
     button(t, 'Back').click();
     expect(t.$('h1')?.textContent).toBe('Tabimate');
   });
 
-  it('names found animals under their picture, and the rest "???" as silhouettes', () => {
+  it('names found animals under their picture, and the rest "???" as silhouettes', async () => {
     const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$$('.journal-cell__button').map((b) => b.textContent)).toEqual(['🐾Tiger']);
     const unknown = t.$$('.journal-cell--unknown');
     expect(unknown).toHaveLength(ANIMALS.size - 1);
@@ -100,19 +103,21 @@ describe('Field Journal screen', () => {
     expect(unknown[0]?.textContent).not.toContain('Platypus');
   });
 
-  it('counts a group answer ("penguin") as found, in the grid and the total', () => {
+  it('counts a group answer ("penguin") as found, in the grid and the total', async () => {
     const penguin = addRun({}, { puzzleDate: '2026-11-05', results: [hit('penguin')] }).journal;
     const t = setup({ journal: penguin, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('.meta')?.textContent).toBe(`1 of ${ANIMALS.size} animals found`);
     expect(t.$('.journal-cell__button .journal-cell__name')?.textContent).toBe('Penguin');
   });
 
-  it('moves between tabs with the arrow keys, Home and End; only the selected one is tabbable', () => {
+  it('moves between tabs with the arrow keys, Home and End; only the selected one is tabbable', async () => {
     const t = setup();
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     const tabs = t.$$('[role="tab"]');
     const selected = () => tabs.findIndex((b) => b.getAttribute('aria-selected') === 'true');
     expect(tabs.map((b) => b.tabIndex)).toEqual(tabs.map((_, i) => (i === 0 ? 0 : -1)));
@@ -128,10 +133,11 @@ describe('Field Journal screen', () => {
     expect(tabs[1]!.tabIndex).toBe(-1);
   });
 
-  it('opens a found animal to its page: first found date and times found', () => {
+  it('opens a found animal to its page: first found date and times found', async () => {
     const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     t.$('.journal-cell__button')!.click();
     const page = t.$('.journal-detail')!;
     expect(page.querySelector('h2')?.textContent).toBe('Tiger');
@@ -140,10 +146,11 @@ describe('Field Journal screen', () => {
     expect(t.$('.journal-detail')).toBeNull();
   });
 
-  it('has a tab per set with its progress, and no achievements tab (they have their own page)', () => {
+  it('has a tab per set with its progress, and no achievements tab (they have their own page)', async () => {
     const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
     t.$$('[role="tab"]')
       .find((b) => b.textContent?.includes('Penguins'))!
       .click();

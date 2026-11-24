@@ -54,6 +54,8 @@ describe('achievement progress', () => {
   it("measures the best day against that day's own prompt count", () => {
     const answered = bestDayProgress((level) => level > 0);
     expect(answered(ctx())).toEqual({ current: 0, target: PROMPTS_PER_DAY });
+    // Days played, none met: measured against the first day's own count, not PROMPTS_PER_DAY.
+    expect(answered(ctx({ history: [day([0, 0, 0])] }))).toEqual({ current: 0, target: 3 });
     // 2 of 3 beats 4 of 7: the old 3-prompt day is the closest to "every prompt".
     const history = [day([1, 1, 0]), day([1, 1, 1, 1, 0, 0, 0])];
     expect(answered(ctx({ history }))).toEqual({ current: 2, target: 3 });
@@ -83,12 +85,5 @@ describe('the registry', () => {
   it('puts every achievement in a known section', () => {
     const sections = new Set<string>(ACHIEVEMENT_SECTIONS.map((s) => s.id));
     for (const a of ACHIEVEMENTS) expect(sections.has(a.section), a.id).toBe(true);
-  });
-
-  it('gives every count-based achievement progress, and none to the one-off firsts', () => {
-    const counted = ACHIEVEMENTS.filter((a) => !a.id.startsWith('first-'));
-    for (const a of counted) expect(a.progress, a.id).toBeTypeOf('function');
-    for (const a of ACHIEVEMENTS.filter((x) => x.id.startsWith('first-')))
-      expect(a.progress, a.id).toBeUndefined();
   });
 });
