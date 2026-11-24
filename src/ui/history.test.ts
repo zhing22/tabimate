@@ -101,7 +101,12 @@ describe('start screen streak', () => {
       freezeReady,
       theme: null,
     };
-    startScreen(root, props, { play: () => {}, journal: () => {}, history: () => {} });
+    startScreen(root, props, {
+      play: () => {},
+      journal: () => {},
+      achievements: () => {},
+      history: () => {},
+    });
     return root.querySelector('.streak')?.textContent ?? '';
   };
 

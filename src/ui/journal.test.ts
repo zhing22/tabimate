@@ -122,7 +122,6 @@ describe('Field Journal screen', () => {
     expect(document.activeElement).toBe(tabs[1]);
     pressKey(tabs[1]!, 'End');
     expect(selected()).toBe(tabs.length - 1);
-    expect(t.$('.badge-list')).not.toBeNull();
     pressKey(tabs.at(-1)!, 'ArrowRight'); // wraps round
     expect(selected()).toBe(0);
     expect(tabs[0]!.tabIndex).toBe(0);
@@ -141,24 +140,16 @@ describe('Field Journal screen', () => {
     expect(t.$('.journal-detail')).toBeNull();
   });
 
-  it('has a tab per set with its progress, and the achievements', () => {
-    const t = setup({
-      journal: tigerFound,
-      achievements: [{ id: 'streak-3', unlockedKey: '2026-11-07' }],
-    });
+  it('has a tab per set with its progress, and no achievements tab (they have their own page)', () => {
+    const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
     t.$$('[role="tab"]')
       .find((b) => b.textContent?.includes('Penguins'))!
       .click();
     expect(t.$('.journal__set')?.textContent).toBe('Penguins · 0 of 2');
-    t.$$('[role="tab"]')
-      .find((b) => b.textContent?.includes('Achievements'))!
-      .click();
-    const first = t.$('.badge')!;
-    expect(first.textContent).toContain(achievementById('streak-3')!.name);
-    expect(first.textContent).toContain(`Unlocked ${formatDateKey('2026-11-07')}`);
-    expect(t.$$('.badge--locked').length).toBeGreaterThan(0);
+    expect(t.$$('[role="tab"]').some((b) => b.textContent?.includes('Achievements'))).toBe(false);
+    expect(t.$('.badge')).toBeNull();
   });
 });
 

@@ -1,16 +1,15 @@
 import type { Portraits } from '@/core/portrait';
-import { badgeList } from '../components/badgeList';
 import { journalDetail } from '../components/journalDetail';
 import { journalGrid, type JournalGrid } from '../components/journalGrid';
 import { tabRow } from '../components/journalTabs';
+import { COLLECTION_PAGE_CLASS, pageHeader } from '../components/pageHeader';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
-import type { BadgeLine, JournalCell, JournalTab } from '../journalView';
+import type { JournalCell, JournalTab } from '../journalView';
 
 export interface JournalProps {
   /** "All animals" first, then the sets. */
   readonly tabs: readonly JournalTab[];
-  readonly badges: readonly BadgeLine[];
   readonly found: number;
   readonly total: number;
   readonly portraits?: Portraits | undefined;
@@ -20,11 +19,6 @@ export interface JournalActions {
   /** Back to the screen the journal was opened from. */
   close(): void;
 }
-
-const BADGES_TAB = { id: 'badges', label: 'Achievements', icon: '🏆' };
-
-/** On <html> while the journal shows (journal.css: full screen on a phone). */
-export const JOURNAL_CLASS = 'is-journal';
 
 /** A set's line: "Big cats · 3 of 7", stamped once complete. */
 function setHeader(tab: JournalTab): HTMLElement | null {
@@ -56,37 +50,18 @@ function cellOpener(panel: HTMLElement, portraits: Portraits | undefined) {
   };
 }
 
-/** Title and count on the left, Back on the right: one compact row. */
-function header(found: number, total: number, back: HTMLElement): HTMLElement {
-  return h(
-    'div',
-    { class: 'journal__head' },
-    h(
-      'div',
-      { class: 'journal__title' },
-      h('h1', { id: 'journal-title', class: 'title title--sm', tabindex: -1 }, 'Field Journal'),
-      h('p', { class: 'meta' }, `${found} of ${total} animals found`),
-    ),
-    back,
-  );
-}
-
 /**
  * What the panel shows for a tab: a set's line and its grid (cells open
- * their page above it), or the achievements. Showing another tab stops the
- * last grid watching for cells scrolling into view.
+ * their page above it). Showing another tab stops the last grid watching for
+ * cells scrolling into view.
  */
 function journalPanel(panel: HTMLElement, props: JournalProps) {
   const openCell = cellOpener(panel, props.portraits);
   let grid: JournalGrid | null = null;
   return {
-    show(tab: JournalTab | typeof BADGES_TAB) {
+    show(tab: JournalTab) {
       grid?.destroy();
       grid = null;
-      if (!('cells' in tab)) {
-        panel.replaceChildren(badgeList(props.badges));
-        return;
-      }
       const shown = journalGrid(tab.cells, {
         portraits: props.portraits,
         open: (cell) => openCell(cell, shown.el.children[tab.cells.indexOf(cell)] as HTMLElement),
@@ -103,11 +78,15 @@ function journalPanel(panel: HTMLElement, props: JournalProps) {
  * achievements, in tabs. A found animal opens to its page above the grid.
  */
 export const journalScreen: Screen<JournalProps, JournalActions> = (root, props, actions) => {
-  const back = h('button', { class: 'button journal__back', type: 'button' }, 'Back');
-  back.addEventListener('click', () => actions.close());
+  const head = pageHeader(
+    'journal-title',
+    'Field Journal',
+    `${props.found} of ${props.total} animals found`,
+    () => actions.close(),
+  );
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
   const content = journalPanel(panel, props);
-  const tabs = [...props.tabs, BADGES_TAB];
+  const { tabs } = props;
   const showTab = (index: number) => {
     row.select(index);
     content.show(tabs[index]!);
@@ -118,16 +97,16 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
     h(
       'section',
       { class: 'card card--journal journal', 'aria-labelledby': 'journal-title' },
-      header(props.found, props.total, back),
+      head.el,
       row.el,
       panel,
     ),
   );
   showTab(0);
-  focus(root.querySelector<HTMLElement>('#journal-title'));
-  document.documentElement.classList.add(JOURNAL_CLASS);
+  focus(head.heading);
+  document.documentElement.classList.add(COLLECTION_PAGE_CLASS);
   return () => {
     content.destroy();
-    document.documentElement.classList.remove(JOURNAL_CLASS);
+    document.documentElement.classList.remove(COLLECTION_PAGE_CLASS);
   };
 };

@@ -1,10 +1,10 @@
 /* On a phone the Field Journal is a card over the full-window scene (like the
-   results; html.is-journal, see base.css), as wide as the results card and
+   results; html.is-collection, see base.css), as wide as the results card and
    90% of the screen tall. Only its panel scrolls, so the title, tabs and Back
    stay in place. */
 @media (max-width: 767px), (max-height: 520px) {
   /* Header, tabs, then the panel takes everything left. */
-  :root.is-journal .journal {
+  :root.is-collection .journal {
     height: calc(var(--vv-height, 100dvh) * 0.9);
     grid-template-rows: auto auto minmax(0, 1fr);
     gap: var(--space-2);
@@ -12,24 +12,24 @@
     align-self: center;
   }
 
-  :root.is-journal .journal__head .title {
+  :root.is-collection .page-head .title {
     font-size: var(--text-lg);
   }
 
   /* Compact chips: still easy to tap, a lot less tall. */
-  :root.is-journal .journal__tab {
+  :root.is-collection .journal__tab {
     min-height: 32px;
     padding: 0 var(--space-2);
     font-size: var(--text-xs);
   }
 
-  :root.is-journal .journal__tabs {
+  :root.is-collection .journal__tabs {
     padding-bottom: var(--space-1);
   }
 
   /* Block, not grid: in a grid shorter than its content, the popup (which
      scrolls itself) would be squeezed to nothing. */
-  :root.is-journal .journal__panel {
+  :root.is-collection .journal__panel {
     display: block;
     min-height: 0;
     overflow-y: auto;
@@ -39,11 +39,11 @@
     scrollbar-gutter: stable;
   }
 
-  :root.is-journal .journal__panel > * + * {
+  :root.is-collection .journal__panel > * + * {
     margin-top: var(--space-3);
   }
 
-  :root.is-journal .journal-grid {
+  :root.is-collection .journal-grid {
     max-height: none;
     overflow-y: visible;
   }

@@ -25,3 +25,18 @@ export const STREAK_FREEZE = { earnEvery: 7, maxHeld: 1 } as const;
 
 /** "Install Tabimate" shows once this many days are finished, until dismissed or installed. */
 export const INSTALL_HINT = { afterDays: 3 } as const;
+
+/**
+ * The Achievements page's sections, in order; each achievement names one.
+ * A section with no achievements yet (encounters, until v3 adds them) is
+ * not shown.
+ */
+export const ACHIEVEMENT_SECTIONS = [
+  { id: 'streaks', name: 'Streaks', icon: '🔥' },
+  { id: 'collection', name: 'Collection', icon: '📖' },
+  { id: 'scoring', name: 'Scoring', icon: '⭐' },
+  { id: 'encounters', name: 'Encounters', icon: '🤝' },
+  { id: 'exploration', name: 'Exploration', icon: '🧭' },
+] as const;
+
+export type AchievementSection = (typeof ACHIEVEMENT_SECTIONS)[number]['id'];

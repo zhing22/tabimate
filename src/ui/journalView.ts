@@ -1,6 +1,5 @@
 // What the Field Journal screen shows, from the animals and the saved
 // collection: one tab for every animal, one per set, and the achievements.
-import { ACHIEVEMENTS, type Achievement } from '@/core/achievements/registry';
 import type { Collection } from '@/core/collection';
 import type { JournalEntry } from '@/core/journal/journal';
 import { JOURNAL_SETS, setMembers, setProgress } from '@/core/journal/sets';
@@ -25,12 +24,6 @@ export interface JournalTab {
   };
 }
 
-export interface BadgeLine {
-  readonly achievement: Achievement;
-  /** The puzzle that unlocked it, or null while locked. */
-  readonly unlockedKey: string | null;
-}
-
 const cellsOf = (animals: readonly Animal[], collection: Collection): JournalCell[] =>
   animals.map((animal) => ({ animal, entry: collection.journal[animal.id] ?? null }));
 
@@ -50,14 +43,4 @@ export function journalTabs(animals: AnimalLookup, collection: Collection): Jour
     progress: setProgress(collection.journal, set, animals),
   }));
   return [all, ...sets];
-}
-
-/** Every achievement, unlocked ones first (in registry order within each). */
-export function badgeLines(collection: Collection): BadgeLine[] {
-  const unlocked = new Map(collection.achievements.map((a) => [a.id, a.unlockedKey]));
-  const lines = ACHIEVEMENTS.map((achievement) => ({
-    achievement,
-    unlockedKey: unlocked.get(achievement.id) ?? null,
-  }));
-  return [...lines.filter((l) => l.unlockedKey), ...lines.filter((l) => !l.unlockedKey)];
 }

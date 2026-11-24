@@ -2,12 +2,27 @@
 // whole record (history, best streak, journal), not just today's run, so an
 // achievement earned before it existed unlocks on the next finished run.
 import { BIOMES } from '@/config/biomes';
-import { JOURNAL_GOALS, PERFECT_DAY_LEVEL, STREAK_GOALS } from '@/config/collection';
+import {
+  JOURNAL_GOALS,
+  PERFECT_DAY_LEVEL,
+  STREAK_GOALS,
+  type AchievementSection,
+} from '@/config/collection';
 import { TOP_LEVEL } from '@/config/levels';
-import { journalSize, type Journal, type JournalRun } from '../journal/journal';
+import type { Journal, JournalRun } from '../journal/journal';
 import { JOURNAL_SETS, setProgress } from '../journal/sets';
 import type { HistoryEntry, Stats } from '../streak';
 import type { AnimalLookup } from '../types';
+import { journalGoal, streakGoal } from './goals';
+import {
+  bestDayProgress,
+  scoreProgress,
+  setsProgress,
+  type Progress,
+  type ProgressContext,
+} from './progress';
+
+export type { Progress, ProgressContext } from './progress';
 
 export type AchievementId = string;
 
@@ -27,7 +42,11 @@ export interface Achievement {
   readonly name: string;
   readonly description: string;
   readonly icon: string;
+  /** Where it sits on the Achievements page (config/collection.ts ACHIEVEMENT_SECTIONS). */
+  readonly section: AchievementSection;
   readonly check: (ctx: AchievementContext) => boolean;
+  /** For a count-based one: how far along the player is (the page's progress bar). */
+  readonly progress?: (ctx: ProgressContext) => Progress;
 }
 
 /** The record a save keeps: which achievement, unlocked on which puzzle. */
@@ -42,28 +61,13 @@ const LAST_BIOME = BIOMES[BIOMES.length - 1]!;
 const answeredAll = (levels: readonly number[]) =>
   levels.length > 0 && levels.every((level) => level > 0);
 
-const streakGoal = (days: number): Achievement => ({
-  id: `streak-${days}`,
-  name: `${days}-day streak`,
-  description: `Finish ${days} days in a row.`,
-  icon: '🔥',
-  check: ({ stats }) => stats.bestStreak >= days,
-});
-
-const journalGoal = (count: number): Achievement => ({
-  id: `journal-${count}`,
-  name: `${count} animals`,
-  description: `Find ${count} different animals for your Field Journal.`,
-  icon: '📖',
-  check: ({ journal }) => journalSize(journal) >= count,
-});
-
 export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: 'first-jackpot',
     name: 'Jackpot!',
     description: 'Find your first top-level animal.',
     icon: '🌟',
+    section: 'scoring',
     check: ({ history }) => history.some((day) => day.levels.includes(TOP_LEVEL)),
   },
   {
@@ -71,6 +75,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     name: 'Family name',
     description: 'Answer with a whole group, like "penguin".',
     icon: '🧺',
+    section: 'collection',
     check: ({ journal, animals }) =>
       Object.keys(journal).some((id) => animals.get(id)?.kind === 'group'),
   },
@@ -80,13 +85,17 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     name: 'Full house',
     description: 'Answer every prompt in one day.',
     icon: '✅',
+    section: 'scoring',
     check: ({ history }) => history.some((day) => answeredAll(day.levels)),
+    progress: bestDayProgress((level) => level > 0),
   },
   {
     id: 'perfect-day',
     name: 'Perfect day',
     description: 'Answer every prompt in one day with rarer animals only.',
     icon: '💎',
+    section: 'scoring',
+    progress: bestDayProgress((level) => level >= PERFECT_DAY_LEVEL),
     check: ({ history }) =>
       history.some(
         (day) => answeredAll(day.levels) && day.levels.every((l) => l >= PERFECT_DAY_LEVEL),
@@ -98,6 +107,8 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     name: 'Collector',
     description: 'Complete a journal set.',
     icon: '🏅',
+    section: 'collection',
+    progress: setsProgress,
     check: ({ journal, animals }) =>
       JOURNAL_SETS.some((set) => setProgress(journal, set, animals).complete),
   },
@@ -106,6 +117,8 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     name: `Reached ${LAST_BIOME.name}`,
     description: `Score ${LAST_BIOME.minScore} in a day to reach the ${LAST_BIOME.name}.`,
     icon: LAST_BIOME.emoji,
+    section: 'exploration',
+    progress: scoreProgress(LAST_BIOME.minScore),
     // The walk goes by the answers' points, so the base decides how far it went.
     check: ({ history }) => history.some((day) => day.base >= LAST_BIOME.minScore),
   },

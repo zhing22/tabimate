@@ -1,0 +1,25 @@
+/* A collection page's header (components/pageHeader.ts): title and count on
+   the left, Back on the right, in one row. */
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.page-head__title {
+  display: grid;
+  min-width: 0;
+}
+
+.page-head__title .meta {
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+.page-head__back {
+  flex: none;
+  min-height: 0;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}

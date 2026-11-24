@@ -1,5 +1,6 @@
-// The collection's part of the UI: the Field Journal screen, and toasts for
-// achievements and new journal animals. Driven by bus events; reads the
+// The collection's part of the UI: the Field Journal, Achievements and
+// History screens, and toasts for achievements (tap one to open its page)
+// and new journal animals. Driven by bus events; reads the
 // saved collection through an injected getter (main.ts passes progress).
 import type { Collection } from '@/core/collection';
 import { dailyKey } from '@/core/date';
@@ -12,7 +13,9 @@ import type { AnimalId, AnimalLookup, RoundResult } from '@/core/types';
 import { createToaster } from './components/toaster';
 import type { Delay } from './frames';
 import type { ScreenHost } from './host';
-import { badgeLines, journalTabs } from './journalView';
+import { badgeSections } from './achievementsView';
+import { journalTabs } from './journalView';
+import { achievementsScreen } from './screens/achievements';
 import { historyScreen } from './screens/history';
 import { journalScreen } from './screens/journal';
 
@@ -46,11 +49,17 @@ export function createCollectionUi(deps: CollectionUiDeps) {
         icon: achievement.icon,
         title: achievement.name,
         text: achievement.description,
+        openLabel: 'Open achievements',
+        // Back from the page goes to the screen the toast showed over.
+        open: () => ui.openAchievements(lastBack, achievement.id),
       }),
     ),
   ];
 
-  return {
+  // The start or results screen last shown: where a tapped toast's page goes back to.
+  let lastBack: () => void = () => {};
+
+  const ui = {
     /** Opens the journal; `back` shows the screen it was opened from. */
     openJournal(back: () => void) {
       const collection = deps.getCollection();
@@ -58,11 +67,20 @@ export function createCollectionUi(deps: CollectionUiDeps) {
         journalScreen,
         {
           tabs: journalTabs(animals, collection),
-          badges: badgeLines(collection),
           found: journalSize(collection.journal),
           total: animals.size,
           portraits: deps.portraits,
         },
+        { close: back },
+      );
+    },
+    /** Opens the Achievements page, at one achievement if given; `back` as for the journal. */
+    openAchievements(back: () => void, focusId?: string) {
+      const stats = deps.getStats();
+      const record = { history: stats.history, stats, animals };
+      host.show(
+        achievementsScreen,
+        { sections: badgeSections(deps.getCollection(), record), focusId },
         { close: back },
       );
     },
@@ -74,9 +92,14 @@ export function createCollectionUi(deps: CollectionUiDeps) {
         { close: back },
       );
     },
-    /** The start and results screens' journal and history buttons. */
+    /** The start and results screens' Journal, Achievements and History buttons. */
     links(back: () => void) {
-      return { journal: () => this.openJournal(back), history: () => this.openHistory(back) };
+      lastBack = back;
+      return {
+        journal: () => ui.openJournal(back),
+        achievements: () => ui.openAchievements(back),
+        history: () => ui.openHistory(back),
+      };
     },
     /** A first-ever find: not in the saved journal, nor answered earlier today. */
     isNewToJournal(id: AnimalId, earlier: readonly RoundResult[]): boolean {
@@ -90,4 +113,5 @@ export function createCollectionUi(deps: CollectionUiDeps) {
       toaster.destroy();
     },
   };
+  return ui;
 }

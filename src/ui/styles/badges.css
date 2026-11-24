@@ -1,37 +1,84 @@
-/* Achievements in the Field Journal: unlocked ones with their date, locked ones dimmed. */
+/* Achievement badges (components/badgeList.ts): a grid of cards; unlocked
+   ones with their date, locked ones dimmed with what they ask and, when they
+   count something, a progress bar. Two columns at 360 px. */
 .badge-list {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
   gap: var(--space-2);
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
+/* The icon beside the name; what it asks, its status and bar below, the
+   card's full width (badge__body only groups them for the markup). */
 .badge {
-  display: flex;
-  gap: var(--space-3);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  padding: var(--space-2) var(--space-3);
+  gap: 2px var(--space-2);
+  align-content: start;
+  padding: var(--space-2);
   background: rgb(255 255 255 / 0.45);
   border-radius: var(--radius-2);
 }
 
-.badge--locked {
+.badge--locked .badge__icon {
+  filter: grayscale(1);
   opacity: 0.55;
 }
 
-.badge--locked .badge__icon {
-  filter: grayscale(1);
+.badge--locked .badge__name,
+.badge--locked .badge__text {
+  color: var(--ink-soft);
+}
+
+/* The badge a tapped toast opened the page at. */
+.badge--focus,
+.badge:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .badge__icon {
   font-size: var(--text-xl);
+  line-height: 1;
 }
 
 .badge__body {
-  display: grid;
+  display: contents;
+  font-size: var(--text-xs);
+}
+
+.badge__text,
+.badge__when,
+.badge__progress {
+  grid-column: 1 / -1;
+  font-size: var(--text-xs);
+}
+
+.badge__name {
   font-size: var(--text-sm);
 }
 
 .badge__when {
-  font-size: var(--text-xs);
+  color: var(--ink-soft);
+}
+
+.badge__progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.badge__bar {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--accent);
+}
+
+.badge__count {
+  font-variant-numeric: tabular-nums;
   color: var(--ink-soft);
 }

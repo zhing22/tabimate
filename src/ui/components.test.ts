@@ -475,7 +475,7 @@ describe('startScreen', () => {
         freezeReady: false,
         theme: null,
       },
-      { play: () => {}, journal: () => {}, history: () => {} },
+      { play: () => {}, journal: () => {}, achievements: () => {}, history: () => {} },
     );
     const text = root.textContent ?? '';
     expect(text).toContain('from LC (10) up to CR (100)');
@@ -496,7 +496,7 @@ describe('startScreen', () => {
         freezeReady: false,
         theme: fishy,
       },
-      { play: () => {}, journal: () => {}, history: () => {} },
+      { play: () => {}, journal: () => {}, achievements: () => {}, history: () => {} },
     );
     expect(root.querySelector('.theme__name')?.textContent).toBe('Fishy Friday');
     expect(root.querySelector('.theme__tagline')?.textContent).toBe(fishy.tagline);

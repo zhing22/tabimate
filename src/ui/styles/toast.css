@@ -25,6 +25,17 @@
   animation: toast-in var(--dur-med) ease-out;
 }
 
+/* A toast that does something (an achievement's opens its page): it takes
+   taps, though the layer around it still lets them through. */
+.toast--action {
+  pointer-events: auto;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .toast__icon {
   font-size: var(--text-xl);
 }

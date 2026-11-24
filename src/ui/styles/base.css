@@ -147,15 +147,15 @@ input {
     }
   }
 
-  /* The results screen (html.is-results) and the Field Journal (html.is-journal)
+  /* The results screen (html.is-results) and the collection pages (html.is-collection: Field Journal, Achievements)
      keep the full-window scene with their card over it, like desktop. */
-  :root:not(.is-results, .is-journal) #scene {
+  :root:not(.is-results, .is-collection) #scene {
     bottom: auto;
     top: calc(var(--vv-top, 0px) + var(--scene-shown) - var(--scene-h));
     height: var(--scene-h);
   }
 
-  :root:not(.is-results, .is-journal) #ui {
+  :root:not(.is-results, .is-collection) #ui {
     top: calc(var(--vv-top, 0px) + var(--scene-shown));
     height: calc(var(--vv-height, 100dvh) - var(--scene-shown));
     padding-top: var(--space-3);
