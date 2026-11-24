@@ -21,6 +21,7 @@
     "draft-descriptions": "tsx scripts/draft-descriptions.ts",
     "content-report": "tsx scripts/content-report.ts",
     "sprite-coverage": "tsx scripts/sprite-coverage.ts",
+    "audit:screens": "tsx scripts/audit-screens.ts",
     "test:d1": "tsx --test functions/test/runsApi.d1.ts",
     "db:migrate:local": "wrangler d1 migrations apply tabimate --local",
     "db:migrate:remote": "wrangler d1 migrations apply tabimate --remote",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261123.1",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",

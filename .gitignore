@@ -28,3 +28,6 @@ data-drafts/cache/
 
 # Wrangler: local D1 state and build output.
 .wrangler/
+
+# Screen audit output (npm run audit:screens).
+art/audit/
