@@ -27,6 +27,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      # The runs API against Wrangler's local D1 (Node's test runner, not Vitest).
+      - run: npm run test:d1
       - run: npm run build
 
   record:

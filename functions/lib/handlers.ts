@@ -13,6 +13,8 @@ export interface RunsDeps {
   /** The static puzzle file's JSON for a date; null if there is none. */
   readonly loadPuzzle: (dateKey: DateKey) => Promise<unknown>;
   readonly now: () => Date;
+  /** The site's own origin: a POST from any other is refused. */
+  readonly origin: string;
 }
 
 const json = (data: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -23,15 +25,51 @@ const json = (data: unknown, status = 200, headers: Record<string, string> = {})
 
 const problem = (status: number, error: string) => json({ error }, status);
 
-/** The body as JSON, refusing anything bigger than a run can be. */
+/**
+ * The body as JSON, refusing anything bigger than a run can be: at once by
+ * its Content-Length, and while reading (in bytes) for a body without one,
+ * so a large upload is never buffered whole.
+ */
 async function readJson(request: Request): Promise<unknown> {
-  const text = await request.text();
-  if (text.length > STATS.maxBodyBytes) throw new RangeError('too large');
-  return JSON.parse(text) as unknown;
+  const declared = Number(request.headers.get('content-length') ?? 0);
+  if (declared > STATS.maxBodyBytes) throw new RangeError('too large');
+  return JSON.parse(await readLimited(request, STATS.maxBodyBytes)) as unknown;
 }
+
+/** The body as text, stopping (and throwing) once it passes `max` bytes. */
+async function readLimited(request: Request, max: number): Promise<string> {
+  const reader: ReadableStreamDefaultReader<Uint8Array> | undefined = request.body?.getReader();
+  if (!reader) return '';
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > max) {
+      await reader.cancel();
+      throw new RangeError('too large');
+    }
+    chunks.push(value);
+  }
+  const bytes = new Uint8Array(size);
+  let at = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, at);
+    at += chunk.byteLength;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+/** A cross-site write: a browser sends Origin, and it isn't this site's. */
+const fromElsewhere = (request: Request, deps: RunsDeps) => {
+  const origin = request.headers.get('origin');
+  return origin !== null && origin !== deps.origin;
+};
 
 /** POST /api/runs: store a finished run once per device and day. 204 when stored (or already). */
 export async function postRun(request: Request, deps: RunsDeps): Promise<Response> {
+  if (fromElsewhere(request, deps)) return problem(403, 'not from this site');
   let body: unknown;
   try {
     body = await readJson(request);

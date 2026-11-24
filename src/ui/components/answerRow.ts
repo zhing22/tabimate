@@ -41,7 +41,7 @@ function details(answer: AnswerLine, id: string) {
  * One answer: a button with its name, level and points that opens to its
  * description and Wikipedia link. Each row is tinted with its level's colour
  * (answers.css lightens it), so rarity reads at a glance; the player's own is
- * marked for sight and for screen readers. With , the percentage of
+ * marked for sight and for screen readers. With `share`, the percentage of
  * players who picked it.
  */
 export function answerRow(

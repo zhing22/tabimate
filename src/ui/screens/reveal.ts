@@ -111,6 +111,18 @@ function revealPicture({ animal, result, portraits }: RevealProps): HTMLElement 
   );
 }
 
+/** Steps run after a delay (at once for none), all cancelled together. */
+function timeline() {
+  const timers: ReturnType<typeof setTimeout>[] = [];
+  return {
+    after: (ms: number, step: () => void) => {
+      if (ms <= 0) step();
+      else timers.push(setTimeout(step, ms));
+    },
+    clear: () => timers.forEach(clearTimeout),
+  };
+}
+
 /**
  * Shown as an overlay above the round, so the answer box keeps focus (and the
  * phone keeps its keyboard). Focus is not moved; the live region speaks instead.
@@ -121,18 +133,15 @@ function revealPicture({ animal, result, portraits }: RevealProps): HTMLElement 
 export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, actions) => {
   const { result, animal, points } = props;
   const level = result.match.level;
-  const label = props.isLast ? (props.lastLabel ?? 'See results') : 'Next prompt';
-  const next = nextButton(label, () => actions.next());
+  const next = nextButton(props.isLast ? (props.lastLabel ?? 'See results') : 'Next prompt', () =>
+    actions.next(),
+  );
   const pointsEl = h('p', { class: 'reveal__points' }, `+${level ? points : 0}`);
   let stopCount = () => {};
   const card = revealCard(props, pointsEl, next);
   root.append(card);
 
-  const timers: ReturnType<typeof setTimeout>[] = [];
-  const after = (ms: number, step: () => void) => {
-    if (ms <= 0) step();
-    else timers.push(setTimeout(step, ms));
-  };
+  const { after, clear } = timeline();
   const showName = () => {
     card.classList.replace('reveal--badge', 'reveal--named');
     // A top-level find lands with a gold flash (reveal.css), after its freeze.
@@ -148,7 +157,7 @@ export const revealScreen: Screen<RevealProps, RevealActions> = (root, props, ac
   };
   after(revealBuildUpMs(level, props.timing), showBadge);
   return () => {
-    timers.forEach(clearTimeout);
+    clear();
     stopCount();
   };
 };

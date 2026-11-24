@@ -3,6 +3,7 @@
 // edge cache. The game works without it: the client treats every failure as
 // "no stats".
 import { getDayStats, postRun, type RunsDeps } from '../lib/handlers.ts';
+import { cachedDayStats } from '../lib/statsCache.ts';
 
 interface Env {
   readonly DB: D1Database;
@@ -19,18 +20,17 @@ function depsFor(request: Request, env: Env): RunsDeps {
       return response.ok ? await response.json<unknown>() : null;
     },
     now: () => new Date(),
+    origin: new URL(request.url).origin,
   };
 }
 
 export const onRequestPost: PagesFunction<Env> = ({ request, env }) =>
   postRun(request, depsFor(request, env));
 
-/** Served from the edge cache for STATS.cacheSeconds; the handler sets the lifetime. */
-export const onRequestGet: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
-  const cache = caches.default;
-  const hit = await cache.match(request);
-  if (hit) return hit;
-  const response = await getDayStats(new URL(request.url), depsFor(request, env));
-  if (response.ok) waitUntil(cache.put(request, response.clone()));
-  return response;
+/** Served from the edge cache (keyed on the date) for STATS.cacheSeconds. */
+export const onRequestGet: PagesFunction<Env> = ({ request, env, waitUntil }) => {
+  const url = new URL(request.url);
+  return cachedDayStats(url, caches.default, waitUntil, () =>
+    getDayStats(url, depsFor(request, env)),
+  );
 };

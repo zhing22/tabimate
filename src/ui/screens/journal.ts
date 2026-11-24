@@ -72,6 +72,33 @@ function header(found: number, total: number, back: HTMLElement): HTMLElement {
 }
 
 /**
+ * What the panel shows for a tab: a set's line and its grid (cells open
+ * their page above it), or the achievements. Showing another tab stops the
+ * last grid watching for cells scrolling into view.
+ */
+function journalPanel(panel: HTMLElement, props: JournalProps) {
+  const openCell = cellOpener(panel, props.portraits);
+  let grid: JournalGrid | null = null;
+  return {
+    show(tab: JournalTab | typeof BADGES_TAB) {
+      grid?.destroy();
+      grid = null;
+      if (!('cells' in tab)) {
+        panel.replaceChildren(badgeList(props.badges));
+        return;
+      }
+      const shown = journalGrid(tab.cells, {
+        portraits: props.portraits,
+        open: (cell) => openCell(cell, shown.el.children[tab.cells.indexOf(cell)] as HTMLElement),
+      });
+      grid = shown;
+      panel.replaceChildren(...[setHeader(tab), shown.el].filter((el) => el !== null));
+    },
+    destroy: () => grid?.destroy(),
+  };
+}
+
+/**
  * The Field Journal: every animal ever found, sets to complete and the
  * achievements, in tabs. A found animal opens to its page above the grid.
  */
@@ -79,26 +106,12 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
   const back = h('button', { class: 'button journal__back', type: 'button' }, 'Back');
   back.addEventListener('click', () => actions.close());
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
-  const openCell = cellOpener(panel, props.portraits);
+  const content = journalPanel(panel, props);
   const tabs = [...props.tabs, BADGES_TAB];
-  let grid: JournalGrid | null = null;
-
-  function showTab(index: number) {
+  const showTab = (index: number) => {
     row.select(index);
-    grid?.destroy();
-    grid = null;
-    const tab = tabs[index]!;
-    if (!('cells' in tab)) {
-      panel.replaceChildren(badgeList(props.badges));
-      return;
-    }
-    const shown = journalGrid(tab.cells, {
-      portraits: props.portraits,
-      open: (cell) => openCell(cell, shown.el.children[tab.cells.indexOf(cell)] as HTMLElement),
-    });
-    grid = shown;
-    panel.replaceChildren(...[setHeader(tab), shown.el].filter((el) => el !== null));
-  }
+    content.show(tabs[index]!);
+  };
   const row = tabRow(tabs, showTab);
 
   root.append(
@@ -114,7 +127,7 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
   focus(root.querySelector<HTMLElement>('#journal-title'));
   document.documentElement.classList.add(JOURNAL_CLASS);
   return () => {
-    grid?.destroy();
+    content.destroy();
     document.documentElement.classList.remove(JOURNAL_CLASS);
   };
 };

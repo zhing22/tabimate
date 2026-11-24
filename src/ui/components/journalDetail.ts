@@ -22,14 +22,6 @@ export function journalDetail(
   portraits?: Portraits,
 ): HTMLElement {
   const { animal, entry } = cell;
-  // A small corner button, so the page stays compact.
-  const closeButton = h(
-    'button',
-    { class: 'journal-detail__close', type: 'button' },
-    h('span', { 'aria-hidden': 'true' }, '×'),
-    h('span', { class: 'sr-only' }, 'Close'),
-  );
-  closeButton.addEventListener('click', close);
   const title = h('h2', { class: 'section-title', tabindex: -1 }, animal.display);
   const el = h(
     'section',
@@ -44,10 +36,22 @@ export function journalDetail(
       ? h('p', { class: 'journal-detail__description' }, animal.description)
       : null,
     detailMeta(animal, entry),
-    closeButton,
+    closeButton(close),
   );
   queueMicrotask(() => title.focus());
   return el;
+}
+
+/** A small × in the corner, so the page stays compact (named "Close" for screen readers). */
+function closeButton(close: () => void): HTMLElement {
+  const button = h(
+    'button',
+    { class: 'journal-detail__close', type: 'button' },
+    h('span', { 'aria-hidden': 'true' }, '×'),
+    h('span', { class: 'sr-only' }, 'Close'),
+  );
+  button.addEventListener('click', close);
+  return button;
 }
 
 /** The name, and the rarest level it was found at. */

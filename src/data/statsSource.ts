@@ -21,6 +21,39 @@ export interface ApiStatsOptions {
   readonly timeoutMs?: number;
 }
 
+/** A fetch with the stats timeout: the game never waits on the server for long. */
+type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
+
+/** Sends a run. True when it needs no retry: stored, or refused for good (a 4xx: an old day, say). */
+async function sendRun(fetchStats: Fetcher, url: string, run: RunSubmission): Promise<boolean> {
+  try {
+    const response = await fetchStats(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(run),
+    });
+    return response.ok || (response.status >= 400 && response.status < 500);
+  } catch {
+    return false;
+  }
+}
+
+/** A day's stats, or null for any failure or a body of the wrong shape. */
+async function fetchDayStats(
+  fetchStats: Fetcher,
+  url: string,
+  dateKey: DateKey,
+): Promise<DayStats | null> {
+  try {
+    const response = await fetchStats(`${url}?date=${dateKey}`);
+    if (!response.ok) return null;
+    const body = (await response.json()) as unknown;
+    return isDayStats(body) ? body : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * The /api/runs API. A run that fails to send is kept in storage and tried
  * once more on the next launch (retryPending), then dropped either way, so a
@@ -31,45 +64,20 @@ export function createApiStatsSource(options: ApiStatsOptions): StatsSource & {
 } {
   const doFetch = options.fetch ?? ((url: string, init?: RequestInit) => fetch(url, init));
   const timeoutMs = options.timeoutMs ?? STATS.timeoutMs;
+  const fetchStats: Fetcher = (url, init = {}) =>
+    doFetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
   const url = new URL(STATS.apiPath, options.baseUrl).href;
-
-  const request = (input: string, init: RequestInit = {}) =>
-    doFetch(input, { ...init, signal: AbortSignal.timeout(timeoutMs) });
-
-  async function send(run: RunSubmission): Promise<boolean> {
-    try {
-      const response = await request(url, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(run),
-      });
-      // A 4xx means the server will never take it (an old day, say): don't retry.
-      return response.ok || (response.status >= 400 && response.status < 500);
-    } catch {
-      return false;
-    }
-  }
-
   return {
     async submitRun(run) {
-      if (!(await send(run))) options.storage.set(STATS.pendingKey, run);
+      if (!(await sendRun(fetchStats, url, run))) options.storage.set(STATS.pendingKey, run);
     },
     async retryPending() {
       const pending = options.storage.get(STATS.pendingKey);
       if (pending === null) return;
       options.storage.remove(STATS.pendingKey); // one more try only
-      if (isSubmission(pending)) await send(pending);
+      if (isSubmission(pending)) await sendRun(fetchStats, url, pending);
     },
-    async getDayStats(dateKey: DateKey): Promise<DayStats | null> {
-      try {
-        const response = await request(`${url}?date=${dateKey}`);
-        if (!response.ok) return null;
-        const body = (await response.json()) as unknown;
-        return isDayStats(body) ? body : null;
-      } catch {
-        return null;
-      }
-    },
+    getDayStats: (dateKey) => fetchDayStats(fetchStats, url, dateKey),
   };
 }
 

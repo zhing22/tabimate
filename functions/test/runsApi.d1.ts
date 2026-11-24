@@ -54,6 +54,7 @@ before(async () => {
     db,
     loadPuzzle: (date) => Promise.resolve(date === TODAY ? PUZZLE : null),
     now: () => NOW,
+    origin: 'https://x.test',
   };
 });
 
