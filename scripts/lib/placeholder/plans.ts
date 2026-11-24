@@ -1,5 +1,6 @@
 // Body plans, a registry: each draws one frame of a kind of body from its
 // spec. A new kind of body is a new entry (and a spec type in PlanSpec).
+import { drawAvian, type AvianSpec } from './avian.ts';
 import { drawBear, type BearSpec } from './bear.ts';
 import type { BirdSpec } from './bird.ts';
 import { drawBird } from './bird.ts';
@@ -21,6 +22,7 @@ export type PlanSpec =
   | BearSpec
   | PrimateSpec
   | ParrotSpec
+  | AvianSpec
   | ElephantSpec
   | RabbitSpec
   | PenguinSpec
@@ -45,6 +47,7 @@ const PLANS: { readonly [P in PlanName]: Drawer<P> } = {
   rabbit: drawRabbit,
   primate: drawPrimate,
   parrot: drawParrot,
+  avian: drawAvian,
   penguin: drawPenguin,
   bird: drawBird,
   bug: drawBug,
@@ -66,6 +69,7 @@ const SELF_SHADED: ReadonlySet<PlanName> = new Set([
   'rabbit',
   'primate',
   'parrot',
+  'avian',
   'shark',
   'whale',
 ]);

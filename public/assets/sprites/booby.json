@@ -1,0 +1,99 @@
+{
+  "frames": {
+    "booby 0.aseprite": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 1.aseprite": {
+      "frame": {
+        "x": 24,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 2.aseprite": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 3.aseprite": {
+      "frame": {
+        "x": 72,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 4.aseprite": {
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 5.aseprite": {
+      "frame": {
+        "x": 120,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 6.aseprite": {
+      "frame": {
+        "x": 144,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "booby 7.aseprite": {
+      "frame": {
+        "x": 168,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    }
+  },
+  "meta": {
+    "app": "scripts/drawPlaceholderSheets.ts",
+    "image": "booby.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 192,
+      "h": 24
+    },
+    "frameTags": [
+      {
+        "name": "walk",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      },
+      {
+        "name": "flap",
+        "from": 4,
+        "to": 7,
+        "direction": "forward"
+      }
+    ]
+  }
+}

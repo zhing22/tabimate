@@ -1,0 +1,99 @@
+{
+  "frames": {
+    "crane 0.aseprite": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 1.aseprite": {
+      "frame": {
+        "x": 24,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 2.aseprite": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 3.aseprite": {
+      "frame": {
+        "x": 72,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 4.aseprite": {
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 5.aseprite": {
+      "frame": {
+        "x": 120,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 6.aseprite": {
+      "frame": {
+        "x": 144,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "crane 7.aseprite": {
+      "frame": {
+        "x": 168,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    }
+  },
+  "meta": {
+    "app": "scripts/drawPlaceholderSheets.ts",
+    "image": "crane.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 192,
+      "h": 24
+    },
+    "frameTags": [
+      {
+        "name": "walk",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      },
+      {
+        "name": "flap",
+        "from": 4,
+        "to": 7,
+        "direction": "forward"
+      }
+    ]
+  }
+}

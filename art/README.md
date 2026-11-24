@@ -125,3 +125,34 @@ wing; a chunky hooked beak.
 - lorikeet: rainbow. Blue head, orange chest and beak.
 - grey-parrot: African grey. Red tail, pale face.
 - kakapo: flightless, moss green, an owl-like face disc.
+
+### Birds (`avian.ts`, looks in `avianLooksPrey.ts`, `avianLooksGround.ts`, `avianLooksFlightless.ts`, `avianLooksSmall.ts`, `avianLooksWater.ts`)
+
+Bright. A look is data: a pose (perched upright, or standing with legs and a
+neck), a beak (`avianParts.ts`: short, hook, big hook, dagger, needle,
+sword, flat, pouch, big, puffin, shoe, down-curved, bent), a tail (short,
+long, forked, fan, train), a crest (`avianCrests.ts`: tuft, crown, quills,
+casque, ear tufts, plume, spiky), which slot colours the head, neck, beak and
+legs, and marks (`avianMarks.ts`: breast, cap, mask, moustache, throat,
+pouch, owl disc, eye ring, cheek, wing bar, spots, ruff, wattle). On the
+ground a bird steps with its wing folded; in the air it beats a broad wing
+(a wader's legs trail); on water it floats. Flightless birds walk.
+
+- Birds of prey: eagle (pale head and tail), crested-eagle (harpy,
+  Philippine), falcon (moustache), vulture (bare coloured head, ruff), hawk
+  (bright tail), osprey (eye mask), owl and horned-owl (face disc, ear tufts).
+- Waders: flamingo (pink legs, bent beak), crane (red crown), crowned-crane
+  (golden crown), secretarybird (quills), stork, heron (plume), shoebill,
+  lapwing (crest, bright legs).
+- Flightless: ostrich (bare neck, pale plumes; emu, rhea), cassowary (casque,
+  wattle, blue neck), kiwi and spotted-kiwi, peacock (crown, a train with
+  eyespots; lyrebird), turkey (fan, wattle, bare head), dodo.
+- Small birds: songbird (breast and cap: robins, sparrow, blue tit),
+  starling (spots), crested-songbird (jay, cardinal, hoatzin, crowned pigeon,
+  roadrunner), hummingbird and swordbill (gorget), kingfisher (kookaburra),
+  magpie (long tail: raven, quetzal), swallow (forked tail), woodpecker and
+  crested-woodpecker (red cap), hornbill (casque), toucan.
+- Sea and water birds: puffin and tufted-puffin (great auk), gull and
+  hooded-gull (black-headed and laughing gulls, tern), albatross, booby (blue
+  feet), frigatebird (red pouch), duck (coloured head) and fancy-duck
+  (mandarin, wood duck), swan, goose (chinstrap), pelican.

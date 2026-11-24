@@ -1,0 +1,57 @@
+{
+  "frames": {
+    "peacock 0.aseprite": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "peacock 1.aseprite": {
+      "frame": {
+        "x": 24,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "peacock 2.aseprite": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    },
+    "peacock 3.aseprite": {
+      "frame": {
+        "x": 72,
+        "y": 0,
+        "w": 24,
+        "h": 24
+      },
+      "duration": 120
+    }
+  },
+  "meta": {
+    "app": "scripts/drawPlaceholderSheets.ts",
+    "image": "peacock.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 96,
+      "h": 24
+    },
+    "frameTags": [
+      {
+        "name": "walk",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 // What each archetype's placeholder looks like: a body plan and its features.
 // Every archetype in animals.json needs an entry (a test checks); a family
-// borrows a shared look (HOOFED, RAPTOR...) and changes what sets it apart.
+// borrows a shared look (HOOFED, ...) and changes what sets it apart.
 import type { PlanSpec } from './plans.ts';
+import { AVIAN_LOOKS } from './avianLooks.ts';
 import { PARROT_LOOKS } from './parrotLooks.ts';
 import { PRIMATE_LOOKS } from './primateLooks.ts';
 
@@ -13,17 +14,16 @@ const HOOFED = {
   snout: 1,
   tail: 'short',
 } as const;
-const RAPTOR = { plan: 'bird', beak: 'hook', wing: 8, tail: 3 } as const;
-const SONGBIRD = { plan: 'bird', body: [6, 4], leg: 2, tail: 3 } as const;
-const WATERFOWL = { plan: 'bird', body: [10, 5], leg: 2, neck: 2, beak: 'flat', tail: 1 } as const;
-const SEABIRD = { plan: 'bird', body: [9, 4], leg: 2, beak: 'long', wing: 9 } as const;
-const WADER = { plan: 'bird', leg: 6, neck: 3, beak: 'long', tail: 1 } as const;
 const GENERIC = { plan: 'quadruped', ears: 'round' } as const;
 
 export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   // Primates: a look per archetype (primateLooks.ts).
   ...Object.fromEntries(
     Object.keys(PRIMATE_LOOKS).map((look) => [look, { plan: 'primate', look } as PlanSpec]),
+  ),
+  // Birds: a look per archetype (avianLooks.ts).
+  ...Object.fromEntries(
+    Object.keys(AVIAN_LOOKS).map((look) => [look, { plan: 'avian', look } as PlanSpec]),
   ),
   // Parrots: a look per archetype (parrotLooks.ts).
   ...Object.fromEntries(
@@ -74,15 +74,7 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
     tail: 'thick',
     pattern: 'back',
   },
-  ratite: { plan: 'bird', body: [8, 6], leg: 7, neck: 5, head: 1.5, tail: 1, wing: 4 },
-  fowl: { plan: 'bird', body: [8, 6], crest: true, tail: 3 },
   amphibian: { plan: 'quadruped', body: [10, 3], leg: 1, ears: 'none', tail: 'thick' },
-  raptor: RAPTOR,
-  owl: { plan: 'bird', body: [7, 7], head: 3, ears: true, beak: 'hook', tail: 1 },
-  wader: WADER,
-  songbird: SONGBIRD,
-  waterfowl: WATERFOWL,
-  seabird: SEABIRD,
   bat: { plan: 'bird', body: [5, 4], leg: 1, beak: 'none', ears: true, wing: 8, tail: 0 },
   // Whales and sharks by look (whale.ts, shark.ts); colours in palettes.json.
   rorqual: { plan: 'whale', look: 'rorqual' },
@@ -114,14 +106,6 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   deer: { ...HOOFED, neck: 3, horns: 'antlers' },
   antelope: { ...HOOFED, horns: 'horns' },
   squirrel: { plan: 'quadruped', body: [8, 4], leg: 2, tail: 'bushy' },
-  hawk: { ...RAPTOR, body: [7, 4] },
-  gull: SEABIRD,
-  heron: { ...WADER, leg: 7, neck: 5 },
-  swan: { ...WATERFOWL, body: [11, 5], neck: 5 },
-  goose: { ...WATERFOWL, neck: 4 },
-  woodpecker: { ...SONGBIRD, beak: 'long', crest: true },
-  hornbill: { plan: 'bird', beak: 'big', tail: 3 },
-  toucan: { plan: 'bird', body: [7, 5], beak: 'big' },
   ray: { plan: 'fish', body: [12, 3], tail: 'whip', dorsal: 'none' },
   jellyfish: { plan: 'blob', kind: 'jelly' },
   crab: { plan: 'bug', body: [10, 4], legs: 8, claws: true },
@@ -133,10 +117,7 @@ export const ARCHETYPES: Readonly<Record<string, PlanSpec>> = {
   scorpion: { plan: 'bug', legs: 8, claws: true, stinger: true },
   camel: { ...HOOFED, body: [12, 6], leg: 6, neck: 4, hump: true },
   hare: { plan: 'rabbit', look: 'hare' },
-  pelican: { ...WATERFOWL, body: [8, 5], beak: 'pouch' },
-  vulture: { ...RAPTOR, body: [10, 6], neck: 2 },
   mammal: GENERIC,
-  bird: { plan: 'bird' },
   fish: { plan: 'fish' },
   animal: GENERIC,
   crustacean: { plan: 'bug', body: [10, 3], legs: 10, claws: true },
