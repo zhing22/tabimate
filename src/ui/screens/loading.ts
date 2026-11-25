@@ -1,8 +1,10 @@
+import type { Portraits } from '@/core/portrait';
 import type { Animal } from '@/core/types';
 import { card } from '../components/card';
 import { themeChip } from '../components/themeChip';
 import { wordmark } from '../components/wordmark';
 import { h } from '../dom';
+import { loadingParty, pickWalker } from './loadingParty';
 
 export interface LoadingProps {
   readonly puzzleNumber: number;
@@ -20,6 +22,12 @@ export interface LoadingView {
   setProgress(fraction: number): void;
   /** Shows a "Did you know?" line once the animals have loaded. */
   setFact(animal: Pick<Animal, 'display' | 'description'> | null): void;
+  /** The animals are in: the centre's walkers become pixel sprites. */
+  setWalkers(
+    animals: Iterable<Animal>,
+    portraits: Portraits | undefined,
+    random?: () => number,
+  ): void;
 }
 
 /** "Packing your bag for Fishy Friday…", or plain on a day without a theme. */
@@ -36,9 +44,9 @@ export function pickFact(
 }
 
 /**
- * The first screen: the large wordmark, the day's theme and number, and,
- * once the animals arrive, a fact about one of them (loadingFlow.ts rotates
- * it). The traveller walks a path that is the progress bar, an animal
+ * The first screen: the large wordmark, the day's theme and number, the
+ * traveller and an animal walking in place, and, once the animals arrive, a
+ * fact about one of them (loadingFlow.ts rotates it). The traveller walks a path that is the progress bar, an animal
  * trotting behind: loadingFlow puts it on the stage, along the ground.
  */
 export function loadingView(props: LoadingProps): LoadingView {
@@ -62,12 +70,14 @@ export function loadingView(props: LoadingProps): LoadingView {
     party,
   );
   const fact = h('p', { class: 'loading__fact', hidden: true });
+  const hero = loadingParty(props.animalEmoji);
   const { el } = card({
     className: 'card--journal loading',
     label: `Tabimate #${props.puzzleNumber}`,
     body: [
       h('h1', { class: 'loading__mark' }, wordmark('lg')),
       themeChip(props.puzzleNumber, props.theme?.name ?? null),
+      hero.el,
       h('p', { class: 'meta' }, loadingText(props.theme)),
       fact,
       track,
@@ -81,6 +91,10 @@ export function loadingView(props: LoadingProps): LoadingView {
       const percent = Math.round(Math.min(1, Math.max(0, fraction)) * 100);
       track.style.setProperty('--progress', `${percent}%`);
       track.setAttribute('aria-valuenow', String(percent));
+    },
+    setWalkers(animals, portraits, random) {
+      const animal = pickWalker(animals, props.animalEmoji, random);
+      if (animal) hero.show(animal, portraits);
     },
     setFact(animal) {
       fact.hidden = !animal?.description;

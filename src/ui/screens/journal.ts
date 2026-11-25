@@ -31,14 +31,8 @@ function setHeader(tab: JournalTab): HTMLElement | null {
   );
 }
 
-/** The open animal's page, as the header's Back sees it: shown while one is open. */
-interface Nested {
-  opened(close: () => void): void;
-  closed(): void;
-}
-
 /** Opens a found animal's page above the grid, marking its cell; closing puts focus back. */
-function cellOpener(panel: HTMLElement, portraits: Portraits | undefined, nested: Nested) {
+function cellOpener(panel: HTMLElement, portraits: Portraits | undefined) {
   return (cell: JournalCell, from: HTMLElement) => {
     panel.querySelector('.journal-detail')?.remove();
     panel.querySelector('.journal-cell--chosen')?.classList.remove('journal-cell--chosen');
@@ -47,9 +41,7 @@ function cellOpener(panel: HTMLElement, portraits: Portraits | undefined, nested
       detail.remove();
       from.classList.remove('journal-cell--chosen');
       from.querySelector('button')?.focus();
-      nested.closed();
     };
-    nested.opened(close);
     const detail = journalDetail(cell, close, portraits);
     // Escape closes the animal's page first, not the whole journal.
     detail.addEventListener('keydown', (event) => {
@@ -68,8 +60,8 @@ function cellOpener(panel: HTMLElement, portraits: Portraits | undefined, nested
  * their page above it). Showing another tab stops the last grid watching for
  * cells scrolling into view.
  */
-function journalPanel(panel: HTMLElement, props: JournalProps, nested: Nested) {
-  const openCell = cellOpener(panel, props.portraits, nested);
+function journalPanel(panel: HTMLElement, props: JournalProps) {
+  const openCell = cellOpener(panel, props.portraits);
   let grid: JournalGrid | null = null;
   return {
     show(tab: JournalTab) {
@@ -93,19 +85,7 @@ function journalPanel(panel: HTMLElement, props: JournalProps, nested: Nested) {
 export const journalScreen: Screen<JournalProps, JournalActions> = (root, props, actions) => {
   const heading = pageTitle('journal-title', 'Field Journal');
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
-  // Back (the header's start) closes an open animal's page: the one nested view.
-  let closeDetail: (() => void) | null = null;
-  const nested: Nested = {
-    opened(close) {
-      closeDetail = close;
-      if (shown.backButton) shown.backButton.hidden = false;
-    },
-    closed() {
-      closeDetail = null;
-      if (shown.backButton) shown.backButton.hidden = true;
-    },
-  };
-  const content = journalPanel(panel, props, nested);
+  const content = journalPanel(panel, props);
   const { tabs } = props;
   const showTab = (index: number) => {
     row.select(index);
@@ -117,11 +97,9 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
     className: 'card--journal journal',
     title: heading,
     meta: `${props.found} of ${props.total} animals found`,
-    back: () => closeDetail?.(),
-    close: () => actions.close(),
+    back: () => actions.close(),
     body: [row.el, panel],
   });
-  if (shown.backButton) shown.backButton.hidden = true;
   root.append(shown.el);
   showTab(0);
   const closePage = openPage(shown.el, () => actions.close());

@@ -5,7 +5,15 @@ import { settingsMenu, type SoundSetting } from './components/settingsMenu';
 import { h } from './dom';
 import { watchMuteKey } from './layout/muteKey';
 import { openPage } from './layout/page';
-import { currentLayout, PAGE_CLASS, sceneHidden, startLayout, TYPING_CLASS } from './layout/shell';
+import {
+  currentLayout,
+  pageOpen,
+  PAGE_CLASS,
+  sceneHidden,
+  setTyping,
+  startLayout,
+  TYPING_CLASS,
+} from './layout/shell';
 import { pressKey } from './testUi';
 
 const html = () => document.documentElement;
@@ -48,6 +56,46 @@ describe('startLayout', () => {
     expect(sceneHidden()).toBe(true);
     html().dataset['layout'] = 'landscape';
     expect(sceneHidden()).toBe(false);
+  });
+});
+
+describe('setTyping', () => {
+  it('holds the sheet, the stage and the text size in px in portrait, and lets go after', () => {
+    html().dataset['layout'] = 'portrait';
+    const ui = h('main', { id: 'ui' });
+    const scene = h('div', { id: 'scene' });
+    document.body.replaceChildren(scene, ui);
+    const rect = (height: number) => ({ height }) as DOMRect;
+    vi.spyOn(ui, 'getBoundingClientRect').mockReturnValue(rect(420));
+    vi.spyOn(scene, 'getBoundingClientRect').mockReturnValue(rect(218));
+    setTyping(true);
+    expect(html().classList.contains(TYPING_CLASS)).toBe(true);
+    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('420px');
+    expect(html().style.getPropertyValue('--typing-stage-h')).toBe('218px');
+    expect(html().style.getPropertyValue('--root-size')).not.toBe('');
+    setTyping(false);
+    expect(html().classList.contains(TYPING_CLASS)).toBe(false);
+    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('');
+    expect(html().style.getPropertyValue('--root-size')).toBe('');
+    vi.restoreAllMocks();
+  });
+
+  it('holds nothing in landscape', () => {
+    html().dataset['layout'] = 'landscape';
+    document.body.replaceChildren(h('main', { id: 'ui' }));
+    setTyping(true);
+    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('');
+    setTyping(false);
+  });
+});
+
+describe('pageOpen', () => {
+  it('is true while a page is open, in either layout', () => {
+    html().dataset['layout'] = 'landscape';
+    expect(pageOpen()).toBe(false);
+    html().classList.add(PAGE_CLASS);
+    expect(pageOpen()).toBe(true);
+    html().classList.remove(PAGE_CLASS);
   });
 });
 

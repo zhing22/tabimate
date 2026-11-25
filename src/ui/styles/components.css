@@ -96,11 +96,17 @@
 }
 
 /* Timer ring */
+/* One step up from 56 px on phones, two in a landscape panel. */
 .timer-ring {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   flex: none;
+}
+
+[data-layout='landscape'] .timer-ring {
+  width: 72px;
+  height: 72px;
 }
 
 .timer-ring svg {

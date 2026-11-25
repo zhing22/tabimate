@@ -76,7 +76,7 @@ export const historyScreen: Screen<HistoryProps, HistoryActions> = (root, props,
     className: 'card--journal history',
     title: heading,
     meta: days === 1 ? '1 day played' : `${days} days played`,
-    close: () => actions.close(),
+    back: () => actions.close(),
     body: [h('div', { class: 'calendar-nav' }, prev, title, next), grid, detail, legend()],
   });
   root.append(shown.el);

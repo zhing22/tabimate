@@ -8,8 +8,10 @@ export interface ShareImageMember {
   /** The sprite still, or null to draw the emoji. */
   readonly picture: PortraitImage | null;
   readonly emoji: string;
-  /** The level's short name in its colours, or null for a miss. */
+  /** The level's short name in its colours, or null for a miss (and the traveller). */
   readonly badge: { readonly text: string; readonly colour: string; readonly ink: string } | null;
+  /** Which way it faces: right (the default, the way they walk) or left. */
+  readonly facing?: 'left' | 'right';
 }
 
 export interface ShareImageInput {
@@ -76,10 +78,10 @@ async function drawMember(
     const w = width * spriteScale;
     const h = height * spriteScale;
     const img = await load(src);
-    // Everyone faces the way they walk (right), as in the UI's pictures.
+    // Pictures face right, as in the UI's; a member facing left is turned round.
     ctx.save();
     ctx.translate(Math.round(x), 0);
-    if (facesLeft) ctx.scale(-1, 1);
+    if (facesLeft !== (member.facing === 'left')) ctx.scale(-1, 1);
     ctx.drawImage(img, Math.round(-w / 2), at.groundY - h, w, h);
     ctx.restore();
   } else {

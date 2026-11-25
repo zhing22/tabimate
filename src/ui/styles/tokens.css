@@ -59,7 +59,7 @@
   --radius-2: 4px;
 
   /* Achievement badges: the grid's narrowest column (two fit at 360 px) and the progress bar's height */
-  --badge-min: 8.5rem;
+  --badge-min: 170px; /* never narrower: below it a word per line */
   --progress-h: 8px;
 
   /* Type */

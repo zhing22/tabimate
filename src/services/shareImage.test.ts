@@ -28,9 +28,11 @@ describe('shareImageLayout', () => {
 function fakeContext() {
   const texts: string[] = [];
   const images: unknown[] = [];
+  const turns: number[] = [];
   const ctx = new Proxy(
     {
       fillText: (text: string) => texts.push(text),
+      scale: (x: number) => turns.push(x),
       drawImage: (img: unknown) => images.push(img),
       createLinearGradient: () => ({ addColorStop: () => {} }),
     },
@@ -39,7 +41,7 @@ function fakeContext() {
       set: () => true,
     },
   ) as unknown as CanvasRenderingContext2D;
-  return { ctx, texts, images };
+  return { ctx, texts, images, turns };
 }
 
 const input: ShareImageInput = {
@@ -84,5 +86,15 @@ describe('drawShareImage', () => {
     expect(texts.join(' ')).not.toMatch(/Tiger|Fox/);
     // The scene and the one member with a sprite are drawn as images.
     expect(images).toEqual(['data:scene', 'data:tiger']);
+  });
+
+  it('turns a picture round when its member faces left (a left-facing sheet faces right)', async () => {
+    const { ctx, turns } = fakeContext();
+    const tiger = input.members[0]!;
+    const members = [tiger, { ...tiger, facing: 'left' as const }];
+    await drawShareImage(ctx, { ...input, members }, (src) =>
+      Promise.resolve(src as unknown as CanvasImageSource),
+    );
+    expect(turns).toEqual([-1]); // facesLeft alone turns it; facesLeft and facing left cancel
   });
 });

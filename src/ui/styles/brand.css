@@ -41,17 +41,40 @@
   min-width: 0;
 }
 
+/* The bar over the prompt and reveal is a step larger than the small
+   wordmark on phones and two steps larger in a landscape panel; each part
+   stays on one line. */
+.top-bar {
+  --bar-mark: calc(var(--u, 16px) * 1.5);
+  --bar-print: 1.75rem;
+  white-space: nowrap;
+}
+
+[data-layout='landscape'] .top-bar {
+  --bar-mark: calc(var(--u, 16px) * 1.8);
+  --bar-print: 2.1rem;
+}
+
+.top-bar .wordmark--sm {
+  height: var(--bar-mark);
+}
+
+.top-bar .wordmark__extra {
+  font-size: calc(var(--bar-mark) * 0.8);
+}
+
 .top-bar__prints {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-1);
 }
 
 .footprint {
   display: inline-grid;
   place-items: center;
-  width: 1.4rem;
-  height: 1.4rem;
+  flex: none;
+  width: var(--bar-print, 1.4rem);
+  height: var(--bar-print, 1.4rem);
   color: rgb(143 106 63 / 0.35);
   border-radius: var(--radius-2);
 }
@@ -69,12 +92,15 @@
   box-shadow: 0 0 0 2px var(--ink);
 }
 
+/* Neutral: the paper's own ink on a deeper paper, so red stays for actions. */
 .theme-chip {
   justify-self: center;
+  margin: 0;
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
-  color: var(--accent-ink);
-  background: var(--accent);
+  color: var(--ink);
+  background: var(--paper-deep);
+  border: 2px solid rgb(143 106 63 / 0.45);
   border-radius: 999px;
 }
 

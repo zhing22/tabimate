@@ -12,7 +12,7 @@
 .loading__track {
   --progress: 0%;
   position: relative;
-  height: 52px;
+  height: 64px;
 }
 
 .loading__path {
@@ -41,14 +41,14 @@
 .loading__party {
   position: absolute;
   bottom: 14px;
-  left: clamp(0px, calc(var(--progress) - 3.5rem), calc(100% - 3.5rem));
+  left: clamp(0px, calc(var(--progress) - 5rem), calc(100% - 5rem));
   display: flex;
   gap: var(--space-1);
   transition: left 300ms ease-out;
 }
 
 .loading__walker {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   line-height: 1;
   animation: party-step 0.5s steps(1) infinite;
 }
@@ -63,8 +63,43 @@
   color: var(--ink-soft);
 }
 
+/* The card's centre: the animal and the traveller walking in place, big
+   enough to see at a glance. Sprites play their walk cycle (results.css);
+   the traveller's still and any emoji step up and down. */
+.loading__hero {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-3);
+  min-height: 80px;
+}
+
+.loading__buddy {
+  display: grid;
+  place-items: end center;
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.loading__buddy--traveller,
+.loading__buddy .portrait:not(.portrait--sprite) {
+  animation: loading-step 0.5s steps(1) infinite;
+}
+
+@keyframes loading-step {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.loading__buddy--traveller {
+  animation-delay: -0.25s;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .loading__walker {
+  .loading__walker,
+  .loading__buddy--traveller,
+  .loading__buddy .portrait {
     animation: none;
   }
 

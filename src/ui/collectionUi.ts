@@ -13,7 +13,7 @@ import type { AnimalId, AnimalLookup, RoundResult } from '@/core/types';
 import { createToaster } from './components/toaster';
 import type { Delay } from './frames';
 import type { ScreenHost } from './host';
-import { sceneHidden } from './layout/shell';
+import { pageOpen, sceneHidden } from './layout/shell';
 import { createScreenLoader, type OpenScreen } from './screenLoader';
 
 // The collection pages load on first open (screenLoader.ts): they are not needed to play.
@@ -39,8 +39,13 @@ const animalsText = (n: number) => (n === 1 ? '1 new animal' : `${n} new animals
 
 export function createCollectionUi(deps: CollectionUiDeps) {
   const { host, bus, animals } = deps;
-  // Toasts show over the scene: they wait while a reveal is up or the scene is hidden.
-  const toaster = createToaster(host.toasts, deps.delay, () => host.hasOverlay || sceneHidden());
+  // Toasts show over the scene: they wait while a reveal or a pop-up is open,
+  // or the scene is hidden.
+  const toaster = createToaster(
+    host.toasts,
+    deps.delay,
+    () => host.hasOverlay || pageOpen() || sceneHidden(),
+  );
   const stops = [
     bus.on('journalUpdated', ({ newlyFound }) => {
       if (newlyFound.length === 0) return;

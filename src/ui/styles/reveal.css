@@ -40,24 +40,61 @@
   visibility: hidden;
 }
 
-/* Beat 3: the name, points and Next button rise in. */
+/* Beat 3: the name, points and Next button rise in (the points sit in the footer). */
 .reveal--named .reveal__body > :not(.reveal__badge),
 .reveal--named .card__footer {
   animation: rise var(--dur-med) ease-out both;
 }
 
+/* Centred between header and footer while it fits; once it doesn't, it
+   starts at the top and scrolls (safe), never cut off above. */
 .reveal .card__body {
   text-align: center;
-  align-content: center;
+  align-content: safe center;
 }
 
 /* The sprite (or emoji): a fixed slot, so the swap from emoji doesn't move the card. */
 .reveal__emoji {
   display: grid;
   place-items: center;
-  min-height: 72px;
-  font-size: 3.5rem;
+  min-height: 96px;
+  font-size: 4.5rem;
   line-height: 1;
+}
+
+/* "+100" right above Next, in the footer. */
+.reveal .card__footer {
+  row-gap: var(--space-1);
+  padding-top: var(--space-2);
+}
+
+.reveal .card__footer > .reveal__points {
+  flex: 1 1 100%;
+  margin: 0;
+}
+
+/* A short card: the sprite and spacing shrink first (zoom keeps the sprite's
+   pixels whole: 4x to 3x, then 2x); only then does the body scroll. */
+@container sheet (max-height: 440px) {
+  .reveal__emoji {
+    zoom: 0.75;
+  }
+  .reveal__body {
+    gap: var(--space-1);
+  }
+  .reveal .card__header,
+  .reveal .card__body {
+    padding-block: var(--space-1);
+  }
+}
+
+@container sheet (max-height: 380px) {
+  .reveal__emoji {
+    zoom: 0.5;
+  }
+  .reveal .card__footer {
+    padding-bottom: var(--space-2);
+  }
 }
 
 .reveal__name {

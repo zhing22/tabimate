@@ -28,19 +28,31 @@ export interface ResultsSummaryActions extends CollectionLinks {
   share(): Promise<ShareOutcome>;
 }
 
-/** The team in one small row: each found animal's picture (misses left out). */
+/**
+ * The team in one row: a slot per prompt, in order, each found animal's
+ * picture (a miss leaves its slot empty). The slots share the width equally
+ * and shrink together (results.css), so it never wraps.
+ */
 function teamRow(props: ResultsSummaryProps): HTMLElement {
   const found = props.rounds.filter((r) => r.animal !== null);
-  return h(
+  const row = h(
     'p',
     { class: 'summary-team', 'aria-label': found.map((r) => r.animal?.display).join(', ') },
-    ...found.map((r) =>
-      portrait(r.animal, isShiny(r.result.match.level), {
-        scale: UI_SPRITE_SCALE.team,
-        portraits: props.portraits,
-      }),
+    ...props.rounds.map((r) =>
+      h(
+        'span',
+        { class: 'summary-team__slot' },
+        r.animal
+          ? portrait(r.animal, isShiny(r.result.match.level), {
+              scale: UI_SPRITE_SCALE.team,
+              portraits: props.portraits,
+            })
+          : null,
+      ),
     ),
   );
+  row.style.setProperty('--slots', String(Math.max(1, props.rounds.length)));
+  return row;
 }
 
 /**

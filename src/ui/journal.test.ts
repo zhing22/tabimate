@@ -76,7 +76,7 @@ describe('Field Journal screen', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('Field Journal');
     expect(t.$('.meta')?.textContent).toBe(`0 of ${ANIMALS.size} animals found`);
-    (t.$('.card__close') as HTMLButtonElement).click();
+    (t.$('.card__back') as HTMLButtonElement).click();
     expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
   });
 
@@ -87,7 +87,7 @@ describe('Field Journal screen', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('History');
     expect(t.$('.calendar')).not.toBeNull();
-    (t.$('.card__close') as HTMLButtonElement).click();
+    (t.$('.card__back') as HTMLButtonElement).click();
     expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
   });
 
@@ -160,22 +160,23 @@ describe('Field Journal screen', () => {
   });
 });
 
-describe('Field Journal nested view', () => {
-  it('shows Back only while an animal page is open; Back closes it, × the journal', async () => {
+describe('Field Journal header', () => {
+  it('has Back on the right and no ×; the animal page keeps its own ×', async () => {
     const tigerFound = addRun({}, { puzzleDate: '2026-11-05', results: [hit('tiger')] }).journal;
     const t = setup({ journal: tigerFound, achievements: [] });
     t.app.showStart();
     button(t, 'Field Journal').click();
     await vi.dynamicImportSettled(); // the page loads on first open
-    const back = t.$('.card__back') as HTMLButtonElement;
-    expect(back.hidden).toBe(true);
+    const header = t.$('.card__header')!;
+    expect(header.lastElementChild?.textContent).toBe('‹ Back');
+    expect(header.textContent).not.toContain('×');
     (t.$('.journal-cell__button') as HTMLButtonElement).click();
-    expect(t.$('.journal-detail')).not.toBeNull();
-    expect(back.hidden).toBe(false);
-    back.click();
+    expect(t.$('.journal-detail')?.textContent).toContain('×');
+    button(t, 'Close').click();
     expect(t.$('.journal-detail')).toBeNull();
-    expect(back.hidden).toBe(true);
     expect(t.$('h1')?.textContent).toBe('Field Journal'); // still in the journal
+    (t.$('.card__back') as HTMLButtonElement).click();
+    expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
   });
 });
 

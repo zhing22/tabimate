@@ -9,7 +9,8 @@ function scoringLine(): string {
 }
 
 /**
- * "How to play": a link-style button (last in the start card's footer) and
+ * "How to play": a link-style button (last in the start card's footer, in
+ * regular weight) and
  * the rules it shows and hides (at the end of the card's body, scrolled to).
  */
 export function howToPlay(): { readonly toggle: HTMLButtonElement; readonly rules: HTMLElement } {

@@ -19,7 +19,10 @@ function badge(level: RoundResult['match']['level']): HTMLElement {
   return h('div', { class: 'reveal__badge' }, el);
 }
 
-/** The card: a drum-roll line, then the picture, name, badge, extras and points; Next in the footer. */
+/**
+ * The card: a drum-roll line, then the picture, name, badge and extras; the
+ * points and Next in the footer, so "+100" is never scrolled away.
+ */
 export function revealCard(
   props: RevealProps,
   pointsEl: HTMLElement,
@@ -42,10 +45,9 @@ export function revealCard(
         h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
         badge(level),
         props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,
-        pointsEl,
       ),
     ],
-    footer: [next],
+    footer: [pointsEl, next],
   });
   shown.el.dataset['level'] = String(level);
   // Styled by effect, not level number, so LEVELS decides which level is shiny.

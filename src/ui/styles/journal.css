@@ -144,3 +144,39 @@
   color: var(--paper);
   text-shadow: 0 0 2px var(--ink);
 }
+
+/* A short landscape panel (a phone on its side): smaller pictures and tighter
+   cells, so more animals and the open animal's page fit; tabs a step smaller
+   (still full tap targets). */
+@container sheet (max-height: 420px) {
+  .journal__tabs {
+    gap: var(--space-1);
+    padding-bottom: var(--space-1);
+  }
+  .journal__tab {
+    padding: 0 var(--space-2);
+    font-size: max(14px, calc(var(--u) * 0.85)); /* a step under the body text's floor */
+  }
+  .journal__panel > * + * {
+    margin-top: var(--space-2);
+  }
+  .journal-grid {
+    grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
+    gap: var(--space-1);
+  }
+  .journal-cell__button,
+  .journal-cell--unknown {
+    grid-template-rows: 32px auto;
+    padding: 2px 1px;
+  }
+  .journal-cell__picture {
+    zoom: 0.75;
+  }
+  .journal .journal-detail__animal {
+    width: 48px;
+    height: 48px;
+  }
+  .journal .journal-detail__animal .portrait {
+    zoom: 0.75;
+  }
+}

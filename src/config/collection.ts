@@ -12,14 +12,14 @@ export const PERFECT_DAY_LEVEL: AnswerLevel = ANSWER_LEVELS[1] ?? TOP_LEVEL;
 
 /** Achievement and journal toasts (ui/components/toast.ts). */
 export const TOAST = {
-  /** Each toast stays up this long; several queue one after another. */
-  showMs: 3_500,
+  /** Each toast stays up this long, then goes by itself; several queue one after another. */
+  showMs: 5_000,
   /**
    * A toast's "Open" button holds it while focused or under the pointer;
    * once both leave, it stays this much longer.
    */
   resumeMs: 2_000,
-  /** While a reveal or a full-screen page hides the scene, a waiting toast checks again this often. */
+  /** While a reveal or a pop-up is open (or the scene is hidden), a waiting toast checks again this often. */
   blockedRetryMs: 500,
 } as const;
 

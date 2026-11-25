@@ -8,6 +8,7 @@ import type { Animal } from '@/core/types';
 import { createScreenHost } from './host';
 import { startLoading } from './loadingFlow';
 import { loadingText, loadingView, pickFact } from './screens/loading';
+import { pickWalker } from './screens/loadingParty';
 
 const described = (id: string, description: string): Animal => ({
   ...ANIMALS.get(id)!,
@@ -33,6 +34,27 @@ describe('loadingView', () => {
     expect(bar.style.getPropertyValue('--progress')).toBe('50%');
     view.setProgress(2);
     expect(bar.getAttribute('aria-valuenow')).toBe('100');
+  });
+
+  it('walks the traveller and the animal in place in the middle of the card, as sprites once the animals are in', async () => {
+    const view = loadingView({ puzzleNumber: 1, theme: null, animalEmoji: '🦊' });
+    const hero = view.el.querySelector<HTMLElement>('.loading__hero')!;
+    expect(hero.textContent).toBe('🦊🧑');
+    const fox = { ...ANIMALS.get('red-fox')!, emoji: '🦊' };
+    const still = { src: 'data:still', width: 16, height: 16, facesLeft: false };
+    const portraits = (animal: Animal | null) => Promise.resolve(animal ? still : null);
+    view.setWalkers([ANIMALS.get('tiger')!, fox], portraits, () => 0.99);
+    await Promise.resolve();
+    expect(hero.querySelectorAll('img')).toHaveLength(1); // the fox's sprite; the traveller's emoji
+    expect(hero.textContent).toBe('🧑');
+  });
+
+  it('picks a walker with the same emoji as the one already walking, else any', () => {
+    const tiger = { ...ANIMALS.get('tiger')!, emoji: '🐅' };
+    const fox = { ...ANIMALS.get('red-fox')!, emoji: '🦊' };
+    expect(pickWalker([tiger, fox], '🦊', () => 0)).toBe(fox);
+    expect(pickWalker([tiger], '🦊', () => 0)).toBe(tiger);
+    expect(pickWalker([], '🦊')).toBeNull();
   });
 
   it('adds a "Did you know?" line once there is a fact', () => {

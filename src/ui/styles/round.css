@@ -44,8 +44,10 @@
   color: var(--ink-soft);
 }
 
-/* Little room above the keyboard: a smaller question, tighter card. */
-@media (max-height: 520px) {
+/* A short card (a short landscape panel): a smaller question, tighter card.
+   A container query on the sheet, never the window, so a phone keyboard
+   (which the sheet's held size ignores) changes nothing. */
+@container sheet (max-height: 400px) {
   .round__prompt {
     font-size: var(--text-lg);
   }
@@ -56,10 +58,6 @@
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
-  }
-  .round .timer-ring {
-    width: 44px;
-    height: 44px;
   }
   .round .card__header,
   .round .card__body,

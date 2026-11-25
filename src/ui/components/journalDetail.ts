@@ -5,16 +5,16 @@ import type { Animal } from '@/core/types';
 import { h } from '../dom';
 import { formatDateKey } from '../format';
 import type { JournalCell } from '../journalView';
-import { levelBadge } from './levelBadge';
 import { portrait } from './portrait';
 
 const timesText = (n: number) => (n === 1 ? 'Found once' : `Found ${n} times`);
 
 /**
  * A found animal's journal page: the animal moving (its sprite's walk, flap or
- * swim; an emoji hops), name, rarest level found, description, and one line
+ * swim; an emoji hops), name, description, and one line
  * with the Wikipedia link, when it was first found and how often; a corner ×
- * closes it. `close` puts focus back where the player was.
+ * closes it. No level badge: an animal's level belongs to a prompt, not to it.
+ * `close` puts focus back where the player was.
  */
 export function journalDetail(
   cell: JournalCell,
@@ -31,7 +31,7 @@ export function journalDetail(
       { class: 'journal-detail__animal' },
       portrait(animal, false, { scale: UI_SPRITE_SCALE.journalDetail, portraits, walking: true }),
     ),
-    detailHead(title, entry),
+    h('div', { class: 'journal-detail__head' }, title),
     animal.description
       ? h('p', { class: 'journal-detail__description' }, animal.description)
       : null,
@@ -52,16 +52,6 @@ function closeButton(close: () => void): HTMLElement {
   );
   button.addEventListener('click', close);
   return button;
-}
-
-/** The name, and the rarest level it was found at. */
-function detailHead(title: HTMLElement, entry: JournalEntry | null): HTMLElement {
-  return h(
-    'div',
-    { class: 'journal-detail__head' },
-    title,
-    entry ? levelBadge(entry.bestLevel).el : null,
-  );
 }
 
 /** One line: the Wikipedia link, then when it was first found and how often. */

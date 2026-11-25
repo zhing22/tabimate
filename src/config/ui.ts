@@ -9,8 +9,10 @@ export const UI_SPRITE_SCALE = {
   journal: 2,
   /** The chosen animal on its journal page, moving (in a 64 px box). */
   journalDetail: 2,
-  /** The animal on the reveal card, walking. */
-  reveal: 3,
+  /** The traveller and an animal walking in place on the loading card. */
+  loading: 3,
+  /** The animal on the reveal card, walking (reveal.css zooms it down on a short card). */
+  reveal: 4,
 } as const;
 
 /**
@@ -18,6 +20,13 @@ export const UI_SPRITE_SCALE = {
  * the run ended (the results backdrop) is drawn sceneScale times its native
  * size from sceneTop, the team stands on its walk line at spriteScale.
  */
+/**
+ * Which way the results line-up's right-hand group (the earlier prompts,
+ * core/lineup.ts) faces: 'left', towards the traveller, or 'right', the way
+ * they walk. The left group always faces right, towards the traveller.
+ */
+export const RESULTS_RIGHT_GROUP_FACING: 'left' | 'right' = 'left';
+
 export const SHARE_IMAGE = {
   width: 1080,
   height: 1350,

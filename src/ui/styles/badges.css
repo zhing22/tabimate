@@ -1,6 +1,7 @@
 /* Achievement badges (components/badgeList.ts): a grid of cards; unlocked
    ones with their date, locked ones dimmed with what they ask and, when they
-   count something, a progress bar. Two columns at 360 px. */
+   count something, a progress bar. As many columns as fit at --badge-min
+   or wider; one column in a narrow sheet. */
 .badge-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--badge-min), 1fr));
@@ -21,6 +22,8 @@
   padding: var(--space-2);
   background: rgb(255 255 255 / 0.45);
   border-radius: var(--radius-2);
+  /* Its picture and words scale with its own width (cqi below). */
+  container: badge / inline-size;
 }
 
 .badge--locked .badge__icon {
@@ -41,7 +44,7 @@
 }
 
 .badge__icon {
-  font-size: var(--text-xl);
+  font-size: clamp(var(--text-lg), 14cqi, 2.75rem);
   line-height: 1;
 }
 
@@ -54,7 +57,7 @@
 .badge__when,
 .badge__progress {
   grid-column: 1 / -1;
-  font-size: var(--text-xs);
+  font-size: clamp(var(--text-min), 7.5cqi, var(--text-sm));
 }
 
 /* "4 of 7" beside the bar: a caption. */
@@ -63,7 +66,7 @@
 }
 
 .badge__name {
-  font-size: var(--text-sm);
+  font-size: clamp(var(--text-min), 9cqi, var(--text-lg));
 }
 
 .badge__when {
@@ -88,12 +91,9 @@
   color: var(--ink-soft);
 }
 
-/* A narrow sheet: one badge per row, a smaller picture. */
+/* A narrow sheet: one badge per row. */
 @container sheet (max-width: 380px) {
   .badge-list {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .badge__icon {
-    font-size: var(--text-lg);
   }
 }

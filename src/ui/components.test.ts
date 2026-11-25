@@ -413,17 +413,29 @@ describe('results: team rows, answers and the party', () => {
     expect(el.textContent).toBe('🦊');
   });
 
-  it('lines the party up behind the traveller, first to join nearest, misses left out', () => {
-    const { el } = partyLineup([round(fox, 1), round(null, 0), round(tiger, 4)]);
-    const row = el.querySelector('.party__members')!;
-    expect([...row.children].map((c) => c.textContent)).toEqual(['🐅', '🦊', '🧑']);
+  it('stands the traveller in the middle: later prompts left facing right, earlier ones right facing them', () => {
+    // Q1 fox, Q2 a miss, Q3 tiger: Q3 on the left; Q2 Q1 on the right (the miss left out).
+    const rounds = [round(fox, 1), round(null, 0), round(tiger, 4)];
+    const { el } = partyLineup(rounds);
+    const [left, traveller, right] = [...el.querySelector('.party__members')!.children];
+    expect(left?.textContent).toBe('🐅');
+    expect(traveller?.textContent).toBe('🧑');
+    expect(right?.textContent).toBe('🦊');
+    expect(right?.classList.contains('party__side--face-left')).toBe(true);
+    expect(left?.classList.contains('party__side--face-right')).toBe(true);
     expect(el.getAttribute('aria-label')).toBe('You and Red fox, Tiger');
     // Each steps a little out of time with the next.
-    expect([...row.children].map((c) => (c as HTMLElement).style.getPropertyValue('--i'))).toEqual([
-      '0',
-      '1',
-      '2',
-    ]);
+    const steps = [...el.querySelectorAll<HTMLElement>('.portrait')].map((c) =>
+      c.style.getPropertyValue('--i'),
+    );
+    expect(steps).toEqual(['0', '1', '2']);
+  });
+
+  it('puts Q7 Q6 Q5 left of the traveller and Q4 Q3 Q2 Q1 right', () => {
+    const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣'];
+    const rounds = emoji.map((e) => round({ ...fox, emoji: e }, 1));
+    const row = partyLineup(rounds).el.querySelector('.party__members')!;
+    expect(row.textContent).toBe('7️⃣6️⃣5️⃣🧑4️⃣3️⃣2️⃣1️⃣');
   });
 });
 

@@ -23,6 +23,6 @@ export const PORTRAIT = { stageShare: 0.34, sheetMaxPx: 640 } as const;
  * on that first focus or after ROUND_START_GRACE_MS (config/game.ts).
  */
 export const KEYBOARD = {
-  /** The stage slides away and back over this long (none with reduced motion). */
-  stageSlideMs: 240,
+  /** The prompt card rises onto the keyboard over this long (none with reduced motion). */
+  sheetRiseMs: 240,
 } as const;

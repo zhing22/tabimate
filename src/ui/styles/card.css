@@ -43,16 +43,13 @@
   margin: 0;
 }
 
-.card__back,
-.card__close {
+/* Back closes a pop-up, at the header's top right (the title keeps the left). */
+.card__back {
   flex: none;
+  align-self: flex-start;
+  margin-inline-start: auto;
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-md);
-}
-
-/* × closes a pop-up (in both layouts); Back only appears in a nested view. */
-.card__close {
-  margin-inline-start: auto;
 }
 
 .card__body {
@@ -88,8 +85,7 @@
   font-size: var(--text-sm);
 }
 
-.card__header .settings__gear,
-.card__header .card__close {
+.card__header .settings__gear {
   width: var(--tap);
   padding: 0;
   font-family: var(--font-body);

@@ -7,11 +7,9 @@ export interface CardOptions {
   readonly title?: HTMLElement;
   /** A line under the title ("7 of 550 animals found"). */
   readonly meta?: Child;
-  /** A Back button at the header's start: one page back. */
+  /** "Back" at the header's end: closes the pop-up, back to where it was opened. */
   readonly back?: () => void;
-  /** A × button at the header's end: closes the full-screen page (portrait only, base.css). */
-  readonly close?: () => void;
-  /** More in the header, before ×: the timer ring, the settings menu. */
+  /** More in the header, before Back: the timer ring, the settings menu. */
   readonly tools?: readonly Child[];
   readonly body: readonly Child[];
   /** Always visible under the body: the screen's main action. */
@@ -27,23 +25,20 @@ export interface Card {
   /** The part that scrolls. */
   readonly body: HTMLElement;
   readonly footer: HTMLElement | null;
-  /** The header's Back button, if asked for (a nested view shows and hides it). */
-  readonly backButton: HTMLButtonElement | null;
 }
 
-function headerButton(className: string, text: string, label: string, onClick: () => void) {
-  const button = h('button', { class: `button ${className}`, type: 'button' }, text);
-  if (label !== text) button.setAttribute('aria-label', label);
+function backButton(onClick: () => void): HTMLButtonElement {
+  const button = h('button', { class: 'button card__back', type: 'button' }, '‹ Back');
+  button.setAttribute('aria-label', 'Back');
   button.addEventListener('click', onClick);
   return button;
 }
 
-function cardHeader(o: CardOptions, back: HTMLButtonElement | null): HTMLElement | null {
-  if (!o.title && !back && !o.close && !o.tools?.length) return null;
+function cardHeader(o: CardOptions): HTMLElement | null {
+  if (!o.title && !o.back && !o.tools?.length) return null;
   return h(
     'header',
     { class: 'card__header' },
-    back,
     h(
       'div',
       { class: 'card__title' },
@@ -51,16 +46,15 @@ function cardHeader(o: CardOptions, back: HTMLButtonElement | null): HTMLElement
       o.meta !== undefined ? h('p', { class: 'meta card__meta' }, o.meta) : null,
     ),
     ...(o.tools ?? []),
-    o.close ? headerButton('card__close', '×', 'Close', o.close) : null,
+    o.back ? backButton(o.back) : null,
   );
 }
 
 /**
- * Every screen's card (v3 layout): a fixed header (Back in a nested view,
- * the title, tools, ×),
- * a body that scrolls, and a footer with the main action that never scrolls
- * away. It fills the sheet (portrait), the panel (landscape) or the screen
- * (a full-screen page).
+ * Every screen's card (v3 layout): a fixed header (the title and its line on
+ * the left; tools and Back on the right), a body that scrolls, and a footer
+ * with the main action that never scrolls away. It fills the sheet
+ * (portrait), the panel (landscape) or the screen (a full-screen page).
  */
 export function card(o: CardOptions): Card {
   const body = h('div', { class: 'card__body' }, ...o.body);
@@ -71,8 +65,7 @@ export function card(o: CardOptions): Card {
     : o.label
       ? { 'aria-label': o.label }
       : {};
-  const backButton = o.back ? headerButton('card__back', '‹ Back', 'Back', o.back) : null;
-  const header = cardHeader(o, backButton);
+  const header = cardHeader(o);
   const el = h('section', { class: `card ${o.className}`, ...named }, header, body, footer);
-  return { el, body, footer, backButton };
+  return { el, body, footer };
 }

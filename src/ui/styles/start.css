@@ -23,10 +23,17 @@
   overflow-wrap: anywhere;
 }
 
-/* Start: the chip, tagline and streak at the top; the flexible space is the
-   body's own height; Play, the tiles and "How to play" in the footer. */
+/* Start: the chip, tagline and Play in one group, centred in the body's free
+   space; the tiles and "How to play" in the footer. */
 .start .card__body {
   text-align: center;
+  align-content: safe center;
+}
+
+.start__hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
 }
 
 .start__title {
@@ -40,19 +47,22 @@
   gap: var(--space-3);
 }
 
-.start .card__footer > .start__play {
-  flex: none;
+.start .start__play {
   width: 100%;
+  margin-top: var(--space-2);
   min-height: calc(var(--tap) * 1.35);
   font-size: var(--text-xl);
 }
 
 .start .link-button {
   align-self: center;
+  font-weight: 400;
 }
 
+/* The tagline, a step up from body text. */
 .start .subtitle {
-  font-size: var(--text-md);
+  margin: 0;
+  font-size: var(--text-lg);
 }
 
 /* A short sheet or panel (a phone on its side, a small phone): the chip and
@@ -61,7 +71,7 @@
   .start .wordmark--lg {
     height: 2.25rem;
   }
-  .start .card__footer > .start__play {
+  .start .start__play {
     min-height: var(--tap);
     font-size: var(--text-lg);
   }

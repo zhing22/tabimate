@@ -1,6 +1,7 @@
 import { LOADING } from '@/config/game';
 import { themeFor } from '@/config/themes';
 import { puzzleNumber } from '@/core/date';
+import type { Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { browserDelay, type Delay } from './frames';
 import type { ScreenHost } from './host';
@@ -8,8 +9,11 @@ import { placeOnStage } from './layout/stage';
 import { loadingView, pickFact } from './screens/loading';
 
 export interface Loading {
-  /** The animals are in: the traveller is halfway, and a "Did you know?" line shows. */
-  loaded(animals: ReadonlyMap<AnimalId, Animal>): void;
+  /**
+   * The animals are in: the traveller is halfway, a "Did you know?" line
+   * shows, and the card's walkers become sprites (from `portraits`).
+   */
+  loaded(animals: ReadonlyMap<AnimalId, Animal>, portraits?: Portraits): void;
   /**
    * Waits for `ready` (today's sprites), at most LOADING.spriteWaitMs, walks the
    * rest of the path, and resolves once the screen has been up LOADING.minMs.
@@ -60,8 +64,9 @@ export function startLoading(host: ScreenHost, key: DateKey, deps: LoadingDeps =
   const shownAt = now();
 
   return {
-    loaded(animals) {
+    loaded(animals, portraits) {
       view.setProgress(DATA_IN);
+      view.setWalkers(animals.values(), portraits, random);
       rotateFacts(animals);
     },
     async finish(ready) {

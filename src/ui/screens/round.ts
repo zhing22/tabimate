@@ -2,7 +2,7 @@ import type { LevelId } from '@/config/levels';
 import type { Prompt } from '@/core/types';
 import { focus } from '../dom';
 import type { Unmount } from '../host';
-import { currentLayout, TYPING_CLASS } from '../layout/shell';
+import { currentLayout, setTyping } from '../layout/shell';
 import {
   buildRound,
   DID_YOU_MEAN,
@@ -80,7 +80,7 @@ export function mountRound(
 
   const doc = root.ownerDocument;
   const portrait = () => currentLayout(doc) === 'portrait';
-  const typing = (on: boolean) => doc.documentElement.classList.toggle(TYPING_CLASS, on);
+  const typing = (on: boolean) => setTyping(on, doc);
   let locked = false;
   const empty = () => input.value.trim() === '';
   input.addEventListener('focus', () => {

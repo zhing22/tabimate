@@ -79,23 +79,23 @@ async function collectionPage(
   await settle(page);
   await capture(state, page);
   if (state === 'journal') await journalDetail(page, capture);
-  await page.getByRole('button', { name: 'Close', exact: true }).click();
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
   await page.locator('.team-card').waitFor();
 }
 
-/** One found animal's page in the Journal (the nested view, with Back). */
+/** One found animal's page in the Journal (closed with its own ×). */
 async function journalDetail(page: Page, capture: Capture) {
   await page.locator('.journal-cell__button').first().click();
   await page.locator('.journal-detail').waitFor();
   await settle(page);
   await capture('journal-detail', page);
-  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await page.getByRole('button', { name: 'Close', exact: true }).click();
   await page.locator('.journal-detail').waitFor({ state: 'detached' });
 }
 
-/** Portrait: × closes the results pop-up; the summary shows under the scene. */
+/** Back closes the results pop-up; the summary shows under the scene. */
 async function summary(page: Page, capture: Capture) {
-  const close = page.getByRole('button', { name: 'Close', exact: true });
+  const close = page.getByRole('button', { name: 'Back', exact: true });
   if (!(await close.isVisible())) return;
   await close.click();
   await page.locator('.results-summary').waitFor();

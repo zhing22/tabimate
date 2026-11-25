@@ -45,9 +45,10 @@ function streakLine(props: StartProps): HTMLElement | null {
 }
 
 /**
- * The start: the wordmark and settings; the day's theme chip, a tagline and
- * the streak; then (after flexible space) a large Play, the collection tiles
- * and "How to play". On the stage the traveller waits with a "Ready?" bubble.
+ * The start: the wordmark and settings; in the middle of the free space, the
+ * day's chip, a tagline and Play right under it (then the streak); at the
+ * bottom the collection tiles and "How to play". On the stage the traveller
+ * waits with a "Ready?" bubble.
  */
 export const startScreen: Screen<StartProps, StartActions> = (root, props, actions) => {
   const play = h('button', { class: 'button button--primary start__play', type: 'button' }, 'Play');
@@ -59,13 +60,18 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
     title: h('h1', { id: 'start-title', class: 'start__title' }, wordmark('lg')),
     tools: [settings?.el],
     body: [
-      themeChip(props.puzzleNumber, props.theme?.name ?? null),
-      h('p', { class: 'subtitle' }, props.theme?.tagline ?? TAGLINE),
-      streakLine(props),
+      h(
+        'div',
+        { class: 'start__hero' },
+        themeChip(props.puzzleNumber, props.theme?.name ?? null),
+        h('p', { class: 'subtitle' }, props.theme?.tagline ?? TAGLINE),
+        play,
+        streakLine(props),
+      ),
       installHint(props.install),
       help.rules,
     ],
-    footer: [play, collectionLinks(actions), help.toggle],
+    footer: [collectionLinks(actions), help.toggle],
   });
   root.append(shown.el);
   const bubble = h('p', { class: 'stage-bubble' }, 'Ready?');

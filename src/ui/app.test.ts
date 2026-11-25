@@ -577,7 +577,7 @@ describe('app: closing the results pop-up', () => {
     await loaded(); // the results load when the run ends
     const score = t.$('.results .results__number')?.textContent;
     expect(score).toMatch(/^\d+$/);
-    t.$<HTMLButtonElement>('.card__close')!.click();
+    t.$<HTMLButtonElement>('.card__back')!.click();
     await loaded();
     expect(t.$('.results')).toBeNull();
     expect(t.$('.results-summary .results__number')?.textContent).toBe(score);

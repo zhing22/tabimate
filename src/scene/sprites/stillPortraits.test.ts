@@ -79,10 +79,24 @@ describe('createStillPortraits', () => {
     expect(baseOf(seen[0]!.pixels)).not.toEqual(hexToRgb(PALETTE[1]));
   });
 
-  it('gives null (the emoji) without a sheet, colours, or a player sprite', async () => {
+  it('draws the traveller for null, once', async () => {
+    const still = { src: 'data:player', width: 16, height: 24, facesLeft: false };
+    const player = vi.fn(() => still);
+    const portraits = createStillPortraits({
+      animals: lookup,
+      loadArt: () => Promise.reject(new Error('unused')),
+      loadSheet: () => Promise.resolve(SHEET),
+      player,
+    });
+    expect(await portraits(null, false)).toBe(still);
+    expect(await portraits(null, true)).toBe(still);
+    expect(player).toHaveBeenCalledOnce();
+  });
+
+  it('gives null (the emoji) without a sheet or colours, or no canvas for the traveller', async () => {
     const { portraits } = setup();
     expect(await portraits(KOALA, false)).toBeNull();
-    expect(await portraits(null, false)).toBeNull();
+    expect(await portraits(null, false)).toBeNull(); // jsdom has no 2D canvas
     const noColours = setup({ animals: new Map() });
     expect(await noColours.portraits(TIGER, false)).toBeNull();
   });

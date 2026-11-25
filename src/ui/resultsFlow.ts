@@ -19,7 +19,7 @@ export interface ResultsFlowDeps {
 /**
  * The end of a run: the results page and, once it is closed (portrait), the
  * summary under the scene that opens it again. Pages opened from the results
- * go Back to them, and × to the summary.
+ * close back to them; Back on the results shows the summary.
  */
 export function createResultsFlow({ app, collection, animalOf, openScreen }: ResultsFlowDeps) {
   const { host, puzzle, animals, clock } = app;

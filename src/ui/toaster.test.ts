@@ -104,3 +104,20 @@ describe('toaster while the scene is hidden', () => {
     expect(layer.textContent).toContain('Journal');
   });
 });
+
+describe('toaster timing and repeats', () => {
+  it('goes by itself after five seconds, and never shows the same note twice', () => {
+    expect(TOAST.showMs).toBe(5_000);
+    const layer = document.createElement('div');
+    document.body.replaceChildren(layer);
+    const time = fakeDelay();
+    const toaster = createToaster(layer, time.delay);
+    const note = { icon: '📖', title: 'Field Journal', text: '7 new animals added' };
+    toaster.show(note);
+    expect(layer.textContent).toContain('Field Journal');
+    time.advance(TOAST.showMs);
+    expect(layer.textContent).toBe('');
+    toaster.show({ ...note }); // a screen opening again must not replay it
+    expect(layer.textContent).toBe('');
+  });
+});

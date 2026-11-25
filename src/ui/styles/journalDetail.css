@@ -36,11 +36,6 @@
   font-size: var(--text-sm);
 }
 
-.journal-detail__head .level-badge {
-  padding: 0 var(--space-1);
-  font-size: var(--text-caption);
-}
-
 .journal-detail__description,
 .journal-detail__meta {
   line-height: 1.3;

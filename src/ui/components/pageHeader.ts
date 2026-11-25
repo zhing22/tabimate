@@ -2,7 +2,7 @@ import { h } from '../dom';
 
 /** What a full-screen page (Journal, Achievements, History) can do from its header. */
 export interface PageActions {
-  /** ×, Escape or the back gesture: closes the page, back to where it was opened. */
+  /** Back, Escape or the back gesture: closes the page, back to where it was opened. */
   close(): void;
 }
 

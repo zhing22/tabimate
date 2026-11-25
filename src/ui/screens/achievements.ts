@@ -50,7 +50,7 @@ export const achievementsScreen: Screen<AchievementsProps, AchievementsActions> 
     className: 'card--journal achievements',
     title: heading,
     meta: `${unlocked} of ${total} unlocked`,
-    close: () => actions.close(),
+    back: () => actions.close(),
     body: [h('div', { class: 'achievements__body' }, ...props.sections.map(section))],
   });
   root.append(shown.el);

@@ -7,6 +7,7 @@ import { emitCollected } from '@/core/collectionEvents';
 import { createGameController } from '@/core/gameController';
 import { puzzleAnimals } from '@/core/puzzleAnimals';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
+import type { Portraits } from '@/core/portrait';
 import { readDebugParams } from '@/debug/debugParams';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
@@ -57,8 +58,10 @@ const loading = startLoading(host, key);
 
 async function load() {
   const [puzzle, animals] = await Promise.all([source.getPuzzle(key), source.getAnimals()]);
-  loading.loaded(animals);
-  return { puzzle, animals };
+  // Pixel portraits of any animal: the loading card's walker, then the Journal.
+  const portraits = journalPortraits(animals, loader);
+  loading.loaded(animals, portraits);
+  return { puzzle, animals, portraits };
 }
 
 interface Game {
@@ -69,7 +72,11 @@ interface Game {
   begin(): void;
 }
 
-function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
+function play(
+  puzzle: Puzzle,
+  animals: ReadonlyMap<AnimalId, Animal>,
+  stills: Portraits | undefined,
+): Game {
   const bus = createBus<GameEvents>({
     onError: (error, type) => console.error(`Listener for "${String(type)}" failed`, error),
   });
@@ -112,7 +119,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     getStats: () => progress.getStats(),
     getCollection: () => progress.getCollection(),
     ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
-    journalPortraits: journalPortraits(animals, loader),
+    journalPortraits: stills,
     getStreakStatus: () => progress.streakStatus(),
     install,
     reload,
@@ -143,8 +150,8 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
 }
 
 load()
-  .then(async ({ puzzle, animals }) => {
-    const game = puzzle ? play(puzzle, animals) : undefined;
+  .then(async ({ puzzle, animals, portraits }) => {
+    const game = puzzle ? play(puzzle, animals, portraits) : undefined;
     if (debug.enabled) {
       const fillJournal = () => progress.fillJournal(animals);
       // Only with ?debug=1: the panel stays out of everyone else's download.

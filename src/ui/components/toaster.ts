@@ -13,7 +13,7 @@ export interface ToastContent {
 }
 
 export interface Toaster {
-  /** Queues a toast: each shows for TOAST.showMs, one after another. */
+  /** Queues a toast: each shows for TOAST.showMs, one after another, and only ever once. */
   show(content: ToastContent): void;
   destroy(): void;
 }
@@ -81,8 +81,10 @@ function toastEl(content: ToastContent, done: () => void, hold: Hold): HTMLEleme
  * to; while it has focus or the pointer is over it the toast stays, then
  * gives TOAST.resumeMs more once both have left. `layer` is the host's toast
  * layer, which outlives screens, and is a polite live region, so each is
- * read once. While `blocked()` (a reveal is up, or a page covers the scene)
- * toasts wait in the queue, checked every TOAST.blockedRetryMs.
+ * read once. While `blocked()` (a reveal or a pop-up is open, or the scene
+ * is hidden) toasts wait in the queue, checked every TOAST.blockedRetryMs.
+ * The same note (title and text) is never shown twice, so nothing replays
+ * when a screen opens again.
  */
 export function createToaster(
   layer: HTMLElement,
@@ -90,6 +92,7 @@ export function createToaster(
   blocked: () => boolean = () => false,
 ): Toaster {
   const queue: ToastContent[] = [];
+  const seen = new Set<string>();
   let cancel: (() => void) | null = null;
   let showing = false;
 
@@ -126,6 +129,10 @@ export function createToaster(
 
   return {
     show(content) {
+      const key = `${content.title}
+${content.text}`;
+      if (seen.has(key)) return;
+      seen.add(key);
       queue.push(content);
       if (!showing) showNext();
     },

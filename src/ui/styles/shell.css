@@ -31,7 +31,6 @@
   left: 0;
   right: 0;
   height: var(--stage-h);
-  transition: transform var(--stage-slide-ms) ease-out;
 }
 
 [data-layout='portrait'] #ui {
@@ -45,13 +44,28 @@
     max(var(--space-2), env(safe-area-inset-bottom)) max(var(--space-2), env(safe-area-inset-left));
 }
 
-/* Typing: the stage slides up out of sight (same size, so no re-scale) and
-   the sheet fills what the keyboard leaves. */
+/* Typing: the prompt card keeps its layout, sizes and content (layout/shell.ts
+   setTyping holds the sheet's and stage's heights and the text size in px, so
+   the frame, its type unit and its container queries don't change) and rises
+   to sit right on the keyboard; whatever is left above it shows the top of
+   the scene, which keeps its size (no re-scale). Never stretched to fill.
+   Where the keyboard leaves less room than the card (most phones), only the
+   empty space around the question gives way, so the bar stays in sight. */
 [data-layout='portrait'].is-typing :is(#scene, #stage-overlay) {
-  transform: translateY(-100%);
+  height: var(--typing-stage-h, var(--stage-h));
 }
 
-[data-layout='portrait'].is-typing #ui,
+[data-layout='portrait'].is-typing #ui {
+  top: calc(var(--vv-top, 0px) + var(--vv-height, 100dvh) - var(--typing-sheet-h));
+  height: var(--typing-sheet-h);
+  transition: top var(--sheet-rise-ms) ease-out;
+}
+
+[data-layout='portrait'].is-typing #ui .card {
+  align-self: end;
+  max-height: calc(var(--vv-height, 100dvh) - 2 * var(--space-2));
+}
+
 [data-layout='portrait'].is-page #ui {
   top: var(--vv-top, 0px);
   height: var(--vv-height, 100dvh);
@@ -76,7 +90,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-layout='portrait'] :is(#scene, #stage-overlay) {
+  [data-layout='portrait'].is-typing #ui {
     transition: none;
   }
   [data-layout='portrait'].is-page #ui .card {

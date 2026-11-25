@@ -1,11 +1,12 @@
 import { isShiny } from '@/config/levels';
 import { BACKDROP_GROUND_Y, BACKDROP_HEIGHT } from '@/config/render';
-import { UI_SPRITE_SCALE } from '@/config/ui';
+import { RESULTS_RIGHT_GROUP_FACING, UI_SPRITE_SCALE } from '@/config/ui';
 import { biomeFor } from '@/core/journey';
+import { lineupSides } from '@/core/lineup';
 import type { BackdropImage, Backdrops, Portraits } from '@/core/portrait';
 import { h } from '../dom';
 import type { Component } from './component';
-import { portrait } from './portrait';
+import { portrait, type PortraitOptions } from './portrait';
 import type { TeamRound } from './teamCard';
 
 const SCALE = UI_SPRITE_SCALE.lineup;
@@ -35,10 +36,45 @@ function showBackdrop(frame: HTMLElement, image: BackdropImage) {
 }
 
 /**
- * The party as it ends the journey, standing in the biome reached: the
- * traveller in front (on the right, facing the way they walked) and the
- * animals that joined behind, first joined nearest, all in a framed snapshot
- * of the scenery. The biome's colours show until the painted scenery is ready.
+ * Scales the party down (never up) to the frame's width, so the whole team
+ * always shows; from its feet, so everyone stays on the walk line.
+ */
+function fitToWidth(frame: HTMLElement, row: HTMLElement): () => void {
+  if (typeof ResizeObserver === 'undefined') return () => {};
+  const fit = () => {
+    const natural = row.offsetWidth;
+    const scale = natural > 0 ? Math.min(1, frame.clientWidth / natural) : 1;
+    row.style.transform = scale < 1 ? `scale(${scale})` : '';
+  };
+  const observer = new ResizeObserver(fit);
+  observer.observe(frame);
+  observer.observe(row); // a sprite replacing an emoji changes its width
+  return () => observer.disconnect();
+}
+
+/** One side of the traveller: its animals left to right, each in a slot that can face either way. */
+function side(rounds: readonly TeamRound[], facing: 'left' | 'right', sprite: PortraitOptions) {
+  return h(
+    'div',
+    { class: `party__side party__side--face-${facing}` },
+    ...rounds
+      .filter((r) => r.animal !== null)
+      .map((r) =>
+        h(
+          'span',
+          { class: 'party__slot' },
+          portrait(r.animal, isShiny(r.result.match.level), sprite),
+        ),
+      ),
+  );
+}
+
+/**
+ * The party as it ends the journey, standing in the biome reached, all in a
+ * framed snapshot of the scenery: the traveller in the middle, the later
+ * prompts' animals on the left facing them, the earlier ones on the right
+ * (core/lineup.ts; facing RESULTS_RIGHT_GROUP_FACING). The whole team always
+ * fits the frame's width. The biome's colours show until the scenery is ready.
  */
 export function partyLineup(
   rounds: readonly TeamRound[],
@@ -46,16 +82,18 @@ export function partyLineup(
 ): Component {
   const members = rounds.filter((r) => r.animal !== null);
   const sprite = { scale: SCALE, portraits: opts.portraits, walking: true };
+  const { left, right } = lineupSides(rounds);
   const row = h(
     'div',
     { class: 'party__members' },
-    ...[...members].reverse().map((r) => portrait(r.animal, isShiny(r.result.match.level), sprite)),
-    portrait(null, false, sprite),
+    side(left, 'right', sprite),
+    h('span', { class: 'party__slot party__traveller' }, portrait(null, false, sprite)),
+    side(right, RESULTS_RIGHT_GROUP_FACING, sprite),
   );
   // Each one bobs a little out of step with the next, like the scene's party.
-  [...row.children].forEach((child, i) =>
-    (child as HTMLElement).style.setProperty('--i', String(i)),
-  );
+  row
+    .querySelectorAll<HTMLElement>('.portrait')
+    .forEach((child, i) => child.style.setProperty('--i', String(i)));
 
   const el = h(
     'div',
@@ -81,5 +119,5 @@ export function partyLineup(
       if (image) showBackdrop(el, image);
     });
   }
-  return { el, destroy: () => {} };
+  return { el, destroy: fitToWidth(el, row) };
 }

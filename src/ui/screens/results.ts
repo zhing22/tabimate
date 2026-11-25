@@ -93,7 +93,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   const shown = card({
     className: 'card--journal results',
     title: heading,
-    close: () => actions.close(),
+    back: () => actions.close(),
     footer: [shareIt.el, saveButton, nextButton],
     body: [
       party.el,

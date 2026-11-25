@@ -77,16 +77,19 @@
   border-radius: var(--radius-2);
 }
 
-/* The picture, with room for a first find's "New" ribbon at its corner. */
+/* The picture, with room inside it for a first find's "New" ribbon at its
+   top-right corner: the body scrolls, and a scroller clips anything outside
+   it, so the ribbon must never stick out past the picture's box. */
 .reveal__picture {
   position: relative;
   justify-self: center;
+  padding: calc(var(--text-sm) * 1.2) 3.25rem 0;
 }
 
 .reveal__ribbon {
   position: absolute;
-  top: calc(-1 * var(--space-2));
-  left: calc(100% - var(--space-5));
+  top: 4px;
+  right: 4px;
   padding: 0 var(--space-2);
   font-size: var(--text-sm);
   font-weight: 800;
