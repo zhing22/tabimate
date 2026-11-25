@@ -1,13 +1,13 @@
 import { ROUND_TIME_MS } from '@/config/game';
 import { themeFor } from '@/config/themes';
-import { msUntilNextReset } from '@/core/date';
 import type { RoundResult } from '@/core/types';
 import type { App, AppDeps } from './appTypes';
 import { createCollectionUi } from './collectionUi';
-import { resultsProps, type AnimalOf, type FinishedRun } from './resultsProps';
+import type { AnimalOf } from './resultsProps';
+import { createResultsFlow } from './resultsFlow';
+import { createScreenLoader } from './screenLoader';
 import { showRevealCard } from './revealFlow';
 import { roundSlot } from './roundSlot';
-import { resultsScreen } from './screens/results';
 import { DID_YOU_MEAN, NOT_FOUND } from './screens/roundView';
 import { startScreen } from './screens/start';
 import { startBonusFlow } from './bonusFlow';
@@ -24,11 +24,15 @@ export function createApp(deps: AppDeps): App {
   const now = () => clock.now().getTime();
   const animalOf: AnimalOf = (result) =>
     result.match.animalId === null ? null : (animals.get(result.match.animalId) ?? null);
+  // One loader for the screens that load on first use: the last asked for shows.
+  const openScreen = createScreenLoader();
   const collection = createCollectionUi({
     ...deps,
+    openScreen,
     portraits: deps.journalPortraits ?? deps.portraits,
     delay: deps.delay,
   });
+  const results = createResultsFlow({ app: deps, collection, animalOf, openScreen });
   // Moving on only counts once the result is visible, so an Enter pressed twice
   // in a hurry can't skip past a reveal during its drum-roll.
   let resultShown = false;
@@ -40,7 +44,12 @@ export function createApp(deps: AppDeps): App {
   const round = roundSlot(
     host,
     { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
-    { submit: (text) => controller.submit(text), next, draft: (text) => controller.setDraft(text) },
+    {
+      submit: (text) => controller.submit(text),
+      next,
+      draft: (text) => controller.setDraft(text),
+      begin: () => controller.beginRound(),
+    },
   );
   const revealDeps = {
     host,
@@ -71,30 +80,6 @@ export function createApp(deps: AppDeps): App {
     });
   }
 
-  function renderResults(run: FinishedRun) {
-    // Fixed when the screen opens: asking "time to the next reset" every second
-    // would jump back to 24 h at noon and never reach zero.
-    const nextPuzzleAt = now() + msUntilNextReset(clock.now());
-    const props = resultsProps(puzzle, animalOf, animals, run, () => nextPuzzleAt - now());
-    host.show(
-      resultsScreen,
-      {
-        ...props,
-        ...(deps.delay ? { delay: deps.delay } : {}),
-        ...(deps.portraits ? { portraits: deps.portraits } : {}),
-        ...(deps.backdrops ? { backdrops: deps.backdrops } : {}),
-        ...(deps.dayStats ? { dayStats: deps.dayStats(puzzle.date) } : {}),
-        install: deps.install,
-      },
-      {
-        next: deps.reload,
-        share: () => deps.share(run),
-        saveImage: deps.saveImage && (() => deps.saveImage?.(run)),
-        ...collection.links(() => renderResults(run)),
-      },
-    );
-  }
-
   function showStart() {
     const status = deps.getStreakStatus();
     host.show(
@@ -107,6 +92,7 @@ export function createApp(deps: AppDeps): App {
         freezeReady: deps.getStats().freezes > 0,
         theme: themeFor(puzzle.date),
         install: deps.install,
+        sound: deps.sound,
       },
       { play: () => controller.start(), ...collection.links(showStart) },
     );
@@ -117,6 +103,7 @@ export function createApp(deps: AppDeps): App {
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
       round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
     ),
+    bus.on('roundTimerStarted', ({ endsAt }) => round.timerStarted(endsAt)),
     // Spoken through the host's live region, which re-reads a repeated message.
     bus.on('answerRejected', () => {
       round.reject();
@@ -138,7 +125,7 @@ export function createApp(deps: AppDeps): App {
   return {
     showStart,
     showResults(run) {
-      renderResults(run);
+      results.show(run);
       host.announce(`Journey complete: ${run.score} points.`);
     },
     destroy() {

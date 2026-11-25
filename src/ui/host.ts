@@ -14,6 +14,8 @@ export interface ScreenHost {
   /** Shows a layer above the screen without unmounting it (keeps input focus). */
   showOverlay<P, A>(screen: Screen<P, A>, props: P, actions: A): void;
   clearOverlay(): void;
+  /** Whether an overlay (a reveal, say) is up. */
+  readonly hasOverlay: boolean;
   /** A layer for toasts: above screens and overlays, outliving both, read politely. */
   readonly toasts: HTMLElement;
   /** Says something to screen readers, politely. */
@@ -59,6 +61,9 @@ export function createScreenHost(root: HTMLElement): ScreenHost {
       unmountOverlay = screen(overlayLayer, props, actions);
     },
     clearOverlay,
+    get hasOverlay() {
+      return unmountOverlay !== null;
+    },
     toasts,
     announce(text) {
       // Clearing first makes a repeated message (two misses in a row) be read again.

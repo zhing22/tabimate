@@ -250,3 +250,18 @@ describe('canOverwrite: the same run, carried further', () => {
     expect(canOverwrite(playing1, { ...playing1, roundEndsAt: 9999 })).toBe(false);
   });
 });
+
+describe('gameReducer: beginTimer', () => {
+  const playing = gameReducer(idle, { type: 'start', roundEndsAt: 10_000 });
+
+  it('brings the deadline forward when the player is ready', () => {
+    expect(gameReducer(playing, { type: 'beginTimer', roundEndsAt: 8_000 }).roundEndsAt).toBe(
+      8_000,
+    );
+  });
+
+  it('never pushes a deadline back, and needs a round in play', () => {
+    expect(gameReducer(playing, { type: 'beginTimer', roundEndsAt: 12_000 })).toBe(playing);
+    expect(gameReducer(idle, { type: 'beginTimer', roundEndsAt: 1 })).toBe(idle);
+  });
+});

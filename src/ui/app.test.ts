@@ -1,6 +1,11 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { INSTANT_REVEAL, ROUND_TIME_MS, type RevealTiming } from '@/config/game';
+import {
+  INSTANT_REVEAL,
+  ROUND_START_GRACE_MS,
+  ROUND_TIME_MS,
+  type RevealTiming,
+} from '@/config/game';
 import { createBus, type GameEvents } from '@/core/events';
 import { createGameController } from '@/core/gameController';
 import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
@@ -10,7 +15,8 @@ import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
 import { createApp, type FinishedRun } from './app';
 import type { ShareOutcome } from '@/core/share';
-import { RESULTS_CLASS, SAID_MS } from './screens/results';
+import { PAGE_CLASS, TYPING_CLASS } from './layout/shell';
+import { SAID_MS } from './screens/results';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
 
@@ -20,8 +26,13 @@ const puzzle: Puzzle = {
   prompts: ['r1', 'r2', 'r3'].map((id, i) => ({ ...PROMPT, id, text: `Prompt ${i + 1}` })),
 };
 
-function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
+function setup(
+  revealTiming: RevealTiming = INSTANT_REVEAL,
+  layout: 'landscape' | 'portrait' = 'landscape',
+) {
   document.body.innerHTML = '<main id="ui"></main>';
+  // Most tests play with a keyboard beside the scene (landscape: the box keeps focus).
+  document.documentElement.dataset['layout'] = layout;
   const root = document.querySelector<HTMLElement>('#ui')!;
   const time = createFakeTime();
   // UI time follows the game clock, so countdown delays fall due at the right moments.
@@ -66,6 +77,9 @@ function setup(revealTiming: RevealTiming = INSTANT_REVEAL) {
   const flush = () => Promise.resolve(); // let the live region's microtask run
   return { root, time, ui, controller, app, reload, share, $, input, live, flush };
 }
+
+/** The results (and their summary) load on first use: wait for the import. */
+const loaded = () => vi.dynamicImportSettled();
 
 /** Answers, then presses Enter again to move on from the reveal. */
 function answer(t: ReturnType<typeof setup>, text: string) {
@@ -117,6 +131,7 @@ describe('app: playing with the keyboard', () => {
 
     answer(t, 'snow leopard');
     answer(t, 'tiger');
+    await loaded(); // the results load when the run ends
     expect(t.$('#results-title')?.textContent).toBe('Journey complete');
     expect(document.activeElement).toBe(t.$('#results-title'));
     expect(t.$('.results__number')?.textContent).toBe('160');
@@ -188,7 +203,7 @@ describe('app: playing with the keyboard', () => {
     }
   });
 
-  it('offers "See results" after the last prompt', () => {
+  it('offers "See results" after the last prompt', async () => {
     const t = setup();
     t.controller.start();
     answer(t, 'Platypus');
@@ -200,6 +215,7 @@ describe('app: playing with the keyboard', () => {
     // Tapping it must not steal focus from the answer box (the phone keyboard).
     expect(button.dispatchEvent(new MouseEvent('mousedown', { cancelable: true }))).toBe(false);
     button.click();
+    await loaded(); // the results load when the run ends
     expect(t.$('#results-title')).not.toBeNull();
   });
 
@@ -350,21 +366,23 @@ describe('app: restoring a saved run', () => {
     expect(t.$('#round-prompt')?.textContent).toBe('Prompt 2');
   });
 
-  it('opens a finished day on the results', () => {
+  it('opens a finished day on the results', async () => {
     const saved = savedRun((t) => {
       for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
     });
     const t = setup();
     t.controller.restore(saved);
+    await loaded(); // the results load when the run ends
     expect(t.$('#results-title')).not.toBeNull();
   });
 });
 
 describe('app: next puzzle', () => {
-  it('counts down to the next noon and then offers the new puzzle', () => {
+  it('counts down to the next noon and then offers the new puzzle', async () => {
     const t = setup();
     t.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    await loaded(); // the results load when the run ends
     const button = [...t.root.querySelectorAll('button')].find((b) =>
       b.textContent?.includes("today's puzzle"),
     )!;
@@ -387,6 +405,7 @@ describe('app: sharing', () => {
     const t = setup();
     t.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    await loaded(); // the results load when the run ends
     const button = [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
     button.click();
     await t.flush();
@@ -407,6 +426,7 @@ describe('app: sharing', () => {
     t.share.mockResolvedValueOnce('cancelled');
     t.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    await loaded(); // the results load when the run ends
     const button = [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
     button.click();
     await t.flush();
@@ -415,12 +435,13 @@ describe('app: sharing', () => {
     expect(t.$('[role="status"]')?.textContent).toBe('');
   });
 
-  it('opens straight on the results, ready to share, when today is already done', () => {
+  it('opens straight on the results, ready to share, when today is already done', async () => {
     const first = setup();
     first.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(first, text);
     const t = setup();
     t.controller.restore(first.controller.getState());
+    await loaded(); // the results load when the run ends
     expect(t.$('#results-title')).not.toBeNull();
     expect([...t.root.querySelectorAll('button')].some((b) => b.textContent === 'Share')).toBe(
       true,
@@ -429,9 +450,10 @@ describe('app: sharing', () => {
 });
 
 describe('app: the Share button', () => {
-  const finish = (t: ReturnType<typeof setup>) => {
+  const finish = async (t: ReturnType<typeof setup>) => {
     t.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
+    await loaded(); // the results load when the run ends
     return [...t.root.querySelectorAll('button')].find((b) => b.textContent === 'Share')!;
   };
   const settle = async () => {
@@ -442,7 +464,7 @@ describe('app: the Share button', () => {
     const t = setup();
     let done: (outcome: 'shared') => void = () => {};
     t.share.mockImplementationOnce(() => new Promise((resolve) => (done = resolve)));
-    const button = finish(t);
+    const button = await finish(t);
     button.click();
     button.click(); // the sheet is still open
     expect(t.share).toHaveBeenCalledTimes(1);
@@ -455,7 +477,7 @@ describe('app: the Share button', () => {
 
   it(`reads "Share" again ${SAID_MS} ms after saying how it went`, async () => {
     const t = setup();
-    const button = finish(t);
+    const button = await finish(t);
     button.click();
     await settle();
     expect(button.textContent).toBe('Copied!');
@@ -468,7 +490,7 @@ describe('app: the Share button', () => {
 
   it('clears and sets the status again, so a second "Copied!" is read out too', async () => {
     const t = setup();
-    const button = finish(t);
+    const button = await finish(t);
     const status = t.$('[role="status"]')!;
     const seen: string[] = [];
     new MutationObserver(() => seen.push(status.textContent ?? '')).observe(status, {
@@ -486,14 +508,84 @@ describe('app: the Share button', () => {
 });
 
 describe('app: results layout', () => {
-  it('marks the page while the results show, so phones get the full-window scene', () => {
+  it('shows the results as a full-screen page, unmarked once gone', async () => {
     const t = setup();
     t.app.showStart();
-    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(false);
+    expect(document.documentElement.classList.contains(PAGE_CLASS)).toBe(false);
     t.controller.start();
     for (const text of ['Platypus', 'tiger', 'killer whale']) answer(t, text);
-    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(true);
+    await loaded(); // the results load when the run ends
+    expect(document.documentElement.classList.contains(PAGE_CLASS)).toBe(true);
     t.app.destroy();
-    expect(document.documentElement.classList.contains(RESULTS_CLASS)).toBe(false);
+    expect(document.documentElement.classList.contains(PAGE_CLASS)).toBe(false);
+  });
+});
+
+describe('app: a phone upright (portrait)', () => {
+  const typing = () => document.documentElement.classList.contains(TYPING_CLASS);
+
+  it('waits for a tap: no focus, "Tap to answer", the ring full until the box is focused', () => {
+    const t = setup(INSTANT_REVEAL, 'portrait');
+    t.controller.start();
+    expect(document.activeElement).not.toBe(t.input());
+    expect(t.input().placeholder).toBe('Tap to answer');
+    t.time.advance(2_000);
+    t.ui.set(0);
+    expect(t.$('.timer-ring__label')?.textContent).toBe(String(ROUND_TIME_MS / 1000));
+    t.input().focus();
+    expect(typing()).toBe(true);
+    t.time.advance(5_000);
+    t.ui.set(0);
+    expect(t.$('.timer-ring__label')?.textContent).toBe(String(ROUND_TIME_MS / 1000 - 5));
+  });
+
+  it('starts the timer by itself once the grace runs out', () => {
+    const t = setup(INSTANT_REVEAL, 'portrait');
+    t.controller.start();
+    t.time.advance(ROUND_START_GRACE_MS + 1_000);
+    t.ui.set(0);
+    expect(t.$('.timer-ring__label')?.textContent).toBe(String(ROUND_TIME_MS / 1000 - 1));
+  });
+
+  it('keeps the keyboard for a wrong guess, closes it for a scored one, and never refocuses', () => {
+    const t = setup(INSTANT_REVEAL, 'portrait');
+    t.controller.start();
+    t.input().focus();
+    type(t.input(), 'zzzz');
+    pressEnter(t.input());
+    expect(document.activeElement).toBe(t.input());
+    type(t.input(), 'tiger');
+    pressEnter(t.input());
+    expect(document.activeElement).not.toBe(t.input()); // blurred: the keyboard closes
+    expect(typing()).toBe(false);
+    t.$<HTMLButtonElement>('.reveal__next')!.click();
+    expect(t.$('.round__prompt')?.textContent).toBe('Prompt 2');
+    expect(document.activeElement).not.toBe(t.input());
+  });
+});
+
+describe('app: closing the results pop-up', () => {
+  it('shows the summary under the scene, which opens the results again', async () => {
+    const t = setup(INSTANT_REVEAL, 'portrait');
+    t.controller.start();
+    for (const text of ['Platypus', 'tiger', 'killer whale']) {
+      t.input().focus();
+      type(t.input(), text);
+      pressEnter(t.input());
+      t.$<HTMLButtonElement>('.reveal__next')!.click();
+    }
+    await loaded(); // the results load when the run ends
+    const score = t.$('.results .results__number')?.textContent;
+    expect(score).toMatch(/^\d+$/);
+    t.$<HTMLButtonElement>('.card__close')!.click();
+    await loaded();
+    expect(t.$('.results')).toBeNull();
+    expect(t.$('.results-summary .results__number')?.textContent).toBe(score);
+    expect(document.documentElement.classList.contains(PAGE_CLASS)).toBe(false);
+    [...t.root.querySelectorAll<HTMLButtonElement>('button')]
+      .find((b) => b.textContent === 'See results')!
+      .click();
+    await loaded();
+    expect(t.$('.results')).not.toBeNull();
   });
 });

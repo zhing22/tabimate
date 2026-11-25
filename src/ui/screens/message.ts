@@ -1,3 +1,4 @@
+import { card } from '../components/card';
 import { countdown } from '../components/countdown';
 import { focus, h } from '../dom';
 import type { Delay } from '../frames';
@@ -21,16 +22,19 @@ export const noPuzzleScreen: Screen<NoPuzzleProps, ReloadActions> = (root, props
     onDone: () => actions.reload(),
     ...(props.delay ? { delay: props.delay } : {}),
   });
-  const heading = h('h1', { class: 'title title--sm', tabindex: -1 }, 'No journey today');
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal', role: 'status' },
-      heading,
-      h('p', {}, "Today's puzzle isn't ready yet. The next one starts in ", timer.el, '.'),
-      button,
-    ),
+  const heading = h(
+    'h1',
+    { id: 'message-title', class: 'title title--sm', tabindex: -1 },
+    'No journey today',
   );
+  const shown = card({
+    className: 'card--journal',
+    title: heading,
+    body: [h('p', {}, "Today's puzzle isn't ready yet. The next one starts in ", timer.el, '.')],
+    footer: [button],
+  });
+  shown.el.setAttribute('role', 'status');
+  root.append(shown.el);
   focus(heading);
   return () => timer.destroy();
 };
@@ -43,17 +47,22 @@ export interface ErrorProps {
 export const errorScreen: Screen<ErrorProps, ReloadActions> = (root, props, actions) => {
   const button = h('button', { class: 'button button--primary', type: 'button' }, 'Try again');
   button.addEventListener('click', () => actions.reload());
-  const heading = h('h1', { class: 'title title--sm', tabindex: -1 }, 'Lost the trail');
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal', role: 'alert' },
-      heading,
+  const heading = h(
+    'h1',
+    { id: 'message-title', class: 'title title--sm', tabindex: -1 },
+    'Lost the trail',
+  );
+  const shown = card({
+    className: 'card--journal',
+    title: heading,
+    body: [
       h('p', {}, 'Something went wrong while loading the journey.'),
       h('p', { class: 'meta error__detail' }, props.message),
-      button,
-    ),
-  );
+    ],
+    footer: [button],
+  });
+  shown.el.setAttribute('role', 'alert');
+  root.append(shown.el);
   focus(button);
   return () => {};
 };

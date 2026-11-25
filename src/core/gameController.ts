@@ -1,4 +1,4 @@
-import { MATCHER_CONFIG, ROUND_TIME_MS } from '@/config/game';
+import { MATCHER_CONFIG, ROUND_START_GRACE_MS, ROUND_TIME_MS } from '@/config/game';
 import { createBonusRunner } from './bonusRunner';
 import type { GameController, GameControllerDeps } from './controllerTypes';
 import type { GameBus } from './events';
@@ -18,6 +18,9 @@ export function createGameController(deps: GameControllerDeps): GameController {
   const { puzzle, clock, scheduler } = deps;
   const mode = deps.mode ?? 'daily';
   const roundTimeMs = deps.timing?.roundTimeMs ?? ROUND_TIME_MS;
+  const graceMs = deps.timing?.startGraceMs ?? ROUND_START_GRACE_MS;
+  // A new round's deadline: its time plus the grace it waits for the player.
+  const nextDeadline = () => now() + graceMs + roundTimeMs;
 
   let state = createRunState(puzzle, mode);
   let disposed = false;
@@ -56,7 +59,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
   function finishReveal() {
     const index = state.results.length - 1;
     const before = baseTotal(state.results.slice(0, -1));
-    if (!dispatch({ type: 'revealDone', nextRoundEndsAt: now() + roundTimeMs })) return;
+    if (!dispatch({ type: 'revealDone', nextRoundEndsAt: nextDeadline() })) return;
     emit('revealFinished', { index });
     if (disposed) return; // a listener tore the game down: start nothing more
     // Biomes change after the reveal, so the level is seen before the scene moves on.
@@ -80,7 +83,7 @@ export function createGameController(deps: GameControllerDeps): GameController {
 
   return {
     start() {
-      if (!dispatch({ type: 'start', roundEndsAt: now() + roundTimeMs })) return;
+      if (!dispatch({ type: 'start', roundEndsAt: nextDeadline() })) return;
       emit('runStarted', { mode, puzzleDate: puzzle.date, promptCount: state.promptCount });
       rounds.run();
     },
@@ -90,6 +93,10 @@ export function createGameController(deps: GameControllerDeps): GameController {
     },
 
     setDraft: (text) => rounds.setDraft(text),
+
+    beginRound() {
+      if (!disposed) rounds.begin();
+    },
 
     next() {
       // dispatch ignores an action that doesn't fit the status, and after dispose.

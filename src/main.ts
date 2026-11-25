@@ -18,11 +18,13 @@ import { systemClock } from '@/services/systemClock';
 import { createApp } from '@/ui/app';
 import { startLoading } from '@/ui/loadingFlow';
 import { createScreenHost } from '@/ui/host';
+import { startLayout } from '@/ui/layout/shell';
+import { watchMuteKey } from '@/ui/layout/muteKey';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { startDebug } from '@/wiring/startDebug';
-import { journalPortraits, startScene } from '@/wiring/startScene';
+import { journalPortraits, startScene, startStillScene } from '@/wiring/startScene';
 import { startShare } from '@/wiring/startShare';
 import { startStats } from '@/wiring/startStats';
 
@@ -30,6 +32,9 @@ const root = document.querySelector<HTMLElement>('#ui');
 if (!root) throw new Error('index.html is missing #ui');
 
 watchViewport();
+startLayout();
+// The Town, painted at once: the loading screen shows over the scene, not a blank sky.
+const still = startStillScene();
 const host = createScreenHost(root);
 const clock = systemClock;
 // One loader for all of public/, so animals.json is fetched once for puzzles and sprites.
@@ -81,7 +86,11 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
   // The scene loads sprites for today's animals only, while the loading screen is up.
   // The results screen shows its sprites; without a scene it uses emoji.
   const scene = startScene(bus, puzzle, puzzleAnimals(puzzle, animals), loader);
-  startAudio(bus, storage, clock);
+  // The live scene covers the still; once it has its sprites the still goes.
+  // Without a scene (no WebGL) the still stays as the backdrop.
+  void scene?.ready.finally(() => still?.dispose());
+  const sound = startAudio(bus, storage, clock);
+  if (sound) watchMuteKey(sound, (text) => host.announce(text));
   startHaptics(bus, storage);
 
   // The link is this site, whatever host serves it (dev, preview or the real domain).
@@ -111,6 +120,7 @@ function play(puzzle: Puzzle, animals: ReadonlyMap<AnimalId, Animal>): Game {
     share: sharing.share,
     saveImage: sharing.saveImage,
     dayStats: (dateKey) => playerStats.dayStats(dateKey),
+    sound,
   });
   // One listener, in this order: record the run (streak, journal, achievements),
   // show results with its streak, then announce what it added to the collection.

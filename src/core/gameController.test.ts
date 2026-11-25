@@ -13,6 +13,9 @@ const puzzle: Puzzle = {
   prompts: ['r1', 'r2', 'r3'].map((id) => ({ ...PROMPT, id, text: `Prompt ${id}` })),
 };
 
+// Rounds time from their start, as before the start grace (tested on its own below).
+const NO_GRACE = { roundTimeMs: ROUND_TIME_MS, startGraceMs: 0 };
+
 type Logged = { [K in keyof GameEvents]: [K, GameEvents[K]] }[keyof GameEvents];
 
 function setup() {
@@ -26,6 +29,7 @@ function setup() {
     answerMatched: 0,
     answerRejected: 0,
     answerSuggested: 0,
+    roundTimerStarted: 0,
     revealFinished: 0,
     biomeEntered: 0,
     bonusIntro: 0,
@@ -43,6 +47,7 @@ function setup() {
     bus,
     clock: time.clock,
     scheduler: time.scheduler,
+    timing: NO_GRACE,
   });
   // Events without stateChanged, which fires after every transition.
   const story = () =>
@@ -344,6 +349,7 @@ describe('gameController: misbehaving listeners', () => {
       bus,
       clock: time.clock,
       scheduler: time.scheduler,
+      timing: NO_GRACE,
     });
     const seen: string[] = [];
     for (const name of ['roundStarted', 'revealFinished', 'biomeEntered', 'runFinished'] as const) {
@@ -482,5 +488,61 @@ describe('gameController: retrying a guess', () => {
     game.next();
     time.advance(ROUND_TIME_MS);
     expect(game.getState().results[1]?.match).toMatchObject({ level: 0, input: '' });
+  });
+});
+
+describe('gameController: the start grace', () => {
+  const GRACE = 3_000;
+  function graced() {
+    const time = createFakeTime();
+    const bus = createBus<GameEvents>();
+    const game = createGameController({
+      puzzle,
+      animals: ANIMALS,
+      bus,
+      clock: time.clock,
+      scheduler: time.scheduler,
+      timing: { roundTimeMs: ROUND_TIME_MS, startGraceMs: GRACE },
+    });
+    const started: number[] = [];
+    bus.on('roundTimerStarted', ({ endsAt }) => started.push(endsAt));
+    return { time, game, started, t0: time.clock.now().getTime() };
+  }
+
+  it('gives each round its time plus the grace, until the player is ready', () => {
+    const { game, t0 } = graced();
+    game.start();
+    expect(game.getState().roundEndsAt).toBe(t0 + GRACE + ROUND_TIME_MS);
+  });
+
+  it('starts the countdown on beginRound, once, and times out from then', () => {
+    const { time, game, started, t0 } = graced();
+    game.start();
+    time.advance(1_000);
+    game.beginRound();
+    game.beginRound(); // already running: nothing more
+    expect(started).toEqual([t0 + 1_000 + ROUND_TIME_MS]);
+    expect(game.getState().roundEndsAt).toBe(t0 + 1_000 + ROUND_TIME_MS);
+    time.advance(ROUND_TIME_MS - 1);
+    expect(game.getState().status).toBe('playing');
+    time.advance(1);
+    expect(game.getState().status).toBe('revealing');
+  });
+
+  it('starts by itself when the grace runs out, keeping what was typed', () => {
+    const { time, game } = graced();
+    game.start();
+    game.setDraft('tiger');
+    time.advance(GRACE + ROUND_TIME_MS);
+    expect(game.getState().results[0]?.match.animalId).toBe('tiger');
+  });
+
+  it('keeps the draft when the countdown starts early', () => {
+    const { time, game } = graced();
+    game.start();
+    game.setDraft('tiger');
+    game.beginRound();
+    time.advance(ROUND_TIME_MS);
+    expect(game.getState().results[0]?.match.animalId).toBe('tiger');
   });
 });

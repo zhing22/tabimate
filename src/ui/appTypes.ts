@@ -9,6 +9,7 @@ import type { ShareOutcome } from '@/core/share';
 import type { DayStats } from '@/core/stats';
 import type { Stats, StreakStatus } from '@/core/streak';
 import type { Animal, AnimalId, DateKey, Puzzle } from '@/core/types';
+import type { SoundSetting } from './components/settingsMenu';
 import type { Delay, FrameLoop } from './frames';
 import type { ScreenHost } from './host';
 import type { FinishedRun } from './resultsProps';
@@ -45,6 +46,8 @@ export interface AppDeps {
   readonly revealTiming?: RevealTiming;
   readonly frames?: FrameLoop;
   readonly delay?: Delay;
+  /** The sound setting, for the settings menu (absent when audio could not start). */
+  readonly sound?: SoundSetting | undefined;
 }
 
 export interface App {

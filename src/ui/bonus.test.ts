@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // v2 Step 11: the Sunday bonus quiz, played through the app.
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { INSTANT_REVEAL } from '@/config/game';
 import { emptyCollection } from '@/core/collection';
 import { createBus, type GameEvents } from '@/core/events';
@@ -62,7 +62,7 @@ function setup() {
 }
 
 describe('the bonus quiz in the app', () => {
-  it('follows the last prompt, asks three questions, then shows the multiplied total', () => {
+  it('follows the last prompt, asks three questions, then shows the multiplied total', async () => {
     const t = setup();
     t.app.showStart();
     t.click('Play');
@@ -83,6 +83,7 @@ describe('the bonus quiz in the app', () => {
     t.click('Next question');
     t.click('False'); // right
     t.click('See results');
+    await vi.dynamicImportSettled(); // the results load when the run ends
     expect(t.$('.results__number')?.textContent).toBe(String(Math.round(85 * 1.2)));
     expect(t.$('.results__bonus')?.textContent).toBe('Base 85 ×1.2 = 102');
   });

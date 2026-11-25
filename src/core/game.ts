@@ -13,6 +13,8 @@ export type GameAction =
     }
   | { readonly type: 'timeout'; readonly promptId: PromptId; readonly timeMs: number }
   | { readonly type: 'revealDone'; readonly nextRoundEndsAt: number }
+  /** The player focused the answer box: the countdown starts now, if that is sooner. */
+  | { readonly type: 'beginTimer'; readonly roundEndsAt: number }
   | { readonly type: 'restore'; readonly state: RunState }
   | BonusAction;
 
@@ -74,6 +76,10 @@ export function gameReducer(state: RunState, action: GameAction): RunState {
       }
       // After the last prompt: the bonus quiz if the day has one, else the end.
       return { ...state, status: state.bonusCount > 0 ? 'bonus' : 'finished', roundEndsAt: null };
+    case 'beginTimer':
+      if (state.status !== 'playing' || state.roundEndsAt === null) return state;
+      if (action.roundEndsAt >= state.roundEndsAt) return state;
+      return { ...state, roundEndsAt: action.roundEndsAt };
     case 'restore':
       return state.status === 'idle' ? action.state : state;
     case 'bonusNext':

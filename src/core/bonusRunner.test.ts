@@ -1,3 +1,4 @@
+import { ROUND_TIME_MS } from '@/config/game';
 import { describe, expect, it } from 'vitest';
 import { BONUS } from '@/config/bonus';
 import { createBus, type GameEvents } from './events';
@@ -30,7 +31,14 @@ function setup() {
   );
   let finished: GameEvents['runFinished'] | null = null;
   bus.on('runFinished', (totals) => (finished = totals));
-  const deps = { puzzle, animals: ANIMALS, bus, clock: time.clock, scheduler: time.scheduler };
+  const deps = {
+    puzzle,
+    animals: ANIMALS,
+    bus,
+    clock: time.clock,
+    scheduler: time.scheduler,
+    timing: { roundTimeMs: ROUND_TIME_MS, startGraceMs: 0 },
+  };
   const game = createGameController(deps);
   /** Plays the prompt (Tiger, EN: 85 points) up to the quiz's intro. */
   const toQuiz = () => {

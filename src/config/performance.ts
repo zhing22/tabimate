@@ -10,5 +10,5 @@
  */
 export const BUNDLE_BUDGET = {
   targetKb: 60,
-  ceilingKb: 117,
+  ceilingKb: 116,
 } as const;

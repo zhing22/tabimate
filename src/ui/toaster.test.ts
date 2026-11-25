@@ -84,3 +84,23 @@ describe('toaster', () => {
     expect(t.layer.textContent).toBe('');
   });
 });
+
+describe('toaster while the scene is hidden', () => {
+  it('keeps toasts queued while blocked, then shows them in turn', () => {
+    const layer = document.createElement('div');
+    document.body.replaceChildren(layer);
+    const time = fakeDelay();
+    let blocked = true;
+    const toaster = createToaster(layer, time.delay, () => blocked);
+    toaster.show({ icon: '🔥', title: 'Streak', text: 'Three days.' });
+    toaster.show({ icon: '📖', title: 'Journal', text: '2 new animals added' });
+    expect(layer.textContent).toBe('');
+    time.advance(TOAST.blockedRetryMs * 3);
+    expect(layer.textContent).toBe('');
+    blocked = false;
+    time.advance(TOAST.blockedRetryMs);
+    expect(layer.textContent).toContain('Streak');
+    time.advance(TOAST.showMs);
+    expect(layer.textContent).toContain('Journal');
+  });
+});

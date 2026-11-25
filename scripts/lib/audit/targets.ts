@@ -25,7 +25,11 @@ export const AUDIT_SIZES: readonly AuditSize[] = [
 
 export const sizeName = (s: AuditSize) => `${s.width}x${s.height}`;
 
-/** Every state, in the order one run reaches them. */
+/**
+ * Every state, in the order one run reaches them. prompt-keyboard is the
+ * box focused with the keyboard's height taken from the window (portrait:
+ * the stage collapsed).
+ */
 export const AUDIT_STATES = [
   'loading',
   'start',
@@ -41,6 +45,8 @@ export const AUDIT_STATES = [
   'journal',
   'achievements',
   'history',
+  // Portrait only: the results pop-up closed, the summary under the scene.
+  'results-summary',
 ] as const;
 export type AuditState = (typeof AUDIT_STATES)[number];
 

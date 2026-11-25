@@ -36,6 +36,14 @@ export const MAX_PROMPTS_PER_PUZZLE = 7;
 
 export const ROUND_TIME_MS = 25_000;
 
+/**
+ * A prompt's timer waits for the player: it starts when they first focus the
+ * answer box, or after this long if they haven't (a phone upright shows the
+ * prompt with the keyboard closed and "Tap to answer"). Where the box is
+ * focused at once (landscape, desktop) it starts at once.
+ */
+export const ROUND_START_GRACE_MS = 3_000;
+
 /** With this much of a round left (or less), the timer ring turns urgent. */
 export const TIMER_WARN_MS = 5_000;
 

@@ -2,15 +2,18 @@ import type { InstallOffer } from '@/core/install';
 import type { Backdrops, Portraits } from '@/core/portrait';
 import type { ShareOutcome } from '@/core/share';
 import type { DayStats } from '@/core/stats';
+import { card } from '../components/card';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { countdown } from '../components/countdown';
 import { installHint } from '../components/installHint';
 import { partyLineup } from '../components/partyLineup';
+import { settingsMenu, type SoundSetting } from '../components/settingsMenu';
 import { shareButton } from '../components/shareButton';
 import { teamCard, type TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
 import { browserDelay, type Delay } from '../frames';
 import type { Screen } from '../host';
+import { openPage } from '../layout/page';
 
 export interface ResultsProps {
   readonly rounds: readonly TeamRound[];
@@ -33,9 +36,12 @@ export interface ResultsProps {
   /** Tomorrow's theme name (config/themes.ts), or null on a plain day. Never its prompts. */
   readonly tomorrowTheme: string | null;
   readonly install?: InstallOffer | undefined;
+  readonly sound?: SoundSetting | undefined;
 }
 
 export interface ResultsActions extends CollectionLinks {
+  /** Closes the pop-up (portrait): the scene and a short summary show instead. */
+  close(): void;
   /** The next puzzle is out: load it. */
   next(): void;
   /** Shares (or copies) the run's share text, with the team image where it can. */
@@ -44,11 +50,14 @@ export interface ResultsActions extends CollectionLinks {
   saveImage?: (() => void) | undefined;
 }
 
-/** On <html> while the results show (base.css: no phone split-screen). */
-export const RESULTS_CLASS = 'is-results';
-
 export { SAID_MS } from '../components/shareButton';
 
+/**
+ * The run's results, a full-screen page (portrait: over the stage; landscape:
+ * in the panel). It opens with a compact line-up of the party where the run
+ * ended, then the score, the collection tiles and the team; Share is in the
+ * footer.
+ */
 export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props, actions) => {
   const team = teamCard(props.rounds, props.portraits);
   let open = true;
@@ -83,11 +92,15 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     'Journey complete',
   );
 
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal results', 'aria-labelledby': 'results-title' },
-      heading,
+  const settings = props.sound ? settingsMenu(props.sound) : null;
+  const shown = card({
+    className: 'card--journal results',
+    title: heading,
+    close: () => actions.close(),
+    tools: [settings?.el],
+    footer: [shareIt.el, saveButton, nextButton],
+    body: [
+      party.el,
       h(
         'p',
         { class: 'results__score' },
@@ -95,7 +108,6 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
         ' points',
       ),
       props.bonusLine ? h('p', { class: 'meta results__bonus' }, props.bonusLine) : null,
-      party.el,
       h(
         'div',
         { class: 'results__stats' },
@@ -104,7 +116,6 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
           ? h('p', { class: 'meta' }, `🔥 ${props.streak}-day streak · best ${props.bestStreak}`)
           : null,
       ),
-      h('div', { class: 'results__actions' }, shareIt.el, saveButton),
       collectionLinks(actions),
       installHint(props.install),
       h('h2', { class: 'section-title' }, 'Your team'),
@@ -113,15 +124,15 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
       props.tomorrowTheme
         ? h('p', { class: 'meta tomorrow' }, 'Tomorrow: ', h('strong', {}, props.tomorrowTheme))
         : null,
-      nextButton,
-    ),
-  );
+    ],
+  });
+  root.append(shown.el);
+  const closePage = openPage(shown.el, () => actions.close());
   focus(heading);
-  // Lets the layout show the scene full-window behind this card on phones too.
-  document.documentElement.classList.add(RESULTS_CLASS);
   return () => {
     open = false;
-    document.documentElement.classList.remove(RESULTS_CLASS);
+    closePage();
+    settings?.destroy();
     timer.destroy();
     team.destroy();
     party.destroy();

@@ -294,7 +294,7 @@ describe('revealScreen beats', () => {
     }
   });
 
-  it('shows the extras under the name', () => {
+  it('shows the badge, then the extras, under the name', () => {
     vi.useFakeTimers();
     try {
       const root = document.createElement('div');
@@ -318,8 +318,11 @@ describe('revealScreen beats', () => {
         { revealed: () => {}, next: () => {} },
       );
       const name = root.querySelector('.reveal__name')!;
-      expect(name.nextElementSibling?.className).toBe('reveal__extras');
-      expect(name.nextElementSibling?.textContent).toBe('A big cat.');
+      // The one level badge under the name, then the extras.
+      const badge = name.nextElementSibling!;
+      expect(badge.className).toBe('reveal__badge');
+      expect(badge.nextElementSibling?.className).toBe('reveal__extras');
+      expect(badge.nextElementSibling?.textContent).toBe('A big cat.');
       expect(root.querySelector('.reveal__points')!.textContent).toBe('+85');
     } finally {
       vi.useRealTimers();

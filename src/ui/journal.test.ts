@@ -189,11 +189,12 @@ describe('collection toasts and the reveal tag', () => {
     const input = t.$('#answer') as HTMLInputElement;
     type(input, 'Platypus');
     pressEnter(input);
-    expect(t.$('.reveal-extra--new')).toBeNull();
+    expect(t.$('.reveal__ribbon')).toBeNull();
     pressKey(input, 'Enter');
     type(input, 'Tiger');
     pressEnter(input);
-    expect(t.$('.reveal-extra--new')?.textContent).toBe('New to your journal!');
+    // A "New" ribbon on the sprite; screen readers hear "New to your journal".
+    expect(t.$('.reveal__ribbon')?.textContent).toBe('New to your journal');
   });
 });
 

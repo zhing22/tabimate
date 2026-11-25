@@ -22,3 +22,9 @@
 .error__detail {
   overflow-wrap: anywhere;
 }
+
+/* The start card's content sits in the middle of the sheet, Play below it. */
+.start .card__body {
+  align-content: center;
+  text-align: center;
+}

@@ -1,21 +1,30 @@
-/* Toasts: a note at the top of the screen that never blocks a tap. */
+/*
+ * Toasts: a note over the scene that never blocks a tap. Portrait: the top
+ * of the stage. Landscape: the scene's top-left corner, clear of the panel.
+ */
 .toast-layer {
   position: fixed;
-  top: max(var(--space-3), env(safe-area-inset-top));
+  top: calc(var(--vv-top, 0px) + max(var(--space-3), env(safe-area-inset-top)));
   left: 0;
   right: 0;
   z-index: var(--z-overlay);
   display: grid;
   justify-items: center;
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-3);
   pointer-events: none;
+}
+
+[data-layout='landscape'] .toast-layer {
+  right: var(--panel-w);
+  justify-items: start;
+  padding-left: max(var(--space-3), env(safe-area-inset-left));
 }
 
 .toast {
   display: flex;
   gap: var(--space-3);
   align-items: center;
-  max-width: var(--card-max);
+  max-width: var(--toast-max);
   padding: var(--space-2) var(--space-4);
   background: var(--paper);
   border-radius: var(--radius-2);
@@ -30,7 +39,7 @@
 .toast__open {
   pointer-events: auto;
   flex: none;
-  min-height: 36px;
+  min-height: var(--tap);
   padding: 0 var(--space-3);
   font: inherit;
   font-size: var(--text-sm);
@@ -40,13 +49,6 @@
   border: 0;
   border-radius: var(--radius-2);
   cursor: pointer;
-}
-
-/* On the Journal and Achievements pages, toasts sit at the bottom, clear of
-   the header and its Back button. */
-:root.is-collection .toast-layer {
-  top: auto;
-  bottom: max(var(--space-3), env(safe-area-inset-bottom));
 }
 
 .toast__icon {

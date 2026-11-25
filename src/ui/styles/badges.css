@@ -57,6 +57,11 @@
   font-size: var(--text-xs);
 }
 
+/* "4 of 7" beside the bar: a caption. */
+.badge__count {
+  font-size: var(--text-caption);
+}
+
 .badge__name {
   font-size: var(--text-sm);
 }

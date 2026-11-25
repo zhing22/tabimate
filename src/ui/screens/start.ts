@@ -1,7 +1,9 @@
 import { ANSWER_LEVELS, LEVELS, TOP_LEVEL } from '@/config/levels';
 import type { InstallOffer } from '@/core/install';
+import { card } from '../components/card';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { installHint } from '../components/installHint';
+import { settingsMenu, type SoundSetting } from '../components/settingsMenu';
 import { h, focus } from '../dom';
 import type { Screen } from '../host';
 
@@ -17,6 +19,8 @@ export interface StartProps {
   readonly install?: InstallOffer | undefined;
   /** The day's theme (config/themes.ts), or null on a plain day. */
   readonly theme: { readonly name: string; readonly tagline: string } | null;
+  /** The sound setting, for the settings menu (none without sound). */
+  readonly sound?: SoundSetting | undefined;
 }
 
 /** "Rarer answers score more, from LC (10) up to CR (100).", read from LEVELS. */
@@ -45,11 +49,13 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
   const play = h('button', { class: 'button button--primary', type: 'button' }, 'Play');
   play.addEventListener('click', () => actions.play());
 
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal', 'aria-labelledby': 'start-title' },
-      h('h1', { id: 'start-title', class: 'title' }, 'Tabimate'),
+  const settings = props.sound ? settingsMenu(props.sound) : null;
+  const shown = card({
+    className: 'card--journal start',
+    title: h('h1', { id: 'start-title', class: 'title' }, 'Tabimate'),
+    tools: [settings?.el],
+    footer: [play],
+    body: [
       h('p', { class: 'subtitle' }, 'A daily journey with animal friends'),
       h('p', { class: 'meta' }, `Puzzle #${props.puzzleNumber} · ${props.promptCount} prompts`),
       props.theme
@@ -61,7 +67,6 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
           )
         : null,
       streakLine(props),
-      play,
       collectionLinks(actions),
       installHint(props.install),
       h(
@@ -87,8 +92,9 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
           ),
         ),
       ),
-    ),
-  );
+    ],
+  });
+  root.append(shown.el);
   focus(play);
-  return () => {};
+  return () => settings?.destroy();
 };

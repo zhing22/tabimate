@@ -1,8 +1,10 @@
-// npm run audit:screens [-- --out art/audit/after] [--size 390x844]
+// npm run audit:screens [-- --out art/audit/after] [--size 390x844] [--compare art/audit/before]
 // Plays one fixed day in the dev server at every audit size (Playwright,
 // Chromium) and writes each state's screenshots plus a contact sheet per state:
 // art/audit/{state}.png (sizes side by side), art/audit/{state}/{size}.png, and
 // art/audit/report.json (per shot: smallest text, text under 16 px, small tap targets).
+// --compare puts an earlier audit's sheet above each new one in {out}/compare/.
+import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { chromium } from '@playwright/test';
@@ -10,7 +12,7 @@ import sharp from 'sharp';
 import { createServer } from 'vite';
 import { planAnswers, type AuditPrompt } from './lib/audit/answers';
 import { measurePage, type Measured } from './lib/audit/measure';
-import { writeContactSheet, type ShotFile } from './lib/audit/contactSheet';
+import { writeComparison, writeContactSheet, type ShotFile } from './lib/audit/contactSheet';
 import { auditOneSize, warmUp, type Capture } from './lib/audit/flow';
 import {
   AUDIT,
@@ -111,6 +113,17 @@ async function captureAll(
   return failures;
 }
 
+/** Before over after, for every state both audits have. */
+async function compareWith(beforeDir: string, outDir: string) {
+  await mkdir(join(outDir, 'compare'), { recursive: true });
+  for (const state of AUDIT_STATES) {
+    const before = join(beforeDir, `${state}.png`);
+    const after = join(outDir, `${state}.png`);
+    if (!existsSync(before) || !existsSync(after)) continue;
+    await writeComparison(state, before, after, join(outDir, 'compare', `${state}.png`));
+  }
+}
+
 async function main() {
   const outDir = option('out') ?? AUDIT.outDir;
   const only = option('size');
@@ -119,6 +132,8 @@ async function main() {
   const { captureFor, write } = collector(outDir);
   const failures = await captureAll(sizes, outDir, captureFor);
   await write(sizes.map(sizeName));
+  const beforeDir = option('compare');
+  if (beforeDir) await compareWith(beforeDir, outDir);
   console.log(`Contact sheets and report.json in ${outDir}/`);
   if (failures.length) {
     console.error(`Incomplete: ${failures.join(', ')}`);

@@ -15,6 +15,7 @@ export default defineConfig({
     pool: 'threads',
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts', 'functions/**/*.test.ts'],
     passWithNoTests: true,
+    setupFiles: ['src/testSetup.ts'],
     // So tests can read stylesheets with ?raw (ui/styles.test.ts checks the tokens).
     css: true,
   },

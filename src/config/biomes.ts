@@ -7,6 +7,12 @@ export interface BiomePalette {
   readonly accent: HexColour;
 }
 
+/**
+ * How a framed scene's border looks (wide windows, SCENE_FRAME in
+ * config/render.ts): a 9-slice per style in ui/styles/sceneFrame.css.
+ */
+export type SceneFrameId = 'timber' | 'stone' | 'vines' | 'ice';
+
 export interface BiomeDef {
   readonly id: string;
   readonly name: string;
@@ -15,6 +21,8 @@ export interface BiomeDef {
   /** Total score needed to enter this biome. The first biome must be 0. */
   readonly minScore: number;
   readonly palette: BiomePalette;
+  /** The frame drawn round the scene on very wide windows. */
+  readonly frame: SceneFrameId;
 }
 
 /**
@@ -40,6 +48,7 @@ export const BIOMES = [
     name: 'Town',
     emoji: '🏘️',
     minScore: 0,
+    frame: 'timber',
     palette: { skyTop: '#8fd3ff', skyBottom: '#e8f6ff', ground: '#b08060', accent: '#d95763' },
   },
   {
@@ -47,6 +56,7 @@ export const BIOMES = [
     name: 'Grassland',
     emoji: '🌾',
     minScore: 50,
+    frame: 'timber',
     palette: { skyTop: '#6cc4f5', skyBottom: '#fff4c9', ground: '#6abe30', accent: '#fbf236' },
   },
   {
@@ -54,6 +64,7 @@ export const BIOMES = [
     name: 'Forest',
     emoji: '🌲',
     minScore: 125,
+    frame: 'timber',
     palette: { skyTop: '#5fa8c8', skyBottom: '#cfe8d0', ground: '#37946e', accent: '#8f563b' },
   },
   {
@@ -61,6 +72,7 @@ export const BIOMES = [
     name: 'Rocky hills',
     emoji: '⛰️',
     minScore: 200,
+    frame: 'stone',
     palette: { skyTop: '#7fb4d8', skyBottom: '#f2e3c6', ground: '#9a8466', accent: '#d9a066' },
   },
   {
@@ -68,6 +80,7 @@ export const BIOMES = [
     name: 'Rainforest',
     emoji: '🌴',
     minScore: 300,
+    frame: 'vines',
     palette: { skyTop: '#4f9a8a', skyBottom: '#d8f0c8', ground: '#2f6e3a', accent: '#df7126' },
   },
   {
@@ -75,6 +88,7 @@ export const BIOMES = [
     name: 'Wetland',
     emoji: '🌿',
     minScore: 420,
+    frame: 'vines',
     palette: { skyTop: '#9ab8c8', skyBottom: '#eef2e0', ground: '#5a7a4a', accent: '#639bff' },
   },
   {
@@ -82,6 +96,7 @@ export const BIOMES = [
     name: 'Snowy peak',
     emoji: '🏔️',
     minScore: 560,
+    frame: 'ice',
     palette: { skyTop: '#5b7fb8', skyBottom: '#e8f0ff', ground: '#eef4fb', accent: '#8a9bb8' },
   },
 ] as const satisfies readonly BiomeDef[];

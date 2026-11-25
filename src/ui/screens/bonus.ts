@@ -1,5 +1,6 @@
 import { BONUS } from '@/config/bonus';
 import type { BonusItem, BonusResult } from '@/core/types';
+import { card } from '../components/card';
 import { timerRing } from '../components/timerRing';
 import { focus, h } from '../dom';
 import type { FrameLoop } from '../frames';
@@ -126,9 +127,15 @@ export const bonusScreen: Screen<BonusProps, BonusActions> = (root, props, actio
       next,
     ];
   }
-  root.append(
-    h('section', { class: 'card card--journal bonus', 'aria-label': 'Bonus quiz' }, ...content),
-  );
+  // The answer buttons (or Next) sit in the footer, always in view.
+  const isAction = (el: HTMLElement) => el === next || el.classList.contains('bonus__choices');
+  const shown = card({
+    className: 'card--journal bonus',
+    label: 'Bonus quiz',
+    body: content.filter((el) => !isAction(el)),
+    footer: content.filter(isAction),
+  });
+  root.append(shown.el);
   focus(focusOn);
   return () => destroy();
 };

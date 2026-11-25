@@ -9,6 +9,22 @@ import { createScene, type Scene } from '@/scene/sceneManager';
 import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
 import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
 import { createStillPortraits } from '@/scene/sprites/stillPortraits';
+import { showStillScene } from '@/scene/stillScene';
+
+/**
+ * The first biome painted on a plain canvas while the day loads (no Kaplay,
+ * no sprites). Null if there is nowhere to draw it; a failure is only logged.
+ */
+export function startStillScene(): { dispose(): void } | null {
+  const container = document.querySelector<HTMLElement>('#scene');
+  if (!container) return null;
+  try {
+    return showStillScene(container, 'town');
+  } catch (error) {
+    console.error('The still scene failed to paint', error);
+    return null;
+  }
+}
 
 /**
  * The scene is scenery: if it can't start (no WebGL, say), the game is still

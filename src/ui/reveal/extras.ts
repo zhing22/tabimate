@@ -1,7 +1,6 @@
 // Extra lines under the revealed name: a registry, so adding one means adding
 // an entry. Each says whether it has something to show for this result, and
 // renders it. They appear in REVEAL_EXTRAS order.
-import { TOP_LEVEL } from '@/config/levels';
 import type { Animal, AnimalLookup, Prompt, RoundResult } from '@/core/types';
 import { h } from '../dom';
 import { betterChild, nearMissText } from './nearMiss';
@@ -12,8 +11,6 @@ export interface RevealContext {
   /** The prompt answered, with every accepted answer and its level. */
   readonly prompt: Prompt;
   readonly animals: AnimalLookup;
-  /** True when this animal is in neither the Field Journal nor earlier answers today. */
-  readonly newToJournal: boolean;
 }
 
 export interface RevealExtra {
@@ -21,20 +18,6 @@ export interface RevealExtra {
   appliesTo(result: RoundResult, ctx: RevealContext): boolean;
   render(result: RoundResult, ctx: RevealContext): HTMLElement;
 }
-
-/** A top-level (CR) find: a gold banner. */
-const jackpot: RevealExtra = {
-  id: 'jackpot',
-  appliesTo: (result) => result.match.level === TOP_LEVEL,
-  render: () => h('p', { class: 'reveal-extra reveal-extra--jackpot' }, 'Jackpot find!'),
-};
-
-/** A first-ever find: it goes into the Field Journal when the run ends. */
-const newFind: RevealExtra = {
-  id: 'newFind',
-  appliesTo: ({ match }, { newToJournal }) => match.level !== 0 && newToJournal,
-  render: () => h('p', { class: 'reveal-extra reveal-extra--new' }, 'New to your journal!'),
-};
 
 /** The animal's one-line description, when it has one. */
 const factLine: RevealExtra = {
@@ -62,8 +45,12 @@ const nearMiss: RevealExtra = {
   },
 };
 
-/** Shown in this order: the banner first, the new-find tag, then the fact, then the hint. */
-export const REVEAL_EXTRAS: readonly RevealExtra[] = [jackpot, newFind, factLine, nearMiss];
+/**
+ * Shown in this order: the fact, then the hint. (A top-level find's jackpot
+ * is inside the level badge, and a first-ever find's "New" ribbon is on the
+ * sprite: screens/reveal.ts.)
+ */
+export const REVEAL_EXTRAS: readonly RevealExtra[] = [factLine, nearMiss];
 
 /** The extras that apply to a result, rendered in order. */
 export const revealExtras = (result: RoundResult, ctx: RevealContext): HTMLElement[] =>

@@ -19,6 +19,8 @@ export const TOAST = {
    * once both leave, it stays this much longer.
    */
   resumeMs: 2_000,
+  /** While a reveal or a full-screen page hides the scene, a waiting toast checks again this often. */
+  blockedRetryMs: 500,
 } as const;
 
 /**

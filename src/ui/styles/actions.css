@@ -7,24 +7,8 @@
   gap: var(--space-3);
 }
 
-/* Field Journal, Achievements, History: three compact buttons on one row,
-   even at 360 px. The middle one is as wide as its long label; the others
-   share what is left ("Field Journal" wraps at its space). */
-.collection-links {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: var(--space-2);
-}
-
-.collection-links .button {
-  min-width: 0;
-  padding: var(--space-1);
-  font-size: var(--text-xs);
-  white-space: normal;
-}
-
 .button--small {
-  min-height: 36px;
+  min-height: var(--tap);
   padding: 0 var(--space-3);
   font-size: var(--text-md);
 }

@@ -1,18 +1,11 @@
-/* Round: the prompt, the answer box and the timer in the header. */
-.round__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* Round: "Prompt 1 of 7" and the timer in the header, the question in the
+   body, the answer box and Go in the footer (always above the keyboard). */
+.round .card__footer > .answer {
+  flex: 1 1 100%;
 }
 
-/*
- * On a phone with the keyboard up the card reaches the top of the screen,
- * under the corner sound button: keep the timer clear of it.
- */
-@media (max-width: 767px) {
-  .round__header {
-    padding-right: calc(var(--tap) + var(--space-2));
-  }
+.round .card__body {
+  align-content: center;
 }
 
 .round__prompt {
@@ -51,14 +44,27 @@
   color: var(--ink-soft);
 }
 
-/* Small phones: tighter cards so the round fits above the keyboard. */
+/* Little room above the keyboard: a smaller question, tighter card. */
 @media (max-height: 520px) {
-  .card {
-    padding: var(--space-4);
-    gap: var(--space-2);
-  }
   .round__prompt {
     font-size: var(--text-lg);
+  }
+  /* The label stays for screen readers; the box says what it wants. */
+  .round .answer__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .round .timer-ring {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .round .card__header,
+  .round .card__body,
+  .round .card__footer {
+    padding-block: var(--space-1);
   }
 }
 

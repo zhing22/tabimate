@@ -1,20 +1,20 @@
 import type { BadgeSection } from '../achievementsView';
 import { unlockedCount } from '../achievementsView';
 import { badgeId, badgeList } from '../components/badgeList';
-import { COLLECTION_PAGE_CLASS, pageHeader } from '../components/pageHeader';
+import { card } from '../components/card';
+import { pageTitle, type PageActions, type PageProps } from '../components/pageHeader';
+import { settingsMenu } from '../components/settingsMenu';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
+import { openPage } from '../layout/page';
 
-export interface AchievementsProps {
+export interface AchievementsProps extends PageProps {
   readonly sections: readonly BadgeSection[];
   /** Open at this achievement (a tapped toast): scrolled into view and focused. */
   readonly focusId?: string | undefined;
 }
 
-export interface AchievementsActions {
-  /** Back to the screen the page was opened from. */
-  close(): void;
-}
+export type AchievementsActions = PageActions;
 
 /** A section: its heading with how many of its own are unlocked, then its badges. */
 function section({ id, name, icon, lines }: BadgeSection): HTMLElement {
@@ -46,21 +46,19 @@ export const achievementsScreen: Screen<AchievementsProps, AchievementsActions> 
   actions,
 ) => {
   const { unlocked, total } = unlockedCount(props.sections);
-  const head = pageHeader(
-    'achievements-title',
-    'Achievements',
-    `${unlocked} of ${total} unlocked`,
-    () => actions.close(),
-  );
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal achievements', 'aria-labelledby': 'achievements-title' },
-      head.el,
-      h('div', { class: 'achievements__body' }, ...props.sections.map(section)),
-    ),
-  );
-  document.documentElement.classList.add(COLLECTION_PAGE_CLASS);
+  const heading = pageTitle('achievements-title', 'Achievements');
+  const settings = props.sound ? settingsMenu(props.sound) : null;
+  const shown = card({
+    className: 'card--journal achievements',
+    title: heading,
+    meta: `${unlocked} of ${total} unlocked`,
+    back: () => actions.close(),
+    close: actions.dismiss ?? (() => actions.close()),
+    tools: [settings?.el],
+    body: [h('div', { class: 'achievements__body' }, ...props.sections.map(section))],
+  });
+  root.append(shown.el);
+  const closePage = openPage(shown.el, () => actions.close());
   const target = props.focusId
     ? root.querySelector<HTMLElement>(`#${badgeId(props.focusId)}`)
     : null;
@@ -68,6 +66,9 @@ export const achievementsScreen: Screen<AchievementsProps, AchievementsActions> 
     target.classList.add('badge--focus');
     target.scrollIntoView?.({ block: 'center' });
     focus(target);
-  } else focus(head.heading);
-  return () => document.documentElement.classList.remove(COLLECTION_PAGE_CLASS);
+  } else focus(heading);
+  return () => {
+    closePage();
+    settings?.destroy();
+  };
 };

@@ -7,6 +7,8 @@ import { mountRound, type RoundActions, type RoundProps, type RoundSetup } from 
  */
 export function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundActions) {
   let screen: ReturnType<typeof mountRound> | null = null;
+  // The box can take focus (starting the timer) while the screen is still mounting.
+  let startedDuringMount: number | null = null;
   return {
     show(props: RoundProps) {
       host.clearOverlay();
@@ -17,11 +19,17 @@ export function roundSlot(host: ScreenHost, setup: RoundSetup, actions: RoundAct
       host.showCustom((root) => {
         const mounted = mountRound(root, props, setup, actions);
         screen = mounted;
+        if (startedDuringMount !== null) mounted.timerStarted(startedDuringMount);
+        startedDuringMount = null;
         return () => {
           mounted.unmount();
           screen = null;
         };
       });
+    },
+    timerStarted(endsAt: number) {
+      if (screen) screen.timerStarted(endsAt);
+      else startedDuringMount = endsAt;
     },
     lock: () => screen?.lock(),
     reject: () => screen?.reject(),

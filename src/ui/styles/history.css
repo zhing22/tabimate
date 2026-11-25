@@ -22,7 +22,7 @@
 }
 
 .calendar__weekday {
-  font-size: var(--text-2xs);
+  font-size: var(--text-caption);
   color: var(--ink-soft);
   text-align: center;
 }
@@ -32,7 +32,7 @@
   display: grid;
   place-items: center;
   aspect-ratio: 1;
-  min-height: 36px;
+  min-height: var(--tap);
   font-size: var(--text-sm);
   border-radius: var(--radius-2);
 }

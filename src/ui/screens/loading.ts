@@ -1,4 +1,5 @@
 import type { Animal } from '@/core/types';
+import { card } from '../components/card';
 import { h } from '../dom';
 
 export interface LoadingProps {
@@ -56,15 +57,21 @@ export function loadingView(props: LoadingProps): LoadingView {
     party,
   );
   const fact = h('p', { class: 'loading__fact', hidden: true });
-  const el = h(
-    'section',
-    { class: 'card card--journal loading', 'aria-busy': 'true' },
-    h('h1', { class: 'title title--sm' }, `Tabimate #${props.puzzleNumber}`),
-    props.theme ? h('p', { class: 'loading__theme' }, props.theme.name) : null,
-    track,
-    h('p', { class: 'meta' }, loadingText(props.theme)),
-    fact,
-  );
+  const { el } = card({
+    className: 'card--journal loading',
+    title: h(
+      'h1',
+      { id: 'loading-title', class: 'title title--sm' },
+      `Tabimate #${props.puzzleNumber}`,
+    ),
+    body: [
+      props.theme ? h('p', { class: 'loading__theme' }, props.theme.name) : null,
+      track,
+      h('p', { class: 'meta' }, loadingText(props.theme)),
+      fact,
+    ],
+  });
+  el.setAttribute('aria-busy', 'true');
   return {
     el,
     setProgress(fraction) {

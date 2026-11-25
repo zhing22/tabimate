@@ -73,3 +73,8 @@
     transition: none;
   }
 }
+
+/* Like the start card: the content in the middle of the sheet or panel. */
+.loading .card__body {
+  align-content: center;
+}

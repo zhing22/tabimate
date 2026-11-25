@@ -1,0 +1,106 @@
+/* The card every screen is (components/card.ts). After components.css: its
+   header rules refine .button. */
+/*
+ * Cards (components/card.ts): pages of a travel journal with a stepped pixel
+ * border. Every screen's card fills its place (the sheet, the panel, or the
+ * screen for a full-screen page): a fixed header, a body that scrolls, and a
+ * footer with the main action that never scrolls away.
+ */
+.card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Room for the border, drawn outside the box. */
+  margin: 6px;
+  max-height: calc(100% - 12px);
+  max-width: calc(100% - 12px);
+  background: var(--paper);
+  border-radius: var(--radius-2);
+  box-shadow:
+    0 0 0 3px var(--paper-edge),
+    0 0 0 6px var(--ink),
+    0 6px 0 6px rgb(0 0 0 / 0.25);
+}
+
+.card__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+
+.card__title {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  text-align: left;
+}
+
+.card__meta {
+  margin: 0;
+}
+
+.card__back,
+.card__close {
+  flex: none;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-md);
+}
+
+/* × closes a full-screen page; in landscape pages live in the panel and Back is enough. */
+[data-layout='landscape'] .card__close {
+  display: none;
+}
+
+.card__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* never wider than the card, whatever is inside */
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+
+.card__footer {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 2px solid rgb(143 106 63 / 0.25);
+}
+
+.card__footer > .button {
+  flex: 1 1 8rem;
+}
+
+/* Header buttons: compact, still 44 px tap targets. */
+.card__header .button {
+  min-width: var(--tap);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.card__header .settings__gear,
+.card__header .card__close {
+  width: var(--tap);
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+}
+
+/* Page titles in a header: one line where they can, beside the buttons. */
+.card__header .title--sm {
+  font-size: var(--text-lg);
+}
+
+.card__header .card__meta {
+  font-size: var(--text-sm);
+}

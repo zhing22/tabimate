@@ -63,12 +63,12 @@ describe('Achievements page', () => {
   it('opens from the start screen beside Journal and History, and goes back', async () => {
     const t = setup(unlockedStreak);
     t.app.showStart();
-    const links = t.$$('.collection-links button').map((b) => b.textContent);
+    const links = t.$$('.collection-links .tile__label').map((b) => b.textContent);
     expect(links).toEqual(['Field Journal', 'Achievements', 'History']);
     t.button('Achievements').click();
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(document.activeElement?.textContent).toBe('Achievements');
-    expect(t.$('.page-head .meta')?.textContent).toBe(`1 of ${ACHIEVEMENTS.length} unlocked`);
+    expect(t.$('.card__meta')?.textContent).toBe(`1 of ${ACHIEVEMENTS.length} unlocked`);
     t.button('Back').click();
     expect(t.$('.collection-links')).not.toBeNull();
   });

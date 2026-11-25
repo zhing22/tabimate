@@ -34,12 +34,7 @@ export function showRevealCard(
 ) {
   const animal = deps.animalOf(result);
   const prompt = deps.puzzle.prompts[index];
-  const ctx = prompt && {
-    animal,
-    prompt,
-    animals: deps.animals,
-    newToJournal: animal !== null && deps.isNew(result, index),
-  };
+  const ctx = prompt && { animal, prompt, animals: deps.animals };
   deps.host.showOverlay(
     revealScreen,
     {
@@ -50,6 +45,7 @@ export function showRevealCard(
       timing: deps.timing ?? REVEAL_TIMING,
       isLast: index === deps.puzzle.prompts.length - 1,
       ...(deps.puzzle.bonus?.length ? { lastLabel: 'Bonus quiz' } : {}),
+      isNew: animal !== null && deps.isNew(result, index),
       focusNext: opts.focusNext,
       portraits: deps.portraits,
     },

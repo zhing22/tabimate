@@ -19,6 +19,35 @@ function labelSvg(text: string, width: number): Buffer {
   );
 }
 
+/**
+ * A state's sheet from an earlier audit above this one's, labelled, both at
+ * this one's width: what changed, at a glance.
+ */
+export async function writeComparison(
+  title: string,
+  beforeFile: string,
+  afterFile: string,
+  file: string,
+): Promise<void> {
+  const { gap, labelHeight, background } = AUDIT.sheet;
+  const after = await sharp(afterFile).png().toBuffer();
+  const { width = 1, height: afterH = 1 } = await sharp(after).metadata();
+  const before = await sharp(beforeFile).resize({ width }).png().toBuffer();
+  const { height: beforeH = 1 } = await sharp(before).metadata();
+  const afterTop = labelHeight + beforeH + gap + labelHeight;
+  await sharp({
+    create: { width, height: afterTop + afterH, channels: 3, background },
+  })
+    .composite([
+      { input: labelSvg(`${title} · before`, width), left: 0, top: 0 },
+      { input: before, left: 0, top: labelHeight },
+      { input: labelSvg(`${title} · after`, width), left: 0, top: afterTop - labelHeight },
+      { input: after, left: 0, top: afterTop },
+    ])
+    .png()
+    .toFile(file);
+}
+
 export async function writeContactSheet(
   title: string,
   shots: readonly ShotFile[],

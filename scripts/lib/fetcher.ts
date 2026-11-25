@@ -77,7 +77,7 @@ export function createFetcher(options: FetcherOptions): Fetcher {
         return null;
       }
       if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
-      const data = await response.json();
+      const data: unknown = await response.json();
       writeFileSync(file, JSON.stringify(data));
       return data;
     },

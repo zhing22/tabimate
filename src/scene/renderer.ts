@@ -1,9 +1,10 @@
 import type { DrawRectOpt, KAPLAYCtx } from 'kaplay';
 import type { BiomeId } from '@/config/biomes';
-import { GROUND_Y, PLAYER_SCREEN_X } from '@/config/render';
+import { GROUND_Y } from '@/config/render';
 import type { BiomeArtSprites } from './biomes/load';
 import type { BorderSprites } from './borders/load';
 import type { BorderKey } from './borders/registry';
+import { easeSpan, partyCameraX, partySpan } from './camera';
 import { createSceneryRenderer } from './drawScenery';
 import { createTitleCardRenderer } from './drawTitleCard';
 import { kaplaySceneryBackend } from './kaplayBackend';
@@ -27,6 +28,7 @@ export interface RendererDeps {
 /**
  * Draws the world each frame, back to front: scenery along the strip, the
  * footprints of misses, the party, effects, and a biome's title card on top.
+ * The camera keeps the whole party (traveller and followers) in view.
  * Option objects are made once and reused, so drawing allocates nothing of ours.
  */
 export function createRenderer(k: KAPLAYCtx, world: World, deps: RendererDeps) {
@@ -56,9 +58,13 @@ export function createRenderer(k: KAPLAYCtx, world: World, deps: RendererDeps) {
     }
   }
 
+  // The party's span the camera frames; it eases to the real one as followers join.
+  let span = partySpan(world.followers.length);
+
   return function draw(view: Viewport, ready: boolean) {
+    span = easeSpan(span, partySpan(world.followers.length), k.dt(), deps.reducedMotion);
     // Whole native pixels only: a camera between pixels makes everything shimmer.
-    const cameraX = Math.round(world.player.x) - Math.round(PLAYER_SCREEN_X * view.visibleWidth);
+    const cameraX = partyCameraX(Math.round(world.player.x), span, view.visibleWidth);
     // Everything in the world moves together when an effect shakes the scene.
     k.pushTransform();
     k.pushTranslate(deps.effects.offset.x, deps.effects.offset.y);

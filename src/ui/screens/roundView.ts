@@ -1,4 +1,5 @@
 import { MAX_INPUT_LENGTH, TIMER_WARN_MS } from '@/config/game';
+import { card } from '../components/card';
 import { timerRing, type TimerRing } from '../components/timerRing';
 import { h } from '../dom';
 import type { FrameLoop } from '../frames';
@@ -12,6 +13,10 @@ export interface RoundSetup {
 /** The one line under the answer box. Short enough to fit a 320 px phone. */
 export const NOT_FOUND = "Not on today's list. Try again.";
 export const DID_YOU_MEAN = 'Did you mean this? Press Go to answer.';
+
+/** The empty box's hint: in portrait the keyboard waits for a tap; elsewhere the box has focus. */
+export const TAP_TO_ANSWER = 'Tap to answer';
+export const TYPE_AN_ANIMAL = 'Type an animal';
 
 export interface RoundView {
   readonly card: HTMLElement;
@@ -58,12 +63,14 @@ export function buildRound(firstEndsAt: number, setup: RoundSetup): RoundView {
     warnAtMs: TIMER_WARN_MS,
     ...(setup.frames ? { frames: setup.frames } : {}),
   });
-  const card = h(
-    'section',
-    { class: 'card round', 'aria-labelledby': 'round-prompt' },
-    h('header', { class: 'round__header' }, step, ring.el),
-    question,
-    form,
-  );
-  return { card, step, question, form, input, go, note, ring };
+  // The question scrolls if it must; the answer box and Go stay in the footer.
+  const shown = card({
+    className: 'round',
+    title: step,
+    labelledBy: 'round-prompt',
+    tools: [ring.el],
+    body: [question],
+    footer: [form],
+  });
+  return { card: shown.el, step, question, form, input, go, note, ring };
 }

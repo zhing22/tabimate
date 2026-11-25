@@ -7,6 +7,8 @@ import type { Scheduler, TimerHandle } from './scheduler';
 export interface RoundTimer {
   /** Starts a round: forgets the last round's text; `onExpire` gets this round's. */
   start(ms: number, onExpire: (draft: string) => void): void;
+  /** Moves the running countdown's deadline, keeping the text in the box. */
+  reschedule(ms: number, onExpire: (draft: string) => void): void;
   /** Stops the countdown without expiring (an answer came in, or dispose). */
   cancel(): void;
   setDraft(text: string): void;
@@ -24,6 +26,13 @@ export function createRoundTimer(scheduler: Scheduler): RoundTimer {
     start(ms, onExpire) {
       cancel();
       draft = '';
+      handle = scheduler.setTimeout(() => {
+        handle = null;
+        onExpire(draft);
+      }, ms);
+    },
+    reschedule(ms, onExpire) {
+      cancel();
       handle = scheduler.setTimeout(() => {
         handle = null;
         onExpire(draft);

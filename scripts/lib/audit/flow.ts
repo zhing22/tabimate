@@ -36,8 +36,9 @@ async function openGame(page: Page, url: string, capture: Capture) {
 
 async function keyboardShot(page: Page, size: AuditSize, capture: Capture) {
   if (!size.keyboardPx) return;
-  await page.setViewportSize({ width: size.width, height: size.height - size.keyboardPx });
+  // As on a phone: the box takes focus, then the keyboard takes its height.
   await page.locator('.answer__input').focus();
+  await page.setViewportSize({ width: size.width, height: size.height - size.keyboardPx });
   await settle(page);
   await capture('prompt-keyboard', page);
   await page.setViewportSize({ width: size.width, height: size.height });
@@ -81,6 +82,16 @@ async function collectionPage(
   await page.locator('.team-card').waitFor();
 }
 
+/** Portrait: × closes the results pop-up; the summary shows under the scene. */
+async function summary(page: Page, capture: Capture) {
+  const close = page.getByRole('button', { name: 'Close', exact: true });
+  if (!(await close.isVisible())) return;
+  await close.click();
+  await page.locator('.results-summary').waitFor();
+  await settle(page);
+  await capture('results-summary', page);
+}
+
 export async function auditOneSize(
   browser: Browser,
   url: string,
@@ -112,6 +123,7 @@ export async function auditOneSize(
     await collectionPage(page, 'Field Journal', '.journal', 'journal', capture);
     await collectionPage(page, 'Achievements', '.badge', 'achievements', capture);
     await collectionPage(page, 'History', '.calendar-legend', 'history', capture);
+    await summary(page, capture);
   } catch (error) {
     await page.screenshot({ path: failedShot }).catch(() => {});
     throw error;

@@ -2,22 +2,16 @@
 // up by a whole number of device pixels, so pixels stay crisp on every screen.
 import type { SizeClass } from './animals';
 import type { HexColour } from './colour';
+import { PROMPTS_PER_DAY } from './game';
 
 /** Scene height in native pixels, on every screen. Wider screens see more world. */
 export const NATIVE_HEIGHT = 180;
 
 /**
  * Widest world view drawn (native px). The canvas buffer is this wide and never
- * resized; a very wide, short window shows sky beyond it instead.
+ * resized; a scene area wider than this at its scale is framed (SCENE_FRAME).
  */
 export const MAX_VISIBLE_WIDTH = 640;
-
-/**
- * Narrowest world view (native px). A tall, narrow screen (a phone upright,
- * with the scene behind the whole page) would otherwise zoom right in; this
- * keeps the scale where the world is at least this wide.
- */
-export const MIN_VISIBLE_WIDTH = 180;
 
 /** The walk line: characters' feet rest here. */
 export const GROUND_Y = 150;
@@ -55,9 +49,6 @@ export const BACKDROP = { top: 78, groundBelow: 12, width: 220 } as const;
 export const BACKDROP_HEIGHT = GROUND_Y + BACKDROP.groundBelow - BACKDROP.top;
 export const BACKDROP_GROUND_Y = GROUND_Y - BACKDROP.top;
 
-/** Where the player stands, as a share of the visible width from the left. */
-export const PLAYER_SCREEN_X = 0.75;
-
 /**
  * Path distance between one follower and the next (native px): a large (24 px)
  * animal plus a few pixels of space, so the party reads as separate animals.
@@ -70,6 +61,37 @@ export const FOLLOWER_STEP_OFFSET_S = 0.13;
 export const SIZE_PX: Readonly<Record<SizeClass, number>> = { S: 12, M: 16, L: 24 };
 
 export const PLAYER_SIZE = { width: 16, height: 24 } as const;
+
+/** Native px kept clear at each end of the party when the camera frames it. */
+export const PARTY_MARGIN = 4;
+
+/**
+ * The narrowest world the scene shows (native px): the traveller and a full
+ * day's followers (one per prompt) at FOLLOWER_SPACING, with a margin each end.
+ * The scene's scale is the largest whole number that keeps this much in view.
+ */
+export const PARTY_MIN_WIDTH =
+  PLAYER_SIZE.width + PROMPTS_PER_DAY * FOLLOWER_SPACING + 2 * PARTY_MARGIN;
+
+/**
+ * Fitting the scene to its area (scene/viewport.ts): rows left over above and
+ * below the 180-row scene are sky and ground, skyShare of them above.
+ */
+export const SCENE_FIT = { skyShare: 0.75 } as const;
+
+/**
+ * Where the scene area is wider than MAX_VISIBLE_WIDTH at its scale, the scene
+ * is drawn in a frame (per-biome style, BIOMES[].frame) on a dim backdrop:
+ * border thickness and the gap around it, in CSS px.
+ */
+export const SCENE_FRAME = { borderPx: 12, gapPx: 16 } as const;
+
+/**
+ * The camera frames the whole party (traveller and followers). As the party
+ * grows it eases to the new framing at this rate (fraction per second, per unit);
+ * with reduced motion it cuts.
+ */
+export const CAMERA = { easePerS: 4 } as const;
 
 /**
  * The walk after an answer: at least WALK.speed px/s, sped up so no walk takes

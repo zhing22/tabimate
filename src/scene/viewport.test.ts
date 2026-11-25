@@ -1,66 +1,65 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_VISIBLE_WIDTH, MIN_VISIBLE_WIDTH } from '@/config/render';
+import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, PARTY_MIN_WIDTH } from '@/config/render';
+import { sceneArea } from '@/core/layout';
 import { computeViewport } from './viewport';
 
-describe('computeViewport', () => {
-  // The Art specs table (scene area in device px). The ultrawide row says 427,
-  // which is 2560 / 6 rounded; the rule floors it, so 426 whole pixels fit.
+/** The viewport for a whole window: its scene area (stage or left of the panel). */
+const forWindow = (w: number, h: number, dpr: number) => {
+  const area = sceneArea(w, h);
+  return computeViewport(area.width, area.height, dpr);
+};
+
+describe('computeViewport for real windows', () => {
+  // [window, dpr, scale, visible native px, scene top (device px)]
   it.each([
-    ['phone portrait', 390, 360, 3, 6, 195],
-    ['laptop window', 1440, 900, 1, 5, 288],
-    ['desktop 1080p', 1920, 1080, 1, 6, 320],
-    ['ultrawide', 2560, 1080, 1, 6, 426],
-  ])('%s: %ix%i css at dpr %i -> x%i, %i px wide', (_name, w, h, dpr, scale, visible) => {
-    const v = computeViewport(w, h, dpr);
-    expect(v.scale).toBe(scale);
-    expect(v.visibleWidth).toBe(visible);
-    expect(v.canvasW).toBe(w * dpr);
-    expect(v.canvasH).toBe(h * dpr);
-  });
-
-  it('puts leftover device rows above the scene, never stretching it', () => {
-    const v = computeViewport(1440, 900, 1); // x5 = 900 rows exactly
-    expect(v.offsetY).toBe(0);
-    const tall = computeViewport(390, 380, 3); // 1140 rows: x6 = 1080, 60 left over
-    expect(tall).toMatchObject({ scale: 6, offsetY: 60 });
-  });
-
-  it('draws the partly visible column at the edge too', () => {
-    const v = computeViewport(1000, 180, 1);
-    expect(v).toMatchObject({ visibleWidth: 640, drawWidth: 640 }); // capped
-    const odd = computeViewport(392, 360, 3); // 1176 / 6 = 196
-    expect(odd).toMatchObject({ visibleWidth: 196, drawWidth: 196 });
-    const part = computeViewport(393, 360, 3); // 1179 / 6 = 196.5
-    expect(part).toMatchObject({ visibleWidth: 196, drawWidth: 197 });
-  });
-
-  it('never goes below x1, and caps the width it draws', () => {
-    expect(computeViewport(300, 100, 1).scale).toBe(1);
-    expect(computeViewport(4000, 200, 1).visibleWidth).toBe(MAX_VISIBLE_WIDTH);
-  });
-
-  it('handles fractional device pixel ratios', () => {
-    const v = computeViewport(412, 400, 2.625); // 1081.5 x 1050 device px
-    expect(v).toMatchObject({ canvasW: 1082, canvasH: 1050, scale: 5, visibleWidth: 216 });
+    ['360x640 phone, stage on top', 360, 640, 2, 2, 360, 56],
+    ['390x844 phone, stage on top', 390, 844, 3, 4, 292, 106],
+    ['844x390 phone on its side, panel right', 844, 390, 3, 6, 222, 68],
+    ['1366x768 laptop, panel right', 1366, 768, 1, 3, 282, 171],
+    ['1920x1080 desktop, panel right', 1920, 1080, 1, 6, 220, 0],
+    ['2560x1080 ultrawide, panel right', 2560, 1080, 1, 6, 326, 0],
+  ])('%s', (_name, w, h, dpr, scale, visible, offsetY) => {
+    const v = forWindow(w, h, dpr);
+    expect(v).toMatchObject({ scale, visibleWidth: visible, offsetY, framed: false });
+    expect(v.visibleWidth).toBeGreaterThanOrEqual(PARTY_MIN_WIDTH);
+    expect(NATIVE_HEIGHT * v.scale).toBeLessThanOrEqual(v.canvasH);
   });
 });
 
-describe('computeViewport on tall screens', () => {
-  it('keeps a phone upright at the play scale when the scene fills the whole screen', () => {
-    const split = computeViewport(390, 360, 3); // the scene band during play
-    const full = computeViewport(390, 844, 3); // behind the results card
-    expect(full.scale).toBe(split.scale);
-    expect(full.visibleWidth).toBe(195);
-    expect(full.offsetY).toBe(844 * 3 - 180 * 6); // the rest is sky
+describe('computeViewport', () => {
+  it('takes the largest scale that fits the height and keeps the whole party in view', () => {
+    // 900 rows allow x5, but x5 shows only 1000 / 5 = 200 px: x4 keeps 250.
+    expect(computeViewport(1000, 900, 1)).toMatchObject({ scale: 4, visibleWidth: 250 });
   });
 
-  it('never shows less than MIN_VISIBLE_WIDTH of world', () => {
-    for (const [w, h, dpr] of [
-      [320, 900, 2],
-      [390, 844, 3],
-      [360, 780, 4],
-    ] as const) {
-      expect(computeViewport(w, h, dpr).visibleWidth).toBeGreaterThanOrEqual(MIN_VISIBLE_WIDTH);
-    }
+  it('splits leftover rows: most become sky above, the rest ground below', () => {
+    const v = computeViewport(500, 400, 1); // x2 = 360 rows, 40 spare
+    expect(v.offsetY).toBe(30);
+    expect(v.stage).toEqual({ x: 0, y: 0, width: 500, height: 400 });
+  });
+
+  it('frames the stage instead of showing more than MAX_VISIBLE_WIDTH of world', () => {
+    const v = computeViewport(3000, 420, 1);
+    // 12 px border + 16 px gap each side; 364 rows inside allow x2.
+    expect(v).toMatchObject({ framed: true, scale: 2, visibleWidth: MAX_VISIBLE_WIDTH });
+    expect(v.stage).toEqual({ x: 860, y: 28, width: 1280, height: 364 });
+    expect(v.offsetX).toBe(860);
+    expect(v.offsetY).toBe(28 + 3); // 4 spare rows, 3 above
+  });
+
+  it('draws the partly visible column at the edge too', () => {
+    const odd = computeViewport(441, 180, 1); // x1: 441 columns, all whole
+    expect(odd).toMatchObject({ visibleWidth: 441, drawWidth: 441 });
+    const part = computeViewport(441, 360, 1.5); // 661.5 -> 662 / x3 = 220.67
+    expect(part).toMatchObject({ scale: 3, visibleWidth: 220, drawWidth: 221 });
+  });
+
+  it('never goes below x1', () => {
+    expect(computeViewport(100, 100, 1).scale).toBe(1);
+  });
+
+  it('handles fractional device pixel ratios', () => {
+    const v = computeViewport(412, 311, 2.625); // 1081.5 x 816.4 device px
+    expect(v).toMatchObject({ canvasW: 1082, canvasH: 816, scale: 4, visibleWidth: 270 });
   });
 });

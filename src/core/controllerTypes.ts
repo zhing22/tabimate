@@ -12,7 +12,12 @@ export interface GameControllerDeps {
   readonly scheduler: Scheduler;
   readonly matcherConfig?: MatcherConfig;
   readonly mode?: GameMode;
-  readonly timing?: { readonly roundTimeMs: number; readonly bonusQuestionMs?: number };
+  readonly timing?: {
+    readonly roundTimeMs: number;
+    readonly bonusQuestionMs?: number;
+    /** How long a prompt waits for the player before its timer starts (ROUND_START_GRACE_MS). */
+    readonly startGraceMs?: number;
+  };
 }
 
 /** The UI talks to the game only through these; it never touches state. */
@@ -30,6 +35,12 @@ export interface GameController {
    * as it stands: scored if it is an exact name, 0 points otherwise.
    */
   setDraft(text: string): void;
+  /**
+   * The player is ready to answer (focused the box): the round's countdown
+   * starts now instead of when its start grace runs out. Emits
+   * roundTimerStarted with the new deadline; does nothing once it has started.
+   */
+  beginRound(): void;
   /**
    * Moves on from the reveal: to the next prompt, or to the results after the
    * last one (to the bonus quiz first, on a quiz day). In the quiz it moves on

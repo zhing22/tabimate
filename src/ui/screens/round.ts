@@ -1,7 +1,15 @@
 import type { Prompt } from '@/core/types';
 import { focus } from '../dom';
 import type { Unmount } from '../host';
-import { buildRound, DID_YOU_MEAN, NOT_FOUND, type RoundSetup } from './roundView';
+import { currentLayout, TYPING_CLASS } from '../layout/shell';
+import {
+  buildRound,
+  DID_YOU_MEAN,
+  NOT_FOUND,
+  TAP_TO_ANSWER,
+  TYPE_AN_ANIMAL,
+  type RoundSetup,
+} from './roundView';
 
 export type { RoundSetup } from './roundView';
 
@@ -18,16 +26,27 @@ export interface RoundActions {
   next(): void;
   /** The text in the box changed (it is submitted as it stands if time runs out). */
   draft(text: string): void;
+  /** The player is ready (the box has focus): the round's countdown starts. */
+  begin(): void;
 }
 
 /**
  * The prompt screen. Unlike the other screens it stays mounted for the whole
- * run and is told about each new round: on iOS only a tap can open the
- * keyboard, so keeping one input focused keeps the keyboard up between rounds.
+ * run and is told about each new round.
+ *
+ * Focus differs by layout. Landscape and desktop: the box takes focus each
+ * round and keeps it through the reveal (Enter moves on). Portrait (a phone
+ * upright): the box is never focused for the player; it says "Tap to answer",
+ * and while it has focus the stage slides away (html.is-typing) so the sheet
+ * gets the space above the keyboard. A scored answer or time-up blurs it, so
+ * the keyboard closes and the stage comes back for the reveal. Either way the
+ * countdown starts when the box first takes focus (or after the start grace).
  */
 export interface RoundScreen {
   setRound(props: RoundProps): void;
-  /** While a reveal shows: input kept (and focused) but read-only, timer held. */
+  /** The countdown started (the box took focus): its new deadline. */
+  timerStarted(endsAt: number): void;
+  /** While a reveal shows: input read-only, timer held; in portrait the box lets go of focus. */
   lock(): void;
   /** The guess matched nothing: say so, keep the text and focus for another try. */
   reject(): void;
@@ -53,8 +72,16 @@ export function mountRound(
     note.textContent = text;
   };
 
+  const doc = root.ownerDocument;
+  const portrait = () => currentLayout(doc) === 'portrait';
+  const typing = (on: boolean) => doc.documentElement.classList.toggle(TYPING_CLASS, on);
   let locked = false;
   const empty = () => input.value.trim() === '';
+  input.addEventListener('focus', () => {
+    typing(true);
+    if (!locked) actions.begin();
+  });
+  input.addEventListener('blur', () => typing(false));
   const refresh = () => {
     go.disabled = locked || empty();
   };
@@ -86,17 +113,23 @@ export function mountRound(
     input.value = '';
     showNote(null);
     refresh();
+    input.placeholder = portrait() ? TAP_TO_ANSWER : TYPE_AN_ANIMAL;
+    if (portrait()) return;
     focus(input);
+    // Still focused from the last round (no focus event): ready all the same.
+    if (doc.activeElement === input) actions.begin();
   };
   setRound(first);
 
   return {
     setRound,
+    timerStarted: (endsAt) => ring.setEndsAt(endsAt),
     lock() {
       locked = true;
-      input.readOnly = true; // readOnly, not disabled: disabling would drop focus and the keyboard
+      input.readOnly = true; // readOnly, not disabled: disabling would drop focus (landscape keeps it)
       ring.freeze();
       refresh();
+      if (portrait()) input.blur(); // the keyboard closes; the stage comes back for the reveal
     },
     reject() {
       // The text stays, so it can be fixed rather than retyped.
@@ -112,6 +145,9 @@ export function mountRound(
       // Selected, so typing replaces it at once; Go or Enter sends it as is.
       input.select();
     },
-    unmount: () => ring.destroy(),
+    unmount() {
+      ring.destroy();
+      typing(false);
+    },
   };
 }

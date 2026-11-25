@@ -90,6 +90,19 @@ export function createRoundRunner(deps: RoundRunnerDeps) {
       }
     },
 
+    /**
+     * The player is ready (focused the box): start the countdown now if the
+     * round's deadline still includes the start grace. Says so on the bus.
+     */
+    begin() {
+      const state = getState();
+      const index = state.results.length;
+      const endsAt = now() + roundTimeMs;
+      if (!dispatch({ type: 'beginTimer', roundEndsAt: endsAt })) return;
+      timer.reschedule(roundTimeMs, onTimeout);
+      emit('roundTimerStarted', { index, endsAt });
+    },
+
     setDraft: (text: string) => timer.setDraft(text),
     cancel: () => timer.cancel(),
   };

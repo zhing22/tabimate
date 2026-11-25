@@ -1,4 +1,5 @@
-/* Lines under the revealed name (ui/reveal/extras.ts), and the jackpot moment. */
+/* Lines under the revealed name (ui/reveal/extras.ts), the "New" ribbon, the
+   jackpot badge and its flash. */
 .reveal__extras {
   display: grid;
   gap: var(--space-1);
@@ -18,17 +19,6 @@
 .reveal-extra--near-miss {
   font-size: var(--text-xs);
   color: var(--hint);
-}
-
-.reveal-extra--jackpot {
-  justify-self: center;
-  padding: var(--space-1) var(--space-3);
-  font-family: var(--font-pixel);
-  font-size: var(--text-lg);
-  color: var(--level-5-ink);
-  background: var(--level-5);
-  border-radius: var(--radius-2);
-  box-shadow: 0 0 0 2px var(--ink);
 }
 
 /* After the freeze, a gold flash washes over the card as the name lands. */
@@ -85,4 +75,40 @@
   color: var(--accent-ink);
   background: var(--accent);
   border-radius: var(--radius-2);
+}
+
+/* The picture, with room for a first find's "New" ribbon at its corner. */
+.reveal__picture {
+  position: relative;
+  justify-self: center;
+}
+
+.reveal__ribbon {
+  position: absolute;
+  top: calc(-1 * var(--space-2));
+  left: calc(100% - var(--space-5));
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: var(--radius-1);
+  box-shadow: 0 0 0 2px var(--ink);
+  transform: rotate(8deg);
+  white-space: nowrap;
+}
+
+/* A top-level find: the one badge says "Jackpot!" too, larger, with a star. */
+.level-badge--jackpot {
+  display: grid;
+  justify-items: center;
+}
+
+.level-badge__jackpot {
+  font-size: var(--text-xl);
+  line-height: 1.1;
+}
+
+.level-badge__jackpot::before {
+  content: '★ ';
 }

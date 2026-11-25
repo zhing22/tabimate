@@ -1,3 +1,4 @@
+import { ROUND_TIME_MS } from '@/config/game';
 import { describe, expect, it } from 'vitest';
 import { dailyKey } from '@/core/date';
 import { createBus, type GameEvents } from '@/core/events';
@@ -33,6 +34,7 @@ function openPage(storage: StorageAdapter, iso: string) {
     bus,
     clock: time.clock,
     scheduler: time.scheduler,
+    timing: { roundTimeMs: ROUND_TIME_MS, startGraceMs: 0 },
   });
   bus.on('stateChanged', ({ state }) => progress.saveRun(state));
   bus.on('runFinished', () => progress.completeRun(game.getState(), ANIMALS));

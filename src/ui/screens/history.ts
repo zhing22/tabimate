@@ -2,23 +2,24 @@ import { SCORE_BANDS } from '@/config/history';
 import { compareMonths, shiftMonth, type Month } from '@/core/calendar';
 import type { Stats } from '@/core/streak';
 import type { AnimalLookup, DateKey } from '@/core/types';
+import { card } from '../components/card';
 import { dayDetail } from '../components/dayDetail';
+import { pageTitle, type PageActions, type PageProps } from '../components/pageHeader';
+import { settingsMenu } from '../components/settingsMenu';
 import { historyCalendar } from '../components/historyCalendar';
 import { focus, h } from '../dom';
 import { formatMonth } from '../format';
 import type { Screen } from '../host';
+import { openPage } from '../layout/page';
 import { dayDetail as detailOf, historyWeeks, monthRange, type HistoryDay } from '../historyView';
 
-export interface HistoryProps {
+export interface HistoryProps extends PageProps {
   readonly stats: Stats;
   readonly animals: AnimalLookup;
   readonly todayKey: DateKey;
 }
 
-export interface HistoryActions {
-  /** Back to the screen the history was opened from. */
-  close(): void;
-}
+export type HistoryActions = PageActions;
 
 const legend = () =>
   h(
@@ -70,25 +71,24 @@ export const historyScreen: Screen<HistoryProps, HistoryActions> = (root, props,
   };
   prev.addEventListener('click', step(-1));
   next.addEventListener('click', step(1));
-  const back = h('button', { class: 'button', type: 'button' }, 'Back');
-  back.addEventListener('click', () => actions.close());
-
-  const heading = h('h1', { class: 'title title--sm', tabindex: -1 }, 'History');
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal history', 'aria-label': 'History' },
-      heading,
-      h('p', { class: 'meta' }, `${props.stats.history.length} days played`),
-      h('div', { class: 'calendar-nav' }, prev, title, next),
-      grid,
-      legend(),
-      detail,
-      back,
-    ),
-  );
+  const heading = pageTitle('history-title', 'History');
+  const settings = props.sound ? settingsMenu(props.sound) : null;
+  const days = props.stats.history.length;
+  const shown = card({
+    className: 'card--journal history',
+    title: heading,
+    meta: days === 1 ? '1 day played' : `${days} days played`,
+    back: () => actions.close(),
+    close: actions.dismiss ?? (() => actions.close()),
+    tools: [settings?.el],
+    body: [h('div', { class: 'calendar-nav' }, prev, title, next), grid, detail, legend()],
+  });
+  root.append(shown.el);
   render();
+  const closePage = openPage(shown.el, () => actions.close());
   focus(heading);
-  // Nothing to stop: every listener is on elements the host removes with the screen.
-  return () => {};
+  return () => {
+    closePage();
+    settings?.destroy();
+  };
 };

@@ -81,9 +81,14 @@ function toastEl(content: ToastContent, done: () => void, hold: Hold): HTMLEleme
  * to; while it has focus or the pointer is over it the toast stays, then
  * gives TOAST.resumeMs more once both have left. `layer` is the host's toast
  * layer, which outlives screens, and is a polite live region, so each is
- * read once.
+ * read once. While `blocked()` (a reveal is up, or a page covers the scene)
+ * toasts wait in the queue, checked every TOAST.blockedRetryMs.
  */
-export function createToaster(layer: HTMLElement, delay: Delay = browserDelay): Toaster {
+export function createToaster(
+  layer: HTMLElement,
+  delay: Delay = browserDelay,
+  blocked: () => boolean = () => false,
+): Toaster {
   const queue: ToastContent[] = [];
   let cancel: (() => void) | null = null;
   let showing = false;
@@ -103,6 +108,11 @@ export function createToaster(layer: HTMLElement, delay: Delay = browserDelay): 
   function showNext() {
     layer.replaceChildren();
     cancel = null;
+    if (queue.length > 0 && blocked()) {
+      showing = true; // waiting counts: show() must not start a second loop
+      wait(TOAST.blockedRetryMs);
+      return;
+    }
     const content = queue.shift();
     showing = content !== undefined;
     if (!content) return;

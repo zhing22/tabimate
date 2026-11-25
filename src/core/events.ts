@@ -73,6 +73,8 @@ export interface GameEvents {
   runRestored: { state: RunState };
   /** endsAt is epoch ms from the injected clock. */
   roundStarted: { index: number; prompt: Prompt; endsAt: number };
+  /** The round's countdown started early (the player focused the box): its new deadline. */
+  roundTimerStarted: { index: number; endsAt: number };
   answerMatched: { round: number; result: RoundResult };
   /** A guess matched nothing in the answer key. The round goes on; try again. */
   answerRejected: { round: number; input: string };

@@ -17,9 +17,7 @@ const result = (animalId: string | null, level: AnswerLevel | 0): RoundResult =>
 const penguin = ANIMALS.get('penguin')!;
 const tiger: Animal = { ...ANIMALS.get('tiger')!, description: 'The largest living cat.' };
 const extrasFor = (r: RoundResult, animal: Animal | null, prompt: Prompt = PROMPT) =>
-  revealExtras(r, { animal, prompt, animals: ANIMALS, newToJournal: false }).map(
-    (el) => el.className.split('--')[1],
-  );
+  revealExtras(r, { animal, prompt, animals: ANIMALS }).map((el) => el.className.split('--')[1]);
 
 describe('betterChild', () => {
   // On PROMPT: penguin (group) 1, Emperor penguin 2, African penguin 4.
@@ -52,27 +50,14 @@ describe('betterChild', () => {
 });
 
 describe('revealExtras', () => {
-  it('shows them in a fixed order: jackpot, new find, fact, near miss', () => {
-    expect(REVEAL_EXTRAS.map((e) => e.id)).toEqual(['jackpot', 'newFind', 'factLine', 'nearMiss']);
+  it('shows them in a fixed order: fact, then near miss', () => {
+    // The jackpot is inside the level badge and "New" is a ribbon on the sprite (reveal.ts).
+    expect(REVEAL_EXTRAS.map((e) => e.id)).toEqual(['factLine', 'nearMiss']);
   });
 
-  it('tags a first-ever find "New to your journal!", never a miss', () => {
-    const ctx = { animal: tiger, prompt: PROMPT, animals: ANIMALS, newToJournal: true };
-    const tags = revealExtras(result('tiger', 4), ctx).map((el) => el.textContent);
-    expect(tags).toContain('New to your journal!');
-    expect(revealExtras(result(null, 0), { ...ctx, animal: null })).toEqual([]);
-  });
-
-  it('gives a top-level find the jackpot banner, and every animal with a description its fact', () => {
-    expect(extrasFor(result('tiger', 5), tiger)).toEqual(['jackpot', 'fact']);
+  it('gives every animal with a description its fact, whatever its level', () => {
+    expect(extrasFor(result('tiger', 5), tiger)).toEqual(['fact']);
     expect(extrasFor(result('tiger', 4), tiger)).toEqual(['fact']);
-    const jackpot = revealExtras(result('tiger', 5), {
-      animal: tiger,
-      prompt: PROMPT,
-      animals: ANIMALS,
-      newToJournal: false,
-    })[0]!;
-    expect(jackpot.textContent).toBe('Jackpot find!');
   });
 
   it('gives a group answer the near-miss hint, and nothing for a miss', () => {

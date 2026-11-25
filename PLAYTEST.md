@@ -20,14 +20,14 @@ prompt and answer fixes.
 
 Aim for at least one tester on each:
 
-| Device                           | Watch especially                                          |
-| -------------------------------- | --------------------------------------------------------- |
-| iPhone, Safari                   | keyboard stays up between prompts; sound starts on tap    |
-| Android phone, Chrome            | layout above the keyboard; pixel art is sharp, not blurry |
-| Small phone (≈ 360 px wide)      | nothing cut off; the answer box and Next button fit       |
-| Tablet                           | layout in portrait and landscape                          |
-| Laptop or desktop, Chrome/Safari | Enter to answer and continue; Share copies the text       |
-| Someone using reduced motion     | no shaking or sparks; everything still readable           |
+| Device                           | Watch especially                                                                             |
+| -------------------------------- | -------------------------------------------------------------------------------------------- |
+| iPhone, Safari                   | tap the box: the stage slides away; a scored answer closes the keyboard; sound starts on tap |
+| Android phone, Chrome            | layout above the keyboard; pixel art is sharp, not blurry                                    |
+| Small phone (≈ 360 px wide)      | nothing cut off; the answer box and Next button fit                                          |
+| Tablet                           | layout in portrait and landscape                                                             |
+| Laptop or desktop, Chrome/Safari | Enter to answer and continue; Share copies the text                                          |
+| Someone using reduced motion     | no shaking or sparks; everything still readable                                              |
 
 ## What to watch for
 

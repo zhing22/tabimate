@@ -34,9 +34,21 @@
   visibility: hidden;
 }
 
+/* Next waits in the footer, keeping its place, until the name is shown. */
+.reveal--pending .card__footer,
+.reveal--badge .card__footer {
+  visibility: hidden;
+}
+
 /* Beat 3: the name, points and Next button rise in. */
-.reveal--named .reveal__body > :not(.reveal__badge) {
+.reveal--named .reveal__body > :not(.reveal__badge),
+.reveal--named .card__footer {
   animation: rise var(--dur-med) ease-out both;
+}
+
+.reveal .card__body {
+  text-align: center;
+  align-content: center;
 }
 
 /* The sprite (or emoji): a fixed slot, so the swap from emoji doesn't move the card. */
@@ -153,7 +165,8 @@
 /* Reduced motion: no popping, sweeping or pulsing; things simply fade in. */
 @media (prefers-reduced-motion: reduce) {
   .reveal__badge,
-  .reveal--named .reveal__body > :not(.reveal__badge) {
+  .reveal--named .reveal__body > :not(.reveal__badge),
+  .reveal--named .card__footer {
     animation: fade var(--reveal-badge-ms, 420ms) ease-out both;
   }
 
@@ -170,6 +183,5 @@
 
 /* The button continues the game; it takes no part in the level's effect. */
 .reveal__next {
-  margin-top: var(--space-2);
   text-shadow: none;
 }

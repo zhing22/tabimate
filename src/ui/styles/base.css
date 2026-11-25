@@ -1,15 +1,30 @@
-/* Reset and page layout: a full-screen scene with the UI as an overlay on top. */
+/*
+ * Reset and the layout shell (ui/layout/shell.ts sets html[data-layout] and
+ * the sizes from config/layout.ts):
+ *
+ *   portrait   the scene on a stage at the top (--stage-share of the height),
+ *              the card as a sheet below it (at most --sheet-max wide, centred).
+ *              html.is-typing: the stage slides away and the sheet takes the
+ *              space above the keyboard. html.is-page: a full-screen page
+ *              covers the stage.
+ *   landscape  the scene on the left, ONE panel of --panel-w on the right for
+ *              every screen, so the scene never re-scales between screens.
+ */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  font-size: var(--root-size);
+}
+
 html,
 body {
   margin: 0;
   height: 100%;
-  overflow: hidden; /* the overlay scrolls inside itself, the page never does */
+  overflow: hidden; /* the card's body scrolls, the page never does */
   overscroll-behavior: none;
 }
 
@@ -38,41 +53,38 @@ input {
 }
 
 /*
- * The canvas world (scene/). It fills #scene and sizes itself to it; the
- * gradient shows only until it starts, or if it can't (no WebGL).
+ * The scene area. scene/canvasLayout.ts places the canvas and the stage
+ * behind it (sky above the scene, ground below; framed on very wide areas).
+ * The gradient shows only until the scene starts, or if it can't.
  */
 #scene {
   position: fixed;
-  inset: 0;
   z-index: var(--z-scene);
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(#5fa8c8, #cfe8d0 70%, #6abe30 70%);
+  background: var(--scene-sky, #8fd3ff);
+}
+
+.scene__stage {
+  position: absolute;
+  background: linear-gradient(
+    var(--scene-sky, #8fd3ff) var(--ground-from, 100%),
+    var(--scene-ground, #6abe30) var(--ground-from, 100%)
+  );
 }
 
 .scene__canvas {
   position: absolute;
-  left: 0;
   image-rendering: pixelated;
 }
 
-/*
- * The UI covers exactly the visible part of the screen. --vv-height/--vv-top
- * come from ui/viewport.ts and shrink it above a phone keyboard.
- */
+/* The card's home: the sheet (portrait) or the panel (landscape). */
 #ui {
   position: fixed;
-  left: 0;
-  right: 0;
-  top: var(--vv-top, 0px);
-  height: var(--vv-height, 100dvh);
   z-index: var(--z-ui);
   display: grid;
-  /* minmax(0, 1fr): the column is the screen width, not the width of its longest line. */
   grid-template-columns: minmax(0, 1fr);
-  overflow-y: auto;
-  padding: max(var(--space-4), env(safe-area-inset-top)) var(--space-4)
-    max(var(--space-4), env(safe-area-inset-bottom));
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .screen-layer,
@@ -80,7 +92,7 @@ input {
   grid-area: 1 / 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  place-items: center;
+  grid-template-rows: minmax(0, 1fr);
   min-height: 0;
 }
 
@@ -95,6 +107,86 @@ input {
 
 .overlay-layer:empty {
   display: none;
+}
+
+/* ---- Landscape: scene left, panel right ---- */
+[data-layout='landscape'] #scene {
+  inset: 0 var(--panel-w) 0 0;
+}
+
+[data-layout='landscape'] #ui {
+  top: var(--vv-top, 0px);
+  right: 0;
+  width: var(--panel-w);
+  height: var(--vv-height, 100dvh);
+  padding: max(var(--space-3), env(safe-area-inset-top))
+    max(var(--space-3), env(safe-area-inset-right)) max(var(--space-3), env(safe-area-inset-bottom))
+    var(--space-3);
+}
+
+/* ---- Portrait: stage on top, sheet below ---- */
+[data-layout='portrait'] {
+  --stage-h: calc(var(--stage-share) * 1vh);
+}
+
+@supports (height: 1svh) {
+  /* svh ignores the browser bar showing and hiding. */
+  [data-layout='portrait'] {
+    --stage-h: calc(var(--stage-share) * 1svh);
+  }
+}
+
+[data-layout='portrait'] #scene {
+  top: var(--vv-top, 0px);
+  left: 0;
+  right: 0;
+  height: var(--stage-h);
+  transition: transform var(--stage-slide-ms) ease-out;
+}
+
+[data-layout='portrait'] #ui {
+  top: calc(var(--vv-top, 0px) + var(--stage-h));
+  left: 0;
+  right: 0;
+  height: calc(var(--vv-height, 100dvh) - var(--stage-h));
+  justify-content: center;
+  grid-template-columns: minmax(0, min(100%, var(--sheet-max)));
+  padding: var(--space-2) max(var(--space-2), env(safe-area-inset-right))
+    max(var(--space-2), env(safe-area-inset-bottom)) max(var(--space-2), env(safe-area-inset-left));
+}
+
+/* Typing: the stage slides up out of sight (same size, so no re-scale) and
+   the sheet fills what the keyboard leaves. */
+[data-layout='portrait'].is-typing #scene {
+  transform: translateY(-100%);
+}
+
+[data-layout='portrait'].is-typing #ui,
+[data-layout='portrait'].is-page #ui {
+  top: var(--vv-top, 0px);
+  height: var(--vv-height, 100dvh);
+  padding-top: max(var(--space-2), env(safe-area-inset-top));
+}
+
+/* A full-screen page slides up over the stage. */
+[data-layout='portrait'].is-page #ui .card {
+  animation: page-in var(--dur-med) ease-out;
+}
+
+@keyframes page-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-layout='portrait'] #scene {
+    transition: none;
+  }
+  [data-layout='portrait'].is-page #ui .card {
+    animation: none;
+  }
 }
 
 .sr-only {
@@ -119,45 +211,4 @@ input {
 
 [hidden] {
   display: none !important;
-}
-
-/*
- * Phone portrait: the scene on top, the prompt below. Desktop and landscape
- * keep the full-window scene with the card over it.
- *
- * When the keyboard opens, the scene keeps its size (a new scale would make
- * the world jump) and slides up instead: the sky goes off the top while the
- * ground and the party stay just above the card.
- */
-@media (orientation: portrait) and (max-width: 767px) {
-  :root {
-    --scene-h: 45vh;
-    /* Room the tallest in-run card (the reveal, with its Next button) needs
-       below the scene. With the keyboard up, ~80 native rows of scene still
-       show: the ground and the party. */
-    --ui-min-h: 340px;
-    --scene-shown: max(0px, min(var(--scene-h), calc(var(--vv-height, 100dvh) - var(--ui-min-h))));
-  }
-
-  /* svh ignores the browser bar showing and hiding. A custom property can't
-     fall back by repeating it, hence @supports. */
-  @supports (height: 1svh) {
-    :root {
-      --scene-h: 45svh;
-    }
-  }
-
-  /* The results screen (html.is-results) and the collection pages (html.is-collection: Field Journal, Achievements)
-     keep the full-window scene with their card over it, like desktop. */
-  :root:not(.is-results, .is-collection) #scene {
-    bottom: auto;
-    top: calc(var(--vv-top, 0px) + var(--scene-shown) - var(--scene-h));
-    height: var(--scene-h);
-  }
-
-  :root:not(.is-results, .is-collection) #ui {
-    top: calc(var(--vv-top, 0px) + var(--scene-shown));
-    height: calc(var(--vv-height, 100dvh) - var(--scene-shown));
-    padding-top: var(--space-3);
-  }
 }

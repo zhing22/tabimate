@@ -57,7 +57,8 @@ export function timerRing(props: TimerRingProps): TimerRing {
 
   let shown = -1;
   const draw = () => {
-    const left = Math.max(0, endsAt - props.now());
+    // Before the countdown starts the deadline includes the start grace: show it full.
+    const left = Math.min(props.totalMs, Math.max(0, endsAt - props.now()));
     const fraction = props.totalMs > 0 ? Math.min(1, left / props.totalMs) : 0;
     arc.setAttribute('stroke-dashoffset', (CIRCUMFERENCE * (1 - fraction)).toFixed(2));
     const seconds = secondsLeft(left);

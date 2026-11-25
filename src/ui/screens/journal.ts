@@ -2,12 +2,15 @@ import type { Portraits } from '@/core/portrait';
 import { journalDetail } from '../components/journalDetail';
 import { journalGrid, type JournalGrid } from '../components/journalGrid';
 import { tabRow } from '../components/journalTabs';
-import { COLLECTION_PAGE_CLASS, pageHeader } from '../components/pageHeader';
+import { card } from '../components/card';
+import { pageTitle, type PageActions, type PageProps } from '../components/pageHeader';
+import { settingsMenu } from '../components/settingsMenu';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
+import { openPage } from '../layout/page';
 import type { JournalCell, JournalTab } from '../journalView';
 
-export interface JournalProps {
+export interface JournalProps extends PageProps {
   /** "All animals" first, then the sets. */
   readonly tabs: readonly JournalTab[];
   readonly found: number;
@@ -15,10 +18,7 @@ export interface JournalProps {
   readonly portraits?: Portraits | undefined;
 }
 
-export interface JournalActions {
-  /** Back to the screen the journal was opened from. */
-  close(): void;
-}
+export type JournalActions = PageActions;
 
 /** A set's line: "Big cats · 3 of 7", stamped once complete. */
 function setHeader(tab: JournalTab): HTMLElement | null {
@@ -44,6 +44,12 @@ function cellOpener(panel: HTMLElement, portraits: Portraits | undefined) {
       from.querySelector('button')?.focus();
     };
     const detail = journalDetail(cell, close, portraits);
+    // Escape closes the animal's page first, not the whole journal.
+    detail.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      close();
+    });
     panel.prepend(detail);
     // The panel scrolls: bring the page into view.
     detail.scrollIntoView?.({ block: 'nearest' });
@@ -78,12 +84,8 @@ function journalPanel(panel: HTMLElement, props: JournalProps) {
  * achievements, in tabs. A found animal opens to its page above the grid.
  */
 export const journalScreen: Screen<JournalProps, JournalActions> = (root, props, actions) => {
-  const head = pageHeader(
-    'journal-title',
-    'Field Journal',
-    `${props.found} of ${props.total} animals found`,
-    () => actions.close(),
-  );
+  const heading = pageTitle('journal-title', 'Field Journal');
+  const settings = props.sound ? settingsMenu(props.sound) : null;
   const panel = h('div', { class: 'journal__panel', role: 'tabpanel', id: 'journal-panel' });
   const content = journalPanel(panel, props);
   const { tabs } = props;
@@ -93,20 +95,22 @@ export const journalScreen: Screen<JournalProps, JournalActions> = (root, props,
   };
   const row = tabRow(tabs, showTab);
 
-  root.append(
-    h(
-      'section',
-      { class: 'card card--journal journal', 'aria-labelledby': 'journal-title' },
-      head.el,
-      row.el,
-      panel,
-    ),
-  );
+  const shown = card({
+    className: 'card--journal journal',
+    title: heading,
+    meta: `${props.found} of ${props.total} animals found`,
+    back: () => actions.close(),
+    close: actions.dismiss ?? (() => actions.close()),
+    tools: [settings?.el],
+    body: [row.el, panel],
+  });
+  root.append(shown.el);
   showTab(0);
-  focus(head.heading);
-  document.documentElement.classList.add(COLLECTION_PAGE_CLASS);
+  const closePage = openPage(shown.el, () => actions.close());
+  focus(heading);
   return () => {
+    closePage();
+    settings?.destroy();
     content.destroy();
-    document.documentElement.classList.remove(COLLECTION_PAGE_CLASS);
   };
 };
