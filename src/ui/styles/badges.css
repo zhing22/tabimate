@@ -87,3 +87,13 @@
   font-variant-numeric: tabular-nums;
   color: var(--ink-soft);
 }
+
+/* A narrow sheet: one badge per row, a smaller picture. */
+@container sheet (max-width: 380px) {
+  .badge-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .badge__icon {
+    font-size: var(--text-lg);
+  }
+}

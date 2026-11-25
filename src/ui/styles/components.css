@@ -124,8 +124,29 @@
   stroke-linecap: butt;
 }
 
+.timer-ring--amber .timer-ring__arc {
+  stroke: var(--timer-amber);
+}
+
+/* The last seconds: red, with a gentle pulse (none with reduced motion). */
 .timer-ring--low .timer-ring__arc {
   stroke: var(--accent);
+}
+
+.timer-ring--low {
+  animation: ring-pulse 1s ease-in-out infinite;
+}
+
+@keyframes ring-pulse {
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-ring--low {
+    animation: none;
+  }
 }
 
 .timer-ring__label {

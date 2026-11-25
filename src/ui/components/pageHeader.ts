@@ -1,17 +1,9 @@
 import { h } from '../dom';
-import type { SoundSetting } from './settingsMenu';
 
 /** What a full-screen page (Journal, Achievements, History) can do from its header. */
 export interface PageActions {
-  /** Back: one page back, to the screen the page was opened from. */
+  /** ×, Escape or the back gesture: closes the page, back to where it was opened. */
   close(): void;
-  /** ×: closes every page (portrait), back to the start or the results summary. */
-  dismiss?: (() => void) | undefined;
-}
-
-/** What every full-screen page shows in its header besides its own title. */
-export interface PageProps {
-  readonly sound?: SoundSetting | undefined;
 }
 
 /**

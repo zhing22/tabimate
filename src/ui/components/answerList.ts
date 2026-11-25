@@ -10,9 +10,11 @@ export interface AnswerListOptions {
   readonly share?: (animalId: string) => number | null;
 }
 
+/**
+ * Opens at the top, highest level first: the player's own row is highlighted
+ * where it falls, never scrolled to (the rare answers are the news).
+ */
 export interface AnswerList extends Component {
-  /** Scrolls the player's answer into the middle of the box. Call once it is visible. */
-  readonly reveal: () => void;
   /** Draws the rows again, e.g. once player shares arrive. */
   readonly refresh: () => void;
 }
@@ -101,12 +103,6 @@ export function answerList(answers: readonly AnswerLine[], options: AnswerListOp
   );
   return {
     el,
-    reveal: () => {
-      const row = list.querySelector<HTMLElement>('.answer--picked');
-      if (!row) return;
-      // Within the box only: scrollIntoView would also scroll the page.
-      box.scrollTop = row.offsetTop - (box.clientHeight - row.offsetHeight) / 2;
-    },
     refresh: () => show(shown),
     destroy: () => {},
   };

@@ -64,7 +64,7 @@ describe('scenery renderer', () => {
   });
 
   it('fades each layer from one biome to the next, the ground layer staying solid', () => {
-    const { drawn, skies } = draw(grassland - BIOME_BORDER / 4); // blend 0.75
+    const { drawn, skies } = draw(grassland + BIOME_BORDER / 4); // blend 0.75
     expect(opacityOf(drawn, 'town/back')).toBeCloseTo(0.25);
     expect(opacityOf(drawn, 'grassland/back')).toBeCloseTo(0.75);
     expect(opacityOf(drawn, 'town/ground')).toBe(1);
@@ -88,8 +88,8 @@ describe('scenery renderer', () => {
     const tiles = drawn.filter((d) => d.sprite === 'tile').map((d) => d.x + camera);
     expect(tiles.length).toBeGreaterThan(0);
     for (const t of tiles) {
-      expect(t).toBeGreaterThanOrEqual(grassland - BIOME_BORDER);
-      expect(t).toBeLessThan(grassland);
+      expect(t).toBeGreaterThanOrEqual(grassland - BIOME_BORDER / 2);
+      expect(t).toBeLessThan(grassland + BIOME_BORDER / 2);
     }
     const gate = drawn.find((d) => d.sprite === 'gate')!;
     expect(gate.x + camera + 10).toBe(gatewayX(1));

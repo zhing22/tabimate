@@ -32,7 +32,10 @@ export function createScreenHost(root: HTMLElement): ScreenHost {
   const overlayLayer = h('div', { class: 'overlay-layer' });
   const live = h('p', { class: 'sr-only', 'aria-live': 'polite', 'aria-atomic': 'true' });
   const toasts = h('div', { class: 'toast-layer', 'aria-live': 'polite' });
-  root.replaceChildren(screenLayer, overlayLayer, live, toasts);
+  // The frame is the screens' size container (base.css: the type scale reads it);
+  // the live region and toasts stay outside it, so toasts can sit over the scene.
+  const frame = h('div', { class: 'ui-frame' }, screenLayer, overlayLayer);
+  root.replaceChildren(frame, live, toasts);
 
   let unmountScreen: Unmount | null = null;
   let unmountOverlay: Unmount | null = null;

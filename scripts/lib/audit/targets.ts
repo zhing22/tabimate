@@ -43,6 +43,7 @@ export const AUDIT_STATES = [
   'results',
   'results-list',
   'journal',
+  'journal-detail',
   'achievements',
   'history',
   // Portrait only: the results pop-up closed, the summary under the scene.

@@ -50,9 +50,9 @@
   font-size: var(--text-md);
 }
 
-/* × closes a full-screen page; in landscape pages live in the panel and Back is enough. */
-[data-layout='landscape'] .card__close {
-  display: none;
+/* × closes a pop-up (in both layouts); Back only appears in a nested view. */
+.card__close {
+  margin-inline-start: auto;
 }
 
 .card__body {
@@ -103,4 +103,24 @@
 
 .card__header .card__meta {
   font-size: var(--text-sm);
+}
+
+/* A narrow sheet (under 380 px): tighter padding and gaps, and nothing in a
+   title or button may be cut: words wrap whole, never mid-word. */
+@container sheet (max-width: 380px) {
+  .card__header,
+  .card__body,
+  .card__footer {
+    padding-inline: var(--space-3);
+  }
+  .card__body {
+    gap: var(--space-2);
+  }
+  .card__title,
+  .button,
+  .tile__label {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
 }

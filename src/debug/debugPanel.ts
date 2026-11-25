@@ -12,13 +12,7 @@ import { explainGuess, type GuessExplained } from './explainGuess';
 
 const MAX_LOG = 8;
 
-/** The debug options in a page URL: whether the panel is on, and a date to play. */
-export function readDebugParams(search: string): { enabled: boolean; date: DateKey | null } {
-  const params = new URLSearchParams(search);
-  const enabled = params.get('debug') === '1';
-  const date = params.get('date');
-  return { enabled, date: enabled && date !== null && isDateKey(date) ? date : null };
-}
+export { readDebugParams } from './debugParams';
 
 export interface DebugPanelDeps {
   /** Absent when there is no puzzle to play (so nothing to explain). */

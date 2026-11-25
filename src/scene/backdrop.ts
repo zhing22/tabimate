@@ -7,7 +7,7 @@ import type { BorderSprites } from './borders/load';
 import type { BorderKey } from './borders/registry';
 import { createSceneryRenderer, type SceneryBackend } from './drawScenery';
 import { makeCanvas } from './sprites/canvasArt';
-import { worldStateAt } from './strip';
+import { cutBlend, worldStateAt } from './strip';
 
 export interface BackdropDeps {
   readonly art: Readonly<Record<BiomeId, BiomeArtSprites>>;
@@ -44,7 +44,7 @@ export function paintBackdrop(deps: BackdropDeps, score: number): BackdropImage 
   const x = distanceFor(score);
   const { canvas, ctx } = makeCanvas(BACKDROP.width, NATIVE_HEIGHT);
   const state = worldStateAt(x);
-  if (deps.reducedMotion) state.blend = 0;
+  if (deps.reducedMotion) cutBlend(state);
   createSceneryRenderer(canvasBackend(ctx), deps)(
     state,
     Math.round(x - BACKDROP.width / 2),

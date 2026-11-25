@@ -1,14 +1,11 @@
 import { revealBuildUpMs, revealNameMs, type RevealTiming } from '@/config/game';
-import { isShiny, LEVELS, TOP_LEVEL } from '@/config/levels';
-import { UI_SPRITE_SCALE } from '@/config/ui';
+import { LEVELS, TOP_LEVEL, type LevelId } from '@/config/levels';
 import type { Portraits } from '@/core/portrait';
 import type { Animal, RoundResult } from '@/core/types';
-import { card } from '../components/card';
 import { countUp } from '../components/countUp';
-import { levelBadge } from '../components/levelBadge';
-import { portrait } from '../components/portrait';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
+import { revealCard } from './revealCard';
 
 export interface RevealProps {
   readonly result: RoundResult;
@@ -27,6 +24,12 @@ export interface RevealProps {
   readonly focusNext: boolean;
   /** Lines under the name (ui/reveal/extras.ts): the fact, the near-miss hint. */
   readonly extras?: readonly HTMLElement[];
+  /** The top bar, as over the prompt: the puzzle number and each answer's footprint. */
+  readonly bar?: {
+    readonly puzzleNumber: number;
+    readonly total: number;
+    readonly levels: readonly LevelId[];
+  };
   /** A first-ever find (in neither the Field Journal nor earlier answers today): a "New" ribbon on the sprite. */
   readonly isNew?: boolean;
   /** The animal's sprite (walking; shiny at the shiny level), else its emoji. */
@@ -66,76 +69,6 @@ function nextButton(label: string, next: () => void): HTMLButtonElement {
   button.addEventListener('mousedown', (event) => event.preventDefault());
   button.addEventListener('click', next);
   return button;
-}
-
-/** The one level badge; a top-level find says "Jackpot!" inside it, in gold (reveal.css). */
-function badge(level: RoundResult['match']['level']): HTMLElement {
-  const el = levelBadge(level, { size: 'lg' }).el;
-  if (level === TOP_LEVEL) {
-    el.classList.add('level-badge--jackpot');
-    el.prepend(h('span', { class: 'level-badge__jackpot' }, 'Jackpot!'), ' ');
-  }
-  return h('div', { class: 'reveal__badge' }, el);
-}
-
-/** The card: a drum-roll line, then the picture, name, badge, extras and points; Next in the footer. */
-function revealCard(props: RevealProps, pointsEl: HTMLElement, next: HTMLElement): HTMLElement {
-  const { animal } = props;
-  const level = props.result.match.level;
-  const shown = card({
-    className: 'reveal reveal--pending',
-    label: 'Result',
-    body: [
-      h('p', { class: 'reveal__suspense', 'aria-hidden': 'true' }, '. . .'),
-      h(
-        'div',
-        { class: 'reveal__body' },
-        revealPicture(props),
-        h('p', { class: 'reveal__name' }, animal?.display ?? "Time's up"),
-        badge(level),
-        props.extras?.length ? h('div', { class: 'reveal__extras' }, ...props.extras) : null,
-        pointsEl,
-      ),
-    ],
-    footer: [next],
-  });
-  shown.el.dataset['level'] = String(level);
-  // Styled by effect, not level number, so LEVELS decides which level is shiny.
-  shown.el.dataset['effect'] = LEVELS[level].effectId;
-  shown.el.style.setProperty('--reveal-level', `var(${LEVELS[level].colour})`);
-  shown.el.style.setProperty('--reveal-badge-ms', `${props.timing.badgePopMs}ms`);
-  return shown.el;
-}
-
-/**
- * The animal's sprite walking (shiny at the shiny level), or a paw print or
- * puff for a miss; a first-ever find wears a small "New" ribbon.
- */
-function revealPicture({ animal, result, portraits, isNew }: RevealProps): HTMLElement {
-  const level = result.match.level;
-  const picture = h(
-    'div',
-    { class: 'reveal__emoji', 'aria-hidden': 'true' },
-    animal
-      ? portrait(animal, isShiny(level), {
-          scale: UI_SPRITE_SCALE.reveal,
-          portraits,
-          walking: true,
-        })
-      : level
-        ? '🐾'
-        : '💨',
-  );
-  const ribbon =
-    isNew && level !== 0
-      ? h(
-          'span',
-          { class: 'reveal__ribbon' },
-          'New',
-          h('span', { class: 'sr-only' }, ' to your journal'),
-        )
-      : null;
-  return h('div', { class: 'reveal__picture' }, picture, ribbon);
 }
 
 /** Steps run after a delay (at once for none), all cancelled together. */

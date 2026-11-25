@@ -109,6 +109,8 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       world.restore(state.results);
       effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
     }),
+    // The results say which biome was reached; no title card over them.
+    bus.on('runFinished', () => world.endJourney()),
     bus.on('answerMatched', ({ result }) => {
       // As the reveal shows the name (after the jackpot freeze for a top-level find).
       const at = revealNameMs(result.match.level);

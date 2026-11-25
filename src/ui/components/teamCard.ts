@@ -89,7 +89,6 @@ export function teamCard(rounds: readonly TeamRound[], portraits?: Portraits): T
           lists.push(list);
           details.append(list.el);
         }
-        list.reveal();
       });
       return h('li', {}, details);
     }),

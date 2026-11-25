@@ -58,8 +58,8 @@
     clip-path: inset(50%);
   }
   .round .timer-ring {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 44px;
+    height: 44px;
   }
   .round .card__header,
   .round .card__body,

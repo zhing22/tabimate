@@ -1,3 +1,4 @@
+import type { LevelId } from '@/config/levels';
 import type { Prompt } from '@/core/types';
 import { focus } from '../dom';
 import type { Unmount } from '../host';
@@ -18,6 +19,8 @@ export interface RoundProps {
   readonly total: number;
   readonly prompt: Prompt;
   readonly endsAt: number;
+  /** The levels of the prompts answered so far, in order (the top bar's footprints). */
+  readonly levels: readonly LevelId[];
 }
 
 export interface RoundActions {
@@ -63,7 +66,10 @@ export function mountRound(
   setup: RoundSetup,
   actions: RoundActions,
 ): RoundScreen {
-  const { card, step, question, form, input, go, note, ring } = buildRound(first.endsAt, setup);
+  const { card, step, question, form, input, go, note, ring, bar } = buildRound(
+    first.endsAt,
+    setup,
+  );
   const showNote = (kind: Note | null, text = '') => {
     note.hidden = kind === null;
     note.dataset['kind'] = kind ?? '';
@@ -106,6 +112,7 @@ export function mountRound(
 
   const setRound = (props: RoundProps) => {
     step.textContent = `Prompt ${props.index + 1} of ${props.total}`;
+    bar.set(props.levels, props.index);
     question.textContent = props.prompt.text;
     ring.setEndsAt(props.endsAt);
     locked = false;

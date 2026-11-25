@@ -70,18 +70,25 @@ describe('the bonus quiz in the app', () => {
     type(input, 'Tiger'); // EN: 85 points
     pressEnter(input);
     t.click('Bonus quiz'); // the last reveal leads to the quiz, not the results
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     expect(t.$('h1')?.textContent).toBe('Bonus quiz');
     t.click('Start');
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     expect(t.$('.bonus__statement')?.textContent).toBe('Bats are blind.');
     expect(document.activeElement?.textContent).toBe('True');
     t.click('False'); // right
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     expect(t.$('.bonus__verdict')?.textContent).toBe('Right!');
     expect(t.$('.bonus__explanation')?.textContent).toBe('Most bats see well.');
     t.click('Next question');
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     t.click('False'); // wrong
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     expect(t.$('.bonus__verdict')?.textContent).toBe("Not quite: it's true.");
     t.click('Next question');
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     t.click('False'); // right
+    await vi.dynamicImportSettled(); // the quiz screen loads on first use
     t.click('See results');
     await vi.dynamicImportSettled(); // the results load when the run ends
     expect(t.$('.results__number')?.textContent).toBe(String(Math.round(85 * 1.2)));

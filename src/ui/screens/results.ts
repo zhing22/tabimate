@@ -7,7 +7,6 @@ import { collectionLinks, type CollectionLinks } from '../components/collectionL
 import { countdown } from '../components/countdown';
 import { installHint } from '../components/installHint';
 import { partyLineup } from '../components/partyLineup';
-import { settingsMenu, type SoundSetting } from '../components/settingsMenu';
 import { shareButton } from '../components/shareButton';
 import { teamCard, type TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
@@ -36,7 +35,6 @@ export interface ResultsProps {
   /** Tomorrow's theme name (config/themes.ts), or null on a plain day. Never its prompts. */
   readonly tomorrowTheme: string | null;
   readonly install?: InstallOffer | undefined;
-  readonly sound?: SoundSetting | undefined;
 }
 
 export interface ResultsActions extends CollectionLinks {
@@ -92,12 +90,10 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
     'Journey complete',
   );
 
-  const settings = props.sound ? settingsMenu(props.sound) : null;
   const shown = card({
     className: 'card--journal results',
     title: heading,
     close: () => actions.close(),
-    tools: [settings?.el],
     footer: [shareIt.el, saveButton, nextButton],
     body: [
       party.el,
@@ -132,7 +128,6 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
   return () => {
     open = false;
     closePage();
-    settings?.destroy();
     timer.destroy();
     team.destroy();
     party.destroy();

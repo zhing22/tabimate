@@ -1,0 +1,145 @@
+/* The wordmark, the prompt top bar, the theme chip, and decoration on the
+   stage (components/wordmark.ts, topBar.ts, themeChip.ts; layout/stage.ts). */
+.wordmark {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.35em;
+  max-width: 100%;
+  color: var(--ink);
+}
+
+.wordmark__art {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
+.wordmark--lg {
+  height: clamp(2.25rem, calc(var(--u, 16px) * 2.6), 4rem);
+}
+
+.wordmark--md {
+  height: calc(var(--u, 16px) * 1.75);
+}
+
+.wordmark--sm {
+  height: calc(var(--u, 16px) * 1.2);
+}
+
+.wordmark__extra {
+  font-family: var(--font-pixel);
+  font-size: var(--text-md);
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+/* Over the prompt and the reveal: the wordmark and a footprint per prompt. */
+.top-bar {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.top-bar__prints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.footprint {
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: rgb(143 106 63 / 0.35);
+  border-radius: var(--radius-2);
+}
+
+.footprint__art {
+  width: 70%;
+  height: auto;
+}
+
+.footprint--done {
+  filter: drop-shadow(0 0 1px var(--ink));
+}
+
+.footprint--current {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.theme-chip {
+  justify-self: center;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* A text-like button: "How to play". Still a 44 px target. */
+.link-button {
+  min-height: var(--tap);
+  padding: 0 var(--space-3);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---- On the stage ---- */
+
+/* "Ready?" over the traveller, who stands in the middle of the start scene. */
+.stage-bubble {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--scene-ground-y, 70%) - var(--scene-px, 3px) * 30);
+  transform: translate(-50%, -100%);
+  margin: 0;
+  padding: 0.2rem 0.6rem;
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: var(--radius-2);
+  box-shadow: 0 0 0 3px var(--ink);
+  animation: bubble-bob 1.6s ease-in-out infinite;
+}
+
+.stage-bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  width: 8px;
+  height: 8px;
+  background: var(--paper);
+  box-shadow:
+    3px 3px 0 0 var(--ink),
+    0 3px 0 0 var(--ink),
+    3px 0 0 0 var(--ink);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@keyframes bubble-bob {
+  50% {
+    transform: translate(-50%, calc(-100% - 3px));
+  }
+}
+
+/* Loading: the path along the ground is the progress bar. */
+#stage-overlay .loading__track {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: calc(var(--scene-ground-y, 75%) - 3.25rem + 4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-bubble {
+    animation: none;
+  }
+}

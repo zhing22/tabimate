@@ -10,6 +10,7 @@ import {
   BIOME_STOPS,
   biomeOfProp,
   createWorldState,
+  borderStartX,
   gatewayX,
   worldStateAt,
   type WorldState,
@@ -85,8 +86,8 @@ export function createSceneryRenderer(backend: SceneryBackend, deps: SceneryDeps
   /** Border ground tiles and gateways for every border in view. */
   function drawBorders(cameraX: number, width: number) {
     for (let i = 1; i < BIOME_STOPS.length; i++) {
-      const end = BIOME_STOPS[i]!.startX;
-      const start = end - BIOME_BORDER;
+      const start = borderStartX(BIOME_STOPS[i]!);
+      const end = start + BIOME_BORDER;
       if (end < cameraX || start > cameraX + width) continue;
       const border = borders.get(borderKey(BIOME_STOPS[i - 1]!.id, BIOME_STOPS[i]!.id));
       const ground = border?.groundTile;

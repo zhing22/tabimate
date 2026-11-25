@@ -5,7 +5,7 @@ import { distanceFor } from '@/core/journey';
 import { ANIMALS } from '@/core/matcher/testFixtures';
 import type { RoundResult } from '@/core/types';
 import { type Point } from './entities/followerTrail';
-import { gatewayX } from './strip';
+import { dominantBiome, gatewayX } from './strip';
 import { createWorld, type World } from './world';
 
 const hit = (animalId: string, level: AnswerLevel): RoundResult => ({
@@ -66,7 +66,7 @@ describe('world: a run', () => {
       if (w.state.blend > 0 && w.state.blend < 1) blended = true;
     }
     expect(blended).toBe(true);
-    expect(w.state.biome).toBe('grassland');
+    expect(dominantBiome(w.state)).toBe('grassland');
   });
 
   it('three followers trail the player one spacing apart on its path', () => {
@@ -109,12 +109,13 @@ describe('world: title cards', () => {
     let card = false;
     for (let i = 0; i < 60; i++) {
       w.update(1 / 60);
-      if (w.state.blend > 0) blended = true;
+      // A cut: the blend is all one biome or all the other, never between.
+      if (w.state.blend > 0 && w.state.blend < 1) blended = true;
       if (w.titleCard.biome === 'grassland') card = true;
     }
     expect(blended).toBe(false);
     expect(card).toBe(true);
-    expect(w.state.biome).toBe('grassland');
+    expect(dominantBiome(w.state)).toBe('grassland');
   });
 });
 
@@ -145,7 +146,7 @@ describe('world: restore', () => {
     ]);
     expect(w.player.x).toBe(distanceFor(75));
     expect(w.player.walking).toBe(false);
-    expect(w.state.biome).toBe('grassland');
+    expect(dominantBiome(w.state)).toBe('grassland');
     w.update(1 / 60);
     expect(w.titleCard.biome).toBeNull();
     // Followers can stand behind a player restored mid-journey.
@@ -161,5 +162,15 @@ describe('world: restore', () => {
     expect(w.followers).toHaveLength(0);
     expect(w.player.x).toBe(0);
     expect(w.state.biome).toBe('town');
+  });
+
+  it('shows no title card once the journey is over', () => {
+    const w = world();
+    w.endJourney();
+    w.join(hit('snow-leopard', 3)); // walks into Grassland
+    for (let i = 0; i < 600; i++) {
+      w.update(1 / 60);
+      expect(w.titleCard.biome).toBeNull();
+    }
   });
 });

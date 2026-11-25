@@ -2,13 +2,12 @@ import type { BadgeSection } from '../achievementsView';
 import { unlockedCount } from '../achievementsView';
 import { badgeId, badgeList } from '../components/badgeList';
 import { card } from '../components/card';
-import { pageTitle, type PageActions, type PageProps } from '../components/pageHeader';
-import { settingsMenu } from '../components/settingsMenu';
+import { pageTitle, type PageActions } from '../components/pageHeader';
 import { focus, h } from '../dom';
 import type { Screen } from '../host';
 import { openPage } from '../layout/page';
 
-export interface AchievementsProps extends PageProps {
+export interface AchievementsProps {
   readonly sections: readonly BadgeSection[];
   /** Open at this achievement (a tapped toast): scrolled into view and focused. */
   readonly focusId?: string | undefined;
@@ -47,14 +46,11 @@ export const achievementsScreen: Screen<AchievementsProps, AchievementsActions> 
 ) => {
   const { unlocked, total } = unlockedCount(props.sections);
   const heading = pageTitle('achievements-title', 'Achievements');
-  const settings = props.sound ? settingsMenu(props.sound) : null;
   const shown = card({
     className: 'card--journal achievements',
     title: heading,
     meta: `${unlocked} of ${total} unlocked`,
-    back: () => actions.close(),
-    close: actions.dismiss ?? (() => actions.close()),
-    tools: [settings?.el],
+    close: () => actions.close(),
     body: [h('div', { class: 'achievements__body' }, ...props.sections.map(section))],
   });
   root.append(shown.el);
@@ -69,6 +65,5 @@ export const achievementsScreen: Screen<AchievementsProps, AchievementsActions> 
   } else focus(heading);
   return () => {
     closePage();
-    settings?.destroy();
   };
 };

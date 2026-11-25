@@ -43,7 +43,13 @@ export function createApp(deps: AppDeps): App {
   };
   const round = roundSlot(
     host,
-    { totalMs: ROUND_TIME_MS, now, ...(deps.frames ? { frames: deps.frames } : {}) },
+    {
+      puzzleNumber: puzzle.number,
+      promptCount: puzzle.prompts.length,
+      totalMs: ROUND_TIME_MS,
+      now,
+      ...(deps.frames ? { frames: deps.frames } : {}),
+    },
     {
       submit: (text) => controller.submit(text),
       next,
@@ -51,6 +57,12 @@ export function createApp(deps: AppDeps): App {
       begin: () => controller.beginRound(),
     },
   );
+  /** The levels of the first `count` answers so far (the top bar's footprints). */
+  const levelsUpTo = (count: number) =>
+    controller
+      .getState()
+      .results.slice(0, count)
+      .map((r) => r.match.level);
   const revealDeps = {
     host,
     puzzle,
@@ -71,6 +83,7 @@ export function createApp(deps: AppDeps): App {
     resultShown = false;
     round.lock();
     showRevealCard(revealDeps, index, result, {
+      levels: levelsUpTo(index + 1),
       focusNext: !round.mounted,
       revealed: (summary) => {
         resultShown = true;
@@ -98,10 +111,16 @@ export function createApp(deps: AppDeps): App {
     );
   }
 
-  const stopBonus = startBonusFlow({ host, bus, controller, now, frames: deps.frames });
+  const stopBonus = startBonusFlow({ host, bus, controller, now, frames: deps.frames, openScreen });
   const stops = [
     bus.on('roundStarted', ({ index, prompt, endsAt }) =>
-      round.show({ index, total: puzzle.prompts.length, prompt, endsAt }),
+      round.show({
+        index,
+        total: puzzle.prompts.length,
+        prompt,
+        endsAt,
+        levels: levelsUpTo(index),
+      }),
     ),
     bus.on('roundTimerStarted', ({ endsAt }) => round.timerStarted(endsAt)),
     // Spoken through the host's live region, which re-reads a repeated message.

@@ -44,7 +44,10 @@ export const ROUND_TIME_MS = 25_000;
  */
 export const ROUND_START_GRACE_MS = 3_000;
 
-/** With this much of a round left (or less), the timer ring turns urgent. */
+/** With this much of a round left (or less), the timer ring turns amber. */
+export const TIMER_AMBER_MS = 10_000;
+
+/** With this much of a round left (or less), the timer ring turns red and pulses gently. */
 export const TIMER_WARN_MS = 5_000;
 
 /**
@@ -171,6 +174,8 @@ export const LOADING = {
   spriteWaitMs: 4_000,
   /** One of these walks behind the traveller, picked at random. */
   animalEmoji: ['🦊', '🐧', '🐢', '🦉', '🐘', '🦔', '🐼', '🦒'],
+  /** The "Did you know?" line changes to another animal this often. */
+  factMs: 5_000,
 } as const;
 
 /** Shown for a prompt that ended with no animal (time ran out): share text, history. */

@@ -27,6 +27,8 @@ export interface Card {
   /** The part that scrolls. */
   readonly body: HTMLElement;
   readonly footer: HTMLElement | null;
+  /** The header's Back button, if asked for (a nested view shows and hides it). */
+  readonly backButton: HTMLButtonElement | null;
 }
 
 function headerButton(className: string, text: string, label: string, onClick: () => void) {
@@ -36,12 +38,12 @@ function headerButton(className: string, text: string, label: string, onClick: (
   return button;
 }
 
-function cardHeader(o: CardOptions): HTMLElement | null {
-  if (!o.title && !o.back && !o.close && !o.tools?.length) return null;
+function cardHeader(o: CardOptions, back: HTMLButtonElement | null): HTMLElement | null {
+  if (!o.title && !back && !o.close && !o.tools?.length) return null;
   return h(
     'header',
     { class: 'card__header' },
-    o.back ? headerButton('card__back', '‹ Back', 'Back', o.back) : null,
+    back,
     h(
       'div',
       { class: 'card__title' },
@@ -54,7 +56,8 @@ function cardHeader(o: CardOptions): HTMLElement | null {
 }
 
 /**
- * Every screen's card (v3 layout): a fixed header (title, Back, tools, ×),
+ * Every screen's card (v3 layout): a fixed header (Back in a nested view,
+ * the title, tools, ×),
  * a body that scrolls, and a footer with the main action that never scrolls
  * away. It fills the sheet (portrait), the panel (landscape) or the screen
  * (a full-screen page).
@@ -68,6 +71,8 @@ export function card(o: CardOptions): Card {
     : o.label
       ? { 'aria-label': o.label }
       : {};
-  const el = h('section', { class: `card ${o.className}`, ...named }, cardHeader(o), body, footer);
-  return { el, body, footer };
+  const backButton = o.back ? headerButton('card__back', '‹ Back', 'Back', o.back) : null;
+  const header = cardHeader(o, backButton);
+  const el = h('section', { class: `card ${o.className}`, ...named }, header, body, footer);
+  return { el, body, footer, backButton };
 }

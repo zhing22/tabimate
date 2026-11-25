@@ -1,4 +1,10 @@
-import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT, RESIZE_DEBOUNCE_MS, SCENE_FRAME } from '@/config/render';
+import {
+  GROUND_Y,
+  MAX_VISIBLE_WIDTH,
+  NATIVE_HEIGHT,
+  RESIZE_DEBOUNCE_MS,
+  SCENE_FRAME,
+} from '@/config/render';
 import { computeViewport, type Viewport } from './viewport';
 
 const px = (devicePx: number, dpr: number) => `${devicePx / dpr}px`;
@@ -39,6 +45,11 @@ export function watchCanvasLayout(container: HTMLElement, canvas: HTMLCanvasElem
     canvas.style.top = px(view.offsetY, dpr);
     placeStage(stage, view, dpr);
     container.classList.toggle('scene--framed', view.framed);
+    // Where the walk line is and how big a scene pixel is, for the UI's stage
+    // decoration (ui/layout/stage.ts) to stand on the ground.
+    const root = document.documentElement.style;
+    root.setProperty('--scene-ground-y', px(view.offsetY + GROUND_Y * view.scale, dpr));
+    root.setProperty('--scene-px', px(view.scale, dpr));
   }
   layout();
   let resizeTimer: ReturnType<typeof setTimeout> | undefined;

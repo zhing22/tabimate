@@ -97,8 +97,8 @@ describe('app: playing with the keyboard', () => {
   it('start -> three rounds -> results, with focus where the player needs it', async () => {
     const t = setup();
     t.app.showStart();
-    expect(t.$('h1')?.textContent).toBe('Tabimate');
-    expect(t.$('.meta')?.textContent).toContain('Puzzle #2');
+    expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
+    expect(t.$('.theme-chip')?.textContent).toContain('Puzzle #2');
     expect(document.activeElement?.textContent).toBe('Play');
 
     (document.activeElement as HTMLButtonElement).click();

@@ -26,11 +26,23 @@ export function createResultsFlow({ app, collection, animalOf, openScreen }: Res
   const now = () => clock.now().getTime();
 
   function summary(run: FinishedRun) {
+    const { rounds } = resultsProps(puzzle, animalOf, animals, run, () => 0);
     openScreen(loadSummary, ({ resultsSummaryScreen }) =>
       host.show(
         resultsSummaryScreen,
-        { score: run.score, biomeName: biomeFor(run.base).name, sound: app.sound },
-        { open: () => results(run), ...collection.links(() => summary(run)) },
+        {
+          score: run.score,
+          biomeName: biomeFor(run.base).name,
+          rounds,
+          portraits: app.portraits,
+          sound: app.sound,
+          delay: app.delay,
+        },
+        {
+          open: () => results(run),
+          share: () => app.share(run),
+          ...collection.links(() => summary(run)),
+        },
       ),
     );
   }
@@ -57,17 +69,13 @@ export function createResultsFlow({ app, collection, animalOf, openScreen }: Res
         ...(app.backdrops ? { backdrops: app.backdrops } : {}),
         ...(app.dayStats ? { dayStats: app.dayStats(puzzle.date) } : {}),
         install: app.install,
-        sound: app.sound,
       },
       {
         next: app.reload,
         close: () => summary(run),
         share: () => app.share(run),
         saveImage: app.saveImage && (() => app.saveImage?.(run)),
-        ...collection.links(
-          () => results(run),
-          () => summary(run),
-        ),
+        ...collection.links(() => results(run)),
       },
     );
   }

@@ -28,7 +28,7 @@ async function openGame(page: Page, url: string, capture: Capture) {
   await settle(page);
   await capture('loading', page);
   release();
-  await page.getByRole('button', { name: 'Play' }).waitFor();
+  await page.getByRole('button', { name: 'Play', exact: true }).waitFor();
   await page.unroute(isDayData);
   await settle(page);
   await capture('start', page);
@@ -78,8 +78,19 @@ async function collectionPage(
   await page.locator(ready).first().waitFor();
   await settle(page);
   await capture(state, page);
-  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  if (state === 'journal') await journalDetail(page, capture);
+  await page.getByRole('button', { name: 'Close', exact: true }).click();
   await page.locator('.team-card').waitFor();
+}
+
+/** One found animal's page in the Journal (the nested view, with Back). */
+async function journalDetail(page: Page, capture: Capture) {
+  await page.locator('.journal-cell__button').first().click();
+  await page.locator('.journal-detail').waitFor();
+  await settle(page);
+  await capture('journal-detail', page);
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await page.locator('.journal-detail').waitFor({ state: 'detached' });
 }
 
 /** Portrait: × closes the results pop-up; the summary shows under the scene. */
@@ -113,7 +124,7 @@ export async function auditOneSize(
   const page = await context.newPage();
   try {
     await openGame(page, url, capture);
-    await page.getByRole('button', { name: 'Play' }).click();
+    await page.getByRole('button', { name: 'Play', exact: true }).click();
     await page.locator('.answer__input').waitFor();
     await settle(page);
     await capture('prompt', page);
@@ -137,7 +148,9 @@ export async function warmUp(browser: Browser, url: string): Promise<void> {
   const page = await browser.newPage();
   try {
     await page.goto(`${url}?debug=1&date=${AUDIT.date}`);
-    await page.getByRole('button', { name: 'Play' }).waitFor({ timeout: AUDIT.warmUpTimeoutMs });
+    await page
+      .getByRole('button', { name: 'Play', exact: true })
+      .waitFor({ timeout: AUDIT.warmUpTimeoutMs });
   } finally {
     await page.close();
   }

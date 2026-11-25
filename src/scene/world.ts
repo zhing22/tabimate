@@ -8,7 +8,7 @@ import { createTrail, type Trail } from './entities/followerTrail';
 import { createIdleMotion, type Pose } from './entities/idleMotion';
 import { createPlayer, type Player } from './entities/player';
 import { createFollower, stepPose, updateFollower, type Follower } from './follower';
-import { createWorldState, dominantBiome, worldStateAt, type WorldState } from './strip';
+import { createWorldState, cutBlend, dominantBiome, worldStateAt, type WorldState } from './strip';
 import { createTitleCards, type TitleCard } from './titleCards';
 
 export type { Follower } from './follower';
@@ -40,6 +40,8 @@ export interface World {
   readonly env: { inWater: boolean };
   /** Rebuilds the scene from a saved run, without animation. */
   restore(results: readonly RoundResult[]): void;
+  /** The run is over: no more biome title cards (a walk still finishing shows none). */
+  endJourney(): void;
   /**
    * An answer joins the journey now, animated: the animal pops in at the back
    * of the party and everyone walks on its points' distance, through any
@@ -72,7 +74,7 @@ export function createWorld(options: WorldOptions): World {
   const env = { inWater: false };
   const locate = () => {
     worldStateAt(player.x, state);
-    if (reducedMotion) state.blend = 0;
+    if (reducedMotion) cutBlend(state);
     env.inWater = WATER.swimBiomes.includes(dominantBiome(state));
   };
 
@@ -108,6 +110,8 @@ export function createWorld(options: WorldOptions): World {
     state,
     titleCard: titles.card,
     env,
+
+    endJourney: () => titles.silence(),
 
     restore(results) {
       followers.length = 0;

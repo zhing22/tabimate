@@ -2,8 +2,26 @@
    scrolls); Share stays in the footer. */
 .results .card__body,
 .results-summary .card__body {
-  gap: var(--space-4);
+  gap: var(--space-2);
   text-align: center;
+}
+
+.results .card__header .title--sm,
+.results-summary .card__header .title--sm {
+  font-size: var(--text-xl);
+}
+
+.results .section-title {
+  font-size: var(--text-lg);
+}
+
+/* The compact team on the summary: each found animal in one row. */
+.summary-team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-2);
 }
 
 .results__score {
@@ -16,7 +34,7 @@
 }
 
 .results .section-title {
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
 }
 
 .results__number {

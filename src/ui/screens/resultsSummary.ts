@@ -1,32 +1,61 @@
+import { isShiny } from '@/config/levels';
+import { UI_SPRITE_SCALE } from '@/config/ui';
+import type { Portraits } from '@/core/portrait';
+import type { ShareOutcome } from '@/core/share';
 import { card } from '../components/card';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
+import { portrait } from '../components/portrait';
 import { settingsMenu, type SoundSetting } from '../components/settingsMenu';
+import { shareButton } from '../components/shareButton';
+import type { TeamRound } from '../components/teamCard';
 import { focus, h } from '../dom';
+import { browserDelay, type Delay } from '../frames';
 import type { Screen } from '../host';
 
 export interface ResultsSummaryProps {
   readonly score: number;
   readonly biomeName: string;
+  /** The day's answers: the compact team row shows each found animal. */
+  readonly rounds: readonly TeamRound[];
+  readonly portraits?: Portraits | undefined;
   readonly sound?: SoundSetting | undefined;
+  readonly delay?: Delay | undefined;
 }
 
 export interface ResultsSummaryActions extends CollectionLinks {
   /** Opens the full results again. */
   open(): void;
+  share(): Promise<ShareOutcome>;
+}
+
+/** The team in one small row: each found animal's picture (misses left out). */
+function teamRow(props: ResultsSummaryProps): HTMLElement {
+  const found = props.rounds.filter((r) => r.animal !== null);
+  return h(
+    'p',
+    { class: 'summary-team', 'aria-label': found.map((r) => r.animal?.display).join(', ') },
+    ...found.map((r) =>
+      portrait(r.animal, isShiny(r.result.match.level), {
+        scale: UI_SPRITE_SCALE.team,
+        portraits: props.portraits,
+      }),
+    ),
+  );
 }
 
 /**
  * What the sheet shows once the results pop-up is closed (portrait): the
- * score and where the run ended, under the scene, with the way back to the
- * full results and the collection tiles.
+ * score and where the run ended under the scene, the team in a row, Share,
+ * and the way back to the full results; the collection tiles too.
  */
 export const resultsSummaryScreen: Screen<ResultsSummaryProps, ResultsSummaryActions> = (
   root,
   props,
   actions,
 ) => {
-  const open = h('button', { class: 'button button--primary', type: 'button' }, 'See results');
+  const open = h('button', { class: 'button', type: 'button' }, 'See results');
   open.addEventListener('click', () => actions.open());
+  const share = shareButton(() => actions.share(), props.delay ?? browserDelay);
   const settings = props.sound ? settingsMenu(props.sound) : null;
   const shown = card({
     className: 'card--journal results-summary',
@@ -41,10 +70,14 @@ export const resultsSummaryScreen: Screen<ResultsSummaryProps, ResultsSummaryAct
       ),
       h('p', { class: 'meta' }, `Reached the ${props.biomeName}`),
       collectionLinks(actions),
+      teamRow(props),
     ],
-    footer: [open],
+    footer: [share.el, open],
   });
   root.append(shown.el);
   focus(open);
-  return () => settings?.destroy();
+  return () => {
+    share.destroy();
+    settings?.destroy();
+  };
 };

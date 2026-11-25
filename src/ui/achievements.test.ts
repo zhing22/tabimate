@@ -69,7 +69,7 @@ describe('Achievements page', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(document.activeElement?.textContent).toBe('Achievements');
     expect(t.$('.card__meta')?.textContent).toBe(`1 of ${ACHIEVEMENTS.length} unlocked`);
-    t.button('Back').click();
+    (t.$('.card__close') as HTMLButtonElement).click();
     expect(t.$('.collection-links')).not.toBeNull();
   });
 
@@ -115,7 +115,7 @@ describe('Achievements page', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(document.activeElement?.id).toBe(badgeId('streak-3'));
     expect(t.$(`#${badgeId('streak-3')}`)!.classList.contains('badge--focus')).toBe(true);
-    t.button('Back').click(); // back to the screen the toast showed over
+    (t.$('.card__close') as HTMLButtonElement).click(); // back to the screen the toast showed over
     expect(t.$('.collection-links')).not.toBeNull();
   });
 });

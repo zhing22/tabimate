@@ -501,8 +501,7 @@ describe('startScreen', () => {
       },
       { play: () => {}, journal: () => {}, achievements: () => {}, history: () => {} },
     );
-    expect(root.querySelector('.theme__name')?.textContent).toBe('Fishy Friday');
-    expect(root.querySelector('.theme__tagline')?.textContent).toBe(fishy.tagline);
-    expect(root.textContent).toContain('Puzzle #31 · 7 prompts');
+    expect(root.querySelector('.theme-chip')?.textContent).toBe('Fishy Friday · Puzzle #31');
+    expect(root.querySelector('.subtitle')?.textContent).toBe(fishy.tagline);
   });
 });

@@ -105,3 +105,20 @@
   gap: var(--space-2);
   font-size: var(--text-sm);
 }
+
+/* Cells from both the width (7 across) and the height left after the header
+   and month row (8 rows: weekdays and up to 6 weeks, plus room): the month
+   always fits, even in a short landscape panel. */
+.history .calendar {
+  --cell: min(calc((100cqi - 3.5rem) / 7 - var(--space-1)), calc((100cqh - 9rem) / 8));
+  grid-template-columns: repeat(7, var(--cell));
+  justify-content: center;
+}
+
+.history .calendar__day,
+.history .calendar__blank {
+  aspect-ratio: auto;
+  height: var(--cell);
+  min-height: 0;
+  font-size: clamp(12px, calc(var(--cell) * 0.42), var(--text-sm));
+}

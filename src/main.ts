@@ -7,7 +7,7 @@ import { emitCollected } from '@/core/collectionEvents';
 import { createGameController } from '@/core/gameController';
 import { puzzleAnimals } from '@/core/puzzleAnimals';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
-import { readDebugParams } from '@/debug/debugPanel';
+import { readDebugParams } from '@/debug/debugParams';
 import { createLocalPuzzleSource } from '@/data/localPuzzleSource';
 import { createJsonLoader } from '@/data/jsonLoader';
 import { browserScheduler } from '@/services/browserScheduler';
@@ -23,7 +23,6 @@ import { watchMuteKey } from '@/ui/layout/muteKey';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
-import { startDebug } from '@/wiring/startDebug';
 import { journalPortraits, startScene, startStillScene } from '@/wiring/startScene';
 import { startShare } from '@/wiring/startShare';
 import { startStats } from '@/wiring/startStats';
@@ -148,7 +147,10 @@ load()
     const game = puzzle ? play(puzzle, animals) : undefined;
     if (debug.enabled) {
       const fillJournal = () => progress.fillJournal(animals);
-      startDebug({ bus: game?.bus, puzzle, animals, storage, dateKey: key, fillJournal });
+      // Only with ?debug=1: the panel stays out of everyone else's download.
+      void import('@/wiring/startDebug').then(({ startDebug }) =>
+        startDebug({ bus: game?.bus, puzzle, animals, storage, dateKey: key, fillJournal }),
+      );
     }
     if (game) {
       await loading.finish(game.ready);

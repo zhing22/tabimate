@@ -10,6 +10,8 @@ export interface TimerRingProps {
   readonly now: () => number;
   /** With this much time left or less (as shown, in whole seconds) the ring turns urgent. */
   readonly warnAtMs: number;
+  /** With this much left (or less) but more than warnAtMs, the ring turns amber first. */
+  readonly amberAtMs?: number;
   readonly frames?: FrameLoop;
 }
 
@@ -66,7 +68,12 @@ export function timerRing(props: TimerRingProps): TimerRing {
       shown = seconds;
       label.textContent = String(seconds);
       el.setAttribute('aria-label', `${seconds} seconds left`);
-      el.classList.toggle('timer-ring--low', seconds * 1000 <= props.warnAtMs);
+      const shownMs = seconds * 1000;
+      el.classList.toggle('timer-ring--low', shownMs <= props.warnAtMs);
+      el.classList.toggle(
+        'timer-ring--amber',
+        props.amberAtMs !== undefined && shownMs <= props.amberAtMs && shownMs > props.warnAtMs,
+      );
     }
   };
 

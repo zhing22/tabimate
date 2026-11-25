@@ -1,6 +1,7 @@
 import { REVEAL_TIMING, type RevealTiming } from '@/config/game';
 import { pointsFor } from '@/core/scoring';
 import type { Portraits } from '@/core/portrait';
+import type { LevelId } from '@/config/levels';
 import type { Animal, AnimalLookup, Puzzle, RoundResult } from '@/core/types';
 import type { ScreenHost } from './host';
 import { revealExtras } from './reveal/extras';
@@ -19,6 +20,8 @@ export interface RevealDeps {
 }
 
 export interface RevealOptions {
+  /** The levels answered so far, this one included (the top bar's footprints). */
+  readonly levels: readonly LevelId[];
   /** Focus the card's Next button (no round screen is mounted to keep focus in). */
   readonly focusNext: boolean;
   readonly revealed: (summary: string) => void;
@@ -46,6 +49,11 @@ export function showRevealCard(
       isLast: index === deps.puzzle.prompts.length - 1,
       ...(deps.puzzle.bonus?.length ? { lastLabel: 'Bonus quiz' } : {}),
       isNew: animal !== null && deps.isNew(result, index),
+      bar: {
+        puzzleNumber: deps.puzzle.number,
+        total: deps.puzzle.prompts.length,
+        levels: opts.levels,
+      },
       focusNext: opts.focusNext,
       portraits: deps.portraits,
     },

@@ -4,6 +4,7 @@ import { puzzleNumber } from '@/core/date';
 import type { Animal, AnimalId, DateKey } from '@/core/types';
 import { browserDelay, type Delay } from './frames';
 import type { ScreenHost } from './host';
+import { placeOnStage } from './layout/stage';
 import { loadingView, pickFact } from './screens/loading';
 
 export interface Loading {
@@ -41,9 +42,19 @@ export function startLoading(host: ScreenHost, key: DateKey, deps: LoadingDeps =
     theme: themeFor(key),
     animalEmoji: LOADING.animalEmoji[Math.floor(random() * LOADING.animalEmoji.length)] ?? '🦊',
   });
+  // A new "Did you know?" line every LOADING.factMs while the screen is up.
+  let stopFacts = () => {};
+  const rotateFacts = (animals: ReadonlyMap<AnimalId, Animal>) => {
+    view.setFact(pickFact(animals.values(), random));
+    stopFacts = delay(() => rotateFacts(animals), LOADING.factMs);
+  };
   host.showCustom((root) => {
     root.append(view.el);
-    return () => {};
+    const unplace = placeOnStage(view.track, view.el.querySelector('.card__body') ?? root);
+    return () => {
+      stopFacts();
+      unplace();
+    };
   });
   view.setProgress(STARTED);
   const shownAt = now();
@@ -51,7 +62,7 @@ export function startLoading(host: ScreenHost, key: DateKey, deps: LoadingDeps =
   return {
     loaded(animals) {
       view.setProgress(DATA_IN);
-      view.setFact(pickFact(animals.values(), random));
+      rotateFacts(animals);
     },
     async finish(ready) {
       // A failed or slow sprite load must not hold the game: emoji stand in.

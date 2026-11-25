@@ -52,13 +52,13 @@
   font-size: var(--text-xs);
 }
 
-/* A small × in the top-right corner. */
+/* A × in the top-right corner: small to look at, a full tap target. */
 .journal-detail__close {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 28px;
-  height: 28px;
+  top: 0;
+  right: 0;
+  width: var(--tap);
+  height: var(--tap);
   padding: 0;
   font-size: var(--text-lg);
   line-height: 1;
@@ -70,7 +70,14 @@
 
 /* Room on the right of the name row for the ×. */
 .journal-detail__head {
-  padding-right: 24px;
+  padding-right: var(--tap);
+}
+
+/* The Wikipedia link: its line is a full tap target. */
+.journal-detail .answer__wiki {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
 }
 
 /* The chosen animal, moving: its sprite's cycle (results.css plays it), or

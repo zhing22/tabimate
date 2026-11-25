@@ -160,17 +160,12 @@ describe('answerList', () => {
     el.remove();
   });
 
-  it('with 150 answers, scrolls your answer into the middle of the box', () => {
-    const { el, reveal } = answerList(answers(150, 120), { question: 'Q1' });
+  it('with 150 answers, opens at the top with your answer highlighted where it falls', () => {
+    const { el } = answerList(answers(150, 120), { question: 'Q1' });
     expect(rows(el)).toHaveLength(150);
     const box = el.querySelector<HTMLElement>('.answer-list__box')!;
-    const mine = el.querySelector<HTMLElement>('.answer--picked')!;
-    // jsdom has no layout: give the box and row the sizes a browser would.
-    Object.defineProperty(box, 'clientHeight', { value: 220 });
-    Object.defineProperty(mine, 'offsetTop', { value: 120 * 44 });
-    Object.defineProperty(mine, 'offsetHeight', { value: 44 });
-    reveal();
-    expect(box.scrollTop).toBe(120 * 44 - (220 - 44) / 2);
+    expect(box.scrollTop).toBe(0);
+    expect(rows(el)[120]!.classList.contains('answer--picked')).toBe(true);
   });
 
   it(`renders ${RESULTS_LIST.renderWindow} rows at a time past that, always including yours`, () => {

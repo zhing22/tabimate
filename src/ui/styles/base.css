@@ -78,6 +78,15 @@ input {
   image-rendering: pixelated;
 }
 
+/* Decoration standing in the scene (ui/layout/stage.ts): over the scene area,
+   placed with --scene-ground-y and --scene-px from scene/canvasLayout.ts. */
+#stage-overlay {
+  position: fixed;
+  z-index: calc(var(--z-scene) + 1);
+  overflow: hidden;
+  pointer-events: none;
+}
+
 /* The card's home: the sheet (portrait) or the panel (landscape). */
 #ui {
   position: fixed;
@@ -87,8 +96,39 @@ input {
   grid-template-rows: minmax(0, 1fr);
 }
 
+/*
+ * The screens' frame: a size container, so the card's type and spacing come
+ * from the sheet or panel it is in, not the window (cqi/cqh, with floors and
+ * caps): readable in a 600 px panel on a big screen, smaller in a short one.
+ */
+.ui-frame {
+  container: sheet / size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+}
+
 .screen-layer,
 .overlay-layer {
+  /* One unit from the frame's size; every token below follows it. */
+  --u: clamp(14px, calc(2.2cqi + 1cqh), 24px);
+  --text-2xs: max(var(--text-min), calc(var(--u) * 0.85));
+  --text-xs: max(var(--text-min), calc(var(--u) * 0.9));
+  --text-sm: max(var(--text-min), calc(var(--u) * 0.95));
+  --text-md: max(var(--text-min), var(--u));
+  --text-lg: calc(var(--u) * 1.25);
+  --text-xl: calc(var(--u) * 1.6);
+  --text-2xl: calc(var(--u) * 2.2);
+  --text-caption: max(12px, calc(var(--u) * 0.75));
+  --space-1: calc(var(--u) * 0.25);
+  --space-2: calc(var(--u) * 0.5);
+  --space-3: calc(var(--u) * 0.75);
+  --space-4: var(--u);
+  --space-5: calc(var(--u) * 1.5);
+  --space-6: calc(var(--u) * 2);
+  font-size: var(--text-md);
   grid-area: 1 / 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -107,86 +147,6 @@ input {
 
 .overlay-layer:empty {
   display: none;
-}
-
-/* ---- Landscape: scene left, panel right ---- */
-[data-layout='landscape'] #scene {
-  inset: 0 var(--panel-w) 0 0;
-}
-
-[data-layout='landscape'] #ui {
-  top: var(--vv-top, 0px);
-  right: 0;
-  width: var(--panel-w);
-  height: var(--vv-height, 100dvh);
-  padding: max(var(--space-3), env(safe-area-inset-top))
-    max(var(--space-3), env(safe-area-inset-right)) max(var(--space-3), env(safe-area-inset-bottom))
-    var(--space-3);
-}
-
-/* ---- Portrait: stage on top, sheet below ---- */
-[data-layout='portrait'] {
-  --stage-h: calc(var(--stage-share) * 1vh);
-}
-
-@supports (height: 1svh) {
-  /* svh ignores the browser bar showing and hiding. */
-  [data-layout='portrait'] {
-    --stage-h: calc(var(--stage-share) * 1svh);
-  }
-}
-
-[data-layout='portrait'] #scene {
-  top: var(--vv-top, 0px);
-  left: 0;
-  right: 0;
-  height: var(--stage-h);
-  transition: transform var(--stage-slide-ms) ease-out;
-}
-
-[data-layout='portrait'] #ui {
-  top: calc(var(--vv-top, 0px) + var(--stage-h));
-  left: 0;
-  right: 0;
-  height: calc(var(--vv-height, 100dvh) - var(--stage-h));
-  justify-content: center;
-  grid-template-columns: minmax(0, min(100%, var(--sheet-max)));
-  padding: var(--space-2) max(var(--space-2), env(safe-area-inset-right))
-    max(var(--space-2), env(safe-area-inset-bottom)) max(var(--space-2), env(safe-area-inset-left));
-}
-
-/* Typing: the stage slides up out of sight (same size, so no re-scale) and
-   the sheet fills what the keyboard leaves. */
-[data-layout='portrait'].is-typing #scene {
-  transform: translateY(-100%);
-}
-
-[data-layout='portrait'].is-typing #ui,
-[data-layout='portrait'].is-page #ui {
-  top: var(--vv-top, 0px);
-  height: var(--vv-height, 100dvh);
-  padding-top: max(var(--space-2), env(safe-area-inset-top));
-}
-
-/* A full-screen page slides up over the stage. */
-[data-layout='portrait'].is-page #ui .card {
-  animation: page-in var(--dur-med) ease-out;
-}
-
-@keyframes page-in {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-layout='portrait'] #scene {
-    transition: none;
-  }
-  [data-layout='portrait'].is-page #ui .card {
-    animation: none;
-  }
 }
 
 .sr-only {

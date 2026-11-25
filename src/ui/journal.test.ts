@@ -76,8 +76,8 @@ describe('Field Journal screen', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('Field Journal');
     expect(t.$('.meta')?.textContent).toBe(`0 of ${ANIMALS.size} animals found`);
-    button(t, 'Back').click();
-    expect(t.$('h1')?.textContent).toBe('Tabimate');
+    (t.$('.card__close') as HTMLButtonElement).click();
+    expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
   });
 
   it('opens History from the start screen too, and goes back', async () => {
@@ -87,8 +87,8 @@ describe('Field Journal screen', () => {
     await vi.dynamicImportSettled(); // the page loads on first open
     expect(t.$('h1')?.textContent).toBe('History');
     expect(t.$('.calendar')).not.toBeNull();
-    button(t, 'Back').click();
-    expect(t.$('h1')?.textContent).toBe('Tabimate');
+    (t.$('.card__close') as HTMLButtonElement).click();
+    expect(t.$('h1 [role="img"]')?.getAttribute('aria-label')).toBe('Tabimate');
   });
 
   it('names found animals under their picture, and the rest "???" as silhouettes', async () => {
@@ -157,6 +157,25 @@ describe('Field Journal screen', () => {
     expect(t.$('.journal__set')?.textContent).toBe('Penguins · 0 of 2');
     expect(t.$$('[role="tab"]').some((b) => b.textContent?.includes('Achievements'))).toBe(false);
     expect(t.$('.badge')).toBeNull();
+  });
+});
+
+describe('Field Journal nested view', () => {
+  it('shows Back only while an animal page is open; Back closes it, × the journal', async () => {
+    const tigerFound = addRun({}, { puzzleDate: '2026-11-05', results: [hit('tiger')] }).journal;
+    const t = setup({ journal: tigerFound, achievements: [] });
+    t.app.showStart();
+    button(t, 'Field Journal').click();
+    await vi.dynamicImportSettled(); // the page loads on first open
+    const back = t.$('.card__back') as HTMLButtonElement;
+    expect(back.hidden).toBe(true);
+    (t.$('.journal-cell__button') as HTMLButtonElement).click();
+    expect(t.$('.journal-detail')).not.toBeNull();
+    expect(back.hidden).toBe(false);
+    back.click();
+    expect(t.$('.journal-detail')).toBeNull();
+    expect(back.hidden).toBe(true);
+    expect(t.$('h1')?.textContent).toBe('Field Journal'); // still in the journal
   });
 });
 

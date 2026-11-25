@@ -21,7 +21,8 @@ describe('loadingView', () => {
       theme: { name: 'Fishy Friday' },
       animalEmoji: '🐢',
     });
-    expect(view.el.querySelector('h1')!.textContent).toBe('Tabimate #31');
+    expect(view.el.querySelector('h1 [role="img"]')!.getAttribute('aria-label')).toBe('Tabimate');
+    expect(view.el.querySelector('.theme-chip')!.textContent).toBe('Fishy Friday · Puzzle #31');
     expect(view.el.textContent).toContain('Fishy Friday');
     expect(view.el.textContent).toContain('Packing your bag for Fishy Friday…');
     const walkers = [...view.el.querySelectorAll('.loading__walker')].map((w) => w.textContent);
@@ -104,12 +105,32 @@ describe('startLoading', () => {
 
   it('shows at once with the day from the date, then moves on as things load', () => {
     const { root, loading, bar } = setup();
-    expect(root.textContent).toContain('Tabimate #22');
+    expect(root.textContent).toContain('Puzzle #22');
     expect(root.textContent).toContain('Fishy Friday'); // 2026-11-27 is a Friday
     expect(bar()).toBe('10');
     loading.loaded(new Map([['tiger', described('tiger', 'A cat.')]]));
     expect(bar()).toBe('50');
     expect(root.textContent).toContain('Did you know? Tiger: A cat.');
+  });
+
+  it(`changes the "Did you know?" line every ${LOADING.factMs} ms`, async () => {
+    const root = document.createElement('main');
+    const time = fakeTime();
+    let roll = 0;
+    const loading = startLoading(createScreenHost(root), '2026-11-27', {
+      ...time,
+      random: () => roll,
+    });
+    loading.loaded(
+      new Map([
+        ['tiger', described('tiger', 'A cat.')],
+        ['red-fox', described('red-fox', 'A fox.')],
+      ]),
+    );
+    expect(root.textContent).toContain('Tiger: A cat.');
+    roll = 0.99;
+    await time.advance(LOADING.factMs);
+    expect(root.textContent).toContain('Red fox: A fox.');
   });
 
   it(`stays up at least ${LOADING.minMs} ms, but no longer than needed`, async () => {

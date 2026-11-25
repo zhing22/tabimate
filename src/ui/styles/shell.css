@@ -1,0 +1,85 @@
+/* The layout shell's two modes (see base.css and ui/layout/shell.ts). */
+/* ---- Landscape: scene left, panel right ---- */
+[data-layout='landscape'] :is(#scene, #stage-overlay) {
+  inset: 0 var(--panel-w) 0 0;
+}
+
+[data-layout='landscape'] #ui {
+  top: var(--vv-top, 0px);
+  right: 0;
+  width: var(--panel-w);
+  height: var(--vv-height, 100dvh);
+  padding: max(var(--space-3), env(safe-area-inset-top))
+    max(var(--space-3), env(safe-area-inset-right)) max(var(--space-3), env(safe-area-inset-bottom))
+    var(--space-3);
+}
+
+/* ---- Portrait: stage on top, sheet below ---- */
+[data-layout='portrait'] {
+  --stage-h: calc(var(--stage-share) * 1vh);
+}
+
+@supports (height: 1svh) {
+  /* svh ignores the browser bar showing and hiding. */
+  [data-layout='portrait'] {
+    --stage-h: calc(var(--stage-share) * 1svh);
+  }
+}
+
+[data-layout='portrait'] :is(#scene, #stage-overlay) {
+  top: var(--vv-top, 0px);
+  left: 0;
+  right: 0;
+  height: var(--stage-h);
+  transition: transform var(--stage-slide-ms) ease-out;
+}
+
+[data-layout='portrait'] #ui {
+  top: calc(var(--vv-top, 0px) + var(--stage-h));
+  left: 0;
+  right: 0;
+  height: calc(var(--vv-height, 100dvh) - var(--stage-h));
+  justify-content: center;
+  grid-template-columns: minmax(0, min(100%, var(--sheet-max)));
+  padding: var(--space-2) max(var(--space-2), env(safe-area-inset-right))
+    max(var(--space-2), env(safe-area-inset-bottom)) max(var(--space-2), env(safe-area-inset-left));
+}
+
+/* Typing: the stage slides up out of sight (same size, so no re-scale) and
+   the sheet fills what the keyboard leaves. */
+[data-layout='portrait'].is-typing :is(#scene, #stage-overlay) {
+  transform: translateY(-100%);
+}
+
+[data-layout='portrait'].is-typing #ui,
+[data-layout='portrait'].is-page #ui {
+  top: var(--vv-top, 0px);
+  height: var(--vv-height, 100dvh);
+  padding-top: max(var(--space-2), env(safe-area-inset-top));
+}
+
+/* A full-screen page: room under the card so its border is never cut. */
+[data-layout='portrait'].is-page #ui {
+  padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px));
+}
+
+/* A full-screen page slides up over the stage. */
+[data-layout='portrait'].is-page #ui .card {
+  animation: page-in var(--dur-med) ease-out;
+}
+
+@keyframes page-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-layout='portrait'] :is(#scene, #stage-overlay) {
+    transition: none;
+  }
+  [data-layout='portrait'].is-page #ui .card {
+    animation: none;
+  }
+}

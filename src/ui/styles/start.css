@@ -23,8 +23,56 @@
   overflow-wrap: anywhere;
 }
 
-/* The start card's content sits in the middle of the sheet, Play below it. */
+/* Start: the chip, tagline and streak at the top; the flexible space is the
+   body's own height; Play, the tiles and "How to play" in the footer. */
 .start .card__body {
-  align-content: center;
   text-align: center;
+}
+
+.start__title {
+  margin: 0;
+  line-height: 0;
+}
+
+.start .card__footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+}
+
+.start .card__footer > .start__play {
+  flex: none;
+  width: 100%;
+  min-height: calc(var(--tap) * 1.35);
+  font-size: var(--text-xl);
+}
+
+.start .link-button {
+  align-self: center;
+}
+
+.start .subtitle {
+  font-size: var(--text-md);
+}
+
+/* A short sheet or panel (a phone on its side, a small phone): the chip and
+   tagline keep their room; Play and the tiles get smaller instead. */
+@container sheet (max-height: 460px) {
+  .start .wordmark--lg {
+    height: 2.25rem;
+  }
+  .start .card__footer > .start__play {
+    min-height: var(--tap);
+    font-size: var(--text-lg);
+  }
+  .start .card__footer {
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+  }
+  .start .tile {
+    padding-block: var(--space-1);
+  }
+  .start .tile__icon {
+    height: 1.1rem;
+  }
 }

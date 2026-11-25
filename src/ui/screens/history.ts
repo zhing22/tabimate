@@ -4,8 +4,7 @@ import type { Stats } from '@/core/streak';
 import type { AnimalLookup, DateKey } from '@/core/types';
 import { card } from '../components/card';
 import { dayDetail } from '../components/dayDetail';
-import { pageTitle, type PageActions, type PageProps } from '../components/pageHeader';
-import { settingsMenu } from '../components/settingsMenu';
+import { pageTitle, type PageActions } from '../components/pageHeader';
 import { historyCalendar } from '../components/historyCalendar';
 import { focus, h } from '../dom';
 import { formatMonth } from '../format';
@@ -13,7 +12,7 @@ import type { Screen } from '../host';
 import { openPage } from '../layout/page';
 import { dayDetail as detailOf, historyWeeks, monthRange, type HistoryDay } from '../historyView';
 
-export interface HistoryProps extends PageProps {
+export interface HistoryProps {
   readonly stats: Stats;
   readonly animals: AnimalLookup;
   readonly todayKey: DateKey;
@@ -72,15 +71,12 @@ export const historyScreen: Screen<HistoryProps, HistoryActions> = (root, props,
   prev.addEventListener('click', step(-1));
   next.addEventListener('click', step(1));
   const heading = pageTitle('history-title', 'History');
-  const settings = props.sound ? settingsMenu(props.sound) : null;
   const days = props.stats.history.length;
   const shown = card({
     className: 'card--journal history',
     title: heading,
     meta: days === 1 ? '1 day played' : `${days} days played`,
-    back: () => actions.close(),
-    close: actions.dismiss ?? (() => actions.close()),
-    tools: [settings?.el],
+    close: () => actions.close(),
     body: [h('div', { class: 'calendar-nav' }, prev, title, next), grid, detail, legend()],
   });
   root.append(shown.el);
@@ -89,6 +85,5 @@ export const historyScreen: Screen<HistoryProps, HistoryActions> = (root, props,
   focus(heading);
   return () => {
     closePage();
-    settings?.destroy();
   };
 };

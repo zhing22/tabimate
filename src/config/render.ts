@@ -42,8 +42,11 @@ export const PROP_BASE_Y = GROUND_Y - 3;
  * The results line-up's snapshot of a biome (native px): from row `top` down to
  * `groundBelow` rows under the walk line. A high camera: it shows the treetops
  * or hills and the path, and only a strip of the empty ground below it.
+ * `width` is wider than any line-up box at its scale (the sheet and panel are
+ * at most ~600 px; the line-up draws 2 px per pixel), so the scenery fills the
+ * whole box, centred, with no gaps at the sides; the share image crops it.
  */
-export const BACKDROP = { top: 78, groundBelow: 12, width: 220 } as const;
+export const BACKDROP = { top: 78, groundBelow: 12, width: 320 } as const;
 
 /** The snapshot's height, and where its walk line is (rows from its top). */
 export const BACKDROP_HEIGHT = GROUND_Y + BACKDROP.groundBelow - BACKDROP.top;

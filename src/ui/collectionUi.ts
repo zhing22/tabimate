@@ -10,7 +10,6 @@ import type { Portraits } from '@/core/portrait';
 import type { Stats } from '@/core/streak';
 import type { Clock } from '@/core/clock';
 import type { AnimalId, AnimalLookup, RoundResult } from '@/core/types';
-import type { SoundSetting } from './components/settingsMenu';
 import { createToaster } from './components/toaster';
 import type { Delay } from './frames';
 import type { ScreenHost } from './host';
@@ -32,7 +31,6 @@ export interface CollectionUiDeps {
   readonly clock: Clock;
   readonly portraits?: Portraits | undefined;
   readonly delay?: Delay | undefined;
-  readonly sound?: SoundSetting | undefined;
   /** Shared with the results, so only the screen asked for last shows. */
   readonly openScreen?: OpenScreen | undefined;
 }
@@ -59,20 +57,18 @@ export function createCollectionUi(deps: CollectionUiDeps) {
         text: achievement.description,
         openLabel: 'Open achievements',
         // Back from the page goes to the screen the toast showed over.
-        open: () => ui.openAchievements(lastBack, achievement.id, lastHome),
+        open: () => ui.openAchievements(lastBack, achievement.id),
       }),
     ),
   ];
 
-  // The start or results screen last shown: where a tapped toast's page goes back
-  // to (Back), and the screen under every page (×: start or the results summary).
+  // The start or results screen last shown: where a tapped toast's page goes back to.
   let lastBack: () => void = () => {};
-  let lastHome: () => void = () => {};
   const open = deps.openScreen ?? createScreenLoader();
 
   const ui = {
-    /** Opens the journal; `back` shows the screen it was opened from, `home` the one under every page. */
-    openJournal(back: () => void, home: () => void = back) {
+    /** Opens the journal; closing it (`back`) shows the screen it was opened from. */
+    openJournal(back: () => void) {
       open(loadJournal, ([{ journalScreen }, { journalTabs }]) => {
         const collection = deps.getCollection();
         host.show(
@@ -82,26 +78,25 @@ export function createCollectionUi(deps: CollectionUiDeps) {
             found: journalSize(collection.journal),
             total: animals.size,
             portraits: deps.portraits,
-            sound: deps.sound,
           },
-          { close: back, dismiss: home },
+          { close: back },
         );
       });
     },
     /** Opens the Achievements page, at one achievement if given; `back` as for the journal. */
-    openAchievements(back: () => void, focusId?: string, home: () => void = back) {
+    openAchievements(back: () => void, focusId?: string) {
       open(loadAchievements, ([{ achievementsScreen }, { badgeSections }]) => {
         const stats = deps.getStats();
         const record = { history: stats.history, stats, animals };
         host.show(
           achievementsScreen,
-          { sections: badgeSections(deps.getCollection(), record), focusId, sound: deps.sound },
-          { close: back, dismiss: home },
+          { sections: badgeSections(deps.getCollection(), record), focusId },
+          { close: back },
         );
       });
     },
     /** Opens the history calendar; `back` as for the journal. */
-    openHistory(back: () => void, home: () => void = back) {
+    openHistory(back: () => void) {
       open(loadHistory, ({ historyScreen }) =>
         host.show(
           historyScreen,
@@ -109,23 +104,21 @@ export function createCollectionUi(deps: CollectionUiDeps) {
             stats: deps.getStats(),
             animals,
             todayKey: dailyKey(deps.clock.now()),
-            sound: deps.sound,
           },
-          { close: back, dismiss: home },
+          { close: back },
         ),
       );
     },
     /**
      * The start, results and summary screens' Journal, Achievements and History
-     * tiles: Back returns to `back`, × to `home` (the screen under every page).
+     * tiles: closing a page returns to `back`.
      */
-    links(back: () => void, home: () => void = back) {
+    links(back: () => void) {
       lastBack = back;
-      lastHome = home;
       return {
-        journal: () => ui.openJournal(back, home),
-        achievements: () => ui.openAchievements(back, undefined, home),
-        history: () => ui.openHistory(back, home),
+        journal: () => ui.openJournal(back),
+        achievements: () => ui.openAchievements(back),
+        history: () => ui.openHistory(back),
       };
     },
     /** A first-ever find: not in the saved journal, nor answered earlier today. */

@@ -1,5 +1,7 @@
 import type { Animal } from '@/core/types';
 import { card } from '../components/card';
+import { themeChip } from '../components/themeChip';
+import { wordmark } from '../components/wordmark';
 import { h } from '../dom';
 
 export interface LoadingProps {
@@ -12,6 +14,8 @@ export interface LoadingProps {
 
 export interface LoadingView {
   readonly el: HTMLElement;
+  /** The path and the walkers: on the stage (ui/layout/stage.ts), along the ground. */
+  readonly track: HTMLElement;
   /** 0..1: how far along the path the traveller has walked. */
   setProgress(fraction: number): void;
   /** Shows a "Did you know?" line once the animals have loaded. */
@@ -32,9 +36,10 @@ export function pickFact(
 }
 
 /**
- * The first screen: the traveller walks a path that is the progress bar, an
- * animal trotting behind, with the puzzle number, the day's theme and, once
- * the animals arrive, a fact about one of them.
+ * The first screen: the large wordmark, the day's theme and number, and,
+ * once the animals arrive, a fact about one of them (loadingFlow.ts rotates
+ * it). The traveller walks a path that is the progress bar, an animal
+ * trotting behind: loadingFlow puts it on the stage, along the ground.
  */
 export function loadingView(props: LoadingProps): LoadingView {
   const party = h(
@@ -59,21 +64,19 @@ export function loadingView(props: LoadingProps): LoadingView {
   const fact = h('p', { class: 'loading__fact', hidden: true });
   const { el } = card({
     className: 'card--journal loading',
-    title: h(
-      'h1',
-      { id: 'loading-title', class: 'title title--sm' },
-      `Tabimate #${props.puzzleNumber}`,
-    ),
+    label: `Tabimate #${props.puzzleNumber}`,
     body: [
-      props.theme ? h('p', { class: 'loading__theme' }, props.theme.name) : null,
-      track,
+      h('h1', { class: 'loading__mark' }, wordmark('lg')),
+      themeChip(props.puzzleNumber, props.theme?.name ?? null),
       h('p', { class: 'meta' }, loadingText(props.theme)),
       fact,
+      track,
     ],
   });
   el.setAttribute('aria-busy', 'true');
   return {
     el,
+    track,
     setProgress(fraction) {
       const percent = Math.round(Math.min(1, Math.max(0, fraction)) * 100);
       track.style.setProperty('--progress', `${percent}%`);

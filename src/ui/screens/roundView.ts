@@ -1,10 +1,14 @@
-import { MAX_INPUT_LENGTH, TIMER_WARN_MS } from '@/config/game';
+import { MAX_INPUT_LENGTH, TIMER_AMBER_MS, TIMER_WARN_MS } from '@/config/game';
 import { card } from '../components/card';
 import { timerRing, type TimerRing } from '../components/timerRing';
+import { topBar, type TopBar } from '../components/topBar';
 import { h } from '../dom';
 import type { FrameLoop } from '../frames';
 
 export interface RoundSetup {
+  /** For the top bar: "Tabimate #21" and a footprint per prompt. */
+  readonly puzzleNumber: number;
+  readonly promptCount: number;
   readonly totalMs: number;
   readonly now: () => number;
   readonly frames?: FrameLoop;
@@ -27,11 +31,13 @@ export interface RoundView {
   readonly go: HTMLButtonElement;
   readonly note: HTMLElement;
   readonly ring: TimerRing;
+  readonly bar: TopBar;
 }
 
 /** The round card's elements, built once; mountRound wires up what they do. */
 export function buildRound(firstEndsAt: number, setup: RoundSetup): RoundView {
-  const step = h('p', { class: 'meta round__step' });
+  // Read out, not shown: the footprints in the top bar show it.
+  const step = h('p', { class: 'round__step sr-only' });
   const question = h('h2', { id: 'round-prompt', class: 'round__prompt' });
   const input = h('input', {
     id: 'answer',
@@ -61,16 +67,18 @@ export function buildRound(firstEndsAt: number, setup: RoundSetup): RoundView {
     totalMs: setup.totalMs,
     now: setup.now,
     warnAtMs: TIMER_WARN_MS,
+    amberAtMs: TIMER_AMBER_MS,
     ...(setup.frames ? { frames: setup.frames } : {}),
   });
   // The question scrolls if it must; the answer box and Go stay in the footer.
+  const bar = topBar(setup.puzzleNumber, setup.promptCount);
   const shown = card({
     className: 'round',
-    title: step,
+    title: bar.el,
     labelledBy: 'round-prompt',
     tools: [ring.el],
-    body: [question],
+    body: [step, question],
     footer: [form],
   });
-  return { card: shown.el, step, question, form, input, go, note, ring };
+  return { card: shown.el, step, question, form, input, go, note, ring, bar };
 }
