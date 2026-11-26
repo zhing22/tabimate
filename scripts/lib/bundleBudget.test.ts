@@ -1,26 +1,42 @@
 import { describe, expect, it } from 'vitest';
-import { budgetVerdict, firstScripts } from './bundleBudget';
+import { budgetProblems, classifyChunks, type ViteManifest } from './bundleBudget';
 
-describe('firstScripts', () => {
-  it('finds the module scripts and module preloads, once each, not other scripts or styles', () => {
-    const html = `<head>
-      <script type="module" crossorigin src="/assets/index-a.js"></script>
-      <link rel="modulepreload" crossorigin href="/assets/levels-b.js">
-      <link rel="stylesheet" href="/assets/index.css">
-      <script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script>
-      <link rel="modulepreload" href="/assets/levels-b.js">
-    </head>`;
-    expect(firstScripts(html)).toEqual(['/assets/index-a.js', '/assets/levels-b.js']);
+describe('classifyChunks', () => {
+  const manifest: ViteManifest = {
+    'index.html': {
+      file: 'assets/build/index.js',
+      isEntry: true,
+      imports: ['_levels.js'],
+      dynamicImports: ['src/wiring/sceneParts.ts', 'src/ui/screens/journal.ts'],
+    },
+    '_levels.js': { file: 'assets/build/levels.js' },
+    'src/wiring/sceneParts.ts': { file: 'assets/build/sceneParts.js', imports: ['_art.js'] },
+    '_art.js': { file: 'assets/build/art.js' },
+    'src/ui/screens/journal.ts': { file: 'assets/build/journal.js', imports: ['_levels.js'] },
+    'style.css': { file: 'assets/build/index.css' },
+  };
+
+  it('splits entry, initial (its imports, the eager chunks and theirs) and lazy, JavaScript only', () => {
+    const kinds = classifyChunks(manifest, ['src/wiring/sceneParts.ts']);
+    expect(Object.fromEntries(kinds)).toEqual({
+      'assets/build/index.js': 'entry',
+      'assets/build/levels.js': 'initial',
+      'assets/build/sceneParts.js': 'initial',
+      'assets/build/art.js': 'initial',
+      'assets/build/journal.js': 'lazy',
+    });
   });
 });
 
-describe('budgetVerdict', () => {
-  const budget = { targetKb: 60, ceilingKb: 120 };
+describe('budgetProblems', () => {
+  const budget = { entryKb: 60, initialKb: 140 };
 
-  it('passes within the target, warns between target and ceiling, fails above the ceiling', () => {
-    expect(budgetVerdict(59, budget)).toMatchObject({ fail: false, warn: false });
-    expect(budgetVerdict(118.4, budget)).toMatchObject({ fail: false, warn: true });
-    expect(budgetVerdict(121, budget)).toMatchObject({ fail: true });
-    expect(budgetVerdict(121, budget).message).toContain('120 KB ceiling');
+  it('names each limit broken, and nothing within budget', () => {
+    expect(budgetProblems(59, 139, budget)).toEqual([]);
+    expect(budgetProblems(61, 139, budget)).toEqual([
+      'Entry chunk is 61.0 KB, over its 60 KB budget.',
+    ]);
+    expect(budgetProblems(59, 141, budget)).toHaveLength(1);
+    expect(budgetProblems(61, 141, budget)).toHaveLength(2);
   });
 });

@@ -15,10 +15,41 @@ import {
 export const PALETTES_FILE = 'data/palettes.json';
 export const MASTER_PALETTE_FILE = 'data/master-palette.json';
 export const SPRITE_MANIFEST_FILE = 'assets/sprites/manifest.json';
-export const sheetFiles = (archetype: string) => ({
+export interface SheetPaths {
+  readonly image: string;
+  readonly json: string;
+}
+
+/** An archetype's sheet files under public/, as in the source tree (dev, tests). */
+export const sheetFiles = (archetype: string): SheetPaths => ({
   image: `assets/sprites/${archetype}.png`,
   json: `assets/sprites/${archetype}.json`,
 });
+
+/**
+ * The sprite manifest: in the source a list of archetypes (files at
+ * sheetFiles' paths); in a build, archetype -> its content-hashed files
+ * (scripts/vite/buildAssets.ts), which can be cached forever.
+ */
+export function readSheetIndex(json: unknown): ReadonlyMap<string, SheetPaths> {
+  const r = createJsonReader(SPRITE_MANIFEST_FILE);
+  if (Array.isArray(json)) {
+    return new Map(
+      json.map((name, i) => {
+        const archetype = r.string(name, item('', i));
+        return [archetype, sheetFiles(archetype)];
+      }),
+    );
+  }
+  const entries = Object.entries(r.object(json, ''));
+  return new Map(
+    entries.map(([archetype, files]) => {
+      const paths = r.object(files, archetype);
+      const image = r.string(paths['image'], `${archetype}.image`);
+      return [archetype, { image, json: r.string(paths['json'], `${archetype}.json`) }];
+    }),
+  );
+}
 
 /** Everything the pixel sprites need besides the sheets themselves. */
 export interface SpriteArt {
@@ -41,12 +72,11 @@ export async function loadSpriteArt(loader: JsonLoader): Promise<SpriteArt> {
     ),
   );
   const palettes = validatePalettes(palettesJson, PALETTES_FILE);
-  const r = createJsonReader(SPRITE_MANIFEST_FILE);
   return {
     palettes,
     master: validateMasterPalette(masterJson, MASTER_PALETTE_FILE),
     animals: validateAnimalArt(animalsJson, ANIMALS_FILE, palettes),
-    sheets: r.array(manifestJson, '').map((name, i) => r.string(name, item('', i))),
+    sheets: [...readSheetIndex(manifestJson).keys()],
   };
 }
 
@@ -65,9 +95,13 @@ function loadImage(url: string, file: string): Promise<HTMLImageElement> {
   });
 }
 
-/** Downloads one archetype's sheet. A missing JSON file says so, by name. */
+/**
+ * Downloads one archetype's sheet, at the paths the manifest gives (hashed in
+ * a build). A missing JSON file says so, by name.
+ */
 export async function loadSheetFiles(loader: JsonLoader, archetype: string): Promise<SheetFiles> {
-  const files = sheetFiles(archetype);
+  const index = readSheetIndex(await loadRequired(loader, SPRITE_MANIFEST_FILE));
+  const files = index.get(archetype) ?? sheetFiles(archetype);
   const [json, image] = await Promise.all([
     loadRequired(loader, files.json),
     loadImage(loader.url(files.image), files.image),

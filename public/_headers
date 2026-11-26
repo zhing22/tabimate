@@ -1,0 +1,14 @@
+# Cloudflare Pages response headers (v3 Step 3).
+# Content-hashed files never change under their name: cache them for good.
+# Vite's bundles (assets/build/) and the sprite sheets, hashed by
+# scripts/vite/buildAssets.ts; the sprite manifest is not hashed (it names
+# the current sheets), so it is checked on every use.
+/assets/build/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/sprites/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/sprites/manifest.json
+  ! Cache-Control
+  Cache-Control: no-cache

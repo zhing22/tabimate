@@ -5,7 +5,7 @@ import type { DayStats } from '@/core/stats';
 import { card } from '../components/card';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { countdown } from '../components/countdown';
-import { installHint } from '../components/installHint';
+import { lazyInstallHint } from '../components/lazyInstallHint';
 import { partyLineup } from '../components/partyLineup';
 import { shareButton } from '../components/shareButton';
 import { teamCard, type TeamRound } from '../components/teamCard';
@@ -113,7 +113,7 @@ export const resultsScreen: Screen<ResultsProps, ResultsActions> = (root, props,
           : null,
       ),
       collectionLinks(actions),
-      installHint(props.install),
+      lazyInstallHint(props.install),
       h('h2', { class: 'section-title' }, 'Your team'),
       team.el,
       h('p', { class: 'meta next-puzzle' }, 'Next puzzle in ', timer.el),

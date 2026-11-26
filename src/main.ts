@@ -1,6 +1,7 @@
 // Composition root: the only place that picks real implementations and wires
 // config, core, data, services and ui together.
 import './ui/styles/index.css';
+import { EARLY_FETCH_GLOBAL, VERSIONED_DATA_FILES } from '@/config/data';
 import { dailyKey, msUntilNextReset } from '@/core/date';
 import { createBus, type GameBus, type GameEvents } from '@/core/events';
 import { emitCollected } from '@/core/collectionEvents';
@@ -24,7 +25,7 @@ import { watchMuteKey } from '@/ui/layout/muteKey';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
 import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
-import { journalPortraits, startScene, startStillScene } from '@/wiring/startScene';
+import { journalPortraits, preloadScene, startScene, startStillScene } from '@/wiring/startScene';
 import { startShare } from '@/wiring/startShare';
 import { startStats } from '@/wiring/startStats';
 
@@ -33,12 +34,24 @@ if (!root) throw new Error('index.html is missing #ui');
 
 watchViewport();
 startLayout();
-// The Town, painted at once: the loading screen shows over the scene, not a blank sky.
+// The Town, painted as soon as its small chunk arrives: the loading screen
+// shows over the scene, not a blank sky. The live scene's code (Kaplay) starts
+// downloading now too, alongside the day's data.
 const still = startStillScene();
+void preloadScene().catch(() => {}); // startScene reports a failure
 const host = createScreenHost(root);
 const clock = systemClock;
 // One loader for all of public/, so animals.json is fetched once for puzzles and sprites.
-const loader = createJsonLoader({ baseUrl: import.meta.env.BASE_URL });
+// index.html has already started the puzzle and animals (scripts/vite/earlyFetch.ts);
+// the files that must come from one build are loaded and checked together.
+const early = (window as unknown as Record<string, Record<string, Promise<Response>> | undefined>)[
+  EARLY_FETCH_GLOBAL
+];
+const loader = createJsonLoader({
+  baseUrl: import.meta.env.BASE_URL,
+  early,
+  versionedSet: VERSIONED_DATA_FILES,
+});
 const source = createLocalPuzzleSource({ loader });
 const storage = createLocalStorageAdapter();
 const progress = createProgressService(storage, clock);
@@ -93,8 +106,11 @@ function play(
   // The results screen shows its sprites; without a scene it uses emoji.
   const scene = startScene(bus, puzzle, puzzleAnimals(puzzle, animals), loader);
   // The live scene covers the still; once it has its sprites the still goes.
-  // Without a scene (no WebGL) the still stays as the backdrop.
-  void scene?.ready.finally(() => still?.dispose());
+  // Without a scene (no WebGL, or its code failed to load) the still stays.
+  void scene.ready.then(
+    () => still.dispose(),
+    () => {},
+  );
   const sound = startAudio(bus, storage, clock);
   if (sound) watchMuteKey(sound, (text) => host.announce(text));
   startHaptics(bus, storage);
@@ -103,8 +119,8 @@ function play(
   const sharing = startShare({
     puzzle,
     animals,
-    portraits: scene?.portraits,
-    backdrops: scene?.backdrops,
+    portraits: scene.portraits,
+    backdrops: scene.backdrops,
     url: shareUrl,
   });
 
@@ -118,7 +134,8 @@ function play(
     clock,
     getStats: () => progress.getStats(),
     getCollection: () => progress.getCollection(),
-    ...(scene ? { portraits: scene.portraits, backdrops: scene.backdrops } : {}),
+    portraits: scene.portraits,
+    backdrops: scene.backdrops,
     journalPortraits: stills,
     getStreakStatus: () => progress.streakStatus(),
     install,
@@ -141,7 +158,7 @@ function play(
   });
   return {
     bus,
-    ready: scene?.ready ?? Promise.resolve(),
+    ready: scene.ready,
     begin() {
       const saved = progress.loadToday(puzzle.date);
       if (!(saved && controller.restore(saved))) app.showStart();

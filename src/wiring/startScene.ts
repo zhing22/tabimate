@@ -1,77 +1,87 @@
-// Composition helpers for main.ts: they pick real implementations, like main.
+// The scene, loaded on demand (v3 Step 3): main.ts calls these at once, and
+// they fetch the scene's code with import(), so the first JavaScript stays
+// small and the download overlaps the day's data. Kaplay and src/scene live
+// in sceneParts.ts; the still and the portraits (no Kaplay) in stillParts.ts.
 import { SPRITE_SOURCE } from '@/config/render';
 import type { GameBus } from '@/core/events';
-import type { Portraits } from '@/core/portrait';
+import type { Backdrops, Portraits } from '@/core/portrait';
 import type { Animal, AnimalId, Puzzle } from '@/core/types';
 import type { JsonLoader } from '@/data/jsonLoader';
-import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
-import { createScene, type Scene } from '@/scene/sceneManager';
-import { createEmojiSpriteProvider } from '@/scene/sprites/emojiSpriteProvider';
-import { createPixelSpriteProvider, readSheet } from '@/scene/sprites/pixelSpriteProvider';
-import { createStillPortraits } from '@/scene/sprites/stillPortraits';
-import { showStillScene } from '@/scene/stillScene';
+import type * as ScenePartsModule from './sceneParts';
+
+type SceneParts = typeof ScenePartsModule;
+let sceneParts: Promise<SceneParts> | undefined;
+
+/** Starts downloading the live scene's code now (call as the loading screen shows). */
+export const preloadScene = (): Promise<SceneParts> => (sceneParts ??= import('./sceneParts'));
+
+const stillParts = () => import('./stillParts');
 
 /**
- * The first biome painted on a plain canvas while the day loads (no Kaplay,
- * no sprites). Null if there is nowhere to draw it; a failure is only logged.
+ * The Town painted on a plain canvas while the day loads, as soon as its
+ * small chunk arrives. dispose() works before then too. A failure is only logged.
  */
-export function startStillScene(): { dispose(): void } | null {
-  const container = document.querySelector<HTMLElement>('#scene');
-  if (!container) return null;
-  try {
-    return showStillScene(container, 'town');
-  } catch (error) {
-    console.error('The still scene failed to paint', error);
-    return null;
-  }
+export function startStillScene(): { dispose(): void } {
+  let disposed = false;
+  let still: { dispose(): void } | null = null;
+  void stillParts()
+    .then((parts) => {
+      if (!disposed) still = parts.showStill();
+    })
+    .catch((error: unknown) => console.error('The still scene failed to paint', error));
+  return {
+    dispose() {
+      disposed = true;
+      still?.dispose();
+    },
+  };
+}
+
+export interface LazyScene {
+  /** Today's sprites are loaded; rejects without a scene (it couldn't load or start). */
+  readonly ready: Promise<unknown>;
+  /** Sprite stills once the scene has them; null (the emoji) without one. */
+  readonly portraits: Portraits;
+  readonly backdrops: Backdrops;
 }
 
 /**
- * The scene is scenery: if it can't start (no WebGL, say), the game is still
- * fully playable over the CSS backdrop, so a failure is only logged.
+ * The live scene, made once its code has loaded. It subscribes to the bus
+ * then; main.ts waits for `ready` before the game begins, so no event is missed.
  */
 export function startScene(
   bus: GameBus,
   puzzle: Puzzle,
   animals: ReadonlyMap<AnimalId, Animal>,
   loader: JsonLoader,
-): Pick<Scene, 'portraits' | 'backdrops' | 'ready'> | null {
-  const container = document.querySelector<HTMLElement>('#scene');
-  if (!container) return null;
-  try {
-    const scene = createScene(container, bus, {
-      animals,
-      puzzleDate: puzzle.date,
-      createSprites: (k) => {
-        const emoji = createEmojiSpriteProvider(k);
-        if (SPRITE_SOURCE === 'emoji') return emoji;
-        return createPixelSpriteProvider(k, {
-          loadArt: () => loadSpriteArt(loader),
-          loadSheet: async (archetype) => readSheet(await loadSheetFiles(loader, archetype)),
-          fallback: emoji,
-        });
-      },
-    });
-    scene.ready.catch((error: unknown) => console.error('Scene sprites failed to load', error));
-    return scene;
-  } catch (error) {
-    console.error('Scene failed to start; playing without it', error);
-    return null;
-  }
+): LazyScene {
+  const scene = preloadScene().then(
+    (parts) => parts.createLiveScene(bus, puzzle, animals, loader),
+    (error: unknown) => {
+      console.error('The scene could not load; playing without it', error);
+      return null;
+    },
+  );
+  return {
+    ready: scene.then((live) => live?.ready ?? Promise.reject(new Error('No scene'))),
+    portraits: (animal, shiny) => scene.then((live) => live?.portraits(animal, shiny) ?? null),
+    backdrops: (score) => scene.then((live) => live?.backdrops(score) ?? null),
+  };
 }
 
 /**
- * Pixel portraits of any animal for the Field Journal (the scene has only
- * today's). Undefined with emoji sprites: the journal then shows emoji.
+ * Pixel portraits of any animal for the loading card and the Field Journal
+ * (the scene has only today's). Undefined with emoji sprites: emoji show.
  */
 export function journalPortraits(
   animals: ReadonlyMap<AnimalId, Animal>,
   loader: JsonLoader,
 ): Portraits | undefined {
   if (SPRITE_SOURCE === 'emoji') return undefined;
-  return createStillPortraits({
-    animals,
-    loadArt: () => loadSpriteArt(loader),
-    loadSheet: async (archetype) => readSheet(await loadSheetFiles(loader, archetype)),
-  });
+  const made = stillParts().then((parts) => parts.createJournalPortraits(animals, loader));
+  return (animal, shiny) =>
+    made.then(
+      (portraits) => portraits(animal, shiny),
+      () => null,
+    );
 }

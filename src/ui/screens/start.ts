@@ -2,7 +2,7 @@ import type { InstallOffer } from '@/core/install';
 import { card } from '../components/card';
 import { collectionLinks, type CollectionLinks } from '../components/collectionLinks';
 import { howToPlay } from '../components/howToPlay';
-import { installHint } from '../components/installHint';
+import { lazyInstallHint } from '../components/lazyInstallHint';
 import { settingsMenu, type SoundSetting } from '../components/settingsMenu';
 import { themeChip } from '../components/themeChip';
 import { wordmark } from '../components/wordmark';
@@ -68,7 +68,7 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
         play,
         streakLine(props),
       ),
-      installHint(props.install),
+      lazyInstallHint(props.install),
       help.rules,
     ],
     footer: [collectionLinks(actions), help.toggle],

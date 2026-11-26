@@ -1,28 +1,37 @@
-// Checks the build's first JavaScript against the budget (config/performance.ts):
-// fails above the ceiling, warns above the target. Runs after vite build
-// (npm run build).
+// Checks the build's JavaScript against the budget (config/performance.ts) and
+// prints every chunk, gzipped: the entry chunk, the initial JS (what a first
+// visit runs before the start screen) and what loads later. Fails the run
+// (npm run build, npm run check) when the entry or the initial JS is over.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { BUNDLE_BUDGET } from '../src/config/performance.ts';
-import { budgetVerdict, firstScripts } from './lib/bundleBudget.ts';
+import { budgetProblems, classifyChunks, type ViteManifest } from './lib/bundleBudget.ts';
 
 const DIST = 'dist';
-const html = readFileSync(join(DIST, 'index.html'), 'utf8');
-const scripts = firstScripts(html);
-if (scripts.length === 0)
-  throw new Error('dist/index.html loads no module script: was the build run?');
+const manifestFile = join(DIST, '.vite', 'manifest.json');
+const manifest = JSON.parse(readFileSync(manifestFile, 'utf8')) as ViteManifest;
+const kinds = classifyChunks(manifest, BUNDLE_BUDGET.eagerChunks);
+const gzipKb = (file: string) => gzipSync(readFileSync(join(DIST, file))).length / 1024;
+const rows = [...kinds]
+  .map(([file, kind]) => ({ file, kind, kb: gzipKb(file) }))
+  .sort((a, b) => a.kind.localeCompare(b.kind) || b.kb - a.kb);
 
-const sizes = scripts.map((src) => {
-  const file = join(DIST, src.replace(/^\//, '').replace(/^\.\//, ''));
-  return { src, kb: gzipSync(readFileSync(file)).length / 1024 };
-});
-const total = sizes.reduce((sum, s) => sum + s.kb, 0);
-for (const { src, kb } of sizes) console.log(`  ${kb.toFixed(1).padStart(6)} KB  ${src}`);
+const sum = (kind: string) => rows.filter((r) => r.kind === kind).reduce((s, r) => s + r.kb, 0);
+const entryKb = sum('entry');
+const initialKb = entryKb + sum('initial');
+const kb = (n: number) => n.toFixed(1).padStart(7);
 
-const verdict = budgetVerdict(total, BUNDLE_BUDGET);
-if (verdict.fail) {
-  console.error(verdict.message);
+console.log('  gzip KB  kind     chunk');
+for (const row of rows) console.log(`  ${kb(row.kb)}  ${row.kind.padEnd(7)}  ${row.file}`);
+console.log(`  ${kb(entryKb)}  entry chunk (budget ${BUNDLE_BUDGET.entryKb})`);
+console.log(`  ${kb(initialKb)}  initial JS (budget ${BUNDLE_BUDGET.initialKb})`);
+console.log(`  ${kb(sum('lazy'))}  loaded on demand`);
+
+const problems = budgetProblems(entryKb, initialKb, BUNDLE_BUDGET);
+if (problems.length > 0) {
+  for (const problem of problems) console.error(problem);
+  console.error('Load more lazily rather than raising the budget.');
   process.exit(1);
 }
-console.log(verdict.warn ? `Warning: ${verdict.message}` : verdict.message);
+console.log('Within budget.');

@@ -55,6 +55,54 @@ describe('createJsonLoader', () => {
   });
 });
 
+describe('createJsonLoader: early fetches and the versioned set', () => {
+  const v = (version: string, data: unknown) => ({ dataVersion: version, data });
+
+  it('uses a fetch index.html started, once, instead of a new request', async () => {
+    const fetch = fakeFetch({ 'data/a.json': { from: 'network' } });
+    const early = { '/base/data/a.json': Promise.resolve(json({ from: 'early' })) };
+    const loader = createJsonLoader({ baseUrl: '/base', fetch, early });
+    expect(await loader.load('data/a.json')).toEqual({ from: 'early' });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('unwraps a versioned set from one build, loading it all at the first ask', async () => {
+    const fetch = fakeFetch({ 'a.json': v('1', [1]), 'b.json': v('1', { b: 2 }) });
+    const loader = createJsonLoader({
+      baseUrl: '/base',
+      fetch,
+      versionedSet: ['a.json', 'b.json'],
+    });
+    expect(await loader.load('a.json')).toEqual([1]);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(await loader.load('b.json')).toEqual({ b: 2 });
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('fetches a mixed set again past the service worker, and refuses it if still mixed', async () => {
+    const stale = vi.fn((input: RequestInfo | URL) => {
+      const url = urlOf(input);
+      const fresh = url.includes('?fresh=');
+      if (url.includes('a.json')) return Promise.resolve(json(v('2', 'a')));
+      return Promise.resolve(json(v(fresh ? '2' : '1', 'b')));
+    });
+    const set = ['a.json', 'b.json'];
+    const loader = createJsonLoader({ baseUrl: '/base', fetch: stale, versionedSet: set });
+    expect(await loader.load('b.json')).toBe('b');
+    expect(stale.mock.calls.map(([url]) => urlOf(url).replace(/=\d+$/, '='))).toEqual([
+      '/base/a.json',
+      '/base/b.json',
+      '/base/a.json?fresh=',
+      '/base/b.json?fresh=',
+    ]);
+    const mixed = vi.fn((input: RequestInfo | URL) =>
+      Promise.resolve(json(urlOf(input).includes('a.json') ? v('1', 'a') : v('2', 'b'))),
+    );
+    const refused = createJsonLoader({ baseUrl: '/base', fetch: mixed, versionedSet: set });
+    await expect(refused.load('a.json')).rejects.toThrow('different versions');
+  });
+});
+
 describe('loadSpriteArt', () => {
   const SIX = ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'];
   const files = {

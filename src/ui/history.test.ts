@@ -8,6 +8,7 @@ import type { InstallOffer } from '@/core/install';
 import { ANIMALS, PROMPT } from '@/core/matcher/testFixtures';
 import { emptyStats, type Stats } from '@/core/streak';
 import { installHint } from './components/installHint';
+import { lazyInstallHint } from './components/lazyInstallHint';
 import { dayDetail, historyWeeks, monthRange } from './historyView';
 import { resultsProps } from './resultsProps';
 import { historyScreen } from './screens/history';
@@ -162,6 +163,15 @@ describe('install hint', () => {
     const ios = installHint(offer({ canPrompt: () => false }))!;
     expect(ios.querySelector('.button')).toBeNull();
     expect(ios.textContent).toContain('Share menu');
+  });
+
+  it('is a slot filled once its code loads, and nothing at all when there is no offer', async () => {
+    expect(lazyInstallHint(offer({ shouldShow: () => false }))).toBeNull();
+    const parent = document.createElement('div');
+    parent.append(lazyInstallHint(offer())!);
+    await vi.dynamicImportSettled();
+    expect(parent.querySelector('.install-hint')).not.toBeNull();
+    expect(parent.querySelector('.install-hint-slot')).toBeNull();
   });
 
   it('"Not now" dismisses it for good', () => {

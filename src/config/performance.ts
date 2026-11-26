@@ -1,14 +1,17 @@
 // Performance budgets (v3 decisions in CLAUDE.md), checked by npm run build
-// (scripts/check-bundle.ts).
+// and npm run check (scripts/check-bundle.ts), in gzipped KB.
 
-/**
- * The first JavaScript a visitor downloads: the entry script and everything
- * it preloads, gzipped, in KB. The build fails above ceilingKb (a ratchet:
- * lower it as the bundle shrinks, never raise it to let one grow) and warns
- * above targetKb, the v3 goal. The scene engine (Kaplay) alone is about
- * 69 KB, so meeting the target needs the scene loaded lazily.
- */
 export const BUNDLE_BUDGET = {
-  targetKb: 60,
-  ceilingKb: 116,
+  /** The entry chunk: the JavaScript index.html runs first. */
+  entryKb: 60,
+  /**
+   * All JavaScript a first visit runs before the start screen: the entry,
+   * what it imports, and the chunks it imports at once (eagerChunks).
+   */
+  initialKb: 140,
+  /**
+   * Loaded with import() but at once, as the loading screen shows (the live
+   * scene: main.ts preloadScene; the still): they count as initial.
+   */
+  eagerChunks: ['src/wiring/sceneParts.ts', 'src/wiring/stillParts.ts'],
 } as const;
