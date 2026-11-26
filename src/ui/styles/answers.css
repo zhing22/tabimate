@@ -45,6 +45,12 @@
  * answerRow.ts), mixed mostly with white: white, blue, red, purple, gold, a
  * light tint, enough to read rarity at a glance without shouting.
  */
+/* A list item, not the prompt's answer form (round.css .answer, a grid with a
+   gap): block, so the description sits right under its row. */
+.answer-list__rows > .answer {
+  display: block;
+}
+
 .answer {
   background: color-mix(in srgb, var(--answer-tint) 18%, #fff);
 }
@@ -102,6 +108,8 @@
 
 /* Opened: the description sits right under the name. */
 .answer__row[aria-expanded='true'] {
+  /* The name sits on its description: the row keeps its 28 px, the space goes above. */
+  align-items: flex-end;
   padding-bottom: 0;
 }
 
@@ -109,7 +117,8 @@
    description runs on into the Wikipedia link, so the two take as few lines
    as fit. */
 .answer__details {
-  padding: 0 var(--space-2) 2px;
+  /* A little room after the link, before the next row. */
+  padding: 0 var(--space-2) var(--space-2);
   font-size: var(--text-caption);
   line-height: 1.2;
 }
