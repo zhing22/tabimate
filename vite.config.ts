@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { buildAssets } from './scripts/vite/buildAssets.ts';
 import { devPuzzleApi } from './scripts/vite/devPuzzleApi.ts';
 import { earlyFetch } from './scripts/vite/earlyFetch.ts';
+import { loadingKit } from './scripts/vite/loadingKit.ts';
 import { HASHED_SPRITE_URL } from './scripts/lib/buildAssets.ts';
 import {
   DATA_NETWORK_TIMEOUT_S,
@@ -97,5 +98,5 @@ export default defineConfig({
   build: { assetsDir: 'assets/build', manifest: true },
   // devPuzzleApi is dev server only (apply: 'serve'): the puzzle editor saves through it.
   // buildAssets (build only) runs before the service worker is generated.
-  plugins: [devPuzzleApi(), earlyFetch(), buildAssets(), pwa],
+  plugins: [devPuzzleApi(), earlyFetch(), loadingKit(), buildAssets(), pwa],
 });

@@ -11,7 +11,7 @@ import { loadingView, pickFact } from './screens/loading';
 export interface Loading {
   /**
    * The animals are in: the traveller is halfway, a "Did you know?" line
-   * shows, and the card's walkers become sprites (from `portraits`).
+   * shows (without the loading kit, the traveller's still from `portraits`).
    */
   loaded(animals: ReadonlyMap<AnimalId, Animal>, portraits?: Portraits): void;
   /**
@@ -44,7 +44,6 @@ export function startLoading(host: ScreenHost, key: DateKey, deps: LoadingDeps =
   const view = loadingView({
     puzzleNumber: puzzleNumber(key),
     theme: themeFor(key),
-    animalEmoji: LOADING.animalEmoji[Math.floor(random() * LOADING.animalEmoji.length)] ?? '🦊',
   });
   // A new "Did you know?" line every LOADING.factMs while the screen is up.
   let stopFacts = () => {};
@@ -66,11 +65,11 @@ export function startLoading(host: ScreenHost, key: DateKey, deps: LoadingDeps =
   return {
     loaded(animals, portraits) {
       view.setProgress(DATA_IN);
-      view.setWalkers(animals.values(), portraits, random);
+      view.setPortraits(portraits);
       rotateFacts(animals);
     },
     async finish(ready) {
-      // A failed or slow sprite load must not hold the game: emoji stand in.
+      // A failed or slow sprite load must not hold the game (the scene draws emoji).
       await Promise.race([ready.catch(() => {}), wait(LOADING.spriteWaitMs)]);
       view.setProgress(1);
       const left = LOADING.minMs - (now() - shownAt);

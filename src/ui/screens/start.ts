@@ -9,6 +9,8 @@ import { wordmark } from '../components/wordmark';
 import { h, focus } from '../dom';
 import type { Screen } from '../host';
 import { placeOnStage } from '../layout/stage';
+import { PLAYER_SIZE } from '@/config/render';
+import { READY_BUBBLE } from '@/config/ui';
 
 export interface StartProps {
   readonly puzzleNumber: number;
@@ -75,6 +77,9 @@ export const startScreen: Screen<StartProps, StartActions> = (root, props, actio
   });
   root.append(shown.el);
   const bubble = h('p', { class: 'stage-bubble' }, 'Ready?');
+  // Its tail's tip stops gapPx native px over the traveller's head.
+  const lift = PLAYER_SIZE.height + READY_BUBBLE.headRisePx + READY_BUBBLE.gapPx;
+  bubble.style.setProperty('--bubble-lift', String(lift));
   const unplace = placeOnStage(bubble, h('div', { hidden: true }));
   focus(play);
   return () => {

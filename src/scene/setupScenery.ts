@@ -9,13 +9,17 @@ import { dominantBiome, type WorldState } from './strip';
 
 /**
  * The scene area's colours for a biome: the sky's top colour above the scene,
- * its ground below it, and the frame style on very wide windows (base.css and
- * sceneFrame.css read these).
+ * its ground below it (also on <html> as --stage-ground), and the frame style
+ * on very wide windows (base.css, shell.css and sceneFrame.css read these).
  */
 export function paintSceneArea(container: HTMLElement, biome: BiomeId, skyTop: string): void {
   const def = BIOMES.find((b) => b.id === biome);
   container.style.setProperty('--scene-sky', skyTop);
-  container.style.setProperty('--scene-ground', def?.palette.ground ?? skyTop);
+  const ground = def?.palette.ground ?? skyTop;
+  container.style.setProperty('--scene-ground', ground);
+  // On <html> too: in portrait the space between the stage and the prompt card
+  // continues the ground (shell.css).
+  container.ownerDocument.documentElement.style.setProperty('--stage-ground', ground);
   container.dataset['frame'] = def?.frame ?? '';
 }
 

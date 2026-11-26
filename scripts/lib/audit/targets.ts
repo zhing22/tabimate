@@ -27,8 +27,8 @@ export const sizeName = (s: AuditSize) => `${s.width}x${s.height}`;
 
 /**
  * Every state, in the order one run reaches them. prompt-keyboard is the
- * box focused with the keyboard's height taken from the window (portrait:
- * the stage collapsed).
+ * prompt's own layout with the box focused and a simulated keyboard over
+ * its bottom (keyboard.ts): the card moved up by the inset, nothing else.
  */
 export const AUDIT_STATES = [
   'loading',
@@ -42,6 +42,8 @@ export const AUDIT_STATES = [
   'reveal-5',
   'results',
   'results-list',
+  // The list with one animal's description open.
+  'results-list-detail',
   'journal',
   'journal-detail',
   'achievements',

@@ -51,25 +51,43 @@ export function portrait(
 
 /**
  * The walk cycle as a stepped background animation over the frames strip:
- * CSS plays it (ui/styles/results.css), so no script runs per frame, and
- * reduced motion simply stops it on the first frame.
+ * CSS plays it (ui/styles/components.css .portrait__walk), so no script runs
+ * per frame, and reduced motion stops it on the first frame. The size comes
+ * from CSS too: a whole number of device pixels per sprite pixel (--px from
+ * --k and --dpr), so every step is exactly one frame wide. The box sits on its
+ * feet (bottom-centre) and is nudged onto whole device pixels once shown.
  */
 function walkingSprite(
   image: PortraitImage,
   walk: NonNullable<PortraitImage['walk']>,
   scale: number,
 ): HTMLElement {
-  const width = image.width * scale;
-  const height = image.height * scale;
   const el = h('span', {
     class: image.facesLeft ? 'portrait__walk portrait__sprite--flip' : 'portrait__walk',
   });
-  el.style.width = `${width}px`;
-  el.style.height = `${height}px`;
+  el.style.setProperty('--fw', String(image.width));
+  el.style.setProperty('--fh', String(image.height));
+  el.style.setProperty('--frames', String(walk.frames));
+  el.style.setProperty('--k-default', String(scale));
   el.style.backgroundImage = `url("${walk.src}")`;
-  el.style.backgroundSize = `${width * walk.frames}px ${height}px`;
-  el.style.setProperty('--walk-to', `-${width * walk.frames}px`);
-  el.style.setProperty('--walk-steps', String(walk.frames));
   el.style.setProperty('--walk-s', `${walk.frames / walk.fps}s`);
+  snapToDevicePixels(el);
   return el;
+}
+
+/**
+ * Moves an element by less than a device pixel so its top-left lands on one:
+ * otherwise a centred sprite can start half way into a device pixel and its
+ * pixels come out uneven.
+ */
+function snapToDevicePixels(el: HTMLElement): void {
+  const win = el.ownerDocument.defaultView;
+  if (!win?.requestAnimationFrame) return;
+  win.requestAnimationFrame(() => {
+    if (!el.isConnected) return;
+    const dpr = win.devicePixelRatio || 1;
+    const { left, top } = el.getBoundingClientRect();
+    const nudge = (v: number) => (Math.round(v * dpr) - v * dpr) / dpr;
+    el.style.translate = `${nudge(left)}px ${nudge(top)}px`;
+  });
 }

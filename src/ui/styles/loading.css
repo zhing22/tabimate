@@ -37,24 +37,20 @@
   transition: width 300ms ease-out;
 }
 
-/* The animal behind, the traveller in front, standing on the path's end. */
+/* The animal behind, the traveller in front, standing on the path's end. The
+   walkers are the loading kit (index.html), one scene pixel per kit pixel. */
+#stage-overlay .kit {
+  --kit-px: var(--scene-px, 3px);
+}
+
 .loading__party {
+  --party-w: calc(2 * 24 * var(--scene-px, 3px) + var(--space-1));
   position: absolute;
   bottom: 14px;
-  left: clamp(0px, calc(var(--progress) - 5rem), calc(100% - 5rem));
+  left: clamp(0px, calc(var(--progress) - var(--party-w)), calc(100% - var(--party-w)));
   display: flex;
   gap: var(--space-1);
   transition: left 300ms ease-out;
-}
-
-.loading__walker {
-  font-size: var(--text-2xl);
-  line-height: 1;
-  animation: party-step 0.5s steps(1) infinite;
-}
-
-.loading__walker + .loading__walker {
-  animation-delay: -0.25s;
 }
 
 .loading__fact {
@@ -63,9 +59,9 @@
   color: var(--ink-soft);
 }
 
-/* The card's centre: the animal and the traveller walking in place, big
-   enough to see at a glance. Sprites play their walk cycle (results.css);
-   the traveller's still and any emoji step up and down. */
+/* The card's centre: the animal and the traveller walking in place (the kit
+   at UI_SPRITE_SCALE.loading, whole device pixels). Without the kit, the
+   traveller's still steps up and down. */
 .loading__hero {
   display: flex;
   justify-content: center;
@@ -77,12 +73,9 @@
 .loading__buddy {
   display: grid;
   place-items: end center;
-  font-size: 3.5rem;
-  line-height: 1;
 }
 
-.loading__buddy--traveller,
-.loading__buddy .portrait:not(.portrait--sprite) {
+.loading__hero > .portrait__sprite {
   animation: loading-step 0.5s steps(1) infinite;
 }
 
@@ -92,14 +85,8 @@
   }
 }
 
-.loading__buddy--traveller {
-  animation-delay: -0.25s;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .loading__walker,
-  .loading__buddy--traveller,
-  .loading__buddy .portrait {
+  .loading__hero > .portrait__sprite {
     animation: none;
   }
 
@@ -112,4 +99,14 @@
 /* Like the start card: the content in the middle of the sheet or panel. */
 .loading .card__body {
   align-content: center;
+}
+
+/* index.html's first paint, before main.js replaces it: the kit's walkers and
+   the line, in the middle of the sheet or panel. */
+.loading-static {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  color: var(--paper);
 }

@@ -18,11 +18,19 @@ export const PANEL_WIDTH_CSS = `clamp(${PANEL.minPx}px, ${PANEL.vw}vw, ${PANEL.m
 export const PORTRAIT = { stageShare: 0.34, sheetMaxPx: 640 } as const;
 
 /**
- * The phone keyboard (portrait): after an answer is scored the input is blurred
- * so the keyboard closes; the next prompt waits for a tap, and its timer starts
- * on that first focus or after ROUND_START_GRACE_MS (config/game.ts).
+ * The phone keyboard (portrait): the prompt card is translated up by the
+ * keyboard's height (ui/viewport.ts --kb-inset), never re-laid out. A scored
+ * answer or time-up blurs the box so the keyboard closes; the next prompt waits
+ * for a tap, and its timer starts on that first focus or after
+ * ROUND_START_GRACE_MS (config/game.ts).
  */
 export const KEYBOARD = {
-  /** The prompt card rises onto the keyboard over this long (none with reduced motion). */
-  sheetRiseMs: 240,
+  /**
+   * The share of a portrait window an on-screen keyboard takes, at most, on the
+   * phones we size for (iOS 844 px: 336; Android 640 px: 260). The prompt card
+   * is never taller than what that leaves, so the keyboard only moves it.
+   */
+  expectedShare: 0.41,
+  /** The card follows the keyboard over this long (none with reduced motion). */
+  cardRiseMs: 200,
 } as const;

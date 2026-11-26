@@ -1,5 +1,5 @@
 // Runs before every test file (vitest.config.ts setupFiles). UI screens mark
-// <html> (the layout, a full-screen page, typing), and jsdom keeps one
+// <html> (the layout, a full-screen page), and jsdom keeps one
 // document per file: start each test from a clean <html>.
 import { afterEach } from 'vitest';
 

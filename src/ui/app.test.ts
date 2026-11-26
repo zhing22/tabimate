@@ -15,7 +15,7 @@ import { createFakeTime } from '@/core/testFakes';
 import type { Puzzle, RunState } from '@/core/types';
 import { createApp, type FinishedRun } from './app';
 import type { ShareOutcome } from '@/core/share';
-import { PAGE_CLASS, TYPING_CLASS } from './layout/shell';
+import { PAGE_CLASS } from './layout/shell';
 import { SAID_MS } from './screens/results';
 import { createScreenHost } from './host';
 import { manualTime, pressEnter, pressKey, type } from './testUi';
@@ -526,8 +526,6 @@ describe('app: results layout', () => {
 });
 
 describe('app: a phone upright (portrait)', () => {
-  const typing = () => document.documentElement.classList.contains(TYPING_CLASS);
-
   it('waits for a tap: no focus, "Tap to answer", the ring full until the box is focused', () => {
     const t = setup(INSTANT_REVEAL, 'portrait');
     t.controller.start();
@@ -537,7 +535,7 @@ describe('app: a phone upright (portrait)', () => {
     t.ui.set(0);
     expect(t.$('.timer-ring__label')?.textContent).toBe(String(ROUND_TIME_MS / 1000));
     t.input().focus();
-    expect(typing()).toBe(true);
+    expect(document.documentElement.className).toBe(''); // one layout: no typing state
     t.time.advance(5_000);
     t.ui.set(0);
     expect(t.$('.timer-ring__label')?.textContent).toBe(String(ROUND_TIME_MS / 1000 - 5));
@@ -561,10 +559,30 @@ describe('app: a phone upright (portrait)', () => {
     type(t.input(), 'tiger');
     pressEnter(t.input());
     expect(document.activeElement).not.toBe(t.input()); // blurred: the keyboard closes
-    expect(typing()).toBe(false);
     t.$<HTMLButtonElement>('.reveal__next')!.click();
     expect(t.$('.round__prompt')?.textContent).toBe('Prompt 2');
     expect(document.activeElement).not.toBe(t.input());
+  });
+
+  it('keeps focus when Go is tapped: three wrong guesses and a correction never blur the box', () => {
+    const t = setup(INSTANT_REVEAL, 'portrait');
+    t.controller.start();
+    t.input().focus();
+    const go = t.$<HTMLButtonElement>('.answer button[type="submit"]')!;
+    for (const kind of ['pointerdown', 'mousedown']) {
+      const press = new Event(kind, { bubbles: true, cancelable: true });
+      go.dispatchEvent(press);
+      expect(press.defaultPrevented).toBe(true); // the tap never moves focus to Go
+    }
+    for (let i = 0; i < 3; i++) {
+      type(t.input(), 'zzzz');
+      go.click();
+      expect(document.activeElement).toBe(t.input());
+    }
+    type(t.input(), 'platipus');
+    go.click();
+    expect(t.input().value).toBe('Platypus');
+    expect(document.activeElement).toBe(t.input());
   });
 });
 

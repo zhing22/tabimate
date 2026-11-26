@@ -8,7 +8,6 @@ import type { Animal } from '@/core/types';
 import { createScreenHost } from './host';
 import { startLoading } from './loadingFlow';
 import { loadingText, loadingView, pickFact } from './screens/loading';
-import { pickWalker } from './screens/loadingParty';
 
 const described = (id: string, description: string): Animal => ({
   ...ANIMALS.get(id)!,
@@ -16,18 +15,21 @@ const described = (id: string, description: string): Animal => ({
 });
 
 describe('loadingView', () => {
-  it('shows the puzzle number, the theme, and the party on a progress-bar path', () => {
-    const view = loadingView({
-      puzzleNumber: 31,
-      theme: { name: 'Fishy Friday' },
-      animalEmoji: '🐢',
-    });
+  const withKit = (on: boolean) =>
+    on
+      ? document.documentElement.setAttribute('data-kit', 'ready')
+      : document.documentElement.removeAttribute('data-kit');
+
+  it('shows the puzzle number, the theme, and the kit party on a progress-bar path', () => {
+    withKit(true);
+    const view = loadingView({ puzzleNumber: 31, theme: { name: 'Fishy Friday' } });
     expect(view.el.querySelector('h1 [role="img"]')!.getAttribute('aria-label')).toBe('Tabimate');
     expect(view.el.querySelector('.theme-chip')!.textContent).toBe('Fishy Friday · Puzzle #31');
-    expect(view.el.textContent).toContain('Fishy Friday');
     expect(view.el.textContent).toContain('Packing your bag for Fishy Friday…');
-    const walkers = [...view.el.querySelectorAll('.loading__walker')].map((w) => w.textContent);
-    expect(walkers).toEqual(['🐢', '🧑']); // the animal behind, the traveller in front
+    const walkers = [...view.el.querySelectorAll('.loading__walker > .kit')].map(
+      (w) => w.className,
+    );
+    expect(walkers).toEqual(['kit kit--animal', 'kit kit--traveller']); // the animal behind
     const bar = view.el.querySelector<HTMLElement>('[role=progressbar]')!;
     view.setProgress(0.5);
     expect(bar.getAttribute('aria-valuenow')).toBe('50');
@@ -36,29 +38,29 @@ describe('loadingView', () => {
     expect(bar.getAttribute('aria-valuenow')).toBe('100');
   });
 
-  it('walks the traveller and the animal in place in the middle of the card, as sprites once the animals are in', async () => {
-    const view = loadingView({ puzzleNumber: 1, theme: null, animalEmoji: '🦊' });
+  it('never shows emoji: the kit walks in the middle of the card from the start', () => {
+    withKit(true);
+    const view = loadingView({ puzzleNumber: 1, theme: null });
     const hero = view.el.querySelector<HTMLElement>('.loading__hero')!;
-    expect(hero.textContent).toBe('🦊🧑');
-    const fox = { ...ANIMALS.get('red-fox')!, emoji: '🦊' };
-    const still = { src: 'data:still', width: 16, height: 16, facesLeft: false };
-    const portraits = (animal: Animal | null) => Promise.resolve(animal ? still : null);
-    view.setWalkers([ANIMALS.get('tiger')!, fox], portraits, () => 0.99);
-    await Promise.resolve();
-    expect(hero.querySelectorAll('img')).toHaveLength(1); // the fox's sprite; the traveller's emoji
-    expect(hero.textContent).toBe('🧑');
+    expect(hero.querySelectorAll('.kit')).toHaveLength(2);
+    expect(view.el.textContent).not.toMatch(/\p{Extended_Pictographic}/u);
   });
 
-  it('picks a walker with the same emoji as the one already walking, else any', () => {
-    const tiger = { ...ANIMALS.get('tiger')!, emoji: '🐅' };
-    const fox = { ...ANIMALS.get('red-fox')!, emoji: '🦊' };
-    expect(pickWalker([tiger, fox], '🦊', () => 0)).toBe(fox);
-    expect(pickWalker([tiger], '🦊', () => 0)).toBe(tiger);
-    expect(pickWalker([], '🦊')).toBeNull();
+  it('without the kit shows the traveller only, as its still once the portraits are in', async () => {
+    withKit(false);
+    const view = loadingView({ puzzleNumber: 1, theme: null });
+    const hero = view.el.querySelector<HTMLElement>('.loading__hero')!;
+    expect(hero.childElementCount).toBe(0);
+    expect(view.el.querySelectorAll('.loading__walker')).toHaveLength(0);
+    const still = { src: 'data:still', width: 16, height: 24, facesLeft: false };
+    view.setPortraits((animal: Animal | null) => Promise.resolve(animal ? null : still));
+    await Promise.resolve();
+    expect(hero.querySelectorAll('img')).toHaveLength(1);
+    expect(view.el.textContent).not.toMatch(/\p{Extended_Pictographic}/u);
   });
 
   it('adds a "Did you know?" line once there is a fact', () => {
-    const view = loadingView({ puzzleNumber: 1, theme: null, animalEmoji: '🦊' });
+    const view = loadingView({ puzzleNumber: 1, theme: null });
     const fact = view.el.querySelector<HTMLElement>('.loading__fact')!;
     expect(fact.hidden).toBe(true);
     view.setFact(described('tiger', 'The largest living cat.'));

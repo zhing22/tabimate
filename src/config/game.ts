@@ -172,8 +172,6 @@ export const LOADING = {
   minMs: 300,
   /** Longest it waits for today's sprites; slower ones arrive in-game (emoji until then). */
   spriteWaitMs: 4_000,
-  /** One of these walks behind the traveller, picked at random. */
-  animalEmoji: ['🦊', '🐧', '🐢', '🦉', '🐘', '🦔', '🐼', '🦒'],
   /** The "Did you know?" line changes to another animal this often. */
   factMs: 5_000,
 } as const;

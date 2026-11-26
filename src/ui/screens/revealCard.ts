@@ -76,6 +76,7 @@ function revealPicture({ animal, result, portraits, isNew }: RevealProps): HTMLE
         ? '🐾'
         : '💨',
   );
+  picture.style.setProperty('--reveal-k', String(UI_SPRITE_SCALE.reveal));
   const ribbon =
     isNew && level !== 0
       ? h(

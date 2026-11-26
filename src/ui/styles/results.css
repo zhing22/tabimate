@@ -128,22 +128,9 @@
   animation-delay: calc(var(--i, 0) * -0.13s);
 }
 
-.portrait__walk {
-  display: block;
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
-  animation: walk-cycle var(--walk-s, 0.5s) steps(var(--walk-steps, 4)) infinite;
-}
-
 @keyframes party-step {
   50% {
     transform: translateY(-2px);
-  }
-}
-
-@keyframes walk-cycle {
-  to {
-    background-position-x: var(--walk-to);
   }
 }
 
@@ -174,8 +161,26 @@
     gap: var(--space-1);
     padding-top: var(--space-1);
   }
+  /* The snapshot keeps the compact line-up's shape at two thirds of its size
+     (zoom scales the frame, the scenery and the party alike: never a strip). */
   .results .party {
-    max-height: 4rem;
+    zoom: 0.6667;
+    /* A percentage is not zoomed: two thirds of the width, as the height. */
+    width: 66.67%;
+    justify-self: center;
+  }
+  .results .tiles {
+    gap: var(--space-1);
+  }
+  .results .tile__icon {
+    display: none;
+  }
+  .results .team-card__picture {
+    width: 32px;
+    height: 32px;
+  }
+  .results .team-card__picture .portrait {
+    zoom: 0.6667;
   }
   .results__number {
     font-size: var(--text-xl);
@@ -184,9 +189,6 @@
     grid-auto-flow: column;
     padding: 0 var(--space-1);
     gap: var(--space-1);
-  }
-  .results .tile__icon {
-    height: 1rem;
   }
   .results .section-title {
     margin-top: 0;
@@ -202,7 +204,14 @@
   }
 }
 
-/* The summary sits in the middle of the free space between header and footer. */
+/* The summary sits in the middle of the free space between header and footer
+   (both layouts: the body fills the card, its rows packed in the middle). */
 .results-summary .card__body {
   align-content: safe center;
+  grid-auto-rows: max-content;
+}
+
+/* The summary's score, a step above the results page's. */
+.results-summary .results__number {
+  font-size: var(--text-3xl);
 }

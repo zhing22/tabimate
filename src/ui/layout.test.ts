@@ -1,19 +1,12 @@
 // @vitest-environment jsdom
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { card } from './components/card';
 import { settingsMenu, type SoundSetting } from './components/settingsMenu';
 import { h } from './dom';
 import { watchMuteKey } from './layout/muteKey';
 import { openPage } from './layout/page';
-import {
-  currentLayout,
-  pageOpen,
-  PAGE_CLASS,
-  sceneHidden,
-  setTyping,
-  startLayout,
-  TYPING_CLASS,
-} from './layout/shell';
+import { currentLayout, pageOpen, PAGE_CLASS, sceneHidden, startLayout } from './layout/shell';
+import { keyboardInset, watchViewport } from './viewport';
 import { pressKey } from './testUi';
 
 const html = () => document.documentElement;
@@ -31,25 +24,41 @@ function sound(muted = false): SoundSetting {
   };
 }
 
+/** A touch screen (pointer: coarse), where a keyboard can shrink the window. */
+const touch = (coarse: boolean) =>
+  vi.stubGlobal('matchMedia', () => ({ matches: coarse }) as MediaQueryList);
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
 describe('startLayout', () => {
-  it('picks portrait or landscape from the window shape, and holds it while typing', () => {
+  it('picks portrait or landscape from the window shape', () => {
+    touch(false);
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(844);
     const height = vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(390);
     const stop = startLayout();
     expect(currentLayout()).toBe('landscape');
     expect(html().style.getPropertyValue('--panel-w')).toContain('clamp(');
-    html().classList.add(TYPING_CLASS);
     height.mockReturnValue(1200);
-    window.dispatchEvent(new Event('resize'));
-    expect(currentLayout()).toBe('landscape'); // the keyboard must not flip it
-    html().classList.remove(TYPING_CLASS);
     window.dispatchEvent(new Event('resize'));
     expect(currentLayout()).toBe('portrait');
     stop();
-    vi.restoreAllMocks();
   });
 
-  it('says the scene is hidden only in portrait, under a page or while typing', () => {
+  it('never flips when a keyboard shrinks a touch screen window (same width)', () => {
+    touch(true);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(390);
+    const height = vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(844);
+    const stop = startLayout();
+    expect(currentLayout()).toBe('portrait');
+    height.mockReturnValue(300); // resizes-content: the keyboard takes 544 px
+    window.dispatchEvent(new Event('resize'));
+    expect(currentLayout()).toBe('portrait');
+    stop();
+  });
+
+  it('says the scene is hidden only in portrait, under a page', () => {
     html().dataset['layout'] = 'portrait';
     expect(sceneHidden()).toBe(false);
     html().classList.add(PAGE_CLASS);
@@ -59,33 +68,38 @@ describe('startLayout', () => {
   });
 });
 
-describe('setTyping', () => {
-  it('holds the sheet, the stage and the text size in px in portrait, and lets go after', () => {
-    html().dataset['layout'] = 'portrait';
-    const ui = h('main', { id: 'ui' });
-    const scene = h('div', { id: 'scene' });
-    document.body.replaceChildren(scene, ui);
-    const rect = (height: number) => ({ height }) as DOMRect;
-    vi.spyOn(ui, 'getBoundingClientRect').mockReturnValue(rect(420));
-    vi.spyOn(scene, 'getBoundingClientRect').mockReturnValue(rect(218));
-    setTyping(true);
-    expect(html().classList.contains(TYPING_CLASS)).toBe(true);
-    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('420px');
-    expect(html().style.getPropertyValue('--typing-stage-h')).toBe('218px');
-    expect(html().style.getPropertyValue('--root-size')).not.toBe('');
-    setTyping(false);
-    expect(html().classList.contains(TYPING_CLASS)).toBe(false);
-    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('');
-    expect(html().style.getPropertyValue('--root-size')).toBe('');
-    vi.restoreAllMocks();
+describe('the keyboard inset', () => {
+  it('is the layout height the visual viewport leaves out, never negative', () => {
+    expect(keyboardInset(844, 508, 0)).toBe(336);
+    expect(keyboardInset(844, 508, 20)).toBe(316); // iOS scrolled the visual viewport
+    expect(keyboardInset(844, 900, 0)).toBe(0);
   });
 
-  it('holds nothing in landscape', () => {
-    html().dataset['layout'] = 'landscape';
-    document.body.replaceChildren(h('main', { id: 'ui' }));
-    setTyping(true);
-    expect(html().style.getPropertyValue('--typing-sheet-h')).toBe('');
-    setTyping(false);
+  it('holds the keyboard-free height on a touch screen, so the inset covers both kinds of browser', () => {
+    touch(true);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(412);
+    const height = vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(915);
+    const vv = { height: 915, offsetTop: 0, addEventListener() {}, removeEventListener() {} };
+    vi.stubGlobal('visualViewport', vv);
+    const stop = watchViewport();
+    const prop = (name: string) => html().style.getPropertyValue(name);
+    expect(prop('--kb-inset')).toBe('0px');
+    // iOS: the window stays, the visual viewport shrinks.
+    vv.height = 585;
+    window.dispatchEvent(new Event('resize'));
+    expect(prop('--kb-inset')).toBe('330px');
+    expect(prop('--app-h')).toBe('915px');
+    // Android (resizes-content): the window shrinks too; the layout keeps its height.
+    height.mockReturnValue(585);
+    window.dispatchEvent(new Event('resize'));
+    expect(prop('--app-h')).toBe('915px');
+    expect(prop('--kb-inset')).toBe('330px');
+    // The keyboard closes: back in place.
+    height.mockReturnValue(915);
+    vv.height = 915;
+    window.dispatchEvent(new Event('resize'));
+    expect(prop('--kb-inset')).toBe('0px');
+    stop();
   });
 });
 

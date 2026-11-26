@@ -54,11 +54,14 @@
 }
 
 /* The sprite (or emoji): a fixed slot, so the swap from emoji doesn't move the card. */
+/* --reveal-k (revealCard.ts, UI_SPRITE_SCALE.reveal) unless a short card steps it
+   down; the slot is a 24 px sprite tall at that scale (the emoji in it too). */
 .reveal__emoji {
+  --slot-k: var(--sprite-k, var(--reveal-k, 4));
   display: grid;
-  place-items: center;
-  min-height: 96px;
-  font-size: 4.5rem;
+  place-items: end center;
+  min-height: calc(var(--slot-k) * 24px);
+  font-size: calc(var(--slot-k) * 1.1rem);
   line-height: 1;
 }
 
@@ -73,27 +76,69 @@
   margin: 0;
 }
 
-/* A short card: the sprite and spacing shrink first (zoom keeps the sprite's
-   pixels whole: 4x to 3x, then 2x); only then does the body scroll. */
-@container sheet (max-height: 440px) {
+/* A short card: the sprite and spacing shrink first, then the body scrolls.
+   The sprite steps down a whole scale (--sprite-k: 4x, 3x, 2x; components.css
+   keeps each step whole device pixels), the "New" ribbon moves onto the
+   picture's corner, the badge goes to one line; the description and "+100"
+   stay in full view on a 360x640 phone and a 844x390 landscape panel. */
+@container sheet (max-height: 520px) {
   .reveal__emoji {
-    zoom: 0.75;
+    --sprite-k: 3;
   }
   .reveal__body {
     gap: var(--space-1);
+  }
+  .reveal__picture {
+    padding-top: 0;
+  }
+  .reveal__ribbon {
+    top: 0;
+  }
+}
+
+@container sheet (max-height: 440px) {
+  .reveal__emoji {
+    --sprite-k: 2;
   }
   .reveal .card__header,
   .reveal .card__body {
     padding-block: var(--space-1);
   }
+  .reveal__name,
+  .level-badge__jackpot {
+    font-size: var(--text-lg);
+  }
+  .reveal .level-badge--lg {
+    padding: var(--space-1) var(--space-3);
+  }
+  .reveal .level-badge--jackpot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.5em;
+    align-items: baseline;
+  }
 }
 
 @container sheet (max-height: 380px) {
-  .reveal__emoji {
-    zoom: 0.5;
+  /* The top bar back to its phone size, on one row: the description and "+100" come first. */
+  .reveal .top-bar {
+    --bar-mark: calc(var(--u, 16px) * 1.2);
+    --bar-print: 1.4rem;
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .reveal__name,
+  .level-badge__jackpot {
+    font-size: var(--text-md);
   }
   .reveal .card__footer {
-    padding-bottom: var(--space-2);
+    padding-block: var(--space-1) var(--space-2);
+  }
+  .reveal__points {
+    font-size: var(--text-lg);
   }
 }
 

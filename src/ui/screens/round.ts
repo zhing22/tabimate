@@ -2,7 +2,7 @@ import type { LevelId } from '@/config/levels';
 import type { Prompt } from '@/core/types';
 import { focus } from '../dom';
 import type { Unmount } from '../host';
-import { currentLayout, setTyping } from '../layout/shell';
+import { currentLayout } from '../layout/shell';
 import {
   buildRound,
   DID_YOU_MEAN,
@@ -39,10 +39,11 @@ export interface RoundActions {
  *
  * Focus differs by layout. Landscape and desktop: the box takes focus each
  * round and keeps it through the reveal (Enter moves on). Portrait (a phone
- * upright): the box is never focused for the player; it says "Tap to answer",
- * and while it has focus the stage slides away (html.is-typing) so the sheet
- * gets the space above the keyboard. A scored answer or time-up blurs it, so
- * the keyboard closes and the stage comes back for the reveal. Either way the
+ * upright): the box is never focused for the player; it says "Tap to answer".
+ * The keyboard only moves the card (ui/viewport.ts, no state of its own here).
+ * Go never takes focus from the box, and a wrong guess or "Did you mean" keeps
+ * it; only a scored answer or time-up blurs it, so the keyboard closes and the
+ * stage shows the reveal. Either way the
  * countdown starts when the box first takes focus (or after the start grace).
  */
 export interface RoundScreen {
@@ -80,14 +81,16 @@ export function mountRound(
 
   const doc = root.ownerDocument;
   const portrait = () => currentLayout(doc) === 'portrait';
-  const typing = (on: boolean) => setTyping(on, doc);
   let locked = false;
   const empty = () => input.value.trim() === '';
   input.addEventListener('focus', () => {
-    typing(true);
     if (!locked) actions.begin();
   });
-  input.addEventListener('blur', () => typing(false));
+  // Tapping Go must not take focus from the box: the keyboard would close and
+  // open again on a wrong guess. The form still submits on click.
+  const keepFocus = (event: Event) => event.preventDefault();
+  go.addEventListener('pointerdown', keepFocus);
+  go.addEventListener('mousedown', keepFocus);
   const refresh = () => {
     go.disabled = locked || empty();
   };
@@ -154,7 +157,6 @@ export function mountRound(
     },
     unmount() {
       ring.destroy();
-      typing(false);
     },
   };
 }

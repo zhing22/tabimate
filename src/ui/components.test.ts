@@ -394,11 +394,12 @@ describe('results: team rows, answers and the party', () => {
     await Promise.resolve();
     await Promise.resolve();
     const walk = el.querySelector<HTMLElement>('.portrait__walk')!;
-    expect(walk.style.width).toBe('48px');
+    // Sizes come from CSS (components.css): whole device pixels per sprite pixel.
+    expect(walk.style.getPropertyValue('--fw')).toBe('24');
+    expect(walk.style.getPropertyValue('--fh')).toBe('24');
+    expect(walk.style.getPropertyValue('--k-default')).toBe('2');
     expect(walk.style.backgroundImage).toContain('data:strip');
-    expect(walk.style.backgroundSize).toBe('192px 48px');
-    expect(walk.style.getPropertyValue('--walk-to')).toBe('-192px');
-    expect(walk.style.getPropertyValue('--walk-steps')).toBe('4');
+    expect(walk.style.getPropertyValue('--frames')).toBe('4');
     expect(walk.style.getPropertyValue('--walk-s')).toBe('0.5s');
 
     const still = portrait(tiger, false, { scale: 2, portraits: () => Promise.resolve(image) });

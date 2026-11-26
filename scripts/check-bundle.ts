@@ -6,7 +6,12 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { BUNDLE_BUDGET } from '../src/config/performance.ts';
-import { budgetProblems, classifyChunks, type ViteManifest } from './lib/bundleBudget.ts';
+import {
+  budgetProblems,
+  classifyChunks,
+  kitProblem,
+  type ViteManifest,
+} from './lib/bundleBudget.ts';
 
 const DIST = 'dist';
 const manifestFile = join(DIST, '.vite', 'manifest.json');
@@ -28,7 +33,14 @@ console.log(`  ${kb(entryKb)}  entry chunk (budget ${BUNDLE_BUDGET.entryKb})`);
 console.log(`  ${kb(initialKb)}  initial JS (budget ${BUNDLE_BUDGET.initialKb})`);
 console.log(`  ${kb(sum('lazy'))}  loaded on demand`);
 
-const problems = budgetProblems(entryKb, initialKb, BUNDLE_BUDGET);
+// The loading kit is inlined into index.html as it is (a data URI): its raw size counts.
+const kitBytes = readFileSync(join(DIST, 'assets', 'loading-kit.png')).length;
+console.log(
+  `  ${kb(kitBytes / 1024)}  loading kit PNG, raw (budget ${BUNDLE_BUDGET.loadingKitKb})`,
+);
+
+const kit = kitProblem(kitBytes, BUNDLE_BUDGET.loadingKitKb);
+const problems = [...budgetProblems(entryKb, initialKb, BUNDLE_BUDGET), ...(kit ? [kit] : [])];
 if (problems.length > 0) {
   for (const problem of problems) console.error(problem);
   console.error('Load more lazily rather than raising the budget.');

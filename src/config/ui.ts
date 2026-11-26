@@ -11,7 +11,7 @@ export const UI_SPRITE_SCALE = {
   journalDetail: 2,
   /** The traveller and an animal walking in place on the loading card. */
   loading: 3,
-  /** The animal on the reveal card, walking (reveal.css zooms it down on a short card). */
+  /** The animal on the reveal card, walking (reveal.css steps it down to 3x, then 2x, on a short card). */
   reveal: 4,
 } as const;
 
@@ -58,3 +58,11 @@ export const APP_COLOURS = {
   night: '#1d2b3a',
   ink: '#2b2134',
 } as const;
+
+/**
+ * The start screen's "Ready?" bubble over the traveller (ui/screens/start.ts,
+ * brand.css .stage-bubble), in native scene px above the walk line: the
+ * traveller's height, the idle bob's 1 px rise, then a clear gap before the
+ * tip of the bubble's tail.
+ */
+export const READY_BUBBLE = { headRisePx: 1, gapPx: 4 } as const;

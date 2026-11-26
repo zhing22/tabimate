@@ -62,3 +62,10 @@ export function budgetProblems(entryKb: number, initialKb: number, budget: Budge
   }
   return problems;
 }
+
+/** The loading kit's PNG against its budget (BUNDLE_BUDGET.loadingKitKb), or null when within it. */
+export function kitProblem(bytes: number, budgetKb: number): string | null {
+  return bytes > budgetKb * 1024
+    ? `Loading kit is ${(bytes / 1024).toFixed(1)} KB, over its ${budgetKb} KB budget.`
+    : null;
+}

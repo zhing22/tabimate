@@ -4,8 +4,8 @@
  *
  *   portrait   the scene on a stage at the top (--stage-share of the height),
  *              the card as a sheet below it (at most --sheet-max wide, centred).
- *              html.is-typing: the sheet keeps its size and rises onto the
- *              keyboard, over the stage. html.is-page: a full-screen page
+ *              The keyboard moves the sheet up by --kb-inset (a transform,
+ *              never a re-layout). html.is-page: a full-screen page
  *              covers the stage.
  *   landscape  the scene on the left, ONE panel of --panel-w on the right for
  *              every screen, so the scene never re-scales between screens.
@@ -121,6 +121,7 @@ input {
   --text-lg: calc(var(--u) * 1.25);
   --text-xl: calc(var(--u) * 1.6);
   --text-2xl: calc(var(--u) * 2.2);
+  --text-3xl: calc(var(--u) * 2.8);
   --text-caption: max(12px, calc(var(--u) * 0.75));
   --space-1: calc(var(--u) * 0.25);
   --space-2: calc(var(--u) * 0.5);

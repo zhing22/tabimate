@@ -14,4 +14,6 @@ export const BUNDLE_BUDGET = {
    * scene: main.ts preloadScene; the still): they count as initial.
    */
   eagerChunks: ['src/wiring/sceneParts.ts', 'src/wiring/stillParts.ts'],
+  /** The loading kit's PNG (config/loadingKit.ts), inlined into index.html: not gzipped, KB. */
+  loadingKitKb: 4,
 } as const;

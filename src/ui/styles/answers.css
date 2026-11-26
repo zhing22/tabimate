@@ -105,17 +105,23 @@
   padding-bottom: 0;
 }
 
+/* The same size and line height as the rows, with as little padding: the
+   description runs on into the Wikipedia link, so the two take as few lines
+   as fit. */
 .answer__details {
-  padding: 0 var(--space-2) var(--space-1);
-  font-size: var(--text-2xs);
-  line-height: 1.3;
+  padding: 0 var(--space-2) 2px;
+  font-size: var(--text-caption);
+  line-height: 1.2;
 }
 
-.answer__description {
-  margin: 0 0 2px;
+.answer__description,
+.answer__details > p {
+  display: inline;
+  margin: 0;
 }
 
 .answer__wiki {
+  margin-inline-start: 0.4em;
   color: var(--hint);
 }
 

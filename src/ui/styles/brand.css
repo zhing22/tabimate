@@ -122,7 +122,12 @@
 .stage-bubble {
   position: absolute;
   left: 50%;
-  top: calc(var(--scene-ground-y, 70%) - var(--scene-px, 3px) * 30);
+  /* Bottom of the tail (--bubble-tail below the box) at --bubble-lift native px
+     over the walk line (start.ts: clear of the traveller's head). */
+  --bubble-tail: 15px;
+  top: calc(
+    var(--scene-ground-y, 70%) - var(--scene-px, 3px) * var(--bubble-lift, 29) - var(--bubble-tail)
+  );
   transform: translate(-50%, -100%);
   margin: 0;
   padding: 0.2rem 0.6rem;

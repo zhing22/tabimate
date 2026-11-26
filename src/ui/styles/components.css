@@ -207,3 +207,32 @@
 .countdown {
   color: var(--ink);
 }
+
+/* A walking sprite (components/portrait.ts): the frames strip played with
+   steps(). --px is one sprite pixel: a whole number of device pixels (--k
+   times the device pixel ratio, rounded down), so the box, the strip and each
+   step are whole frames at the scaled size. --sprite-k (set by a screen, e.g.
+   the reveal on a short card) overrides the scale the code asked for. */
+.portrait__walk {
+  --k: var(--sprite-k, var(--k-default, 2));
+  --px: calc(var(--k) * 1px);
+  display: block;
+  width: calc(var(--fw) * var(--px));
+  height: calc(var(--fh) * var(--px));
+  background-repeat: no-repeat;
+  background-size: calc(var(--frames) * var(--fw) * var(--px)) 100%;
+  image-rendering: pixelated;
+  animation: walk-cycle var(--walk-s, 0.5s) steps(var(--frames, 4)) infinite;
+}
+
+@supports (width: round(down, 1.5px, 1px)) {
+  .portrait__walk {
+    --px: calc(round(down, var(--k) * var(--dpr, 1), 1) / var(--dpr, 1) * 1px);
+  }
+}
+
+@keyframes walk-cycle {
+  to {
+    background-position-x: calc(-1 * var(--frames) * var(--fw) * var(--px));
+  }
+}

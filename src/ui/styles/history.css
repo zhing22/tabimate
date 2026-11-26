@@ -122,3 +122,21 @@
   min-height: 0;
   font-size: clamp(12px, calc(var(--cell) * 0.42), var(--text-sm));
 }
+
+/* A short landscape panel: the legend in caption type, packed onto as few
+   lines as fit, and the cells leave it room, so the month and the legend
+   both show without scrolling. */
+@container sheet (max-height: 420px) {
+  .history .calendar {
+    --cell: min(calc((100cqi - 3.5rem) / 7 - var(--space-1)), calc((100cqh - 13.5rem) / 8));
+  }
+  .calendar-legend {
+    gap: 0 var(--space-2);
+    font-size: var(--text-caption);
+    line-height: 1.2;
+  }
+  .calendar-legend__swatch {
+    width: 10px;
+    height: 10px;
+  }
+}

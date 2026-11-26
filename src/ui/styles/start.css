@@ -50,7 +50,9 @@
 .start .start__play {
   width: 100%;
   margin-top: var(--space-2);
-  min-height: calc(var(--tap) * 1.35);
+  /* A big, easy target: 58 px tall on every screen (the short-sheet rule below
+     only shrinks its text). */
+  min-height: 58px;
   font-size: var(--text-xl);
 }
 
@@ -66,13 +68,12 @@
 }
 
 /* A short sheet or panel (a phone on its side, a small phone): the chip and
-   tagline keep their room; Play and the tiles get smaller instead. */
+   tagline keep their room; Play's text and the tiles get smaller instead. */
 @container sheet (max-height: 460px) {
   .start .wordmark--lg {
     height: 2.25rem;
   }
   .start .start__play {
-    min-height: var(--tap);
     font-size: var(--text-lg);
   }
   .start .card__footer {

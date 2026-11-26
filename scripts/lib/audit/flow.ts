@@ -2,6 +2,8 @@
 // state on the way (screen states only: the steps that reach them live here).
 import type { Browser, Page } from '@playwright/test';
 import type { PlannedAnswer } from './answers';
+import { checkNoJump, setKeyboard } from './keyboard';
+import { collectionPage, results, summary } from './pages';
 import { AUDIT, type AuditSize, type AuditState } from './targets';
 
 export type Capture = (state: AuditState, page: Page) => Promise<void>;
@@ -36,12 +38,15 @@ async function openGame(page: Page, url: string, capture: Capture) {
 
 async function keyboardShot(page: Page, size: AuditSize, capture: Capture) {
   if (!size.keyboardPx) return;
-  // As on a phone: the box takes focus, then the keyboard takes its height.
+  // As on a phone: the box takes focus, then the keyboard covers the bottom of
+  // the same layout (keyboard.ts). Then the "never jumps" check.
   await page.locator('.answer__input').focus();
-  await page.setViewportSize({ width: size.width, height: size.height - size.keyboardPx });
+  await setKeyboard(page, size.keyboardPx);
   await settle(page);
   await capture('prompt-keyboard', page);
-  await page.setViewportSize({ width: size.width, height: size.height });
+  // Portrait only: a landscape panel fits what the keyboard leaves (shell.css).
+  if (size.height > size.width) await checkNoJump(page, size.keyboardPx);
+  await setKeyboard(page, 0);
   await settle(page);
 }
 
@@ -53,54 +58,6 @@ async function answer(page: Page, planned: PlannedAnswer, capture: Capture) {
   if (planned.capture) await capture(planned.capture, page);
   await page.locator('.reveal__next').click();
   await page.locator('.reveal').waitFor({ state: 'detached' });
-}
-
-async function results(page: Page, capture: Capture) {
-  await page.locator('.team-card').waitFor();
-  await settle(page);
-  await capture('results', page);
-  const first = page.locator('.team-card__summary').first();
-  await first.click();
-  await first.scrollIntoViewIfNeeded();
-  await settle(page);
-  await capture('results-list', page);
-  await first.click();
-}
-
-async function collectionPage(
-  page: Page,
-  button: string,
-  ready: string,
-  state: AuditState,
-  capture: Capture,
-) {
-  await page.getByRole('button', { name: button, exact: true }).click();
-  await page.locator(ready).first().waitFor();
-  await settle(page);
-  await capture(state, page);
-  if (state === 'journal') await journalDetail(page, capture);
-  await page.getByRole('button', { name: 'Back', exact: true }).click();
-  await page.locator('.team-card').waitFor();
-}
-
-/** One found animal's page in the Journal (closed with its own ×). */
-async function journalDetail(page: Page, capture: Capture) {
-  await page.locator('.journal-cell__button').first().click();
-  await page.locator('.journal-detail').waitFor();
-  await settle(page);
-  await capture('journal-detail', page);
-  await page.getByRole('button', { name: 'Close', exact: true }).click();
-  await page.locator('.journal-detail').waitFor({ state: 'detached' });
-}
-
-/** Back closes the results pop-up; the summary shows under the scene. */
-async function summary(page: Page, capture: Capture) {
-  const close = page.getByRole('button', { name: 'Back', exact: true });
-  if (!(await close.isVisible())) return;
-  await close.click();
-  await page.locator('.results-summary').waitFor();
-  await settle(page);
-  await capture('results-summary', page);
 }
 
 export async function auditOneSize(

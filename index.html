@@ -32,7 +32,14 @@
     <!-- Decoration that stands in the scene (ui/layout/stage.ts): the loading path, "Ready?". -->
     <div id="stage-overlay" aria-hidden="true"></div>
     <main id="ui">
-      <p class="loading">Packing your bag…</p>
+      <!-- Before any JS: the loading kit's walkers (inlined by scripts/vite/loadingKit.ts) and the line. -->
+      <div class="loading-static">
+        <div class="loading__hero" aria-hidden="true">
+          <span class="loading__buddy"><span class="kit kit--animal"></span></span>
+          <span class="loading__buddy"><span class="kit kit--traveller"></span></span>
+        </div>
+        <p class="loading">Packing your bag…</p>
+      </div>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

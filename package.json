@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && npm run bundle",
-    "bundle": "vite build && tsx scripts/check-bundle.ts",
+    "art:loading-kit": "tsx scripts/build-loading-kit.ts",
+    "bundle": "tsx scripts/build-loading-kit.ts && vite build && tsx scripts/check-bundle.ts",
     "measure:start": "tsx scripts/measure-start.ts",
     "preview": "vite preview",
     "test": "vitest run",

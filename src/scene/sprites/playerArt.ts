@@ -4,7 +4,7 @@ import { PLAYER_SIZE } from '@/config/render';
 import type { PortraitImage } from '@/core/portrait';
 import { makeCanvas, portraitFrom } from './canvasArt';
 
-const COLOURS: Readonly<Record<string, string>> = {
+export const PLAYER_COLOURS: Readonly<Record<string, string>> = {
   o: '#222034', // outline
   h: '#8f563b', // hat
   b: '#d9a066', // hat band
@@ -58,10 +58,46 @@ export function playerStill(): PortraitImage | null {
 export function paintPlayer(ctx: CanvasRenderingContext2D): void {
   PLAYER_PIXELS.forEach((row, y) => {
     for (let x = 0; x < row.length; x++) {
-      const colour = COLOURS[row[x]!];
+      const colour = PLAYER_COLOURS[row[x]!];
       if (!colour) continue;
       ctx.fillStyle = colour;
       ctx.fillRect(x, y, 1, 1);
     }
   });
 }
+
+/** From this row down are the legs; the walk frames swap them. */
+const LEGS_FROM = 18;
+
+// prettier-ignore
+const STRIDE_A: readonly string[] = [
+  '.....oddodddo...',
+  '....oddo.oddo...',
+  '...oddo...oddo..',
+  '...okko...okkoo.',
+  '..okkko...okkkko',
+  '..ooooo...oooooo',
+];
+
+// prettier-ignore
+const STRIDE_B: readonly string[] = [
+  '.....oddodddo...',
+  '.....oddooddo...',
+  '....oddo.oddo...',
+  '....okko.okko...',
+  '...okkko.okkko..',
+  '...ooooo.ooooo..',
+];
+
+const withLegs = (legs: readonly string[]) => [...PLAYER_PIXELS.slice(0, LEGS_FROM), ...legs];
+
+/**
+ * The traveller's walk: standing, a long stride, standing, a short one. The
+ * loading kit (scripts/build-loading-kit.ts) plays them before any JS runs.
+ */
+export const PLAYER_WALK_FRAMES: readonly (readonly string[])[] = [
+  PLAYER_PIXELS,
+  withLegs(STRIDE_A),
+  PLAYER_PIXELS,
+  withLegs(STRIDE_B),
+];

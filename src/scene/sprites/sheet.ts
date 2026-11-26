@@ -16,8 +16,10 @@ export interface FrameTag {
 
 export interface SheetInfo {
   readonly frames: readonly FrameRect[];
+  /** Each frame's place in its box: all 0 unless the export was trimmed. */
+  readonly offsets: readonly FrameOffset[];
   readonly tags: Readonly<Record<string, FrameTag>>;
-  /** Size of one frame: every frame of a sheet is the same size. */
+  /** Size of one frame (its untrimmed box): every frame of a sheet is the same size. */
   readonly frameWidth: number;
   readonly frameHeight: number;
 }
@@ -27,20 +29,51 @@ const DEFAULT_FRAME_MS = 125;
 const isObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
-function rectOf(entry: unknown, i: number): { rect: FrameRect; duration: number } {
+/** Where a frame's pixels sit in its untrimmed box (Aseprite's spriteSourceSize). */
+export interface FrameOffset {
+  readonly x: number;
+  readonly y: number;
+}
+
+interface ParsedFrame {
+  readonly rect: FrameRect;
+  readonly offset: FrameOffset;
+  /** The untrimmed box (Aseprite's sourceSize): the frame's real size. */
+  readonly source: { readonly w: number; readonly h: number };
+  readonly duration: number;
+}
+
+const numbers = (o: Record<string, unknown>, keys: readonly string[]) =>
+  keys.map((k) => Number(o[k]));
+
+function rectOf(entry: unknown, i: number): ParsedFrame {
   const frame = isObject(entry) ? entry.frame : undefined;
   if (!isObject(frame)) throw new Error(`frame ${i} has no "frame" rectangle`);
-  const [x, y, w, h] = [frame.x, frame.y, frame.w, frame.h].map(Number) as [
-    number,
-    number,
-    number,
-    number,
-  ];
+  const [x, y, w, h] = numbers(frame, ['x', 'y', 'w', 'h']) as [number, number, number, number];
   if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
     throw new Error(`frame ${i} has a bad rectangle`);
   }
+  // A trimmed export: the pixels sit at spriteSourceSize inside a sourceSize box.
+  const placed = isObject(entry) && isObject(entry.spriteSourceSize) ? entry.spriteSourceSize : {};
+  const box = isObject(entry) && isObject(entry.sourceSize) ? entry.sourceSize : {};
+  const [ox, oy] = numbers(placed, ['x', 'y']).map((n) => (Number.isFinite(n) ? n : 0)) as [
+    number,
+    number,
+  ];
+  const [sw, sh] = numbers(box, ['w', 'h']).map((n, k) => (n > 0 ? n : k ? h : w)) as [
+    number,
+    number,
+  ];
+  if (ox < 0 || oy < 0 || ox + w > sw || oy + h > sh) {
+    throw new Error(`frame ${i} lies outside its ${sw}x${sh} source box`);
+  }
   const duration = isObject(entry) ? Number(entry.duration) : NaN;
-  return { rect: { x, y, w, h }, duration: duration > 0 ? duration : DEFAULT_FRAME_MS };
+  return {
+    rect: { x, y, w, h },
+    offset: { x: ox, y: oy },
+    source: { w: sw, h: sh },
+    duration: duration > 0 ? duration : DEFAULT_FRAME_MS,
+  };
 }
 
 /**
@@ -59,8 +92,8 @@ export function parseAsepriteSheet(
       : null;
   if (!raw || raw.length === 0) throw new Error('sheet JSON has no frames');
   const parsed = raw.map(rectOf);
-  const first = parsed[0]!.rect;
-  if (parsed.some(({ rect }) => rect.w !== first.w || rect.h !== first.h)) {
+  const first = parsed[0]!.source;
+  if (parsed.some(({ source }) => source.w !== first.w || source.h !== first.h)) {
     throw new Error('every frame must be the same size');
   }
   if (image) {
@@ -92,6 +125,7 @@ export function parseAsepriteSheet(
   }
   return {
     frames: parsed.map((p) => p.rect),
+    offsets: parsed.map((p) => p.offset),
     tags,
     frameWidth: first.w,
     frameHeight: first.h,

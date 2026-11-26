@@ -8,6 +8,7 @@ import { makeCanvas, portraitFrom } from './canvasArt';
 import type { AnimalArt, Palette } from '@/config/render';
 import type { Pixels } from './recolor';
 import { parseAsepriteSheet, type SheetInfo } from './sheet';
+import { untrimmed } from './sheetLayout';
 
 /** What the provider needs about colours and sheets (see data/spriteArtSource). */
 export interface PixelArt {
@@ -28,12 +29,20 @@ export interface LoadedSheet {
  */
 export function readSheet(files: { json: unknown; image: HTMLImageElement }): LoadedSheet {
   const { width, height } = files.image;
-  const { ctx } = makeCanvas(width, height);
-  ctx.drawImage(files.image, 0, 0);
-  return {
-    info: parseAsepriteSheet(files.json, { width, height }),
-    pixels: ctx.getImageData(0, 0, width, height),
-  };
+  const info = parseAsepriteSheet(files.json, { width, height });
+  // A trimmed export is laid out untrimmed once, here: the scene and the UI
+  // then draw the same frames, anchored the same way.
+  const layout = untrimmed(info);
+  if (!layout) {
+    const { ctx } = makeCanvas(width, height);
+    ctx.drawImage(files.image, 0, 0);
+    return { info, pixels: ctx.getImageData(0, 0, width, height) };
+  }
+  const w = info.frameWidth * info.frames.length;
+  const { ctx } = makeCanvas(w, info.frameHeight);
+  for (const { from, toX, toY } of layout.copies)
+    ctx.drawImage(files.image, from.x, from.y, from.w, from.h, toX, toY, from.w, from.h);
+  return { info: layout.info, pixels: ctx.getImageData(0, 0, w, info.frameHeight) };
 }
 
 /** The sheet's walk, flap and swim frames, those it has. */

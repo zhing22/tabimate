@@ -44,7 +44,7 @@
    * The root size: everything in rem grows with the window, from 15 px on a
    * phone to 20 px on a big screen. Body text has a 16 px floor (--text-*).
    */
-  --root-size: clamp(15px, 0.6vw + 0.8vh, 20px);
+  --root-size: clamp(15px, 0.6vw + 0.008 * var(--app-h, 100vh), 20px);
 
   /* Spacing (a 4 px grid at 16 px) */
   --space-1: 0.25rem;
@@ -77,6 +77,7 @@
   --text-lg: 1.25rem;
   --text-xl: 1.75rem;
   --text-2xl: 2.5rem;
+  --text-3xl: 3.25rem;
 
   /* Layers */
   --z-scene: 0;

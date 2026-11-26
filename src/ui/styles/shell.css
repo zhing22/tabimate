@@ -14,16 +14,11 @@
     var(--space-3);
 }
 
-/* ---- Portrait: stage on top, sheet below ---- */
+/* ---- Portrait: stage on top, sheet below ----
+   Sized from --app-h (ui/viewport.ts: the window's height without a keyboard),
+   so a keyboard never re-lays anything out. */
 [data-layout='portrait'] {
-  --stage-h: calc(var(--stage-share) * 1vh);
-}
-
-@supports (height: 1svh) {
-  /* svh ignores the browser bar showing and hiding. */
-  [data-layout='portrait'] {
-    --stage-h: calc(var(--stage-share) * 1svh);
-  }
+  --stage-h: calc(var(--stage-share) * var(--app-h, 100svh) / 100);
 }
 
 [data-layout='portrait'] :is(#scene, #stage-overlay) {
@@ -34,36 +29,44 @@
 }
 
 [data-layout='portrait'] #ui {
-  top: calc(var(--vv-top, 0px) + var(--stage-h));
+  top: var(--stage-h);
   left: 0;
   right: 0;
-  height: calc(var(--vv-height, 100dvh) - var(--stage-h));
+  height: calc(var(--app-h, 100svh) - var(--stage-h));
   justify-content: center;
   grid-template-columns: minmax(0, min(100%, var(--sheet-max)));
   padding: var(--space-2) max(var(--space-2), env(safe-area-inset-right))
     max(var(--space-2), env(safe-area-inset-bottom)) max(var(--space-2), env(safe-area-inset-left));
 }
 
-/* Typing: the prompt card keeps its layout, sizes and content (layout/shell.ts
-   setTyping holds the sheet's and stage's heights and the text size in px, so
-   the frame, its type unit and its container queries don't change) and rises
-   to sit right on the keyboard; whatever is left above it shows the top of
-   the scene, which keeps its size (no re-scale). Never stretched to fill.
-   Where the keyboard leaves less room than the card (most phones), only the
-   empty space around the question gives way, so the bar stays in sight. */
-[data-layout='portrait'].is-typing :is(#scene, #stage-overlay) {
-  height: var(--typing-stage-h, var(--stage-h));
+/* The keyboard: one layout, no typing state. The sheet is translated up by
+   the keyboard's height, so the card sits right on it and covers the lower
+   part of the stage; whatever stays above shows the scene. At 0 it is back in
+   place. Where the keyboard leaves less room than the card, the card's top
+   stops at the top of the screen and only the empty space around the question
+   gives way (the card is end-aligned, its body flexes); its type and sizes
+   never change. */
+/* (The frame moves, not #ui: a transform makes its box the containing block
+   of fixed children, and the toasts beside the frame must stay on the window.) */
+[data-layout='portrait']:not(.is-page) #ui > .ui-frame {
+  transform: translateY(calc(-1 * var(--kb-inset, 0px)));
+  transition: transform var(--card-rise-ms) ease-out;
 }
 
-[data-layout='portrait'].is-typing #ui {
-  top: calc(var(--vv-top, 0px) + var(--vv-height, 100dvh) - var(--typing-sheet-h));
-  height: var(--typing-sheet-h);
-  transition: top var(--sheet-rise-ms) ease-out;
+/* The prompt card is never taller than an on-screen keyboard leaves
+   (KEYBOARD.expectedShare of --app-h), so opening one only moves it. It sits at
+   the bottom of the sheet; the space above it continues the scene's ground. */
+[data-layout='portrait']:not(.is-page) #ui:has(.round):not(:has(.reveal)) {
+  background: var(--stage-ground, transparent);
 }
 
-[data-layout='portrait'].is-typing #ui .card {
+[data-layout='portrait']:not(.is-page) #ui .card.round {
+  height: calc(var(--app-h, 100svh) * (1 - var(--kb-expected, 0.41)) - 2 * var(--space-2) - 12px);
+}
+
+[data-layout='portrait']:not(.is-page) #ui .card {
   align-self: end;
-  max-height: calc(var(--vv-height, 100dvh) - 2 * var(--space-2));
+  max-height: min(calc(100% - 12px), calc(var(--vv-height, 100dvh) - 2 * var(--space-2) - 12px));
 }
 
 [data-layout='portrait'].is-page #ui {
@@ -90,7 +93,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-layout='portrait'].is-typing #ui {
+  [data-layout='portrait'] #ui > .ui-frame {
     transition: none;
   }
   [data-layout='portrait'].is-page #ui .card {
