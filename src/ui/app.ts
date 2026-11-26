@@ -136,7 +136,11 @@ export function createApp(deps: AppDeps): App {
     bus.on('runRestored', ({ state }) => {
       const index = state.results.length - 1;
       const last = state.results[index];
-      if (state.status === 'revealing' && last) showReveal(index, last);
+      if (state.status !== 'revealing' || !last) return;
+      // No round screen goes under a restored reveal: clear the loading screen
+      // (and its path on the stage) rather than leave it there.
+      host.showCustom(() => () => {});
+      showReveal(index, last);
     }),
     bus.on('biomeEntered', ({ biome }) => host.announce(`You entered the ${biome.name}.`)),
   ];

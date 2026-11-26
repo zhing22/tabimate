@@ -4,6 +4,7 @@ import {
   contentHash,
   hashedName,
   HASHED_SPRITE,
+  HASHED_SPRITE_URL,
   hashedSpriteManifest,
   setVersion,
   wrapVersioned,
@@ -19,6 +20,16 @@ describe('build asset helpers', () => {
     expect(HASHED_SPRITE.test(`bear.${hash}.png`)).toBe(true);
     expect(HASHED_SPRITE.test('bear.png')).toBe(false);
     expect(HASHED_SPRITE.test('manifest.json')).toBe(false);
+  });
+
+  it("matches the service worker's sprite rule to the names the build writes, and nothing else", () => {
+    const [name] = Object.values(hashedSpriteManifest(['bear'], 'assets/sprites', contentHash));
+    expect(HASHED_SPRITE_URL.test(`https://tabimate.example/${name!.image}`)).toBe(true);
+    expect(HASHED_SPRITE_URL.test(`https://tabimate.example/${name!.json}`)).toBe(true);
+    expect(HASHED_SPRITE_URL.test('https://tabimate.example/assets/sprites/manifest.json')).toBe(
+      false,
+    );
+    expect(HASHED_SPRITE_URL.test('https://tabimate.example/assets/sprites/bear.png')).toBe(false);
   });
 
   it('maps each archetype to its hashed image and JSON', () => {

@@ -43,12 +43,28 @@ export function createLocalPuzzleSource(options: LocalPuzzleSourceOptions): Puzz
     return json === MISSING ? null : validateBonus(json, file, key);
   }
 
+  /**
+   * The puzzle checked against the animals. A fresh puzzle can meet an older
+   * animals.json from the service worker's cache (a slow network: the set is
+   * consistent, just old) and name an animal it lacks: so on any failure the
+   * set is fetched again, fresh, and checked once more before giving up.
+   */
+  async function checked(json: unknown, file: string, key: DateKey) {
+    try {
+      return validatePuzzle(json, { file, key, animals: await getAnimals() });
+    } catch {
+      loader.refreshSet();
+      animals = null;
+      return validatePuzzle(json, { file, key, animals: await getAnimals() });
+    }
+  }
+
   async function getPuzzle(key: DateKey) {
     if (!isDateKey(key)) throw new RangeError(`Invalid puzzle key "${key}"`);
     const file = puzzleFile(key);
-    const [json, registry, bonus] = await Promise.all([load(file), getAnimals(), getBonus(key)]);
+    const [json, , bonus] = await Promise.all([load(file), getAnimals(), getBonus(key)]);
     if (json === MISSING) return null;
-    const puzzle = validatePuzzle(json, { file, key, animals: registry });
+    const puzzle = await checked(json, file, key);
     return bonus ? { ...puzzle, bonus } : puzzle;
   }
 

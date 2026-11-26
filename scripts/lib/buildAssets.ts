@@ -2,11 +2,11 @@
 // content-hashed sprite names and one version for the data files that must
 // come from the same build.
 import { createHash } from 'node:crypto';
-import { DATA_VERSION_KEY } from '../../src/config/data.ts';
+import { DATA_VERSION_KEY, SPRITE_HASH_LENGTH } from '../../src/config/data.ts';
 
-/** A short content hash: changes whenever the bytes do. */
+/** A short content hash (SPRITE_HASH_LENGTH hex digits): changes whenever the bytes do. */
 export const contentHash = (bytes: Uint8Array | string): string =>
-  createHash('sha256').update(bytes).digest('hex').slice(0, 10);
+  createHash('sha256').update(bytes).digest('hex').slice(0, SPRITE_HASH_LENGTH);
 
 /** "bear.png" with hash "abc" -> "bear.abc.png". */
 export function hashedName(file: string, hash: string): string {
@@ -14,8 +14,13 @@ export function hashedName(file: string, hash: string): string {
   return dot < 0 ? `${file}.${hash}` : `${file.slice(0, dot)}.${hash}${file.slice(dot)}`;
 }
 
-/** Hashed names match this, so the service worker and _headers can tell them apart. */
-export const HASHED_SPRITE = /\.[0-9a-f]{10}\.(png|json)$/;
+const HASH_TAIL = String.raw`\.[0-9a-f]{${SPRITE_HASH_LENGTH}}\.(png|json)$`;
+
+/** A hashed sheet's file name ends like this. */
+export const HASHED_SPRITE = new RegExp(HASH_TAIL);
+
+/** A hashed sheet's URL: the service worker's cache-first rule (vite.config.ts). */
+export const HASHED_SPRITE_URL = new RegExp(String.raw`/assets/sprites/[^/?]+${HASH_TAIL}`);
 
 /**
  * The built sprite manifest: each archetype's hashed image and JSON, paths

@@ -3,7 +3,7 @@ import { revealNameMs } from '@/config/game';
 import { MAX_VISIBLE_WIDTH, NATIVE_HEIGHT } from '@/config/render';
 import type { GameBus } from '@/core/events';
 import type { Backdrops, Portraits } from '@/core/portrait';
-import type { Animal, AnimalId, DateKey } from '@/core/types';
+import type { Animal, AnimalId, DateKey, RunState } from '@/core/types';
 import { watchCanvasLayout } from './canvasLayout';
 import { createEffectsLayer } from './effects/effectsLayer';
 import { createRenderer } from './renderer';
@@ -17,6 +17,12 @@ export interface SceneDeps {
   readonly puzzleDate: DateKey;
   readonly createSprites: (k: KAPLAYCtx) => SpriteProvider;
   readonly reducedMotion?: boolean;
+  /**
+   * The run as it stands, read once as the scene starts: its code loads with
+   * import(), so by then the game may have restored a run or taken answers,
+   * events the scene never heard. Absent or empty: nothing to catch up on.
+   */
+  readonly currentRun?: () => RunState;
 }
 
 export interface Scene {
@@ -102,13 +108,16 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
     for (const timer of joins) clearTimeout(timer);
     joins.clear();
   };
+  // The party as the run stands: every saved answer has been revealed (a
+  // reload mid-reveal included), idle effects, no entrances.
+  const restore = (state: RunState) => {
+    cancelJoins();
+    world.restore(state.results);
+    effects.sync(world.followers, false);
+    if (state.status === 'finished') world.endJourney();
+  };
   const stops = [
-    bus.on('runRestored', ({ state }) => {
-      cancelJoins();
-      // Every saved answer has been revealed (a reload mid-reveal included).
-      world.restore(state.results);
-      effects.sync(world.followers, false); // the party as it was: idle effects, no entrances
-    }),
+    bus.on('runRestored', ({ state }) => restore(state)),
     // The results say which biome was reached; no title card over them.
     bus.on('runFinished', () => world.endJourney()),
     bus.on('answerMatched', ({ result }) => {
@@ -122,6 +131,9 @@ export function createScene(container: HTMLElement, bus: GameBus, deps: SceneDep
       joins.add(timer);
     }),
   ];
+  // Started late (its code loaded after the game began): catch up with the run.
+  const current = deps.currentRun?.();
+  if (current && current.results.length > 0) restore(current);
 
   return {
     ready,

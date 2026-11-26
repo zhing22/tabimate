@@ -5,7 +5,7 @@
 import { SPRITE_SOURCE } from '@/config/render';
 import type { GameBus } from '@/core/events';
 import type { Backdrops, Portraits } from '@/core/portrait';
-import type { Animal, AnimalId, Puzzle } from '@/core/types';
+import type { Animal, AnimalId, Puzzle, RunState } from '@/core/types';
 import type { JsonLoader } from '@/data/jsonLoader';
 import type * as ScenePartsModule from './sceneParts';
 
@@ -47,16 +47,19 @@ export interface LazyScene {
 
 /**
  * The live scene, made once its code has loaded. It subscribes to the bus
- * then; main.ts waits for `ready` before the game begins, so no event is missed.
+ * then, which can be after the game began (main.ts waits for `ready` only up
+ * to LOADING.spriteWaitMs, and a player can tap Play): so it starts from
+ * `currentRun`, the run as it stands, catching up on what it missed.
  */
 export function startScene(
   bus: GameBus,
   puzzle: Puzzle,
   animals: ReadonlyMap<AnimalId, Animal>,
   loader: JsonLoader,
+  currentRun: () => RunState,
 ): LazyScene {
   const scene = preloadScene().then(
-    (parts) => parts.createLiveScene(bus, puzzle, animals, loader),
+    (parts) => parts.createLiveScene(bus, puzzle, animals, loader, currentRun),
     (error: unknown) => {
       console.error('The scene could not load; playing without it', error);
       return null;

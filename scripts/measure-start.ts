@@ -32,12 +32,16 @@ async function visit(page: Page, label: string, reload: boolean): Promise<void> 
     m.type() === 'error' ? errors.push(m.text()) : undefined;
   page.on('request', onRequest);
   page.on('console', onConsole);
+  const onFailed = (r: Request) =>
+    errors.push(`request failed: ${r.url()} (${r.failure()?.errorText ?? ''})`);
+  page.on('requestfailed', onFailed);
   const started = Date.now();
   await (reload ? page.reload() : page.goto(url));
   await page.getByRole('button', { name: 'Play', exact: true }).waitFor({ timeout: 30_000 });
   const ms = Date.now() - started;
   page.off('request', onRequest);
   page.off('console', onConsole);
+  page.off('requestfailed', onFailed);
   const rows = new Map<string, { count: number; bytes: number; worker: number }>();
   for (const request of requests) {
     const sizes = await request.sizes().catch(() => null);

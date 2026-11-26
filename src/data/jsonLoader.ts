@@ -32,68 +32,93 @@ export interface JsonLoader {
    * source and the sprite art); a failed load is retried on the next call.
    */
   load(file: string): Promise<unknown>;
+  /**
+   * Forgets the versioned set: the next load fetches it fresh, past the
+   * service worker (a puzzle naming an animal the cached set lacks).
+   */
+  refreshSet(): void;
 }
 
 type Loaded = Versioned | typeof MISSING;
 
+interface Fetcher {
+  readonly base: string;
+  readonly fetch: (input: string, init: RequestInit) => Promise<Response>;
+  readonly early: Map<string, Promise<Response>>;
+}
+
+const INIT: RequestInit = { headers: { Accept: 'application/json' } };
+
+/**
+ * The response for a file: an early fetch the first time (a normal fetch
+ * if that one failed), or, fresh, a URL the service worker's rule skips.
+ */
+function request(f: Fetcher, file: string, fresh: boolean): Promise<Response> {
+  const url = f.base + file;
+  if (fresh) return f.fetch(`${url}?${FRESH_PARAM}=${Date.now()}`, INIT);
+  const started = f.early.get(url);
+  f.early.delete(url);
+  return started ? started.catch(() => f.fetch(url, INIT)) : f.fetch(url, INIT);
+}
+
+async function fetchJson(f: Fetcher, file: string, fresh = false): Promise<Loaded> {
+  let response: Response;
+  try {
+    response = await request(f, file, fresh);
+  } catch (error) {
+    throw new DataError(file, null, `could not be fetched (${String(error)})`);
+  }
+  if (response.status === 404) return MISSING;
+  if (!response.ok) {
+    throw new DataError(file, null, `could not be fetched (HTTP ${response.status})`);
+  }
+  // Vite dev and Cloudflare Pages answer unknown paths with index.html and a 200.
+  if (!(response.headers.get('content-type') ?? '').includes('json')) return MISSING;
+  try {
+    return unwrapVersioned((await response.json()) as unknown);
+  } catch {
+    throw new DataError(file, null, 'is not valid JSON');
+  }
+}
+
+const consistent = (loaded: readonly Loaded[]) =>
+  sameVersion(loaded.filter((l): l is Versioned => l !== MISSING));
+
+/** The whole set, from one build: fetched again, fresh, if the versions differ. */
+async function loadSet(
+  f: Fetcher,
+  set: readonly string[],
+  fresh: boolean,
+): Promise<ReadonlyMap<string, unknown>> {
+  const fetchAll = (asFresh: boolean) =>
+    Promise.all(set.map((file) => fetchJson(f, file, asFresh)));
+  let loaded = await fetchAll(fresh);
+  if (!consistent(loaded)) loaded = await fetchAll(true);
+  if (!consistent(loaded)) {
+    throw new DataError(set.join(', '), null, 'are from different versions of the game');
+  }
+  return new Map(set.map((file, i) => [file, loaded[i] === MISSING ? MISSING : loaded[i]!.data]));
+}
+
 /** Fetches JSON files from public/, with one error style for every caller. */
 export function createJsonLoader(options: JsonLoaderOptions): JsonLoader {
-  const base = options.baseUrl.endsWith('/') ? options.baseUrl : `${options.baseUrl}/`;
-  // Called unbound: browsers reject fetch called with a non-window `this`.
-  const fetchFn =
-    options.fetch ?? ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, init));
-  const early = new Map(Object.entries(options.early ?? {}));
+  const f: Fetcher = {
+    base: options.baseUrl.endsWith('/') ? options.baseUrl : `${options.baseUrl}/`,
+    // Called unbound: browsers reject fetch called with a non-window `this`.
+    fetch: options.fetch ?? ((input, init) => fetch(input, init)),
+    early: new Map(Object.entries(options.early ?? {})),
+  };
   const set = options.versionedSet ?? [];
   const cache = new Map<string, Promise<unknown>>();
   let setLoad: Promise<ReadonlyMap<string, unknown>> | null = null;
-
-  const request = (file: string, fresh: boolean): Promise<Response> => {
-    const url = base + file;
-    const started = fresh ? undefined : early.get(url);
-    early.delete(url);
-    const init = { headers: { Accept: 'application/json' } };
-    return started ?? fetchFn(fresh ? `${url}?${FRESH_PARAM}=${Date.now()}` : url, init);
-  };
-
-  async function fetchJson(file: string, fresh = false): Promise<Loaded> {
-    let response: Response;
-    try {
-      response = await request(file, fresh);
-    } catch (error) {
-      throw new DataError(file, null, `could not be fetched (${String(error)})`);
-    }
-    if (response.status === 404) return MISSING;
-    if (!response.ok) {
-      throw new DataError(file, null, `could not be fetched (HTTP ${response.status})`);
-    }
-    // Vite dev and Cloudflare Pages answer unknown paths with index.html and a 200.
-    if (!(response.headers.get('content-type') ?? '').includes('json')) return MISSING;
-    try {
-      return unwrapVersioned((await response.json()) as unknown);
-    } catch {
-      throw new DataError(file, null, 'is not valid JSON');
-    }
-  }
-
-  /** The whole set, from one build: fetched again, fresh, if the versions differ. */
-  async function loadSet(): Promise<ReadonlyMap<string, unknown>> {
-    const fetchAll = (fresh: boolean) => Promise.all(set.map((file) => fetchJson(file, fresh)));
-    const consistent = (loaded: Loaded[]) =>
-      sameVersion(loaded.filter((l): l is Versioned => l !== MISSING));
-    let loaded = await fetchAll(false);
-    if (!consistent(loaded)) loaded = await fetchAll(true);
-    if (!consistent(loaded)) {
-      throw new DataError(set.join(', '), null, 'are from different versions of the game');
-    }
-    return new Map(set.map((file, i) => [file, loaded[i] === MISSING ? MISSING : loaded[i]!.data]));
-  }
+  let freshSet = false;
 
   const loadOne = async (file: string): Promise<unknown> => {
     if (!set.includes(file)) {
-      const loaded = await fetchJson(file);
+      const loaded = await fetchJson(f, file);
       return loaded === MISSING ? MISSING : loaded.data;
     }
-    setLoad ??= loadSet().catch((error: unknown) => {
+    setLoad ??= loadSet(f, set, freshSet).catch((error: unknown) => {
       setLoad = null;
       throw error;
     });
@@ -101,7 +126,7 @@ export function createJsonLoader(options: JsonLoaderOptions): JsonLoader {
   };
 
   return {
-    url: (file) => base + file,
+    url: (file) => f.base + file,
     load(file) {
       let pending = cache.get(file);
       if (!pending) {
@@ -112,6 +137,11 @@ export function createJsonLoader(options: JsonLoaderOptions): JsonLoader {
         cache.set(file, pending);
       }
       return pending;
+    },
+    refreshSet() {
+      setLoad = null;
+      freshSet = true;
+      for (const file of set) cache.delete(file);
     },
   };
 }

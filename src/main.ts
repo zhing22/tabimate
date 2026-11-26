@@ -23,6 +23,7 @@ import { createScreenHost } from '@/ui/host';
 import { startLayout } from '@/ui/layout/shell';
 import { watchMuteKey } from '@/ui/layout/muteKey';
 import { errorScreen, noPuzzleScreen } from '@/ui/screens/message';
+import { reloadForNewVersion } from '@/ui/newVersion';
 import { watchViewport } from '@/ui/viewport';
 import { startAudio, startHaptics } from '@/wiring/startAudio';
 import { journalPortraits, preloadScene, startScene, startStillScene } from '@/wiring/startScene';
@@ -34,6 +35,12 @@ if (!root) throw new Error('index.html is missing #ui');
 
 watchViewport();
 startLayout();
+// A lazy chunk that fails to load (a new version deployed mid-session) reloads
+// the page once (ui/newVersion.ts); the run is saved, so nothing is lost.
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault();
+  reloadForNewVersion();
+});
 // The Town, painted as soon as its small chunk arrives: the loading screen
 // shows over the scene, not a blank sky. The live scene's code (Kaplay) starts
 // downloading now too, alongside the day's data.
@@ -104,7 +111,9 @@ function play(
 
   // The scene loads sprites for today's animals only, while the loading screen is up.
   // The results screen shows its sprites; without a scene it uses emoji.
-  const scene = startScene(bus, puzzle, puzzleAnimals(puzzle, animals), loader);
+  const scene = startScene(bus, puzzle, puzzleAnimals(puzzle, animals), loader, () =>
+    controller.getState(),
+  );
   // The live scene covers the still; once it has its sprites the still goes.
   // Without a scene (no WebGL, or its code failed to load) the still stays.
   void scene.ready.then(

@@ -4,7 +4,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { buildAssets } from './scripts/vite/buildAssets.ts';
 import { devPuzzleApi } from './scripts/vite/devPuzzleApi.ts';
 import { earlyFetch } from './scripts/vite/earlyFetch.ts';
-import { DATA_NETWORK_TIMEOUT_S, VERSIONED_DATA_FILES } from './src/config/data.ts';
+import { HASHED_SPRITE_URL } from './scripts/lib/buildAssets.ts';
+import {
+  DATA_NETWORK_TIMEOUT_S,
+  RUNTIME_CACHE_ENTRIES,
+  VERSIONED_DATA_FILES,
+} from './src/config/data.ts';
 import { APP_COLOURS } from './src/config/ui.ts';
 
 // Shared with vitest.config.ts; mirrors "paths" in tsconfig.json.
@@ -20,9 +25,6 @@ const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$
  * not a function: generateSW copies the rules into sw.js, where imports don't exist.
  */
 export const VERSIONED_DATA = new RegExp(`/(${VERSIONED_DATA_FILES.map(escapeRegExp).join('|')})$`);
-
-/** Sprite sheets the build has content-hashed (scripts/vite/buildAssets.ts). */
-export const HASHED_SPRITES = /\/assets\/sprites\/[^/?]+\.[0-9a-f]{10}\.(png|json)$/;
 
 /** Each day's puzzle and bonus quiz: the date is in the URL. */
 export const DAY_FILES = /\/data\/(puzzles|bonus)\/\d{4}-\d{2}-\d{2}\.json$/;
@@ -67,14 +69,17 @@ const pwa = VitePWA({
     navigateFallback: 'index.html',
     runtimeCaching: [
       {
-        urlPattern: HASHED_SPRITES,
+        urlPattern: HASHED_SPRITE_URL,
         handler: 'CacheFirst',
-        options: { cacheName: 'sprites', expiration: { maxEntries: 500 } },
+        options: {
+          cacheName: 'sprites',
+          expiration: { maxEntries: RUNTIME_CACHE_ENTRIES.sprites },
+        },
       },
       {
         urlPattern: DAY_FILES,
         handler: 'StaleWhileRevalidate',
-        options: { cacheName: 'puzzles', expiration: { maxEntries: 30 } },
+        options: { cacheName: 'puzzles', expiration: { maxEntries: RUNTIME_CACHE_ENTRIES.days } },
       },
       {
         urlPattern: VERSIONED_DATA,

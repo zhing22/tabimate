@@ -2,7 +2,7 @@
 // wiring/startScene.ts so none of it is in the first JavaScript.
 import { SPRITE_SOURCE } from '@/config/render';
 import type { GameBus } from '@/core/events';
-import type { Animal, AnimalId, Puzzle } from '@/core/types';
+import type { Animal, AnimalId, Puzzle, RunState } from '@/core/types';
 import type { JsonLoader } from '@/data/jsonLoader';
 import { loadSheetFiles, loadSpriteArt } from '@/data/spriteArtSource';
 import { createScene, type Scene } from '@/scene/sceneManager';
@@ -20,6 +20,7 @@ export function createLiveScene(
   puzzle: Puzzle,
   animals: ReadonlyMap<AnimalId, Animal>,
   loader: JsonLoader,
+  currentRun: () => RunState,
 ): LiveScene | null {
   const container = document.querySelector<HTMLElement>('#scene');
   if (!container) return null;
@@ -27,6 +28,7 @@ export function createLiveScene(
     const scene = createScene(container, bus, {
       animals,
       puzzleDate: puzzle.date,
+      currentRun,
       createSprites: (k) => {
         const emoji = createEmojiSpriteProvider(k);
         if (SPRITE_SOURCE === 'emoji') return emoji;

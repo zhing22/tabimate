@@ -66,6 +66,14 @@ describe('createJsonLoader: early fetches and the versioned set', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
+  it('falls back to a normal fetch when the early one failed', async () => {
+    const fetch = fakeFetch({ 'data/a.json': { from: 'network' } });
+    const early = { '/base/data/a.json': Promise.reject(new Error('blip')) };
+    const loader = createJsonLoader({ baseUrl: '/base', fetch, early });
+    expect(await loader.load('data/a.json')).toEqual({ from: 'network' });
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+
   it('unwraps a versioned set from one build, loading it all at the first ask', async () => {
     const fetch = fakeFetch({ 'a.json': v('1', [1]), 'b.json': v('1', { b: 2 }) });
     const loader = createJsonLoader({

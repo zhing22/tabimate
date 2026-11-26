@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { DataError } from './dataError';
+import { createJsonLoader } from './jsonLoader';
 import { createLocalPuzzleSource } from './localPuzzleSource';
 import { FIXTURE_KEY, fixtureAnimals, fixturePuzzle } from './testFixtures';
 
@@ -86,6 +87,26 @@ describe('createLocalPuzzleSource', () => {
     const error: unknown = await source.getPuzzle(FIXTURE_KEY).catch((e: unknown) => e);
     expect(error).toBeInstanceOf(DataError);
     expect((error as DataError).field).toBe('prompts[0].answers[0].animalId');
+  });
+
+  it("fetches the animals again, fresh, when a new day's puzzle names one a cached copy lacks", async () => {
+    const puzzle = fixturePuzzle();
+    puzzle.prompts[0]!.answers.push({ animalId: 'dodo', level: 1 });
+    const dodo = { ...fixtureAnimals()[0]!, id: 'dodo', display: 'Dodo', aliases: [] };
+    const fetch = vi.fn((input: RequestInfo | URL) => {
+      const url = urlOf(input);
+      if (url === PUZZLE_URL) return Promise.resolve(json(puzzle));
+      const fresh = url.startsWith(`${ANIMALS_URL}?fresh=`);
+      if (url === ANIMALS_URL || fresh) {
+        return Promise.resolve(json(fresh ? [...fixtureAnimals(), dodo] : fixtureAnimals()));
+      }
+      return Promise.resolve(status(404));
+    });
+    const loader = createJsonLoader({ baseUrl: BASE, fetch, versionedSet: ['data/animals.json'] });
+    const source = createLocalPuzzleSource({ loader });
+    const loaded = await source.getPuzzle(FIXTURE_KEY);
+    expect(loaded?.prompts[0]?.answers.map((a) => a.animalId)).toContain('dodo');
+    expect((await source.getAnimals()).has('dodo')).toBe(true);
   });
 
   it('rejects when animals.json is missing', async () => {

@@ -357,8 +357,12 @@ describe('app: restoring a saved run', () => {
       pressEnter(t.input());
     });
     const t = setup();
+    t.root
+      .querySelector('.screen-layer')
+      ?.append(Object.assign(document.createElement('p'), { className: 'loading-left' }));
     expect(t.controller.restore(saved)).toBe(true);
     expect(t.$('.reveal__name')?.textContent).toBe('Tiger');
+    expect(t.$('.loading-left')).toBeNull(); // the screen under it (loading) is cleared
     // No answer box on screen after a reload, so the button takes focus.
     const next = t.$<HTMLButtonElement>('.reveal__next')!;
     expect(document.activeElement).toBe(next);

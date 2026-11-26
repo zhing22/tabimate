@@ -3,11 +3,14 @@
  * first JavaScript: the collection pages and the results. One loader for
  * all of them, so only the screen asked for last shows, however the loads
  * finish (a slow results load can't cover a page opened after it). The
- * service worker precaches every chunk for offline play.
+ * service worker precaches every chunk for offline play; a chunk that fails
+ * to load anyway (a new version deployed mid-session) reloads the page.
  */
+import { reloadForNewVersion } from './newVersion';
+
 export type OpenScreen = <T>(load: () => Promise<T>, show: (loaded: T) => void) => void;
 
-export function createScreenLoader(): OpenScreen {
+export function createScreenLoader(onFailure: () => void = reloadForNewVersion): OpenScreen {
   let latest = 0;
   return (load, show) => {
     const asked = ++latest;
@@ -15,6 +18,9 @@ export function createScreenLoader(): OpenScreen {
       .then((loaded) => {
         if (asked === latest) show(loaded);
       })
-      .catch((error: unknown) => console.warn('A screen could not load.', error));
+      .catch((error: unknown) => {
+        console.warn('A screen could not load.', error);
+        onFailure();
+      });
   };
 }
